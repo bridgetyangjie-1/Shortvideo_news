@@ -1,6 +1,6 @@
 {
   "success": true,
-  "generated_at": "2026-06-09T13:53:13+08:00",
+  "generated_at": "2026-06-09T16:46:59+08:00",
   "data_date": "2026-06-09",
   "genre_distribution": {
     "genres": [],
@@ -78,7 +78,9 @@
     {
       "type": "数据",
       "icon": "📊",
-      "content": "今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿"
+      "title": "行业数据更新",
+      "content": "今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿。",
+      "source_url": ""
     }
   ],
   "insights": [
