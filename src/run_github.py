@@ -53,7 +53,7 @@ def main():
         
         logger.info("工作流执行完成！")
         
-        # 输出结果摘要
+        # 输出结果摘要（不再重复保存，push_node已保存）
         if result:
             logger.info(f"生成数据日期: {result.get('data_date', 'N/A')}")
             rankings = result.get('rankings', [])
@@ -61,25 +61,11 @@ def main():
             if rankings:
                 logger.info(f"TOP1: {rankings[0].get('title', 'N/A')}")
             
-            # 保存结果到文件供后续步骤使用
+            # push_node已经保存数据，无需重复保存
+            # 只检查保存结果
             output_path = os.path.join(os.environ.get('COZE_WORKSPACE_PATH', os.getcwd()), 'assets', 'data', 'latest.json')
-            
-            # 将Pydantic对象转换为可序列化的字典
-            serializable_result = {}
-            for key, value in result.items():
-                if hasattr(value, 'model_dump'):
-                    serializable_result[key] = value.model_dump()
-                elif isinstance(value, list):
-                    serializable_result[key] = [
-                        item.model_dump() if hasattr(item, 'model_dump') else item
-                        for item in value
-                    ]
-                else:
-                    serializable_result[key] = value
-            
-            with open(output_path, 'w', encoding='utf-8') as f:
-                json.dump(serializable_result, f, ensure_ascii=False, indent=2)
-            logger.info(f"数据已保存到: {output_path}")
+            if os.path.exists(output_path):
+                logger.info(f"数据已保存到: {output_path}")
             
             return True
         else:

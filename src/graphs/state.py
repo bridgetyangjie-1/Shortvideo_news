@@ -464,15 +464,9 @@ class GenreDistributionInput(BaseModel):
 
 class GenreDistributionOutput(BaseModel):
     """题材分布节点输出"""
-    genres: List[GenreStat] = Field(default=[], description="各题材统计")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布数据")
     total_count: int = Field(default=0, description="总短剧数")
     total_views: int = Field(default=0, description="总播放量(万)")
-    # 🔍 新增：标签分布数据
-    background_tags: List[TagHeat] = Field(default=[], description="背景标签分布")
-    theme_tags: List[TagHeat] = Field(default=[], description="主题标签分布")
-    setting_tags: List[TagHeat] = Field(default=[], description="设定标签分布")
-    top_tag: str = Field(default="", description="最热门标签")
-    rising_tag: str = Field(default="", description="上升最快标签")
 
 
 # ==================== 历史数据节点 ====================
