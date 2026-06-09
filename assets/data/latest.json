@@ -1,388 +1,30 @@
 {
   "success": true,
-  "generated_at": "2026-06-10T00:57:02+08:00",
-  "data_date": "2026-06-10",
+  "generated_at": "",
+  "data_date": "2026-06-09",
   "genre_distribution": {
     "genres": [],
     "top_genre": "",
     "rising_genre": ""
   },
   "industry": {
-    "user_scale": {
-      "value": 5.8,
-      "unit": "亿",
-      "description": "中国短剧用户总规模",
-      "source": "中国网络视听协会《2026中国网络视听发展研究报告》",
-      "estimate": false
-    },
-    "market_size": "1000亿+",
-    "drama_count": "25万+",
-    "billion_dramas": 20,
+    "user_scale": "",
+    "market_size": "",
+    "drama_count": "",
+    "billion_dramas": 0,
     "ai_ratio": 0,
-    "female_ratio": 100,
+    "female_ratio": 0,
     "male_ratio": 0,
-    "app_mau": "3.04亿",
-    "app_mau_yoy": "+1.4亿"
+    "app_mau": "",
+    "app_mau_yoy": ""
   },
-  "rankings": [
-    {
-      "rank": 1,
-      "title": "我在八零年代当后妈",
-      "female_lead": "徐艺真",
-      "male_lead": "未知",
-      "views": "12500万",
-      "views_num": 12500,
-      "platform": "抖音、微信小程序",
-      "genre": "年代言情",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "点众",
-      "core_trope": [
-        "穿越八零",
-        "后妈逆袭",
-        "年代致富"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 2,
-      "title": "闪婚后，傅先生马甲藏不住了",
-      "female_lead": "未知",
-      "male_lead": "孙樾",
-      "views": "9800万",
-      "views_num": 9800,
-      "platform": "抖音、快手",
-      "genre": "都市言情",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "九州",
-      "core_trope": [
-        "闪婚契约",
-        "马甲大佬",
-        "先婚后爱"
-      ],
-      "episodes_count": 90
-    },
-    {
-      "rank": 3,
-      "title": "重生之我在霸总短剧里当保姆",
-      "female_lead": "王格格",
-      "male_lead": "未知",
-      "views": "8200万",
-      "views_num": 8200,
-      "platform": "抖音、红果短剧",
-      "genre": "重生逆袭",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "麦芽",
-      "core_trope": [
-        "重生复仇",
-        "扮猪吃虎",
-        "保姆逆袭"
-      ],
-      "episodes_count": 85
-    },
-    {
-      "rank": 4,
-      "title": "前妻别跑2",
-      "female_lead": "未知",
-      "male_lead": "张集骏",
-      "views": "7100万",
-      "views_num": 7100,
-      "platform": "抖音、腾讯微视",
-      "genre": "都市言情",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "点众",
-      "core_trope": [
-        "追妻火葬场",
-        "破镜重圆",
-        "带球跑"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 5,
-      "title": "离婚后，她带崽嫁入豪门",
-      "female_lead": "赵佳",
-      "male_lead": "未知",
-      "views": "6500万",
-      "views_num": 6500,
-      "platform": "快手、微信小程序",
-      "genre": "都市言情",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "九州",
-      "core_trope": [
-        "离婚逆袭",
-        "带球跑",
-        "豪门宠妻"
-      ],
-      "episodes_count": 90
-    },
-    {
-      "rank": 6,
-      "title": "季总，你的马甲又掉了",
-      "female_lead": "马秋元",
-      "male_lead": "未知",
-      "views": "5800万",
-      "views_num": 5800,
-      "platform": "抖音、红果短剧",
-      "genre": "都市言情",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "麦芽",
-      "core_trope": [
-        "马甲大佬",
-        "扮猪吃虎",
-        "女强逆袭"
-      ],
-      "episodes_count": 85
-    },
-    {
-      "rank": 7,
-      "title": "我在精神病院学斩神",
-      "female_lead": "未知",
-      "male_lead": "申浩男",
-      "views": "5200万",
-      "views_num": 5200,
-      "platform": "抖音、B站",
-      "genre": "悬疑奇幻",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "未知厂牌",
-      "core_trope": [
-        "精神病院",
-        "异能觉醒",
-        "斩神灭魔"
-      ],
-      "episodes_count": 60
-    },
-    {
-      "rank": 8,
-      "title": "这个反派有点东西",
-      "female_lead": "未知",
-      "male_lead": "白方文",
-      "views": "4900万",
-      "views_num": 4900,
-      "platform": "快手、爱奇艺随刻",
-      "genre": "古装仙侠",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "点众",
-      "core_trope": [
-        "反派逆袭",
-        "系统金手指",
-        "仙侠修真"
-      ],
-      "episodes_count": 70
-    },
-    {
-      "rank": 9,
-      "title": "我的26岁女房客",
-      "female_lead": "未知",
-      "male_lead": "何健麒",
-      "views": "4500万",
-      "views_num": 4500,
-      "platform": "抖音、微信小程序",
-      "genre": "都市言情",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "九州",
-      "core_trope": [
-        "合租情缘",
-        "大叔萝莉",
-        "治愈系"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 10,
-      "title": "龙王殿",
-      "female_lead": "未知",
-      "male_lead": "张欣",
-      "views": "4200万",
-      "views_num": 4200,
-      "platform": "快手、抖音",
-      "genre": "都市战神",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "麦芽",
-      "core_trope": [
-        "战神归来",
-        "龙王赘婿",
-        "打脸装逼"
-      ],
-      "episodes_count": 100
-    }
-  ],
+  "rankings": [],
   "actors": {
-    "female": [
-      {
-        "rank": 1,
-        "name": "徐艺真",
-        "popularity": 985,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "我在八零年代当后妈",
-        "trend": ""
-      },
-      {
-        "rank": 2,
-        "name": "王格格",
-        "popularity": 920,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "重生之我在霸总短剧里当保姆",
-        "trend": ""
-      },
-      {
-        "rank": 3,
-        "name": "赵佳",
-        "popularity": 880,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "离婚后，她带崽嫁入豪门",
-        "trend": ""
-      },
-      {
-        "rank": 4,
-        "name": "马秋元",
-        "popularity": 850,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "季总，你的马甲又掉了",
-        "trend": ""
-      }
-    ],
-    "male": [
-      {
-        "rank": 1,
-        "name": "孙樾",
-        "popularity": 960,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "闪婚后，傅先生马甲藏不住了",
-        "trend": ""
-      },
-      {
-        "rank": 2,
-        "name": "张集骏",
-        "popularity": 910,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "前妻别跑2",
-        "trend": ""
-      },
-      {
-        "rank": 3,
-        "name": "申浩男",
-        "popularity": 870,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "我在精神病院学斩神",
-        "trend": ""
-      },
-      {
-        "rank": 4,
-        "name": "白方文",
-        "popularity": 840,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "这个反派有点东西",
-        "trend": ""
-      },
-      {
-        "rank": 5,
-        "name": "何健麒",
-        "popularity": 810,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "我的26岁女房客",
-        "trend": ""
-      }
-    ]
+    "female": [],
+    "male": []
   },
   "platform": {
-    "apps": [
-      {
-        "name": "红果免费短剧",
-        "mau": 3.04,
-        "mau_unit": "亿",
-        "yoy": "+1.4亿",
-        "share": 85,
-        "trend": "up"
-      }
-    ],
+    "apps": [],
     "mini_programs": []
   },
   "audience_profile": {
@@ -395,8 +37,8 @@
       "age_45_plus": 0
     },
     "top_regions": [],
-    "peak_viewing_hours": "20:00-23:00",
-    "avg_watch_duration": "45分钟",
+    "peak_viewing_hours": "",
+    "avg_watch_duration": "",
     "device": {
       "ios": 58,
       "android": 42
@@ -405,54 +47,12 @@
     "traits": []
   },
   "play_trend": {
-    "daily": [
-      {
-        "date": "2026-06-10",
-        "total_views": 68700
-      },
-      {
-        "date": "2026-06-09",
-        "total_views": 79700
-      }
-    ],
-    "weekly": [
-      {
-        "week": "2026-W23",
-        "start_date": "2026-06-08",
-        "end_date": "2026-06-14",
-        "top1_title": "我在八零年代当后妈",
-        "top1_views": "12500万",
-        "total_views": 68700
-      }
-    ],
-    "trend_direction": "down"
+    "daily": [],
+    "weekly": [],
+    "trend_direction": "stable"
   },
-  "daily_news": [
-    {
-      "type": "数据",
-      "icon": "📊",
-      "title": "行业数据更新",
-      "content": "今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿。",
-      "source_url": ""
-    }
-  ],
-  "insights": [
-    {
-      "icon": "📈",
-      "title": "《重生之我在霸总短剧",
-      "content": "该剧在抖音、快手双平台周播放量从1.2亿飙升至1.74亿，6月8日单日播放破4000万创历史新高，反套路NPC视角引发社交媒体二创热潮。"
-    },
-    {
-      "icon": "🏭",
-      "title": "点众《我在精神病院学",
-      "content": "该剧上线30天累计播放量突破5亿，成为点众2026年至今播放量最高的短剧，厂牌宣布将推出互动式短剧版本进行IP衍生开发。"
-    },
-    {
-      "icon": "💰",
-      "title": "抖音升级“星火计划”",
-      "content": "6月8日新规生效，单集播放超500万且完播率超60%的短剧分成比例从70%提至75%，同时要求片头标注付费/免费标识，违规限流。"
-    }
-  ],
-  "quality_score": 85.0,
+  "daily_news": [],
+  "insights": [],
+  "quality_score": 0.0,
   "error_message": ""
 }

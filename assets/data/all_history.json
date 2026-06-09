@@ -92,7 +92,7 @@
   "data": {
     "2026-06-09": {
       "success": true,
-      "generated_at": "2026-06-09T16:50:57+08:00",
+      "generated_at": "2026-06-09T17:01:30+08:00",
       "data_date": "2026-06-09",
       "genre_distribution": {
         "genres": [],
@@ -150,6 +150,10 @@
       "play_trend": {
         "daily": [
           {
+            "date": "2026-06-10",
+            "total_views": 68700
+          },
+          {
             "date": "2026-06-09",
             "total_views": 0
           }
@@ -164,7 +168,7 @@
             "total_views": 0
           }
         ],
-        "trend_direction": "stable"
+        "trend_direction": "up"
       },
       "daily_news": [
         {
@@ -177,29 +181,9 @@
       ],
       "insights": [
         {
-          "icon": "🤖",
-          "title": "AI短剧崛起",
-          "content": "AI短剧占比持续上升，技术与内容融合加速。"
-        },
-        {
-          "icon": "📈",
-          "title": "女频主导",
-          "content": "女频短剧仍占据市场主导地位，甜宠题材持续火热。"
-        },
-        {
-          "icon": "🎬",
-          "title": "题材多元化",
-          "content": "题材从都市甜宠向多元化发展，悬疑、古风题材增长。"
-        },
-        {
-          "icon": "👥",
-          "title": "演员迭代",
-          "content": "新人演员快速崛起，老牌演员保持稳定人气。"
-        },
-        {
-          "icon": "📱",
-          "title": "平台格局",
-          "content": "红果保持领先，平台竞争加剧，用户粘性提升。"
+          "icon": "📊",
+          "title": "大盘平稳",
+          "content": "今日各平台榜单无显著异动，TOP8剧目排名稳定，维持常规投流策略。"
         }
       ],
       "quality_score": 60.0,
