@@ -27,7 +27,7 @@ jobs:
 
       - name: Run workflow
         env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEPSEEK_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           export PYTHONPATH="${GITHUB_WORKSPACE}/src"

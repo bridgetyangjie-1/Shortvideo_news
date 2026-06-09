@@ -84,7 +84,7 @@ def push_node(state: PushNodeInput) -> PushNodeOutput:
         "data_date": data_date,
         "genre_distribution": state.genre_distribution.model_dump() if state.genre_distribution else {},
         "industry": state.industry.model_dump() if state.industry else {},
-        "rankings": [r.model_dump() for r in state.rankings] if state.rankings else [],
+        "rankings": [r.model_dump() for r in state.enriched_rankings] if state.enriched_rankings else [],
         "actors": state.actors.model_dump() if state.actors else {"female": [], "male": []},
         "platform": state.platform.model_dump() if state.platform else {},
         "audience_profile": state.audience_profile.model_dump() if state.audience_profile else {},
