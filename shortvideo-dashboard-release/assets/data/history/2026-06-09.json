@@ -1,0 +1,524 @@
+{
+  "success": true,
+  "generated_at": "2026-06-09T16:56:32+08:00",
+  "data_date": "2026-06-09",
+  "period": "2026-06-09",
+  "overview": {
+    "dramas": 10,
+    "heat": 83.0,
+    "roi": 2.3,
+    "hitRate": 20,
+    "dramasChange": 0,
+    "heatChange": 0.0,
+    "roiChange": 0.0,
+    "hitRateChange": 0
+  },
+  "genre_distribution": {
+    "AI玄幻": 20.0,
+    "都市轻喜剧": 10.0,
+    "奇幻喜剧": 10.0,
+    "都市甜宠": 10.0,
+    "古装甜宠": 10.0,
+    "都市情感": 10.0,
+    "律政甜宠": 10.0,
+    "古装轻喜剧": 10.0,
+    "亲情治愈": 10.0
+  },
+  "platform_share": [
+    {
+      "name": "红果",
+      "share": 100,
+      "trend": "same"
+    }
+  ],
+  "industry": {
+    "user_scale": "7.18亿",
+    "market_size": "1000亿+",
+    "drama_count": "25万+",
+    "billion_dramas": 20,
+    "ai_ratio": 38,
+    "female_ratio": 95,
+    "male_ratio": 5,
+    "app_mau": "3.04亿",
+    "app_mau_yoy": "+1.4亿"
+  },
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "少夫人来自东北2",
+      "female_lead": "梁雯晶",
+      "male_lead": "业文",
+      "views": "1.18亿",
+      "views_num": 11800,
+      "platform": "红果",
+      "genre": "都市轻喜剧",
+      "tags": [
+        "南北文化碰撞",
+        "先婚后爱",
+        "家庭温情",
+        "爽感解压",
+        "女频热榜"
+      ],
+      "trend": "↑ 上升",
+      "trend_type": "up",
+      "category": "female",
+      "is_ai": false,
+      "desc": "东北直爽少女嫁入南方豪门，大大咧咧的性格打破豪门陈规，与高冷丈夫从契约婚姻到渐生情愫，爆笑碰撞中上演甜暖逗趣的家庭日常。",
+      "change": "up1",
+      "heat": 11800
+    },
+    {
+      "rank": 2,
+      "title": "十八岁太奶奶驾到4",
+      "female_lead": "李柯以",
+      "male_lead": "曾辉",
+      "views": "1.7亿",
+      "views_num": 17000,
+      "platform": "红果",
+      "genre": "奇幻喜剧",
+      "tags": [
+        "灵魂互换",
+        "家族整顿",
+        "高能反转",
+        "奇幻设定",
+        "轻松下饭"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "百岁老人意外魂穿十八岁少女，回到晚辈主导的大家族，用长辈智慧整顿鸡飞狗跳的家庭矛盾，闹出无数笑话的同时也治愈了全家人。",
+      "change": "down1",
+      "heat": 17000
+    },
+    {
+      "rank": 3,
+      "title": "宜嫁宜娶",
+      "female_lead": "赵夕汐",
+      "male_lead": "王皓祯",
+      "views": "7035万",
+      "views_num": 7035,
+      "platform": "红果",
+      "genre": "都市甜宠",
+      "tags": [
+        "先婚后爱",
+        "生活流",
+        "双向成长",
+        "熟男熟女",
+        "现实主义"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "为应对家人催婚的两个都市青年协议结婚，在柴米油盐的日常相处中逐渐发现对方闪光点，从搭伙伙伴变成灵魂伴侣，共同奔赴理想生活。",
+      "change": "up2",
+      "heat": 7035
+    },
+    {
+      "rank": 4,
+      "title": "错嫁有喜",
+      "female_lead": "马秋元",
+      "male_lead": "谢予望",
+      "views": "8900万",
+      "views_num": 8900,
+      "platform": "红果、抖音精选",
+      "genre": "古装甜宠",
+      "tags": [
+        "错嫁",
+        "双向奔赴",
+        "逆袭翻盘",
+        "宅斗爽感",
+        "古风甜虐"
+      ],
+      "trend": "↑ 上升",
+      "trend_type": "up",
+      "category": "female",
+      "is_ai": false,
+      "desc": "医女替嫡姐错嫁残戾王爷，本以为小命难保，却凭借一手医术和聪慧头脑化解王府危机，与冷面王爷从互相猜忌到倾心相爱，最终逆袭成正妃。",
+      "change": "down1",
+      "heat": 8900
+    },
+    {
+      "rank": 5,
+      "title": "曼陀罗",
+      "female_lead": "李柯以",
+      "male_lead": "沉思",
+      "views": "7800万",
+      "views_num": 7800,
+      "platform": "红果",
+      "genre": "都市情感",
+      "tags": [
+        "病娇美学",
+        "偏执爱情",
+        "童年往事",
+        "虐恋拉扯",
+        "悬疑感"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "女主重逢童年时救下的孤僻少年，对方如今已是掌控欲极强的商界大佬，以报恩为名把她困在身边，两人在拉扯中揭开尘封多年的童年秘密。",
+      "change": "down1",
+      "heat": 7800
+    },
+    {
+      "rank": 6,
+      "title": "仙祖归来:修仙满级回来后，我儿孙满堂了",
+      "female_lead": "",
+      "male_lead": "",
+      "views": "6326万",
+      "views_num": 6326,
+      "platform": "红果",
+      "genre": "AI玄幻",
+      "tags": [
+        "修仙逆袭",
+        "祖孙情深",
+        "AI漫剧",
+        "爽文逻辑",
+        "全家打脸"
+      ],
+      "trend": "↑ 上升",
+      "trend_type": "up",
+      "category": "ai",
+      "is_ai": true,
+      "desc": "修仙千年的老祖渡劫归来回到现代，发现后代子孙被人欺负，抬手就用仙法打脸恶人，把落魄的家族重新带上巅峰，过上儿孙绕膝的爽感生活。",
+      "change": "up1",
+      "heat": 6326
+    },
+    {
+      "rank": 7,
+      "title": "烬九州",
+      "female_lead": "",
+      "male_lead": "",
+      "views": "6445万",
+      "views_num": 6445,
+      "platform": "红果",
+      "genre": "AI玄幻",
+      "tags": [
+        "重生逆袭",
+        "乡村成长",
+        "AI漫剧",
+        "家国情怀",
+        "战力天花板"
+      ],
+      "trend": "↑ 上升",
+      "trend_type": "up",
+      "category": "ai",
+      "is_ai": true,
+      "desc": "上古战神陨落重生到贫困乡村少年身上，恰逢外敌入侵九州动荡，他一边带领村民致富一边修炼恢复实力，最终重登巅峰守护九州苍生。",
+      "change": "up1",
+      "heat": 6445
+    },
+    {
+      "rank": 8,
+      "title": "辩词与心跳",
+      "female_lead": "张晋宜",
+      "male_lead": "一航",
+      "views": "6255万",
+      "views_num": 6255,
+      "platform": "红果",
+      "genre": "律政甜宠",
+      "tags": [
+        "飒姐律师",
+        "年下恋",
+        "直球爱情",
+        "职场爽感",
+        "势均力敌"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "金牌女律师接手离婚案，遇上对方律所的年下男律师，法庭上两人针锋相对，法庭外直球弟弟频频示好，两人在交锋中擦出势均力敌的爱情火花。",
+      "change": "down2",
+      "heat": 6255
+    },
+    {
+      "rank": 9,
+      "title": "帝后也疯狂",
+      "female_lead": "王云云",
+      "male_lead": "张庭睿",
+      "views": "6142万",
+      "views_num": 6142,
+      "platform": "红果",
+      "genre": "古装轻喜剧",
+      "tags": [
+        "灵魂互换",
+        "相爱相杀",
+        "宫廷整顿",
+        "爆笑无厘头",
+        "帝后甜宠"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "常年不和的皇帝皇后意外互换身体，皇帝被迫去后宫宫斗，皇后被迫上朝批奏折，两人在互相拆台的过程中逐渐理解对方，联手整顿混乱宫廷。",
+      "change": "same",
+      "heat": 6142
+    },
+    {
+      "rank": 10,
+      "title": "暖春报恩",
+      "female_lead": "黄褚幸沅",
+      "male_lead": "崔英捷",
+      "views": "5296万",
+      "views_num": 5296,
+      "platform": "红果",
+      "genre": "亲情治愈",
+      "tags": [
+        "祖孙情",
+        "治愈",
+        "乡村题材",
+        "现实向",
+        "催泪暖心"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "女孩大学毕业后回到贫困乡村，报答当年收养自己的爷爷奶奶，用所学知识带领乡亲们发展特色农业，在绿水青山间实现自我价值和亲情圆满。",
+      "change": "same",
+      "heat": 5296
+    }
+  ],
+  "actors": {
+    "female": [],
+    "male": []
+  },
+  "platform": {
+    "apps": [
+      {
+        "name": "红果免费短剧",
+        "mau": 3.04,
+        "mau_unit": "亿",
+        "yoy": "+1.4亿",
+        "share": 85,
+        "trend": "up"
+      }
+    ],
+    "mini_programs": []
+  },
+  "audience_profile": {
+    "gender_female": 95,
+    "gender_male": 5,
+    "age_distribution": {
+      "age_18_24": 25,
+      "age_25_34": 40,
+      "age_35_44": 25,
+      "age_45_plus": 10
+    },
+    "top_regions": [
+      "广东",
+      "江苏",
+      "浙江",
+      "山东",
+      "河南"
+    ],
+    "peak_viewing_hours": "12:00-14:00, 20:00-23:00",
+    "avg_watch_duration": "45分钟/天",
+    "device": {
+      "ios": 58,
+      "android": 42
+    },
+    "time": [
+      {
+        "label": "午间 12-14点",
+        "value": 15
+      },
+      {
+        "label": "晚间 18-21点",
+        "value": 28
+      },
+      {
+        "label": "深夜 21-24点",
+        "value": 45
+      },
+      {
+        "label": "凌晨 0-3点",
+        "value": 12
+      }
+    ],
+    "traits": [
+      "追剧热情高",
+      "碎片化观看",
+      "女性主导",
+      "情感共鸣强",
+      "甜宠偏好"
+    ]
+  },
+  "weekly_rankings": [
+    {
+      "week": "2026-W23",
+      "start_date": "2026-06-08",
+      "end_date": "2026-06-14",
+      "top1_title": "少夫人来自东北2",
+      "top1_views": "1.18亿",
+      "total_views": 82999
+    }
+  ],
+  "play_trend": {
+    "daily": [
+      {
+        "date": "2026-06-09",
+        "total_views": 82999
+      }
+    ],
+    "weekly": [
+      {
+        "week": "2026-W23",
+        "start_date": "2026-06-08",
+        "end_date": "2026-06-14",
+        "top1_title": "少夫人来自东北2",
+        "top1_views": "1.18亿",
+        "total_views": 82999
+      }
+    ],
+    "trend_direction": "stable"
+  },
+  "insights": [
+    {
+      "icon": "🤖",
+      "title": "AI短剧崛起",
+      "content": "AI短剧占比持续上升，技术与内容融合加速。"
+    },
+    {
+      "icon": "📈",
+      "title": "女频主导",
+      "content": "女频短剧仍占据市场主导地位，甜宠题材持续火热。"
+    },
+    {
+      "icon": "🎬",
+      "title": "题材多元化",
+      "content": "题材从都市甜宠向多元化发展，悬疑、古风题材增长。"
+    },
+    {
+      "icon": "👥",
+      "title": "演员迭代",
+      "content": "新人演员快速崛起，老牌演员保持稳定人气。"
+    },
+    {
+      "icon": "📱",
+      "title": "平台格局",
+      "content": "红果保持领先，平台竞争加剧，用户粘性提升。"
+    }
+  ],
+  "daily_news": [
+    {
+      "type": "数据",
+      "icon": "📊",
+      "content": "今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿"
+    }
+  ],
+  "quality_score": 82.0,
+  "error_message": "",
+  "daily_change": {
+    "has_comparison": true,
+    "prev_date": "2026-06-08",
+    "views_change_pct": 6.5,
+    "views_change_text": "↑6.5% vs 2026-06-08",
+    "count_change": 0,
+    "ai_change": 0,
+    "top1_prev_title": "少夫人来自东北2",
+    "top1_prev_views": "1.18亿"
+  },
+  "weekly_data": {
+    "has_weekly": true,
+    "week_start": "2026-06-03",
+    "week_end": "2026-06-09",
+    "days_count": 6,
+    "avg_views": 165125,
+    "avg_ai_ratio": 35.2,
+    "total_drama_entries": 45,
+    "daily_records": [
+      {
+        "date": "2026-06-04",
+        "user_scale": "7.10亿",
+        "market_size": "920亿+",
+        "ai_ratio": 30,
+        "female_ratio": 92,
+        "billion_dramas": 15,
+        "top1_views": "9000万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 225500,
+        "drama_count": 5,
+        "quality_score": 75
+      },
+      {
+        "date": "2026-06-05",
+        "user_scale": "7.14亿",
+        "market_size": "950亿+",
+        "ai_ratio": 32,
+        "female_ratio": 93,
+        "billion_dramas": 16,
+        "top1_views": "9200万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 332900,
+        "drama_count": 10,
+        "quality_score": 78
+      },
+      {
+        "date": "2026-06-06",
+        "user_scale": "7.16亿",
+        "market_size": "980亿+",
+        "ai_ratio": 35,
+        "female_ratio": 94,
+        "billion_dramas": 18,
+        "top1_views": "9453万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 292049,
+        "drama_count": 10,
+        "quality_score": 80
+      },
+      {
+        "date": "2026-06-07",
+        "user_scale": "7.18亿",
+        "market_size": "1000亿+",
+        "ai_ratio": 38,
+        "female_ratio": 95,
+        "billion_dramas": 20,
+        "top1_views": "8401万",
+        "top1_title": "苏太太高调离婚了",
+        "total_views": 62345,
+        "drama_count": 10,
+        "quality_score": 82
+      },
+      {
+        "date": "2026-06-08",
+        "user_scale": "7.18亿",
+        "market_size": "1000亿+",
+        "ai_ratio": 38,
+        "female_ratio": 95,
+        "billion_dramas": 20,
+        "top1_views": "1.18亿",
+        "top1_title": "少夫人来自东北2",
+        "total_views": 77955,
+        "drama_count": 10,
+        "quality_score": 82.0
+      },
+      {
+        "date": "2026-06-09",
+        "user_scale": "7.18亿",
+        "market_size": "1000亿+",
+        "ai_ratio": 38,
+        "female_ratio": 95,
+        "billion_dramas": 20,
+        "top1_views": "0",
+        "top1_title": "",
+        "total_views": 0,
+        "drama_count": 0,
+        "quality_score": 82.0
+      }
+    ]
+  },
+  "available_dates": [
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09"
+  ]
+}

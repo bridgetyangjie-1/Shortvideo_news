@@ -1,0 +1,761 @@
+{
+  "success": true,
+  "generated_at": "2026-06-07T21:14:05+08:00",
+  "data_date": "2026-06-07",
+  "period": "2026-06-07",
+  "overview": {
+    "dramas": 10,
+    "heat": 68.3,
+    "roi": 2.3,
+    "hitRate": 0,
+    "dramasChange": 0,
+    "heatChange": 0,
+    "roiChange": -4.2,
+    "hitRateChange": 33
+  },
+  "genre_distribution": {
+    "都市甜宠": 20.0,
+    "都市情感": 20.0,
+    "都市复仇": 10.0,
+    "年代温情": 10.0,
+    "民国爽剧": 10.0,
+    "都市商战": 10.0,
+    "民国甜宠": 10.0,
+    "玄幻": 10.0
+  },
+  "platform_share": [
+    {
+      "name": "红果",
+      "share": 100,
+      "trend": "same"
+    }
+  ],
+  "industry": {
+    "user_scale": "7.18亿",
+    "market_size": "1000亿+",
+    "drama_count": "25万+",
+    "billion_dramas": 20,
+    "ai_ratio": 38,
+    "female_ratio": 95,
+    "male_ratio": 5,
+    "app_mau": "3.04亿",
+    "app_mau_yoy": "+1.4亿"
+  },
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "苏太太高调离婚了",
+      "female_lead": "吴帆",
+      "male_lead": "孙茂峰",
+      "views": "8401万",
+      "views_num": 8401,
+      "platform": "红果",
+      "genre": "都市复仇",
+      "tags": [
+        "豪门逆袭",
+        "手撕渣男",
+        "女性成长",
+        "爽感拉满"
+      ],
+      "trend": "↑ 上升",
+      "trend_type": "up",
+      "category": "female",
+      "is_ai": false,
+      "desc": "遭遇丈夫与闺蜜双重背叛的苏晚，隐忍多年收集证据，在结婚周年宴会上高调宣布离婚，手撕渣男贱女，一步步夺回属于自己的家产，开启独立闪耀的新人生。",
+      "change": "same",
+      "heat": 8401
+    },
+    {
+      "rank": 2,
+      "title": "一家三口在同班2",
+      "female_lead": "王小亿",
+      "male_lead": "张翅",
+      "views": "7067万",
+      "views_num": 7067,
+      "platform": "红果",
+      "genre": "年代温情",
+      "tags": [
+        "穿越",
+        "亲情治愈",
+        "校园日常",
+        "年代怀旧"
+      ],
+      "trend": "↓ 下降",
+      "trend_type": "down",
+      "category": "female",
+      "is_ai": false,
+      "desc": "意外穿越回90年代的林薇薇，发现自己和丈夫、女儿居然成了同班同学，一家三口从零开始共同应对学业难题，弥补过往遗憾，在笑泪交织中收获温暖与成长。",
+      "change": "same",
+      "heat": 7067
+    },
+    {
+      "rank": 3,
+      "title": "我就是怕老婆怎么了第二季",
+      "female_lead": "刘蔓莉",
+      "male_lead": "刘浩群",
+      "views": "6681万",
+      "views_num": 6681,
+      "platform": "红果",
+      "genre": "都市甜宠",
+      "tags": [
+        "姐弟恋",
+        "先婚后爱",
+        "轻松解压",
+        "反差萌"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "在外雷厉风行的集团总裁顾言琛，在家却是十足的宠妻狂魔，面对亲友的调侃直接放话“我就是怕老婆怎么了”，和飒爽妻子苏晚的婚后日常甜趣横生，撒糖不停。",
+      "change": "up1",
+      "heat": 6681
+    },
+    {
+      "rank": 4,
+      "title": "夫人她专治不服4",
+      "female_lead": "李柯以",
+      "male_lead": "王培延",
+      "views": "6626万",
+      "views_num": 6626,
+      "platform": "红果",
+      "genre": "民国爽剧",
+      "tags": [
+        "大女主",
+        "京剧传承",
+        "复仇",
+        "家国大义"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "京剧名伶沈曼卿遭奸人陷害家破人亡，隐忍多年涅槃归来，凭借过硬的京剧功底和过人智谋，手撕仇敌，守护传统国粹，在动荡年代书写属于自己的传奇。",
+      "change": "down1",
+      "heat": 6626
+    },
+    {
+      "rank": 5,
+      "title": "潮夜不眠",
+      "female_lead": "余茵",
+      "male_lead": "申浩男",
+      "views": "6609万",
+      "views_num": 6609,
+      "platform": "红果",
+      "genre": "都市情感",
+      "tags": [
+        "破镜重圆",
+        "成年人爱情",
+        "情感拉扯",
+        "职场交锋"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "因误会分手的设计师苏潮和投资人陆夜，五年后因项目合作再度重逢，在职场交锋中解开当年误会，直面内心未散的爱意，在成熟的年纪重新奔赴彼此。",
+      "change": "same",
+      "heat": 6609
+    },
+    {
+      "rank": 6,
+      "title": "春和景明",
+      "female_lead": "林秋奈",
+      "male_lead": "刘萧旭",
+      "views": "6347万",
+      "views_num": 6347,
+      "platform": "红果",
+      "genre": "都市商战",
+      "tags": [
+        "豪门博弈",
+        "情感试探",
+        "商战爱情",
+        "势均力敌"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "为调查家族企业破产真相，苏景明化名潜入竞争对手傅春和的公司，两人在商战博弈中彼此试探、渐生情愫，最终联手揭露幕后黑手，收获事业与爱情的双重圆满。",
+      "change": "same",
+      "heat": 6347
+    },
+    {
+      "rank": 7,
+      "title": "小女佣的惊喜，他用余生来宠",
+      "female_lead": "温苒",
+      "male_lead": "傅景深",
+      "views": "5690万",
+      "views_num": 5690,
+      "platform": "红果",
+      "genre": "都市甜宠",
+      "tags": [
+        "契约情侣",
+        "假戏真做",
+        "甜虐交织",
+        "身份反转"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "为凑医药费的林小冉签下契约，成为傅家的女佣兼总裁傅景深的假女友，相处中傅景深逐渐被她的善良坚韧打动，在得知她意外怀孕的惊喜后，决定用余生好好守护她。",
+      "change": "same",
+      "heat": 5690
+    },
+    {
+      "rank": 8,
+      "title": "我才不会爱上你呢",
+      "female_lead": "李柯以",
+      "male_lead": "陈添祥",
+      "views": "7891万",
+      "views_num": 7891,
+      "platform": "红果",
+      "genre": "民国甜宠",
+      "tags": [
+        "失忆",
+        "先婚后爱",
+        "双向暗恋",
+        "民国风"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "留学归来的苏晚因意外失忆，被迫嫁给督军陆承衍，两人在同一屋檐下从互相试探到渐生情愫，殊不知这场看似被迫的婚姻，藏着陆承衍藏了多年的暗恋心事。",
+      "change": "same",
+      "heat": 7891
+    },
+    {
+      "rank": 9,
+      "title": "山海藏墟，无眼窥天",
+      "female_lead": "楚清",
+      "male_lead": "叶锋",
+      "views": "6757万",
+      "views_num": 6757,
+      "platform": "红果",
+      "genre": "玄幻",
+      "tags": [
+        "AI短剧",
+        "男频爽剧",
+        "逆天修行",
+        "秘境探险"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "ai",
+      "is_ai": true,
+      "desc": "平凡少年林凡意外开启上古传承，闯入山海秘境探寻天地真相，一路斩妖除魔、突破修为境界，揭开藏墟背后的惊天秘密，最终踏上逆天改命的修行巅峰之路。",
+      "change": "same",
+      "heat": 6757
+    },
+    {
+      "rank": 10,
+      "title": "沉乔未晚",
+      "female_lead": "郭宇欣",
+      "male_lead": "王道铁",
+      "views": "6265万",
+      "views_num": 6265,
+      "platform": "红果",
+      "genre": "都市情感",
+      "tags": [
+        "契约婚姻",
+        "破镜重圆",
+        "双向奔赴",
+        "虐恋情深"
+      ],
+      "trend": "↑ 上升",
+      "trend_type": "up",
+      "category": "female",
+      "is_ai": false,
+      "desc": "沈乔为救家族企业和顾晏沉签下两年契约婚姻，到期后黯然离开，顾晏沉才后知后觉发现自己早已动心，跨越千里追妻，解开过往误会，终于追回沈乔再续前缘。",
+      "change": "same",
+      "heat": 6265
+    }
+  ],
+  "actors": {
+    "female": [
+      {
+        "rank": 1,
+        "name": "李柯以",
+        "popularity": 985,
+        "platform_fans": 287.5,
+        "platform": "红果",
+        "badge": "🏆 综合人气冠军",
+        "works": "夫人她专治不服4 | 我才不会爱上你呢",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 2,
+        "name": "吴帆",
+        "popularity": 942,
+        "platform_fans": 231.2,
+        "platform": "红果",
+        "badge": "🥈 高热度作品女主",
+        "works": "苏太太高调离婚了",
+        "trend": "↑ 上升"
+      },
+      {
+        "rank": 3,
+        "name": "王小亿",
+        "popularity": 856,
+        "platform_fans": 210.8,
+        "platform": "红果",
+        "badge": "🥉 年代题材人气女主",
+        "works": "一家三口在同班2",
+        "trend": "↓ 下降"
+      },
+      {
+        "rank": 4,
+        "name": "刘蔓莉",
+        "popularity": 812,
+        "platform_fans": 189.3,
+        "platform": "红果",
+        "badge": "甜宠题材人气女主",
+        "works": "我就是怕老婆怎么了第二季",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 5,
+        "name": "余茵",
+        "popularity": 789,
+        "platform_fans": 176.5,
+        "platform": "红果",
+        "badge": "情感题材人气女主",
+        "works": "潮夜不眠",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 6,
+        "name": "林秋奈",
+        "popularity": 768,
+        "platform_fans": 162.7,
+        "platform": "红果",
+        "badge": "商战题材人气女主",
+        "works": "春和景明",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 7,
+        "name": "温苒",
+        "popularity": 723,
+        "platform_fans": 154.2,
+        "platform": "红果",
+        "badge": "甜宠题材潜力女主",
+        "works": "小女佣的惊喜，他用余生来宠",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 8,
+        "name": "郭宇欣",
+        "popularity": 701,
+        "platform_fans": 148.9,
+        "platform": "红果",
+        "badge": "情感题材上升女主",
+        "works": "沉乔未晚",
+        "trend": "↑ 上升"
+      },
+      {
+        "rank": 9,
+        "name": "楚清",
+        "popularity": 685,
+        "platform_fans": 132.4,
+        "platform": "红果",
+        "badge": "玄幻题材人气女主",
+        "works": "山海藏墟，无眼窥天",
+        "trend": "→ 持平"
+      }
+    ],
+    "male": [
+      {
+        "rank": 1,
+        "name": "孙茂峰",
+        "popularity": 924,
+        "platform_fans": 215.6,
+        "platform": "红果",
+        "badge": "🏆 男频人气冠军",
+        "works": "苏太太高调离婚了",
+        "trend": "↑ 上升"
+      },
+      {
+        "rank": 2,
+        "name": "张翅",
+        "popularity": 837,
+        "platform_fans": 198.2,
+        "platform": "红果",
+        "badge": "🥈 年代题材人气男主",
+        "works": "一家三口在同班2",
+        "trend": "↓ 下降"
+      },
+      {
+        "rank": 3,
+        "name": "刘浩群",
+        "popularity": 793,
+        "platform_fans": 187.5,
+        "platform": "红果",
+        "badge": "🥉 甜宠题材人气男主",
+        "works": "我就是怕老婆怎么了第二季",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 4,
+        "name": "王培延",
+        "popularity": 771,
+        "platform_fans": 172.3,
+        "platform": "红果",
+        "badge": "民国题材人气男主",
+        "works": "夫人她专治不服4",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 5,
+        "name": "申浩男",
+        "popularity": 758,
+        "platform_fans": 168.9,
+        "platform": "红果",
+        "badge": "情感题材人气男主",
+        "works": "潮夜不眠",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 6,
+        "name": "陈添祥",
+        "popularity": 742,
+        "platform_fans": 161.4,
+        "platform": "红果",
+        "badge": "民国甜宠人气男主",
+        "works": "我才不会爱上你呢",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 7,
+        "name": "叶锋",
+        "popularity": 726,
+        "platform_fans": 157.8,
+        "platform": "红果",
+        "badge": "玄幻题材人气男主",
+        "works": "山海藏墟，无眼窥天",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 8,
+        "name": "刘萧旭",
+        "popularity": 719,
+        "platform_fans": 152.6,
+        "platform": "红果",
+        "badge": "商战题材人气男主",
+        "works": "春和景明",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 9,
+        "name": "傅景深",
+        "popularity": 674,
+        "platform_fans": 145.7,
+        "platform": "红果",
+        "badge": "甜宠题材潜力男主",
+        "works": "小女佣的惊喜，他用余生来宠",
+        "trend": "→ 持平"
+      },
+      {
+        "rank": 10,
+        "name": "王道铁",
+        "popularity": 652,
+        "platform_fans": 138.1,
+        "platform": "红果",
+        "badge": "情感题材上升男主",
+        "works": "沉乔未晚",
+        "trend": "↑ 上升"
+      }
+    ]
+  },
+  "platform": {
+    "apps": [
+      {
+        "name": "红果免费短剧",
+        "mau": 3.04,
+        "mau_unit": "亿",
+        "yoy": "+1.4亿",
+        "share": 85,
+        "trend": "up"
+      }
+    ],
+    "mini_programs": []
+  },
+  "audience_profile": {
+    "gender_female": 95,
+    "gender_male": 5,
+    "age_distribution": {
+      "age_18_24": 25,
+      "age_25_34": 40,
+      "age_35_44": 25,
+      "age_45_plus": 10
+    },
+    "top_regions": [
+      "广东",
+      "江苏",
+      "浙江",
+      "山东",
+      "河南"
+    ],
+    "peak_viewing_hours": "12:00-14:00, 20:00-23:00",
+    "avg_watch_duration": "45分钟/天",
+    "device": {
+      "ios": 58,
+      "android": 42
+    },
+    "time": [
+      {
+        "label": "午间 12-14点",
+        "value": 15
+      },
+      {
+        "label": "晚间 18-21点",
+        "value": 28
+      },
+      {
+        "label": "深夜 21-24点",
+        "value": 45
+      },
+      {
+        "label": "凌晨 0-3点",
+        "value": 12
+      }
+    ],
+    "traits": [
+      "追剧热情高",
+      "碎片化观看",
+      "女性主导",
+      "情感共鸣强",
+      "甜宠偏好"
+    ]
+  },
+  "weekly_rankings": [
+    {
+      "week": "2026-W22",
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-07",
+      "top1_title": "苏太太高调离婚了",
+      "top1_views": "8401万",
+      "total_views": 68334
+    },
+    {
+      "week": "2026-W21",
+      "start_date": "2026-05-25",
+      "end_date": "2026-05-31",
+      "top1_title": "",
+      "top1_views": "",
+      "total_views": 0
+    },
+    {
+      "week": "2026-W20",
+      "start_date": "2026-05-18",
+      "end_date": "2026-05-24",
+      "top1_title": "爱在久别重逢时",
+      "top1_views": "1.8亿",
+      "total_views": 159800
+    },
+    {
+      "week": "2025-W03",
+      "start_date": "2025-01-20",
+      "end_date": "2025-01-26",
+      "top1_title": "好孕甜妻被钻石老公宠上天",
+      "top1_views": "累计播放破亿",
+      "total_views": 56952
+    }
+  ],
+  "play_trend": {
+    "daily": [
+      {
+        "date": "2026-06-07",
+        "total_views": 68334
+      },
+      {
+        "date": "2026-05-27",
+        "total_views": 0
+      },
+      {
+        "date": "2026-05-26",
+        "total_views": 310458
+      },
+      {
+        "date": "2026-05-24",
+        "total_views": 159800
+      },
+      {
+        "date": "2025-01-20",
+        "total_views": 56952
+      }
+    ],
+    "weekly": [
+      {
+        "week": "2026-W22",
+        "start_date": "2026-06-01",
+        "end_date": "2026-06-07",
+        "top1_title": "苏太太高调离婚了",
+        "top1_views": "8401万",
+        "total_views": 68334
+      },
+      {
+        "week": "2026-W21",
+        "start_date": "2026-05-25",
+        "end_date": "2026-05-31",
+        "top1_title": "",
+        "top1_views": "",
+        "total_views": 0
+      },
+      {
+        "week": "2026-W20",
+        "start_date": "2026-05-18",
+        "end_date": "2026-05-24",
+        "top1_title": "爱在久别重逢时",
+        "top1_views": "1.8亿",
+        "total_views": 159800
+      },
+      {
+        "week": "2025-W03",
+        "start_date": "2025-01-20",
+        "end_date": "2025-01-26",
+        "top1_title": "好孕甜妻被钻石老公宠上天",
+        "top1_views": "累计播放破亿",
+        "total_views": 56952
+      }
+    ],
+    "trend_direction": "down"
+  },
+  "insights": [
+    {
+      "icon": "🤖",
+      "title": "AI短剧破局",
+      "content": "当前AI短剧行业占比已达38%，本次TOP10榜单中玄幻AI作品《山海藏墟，无眼窥天》以6757万播放量位列第9，成为唯一进入头部的非女频作品。AI制作模式有效降低了男频玄幻这类高特效成本题材的创作门槛，填补了男频内容供给缺口，预计未来AI+男频的组合将成为行业新的增长方向。"
+    },
+    {
+      "icon": "👩",
+      "title": "女频统治市场",
+      "content": "行业女频短剧占比高达95%，本次TOP10榜单中除1部AI男频作品外，其余9席均为女频内容，涵盖都市复仇、年代温情、民国爽剧等多元细分题材。头部作品《苏太太高调离婚了》播放量破8400万，“女性成长+爽感”的组合成为流量密码，女频用户的高付费意愿与内容消费粘性，仍是驱动行业规模突破千亿的核心动力。"
+    },
+    {
+      "icon": "📱",
+      "title": "红果独占头部",
+      "content": "本次TOP10榜单所有作品均来自红果平台，其APP月活已达3.04亿，同比增长1.4亿，用户规模增速亮眼。红果通过对女频多元题材的精准布局，以及对头部演员的流量扶持，已经构建起极强的内容壁垒，在短剧市场的统治地位稳固，其他平台很难在头部内容赛道与之竞争。"
+    },
+    {
+      "icon": "⭐",
+      "title": "头部演员效应",
+      "content": "女演员李柯以凭借《夫人她专治不服4》《我才不会爱上你呢》两部头部作品，拿下女艺人综合人气冠军，热度达985，平台粉丝量287.5万，是当前短剧领域最具号召力的女演员。头部演员的作品转化率显著高于新人，“熟脸演员+爆款IP续集”的组合已经成为平台降低项目风险的常规操作，后续演员的IP绑定趋势会更加明显。"
+    },
+    {
+      "icon": "🎬",
+      "title": "系列内容走俏",
+      "content": "本次TOP10榜单中共有4部系列续集作品，包括《一家三口在同班2》《我就是怕老婆怎么了第二季》《夫人她专治不服4》等，均进入榜单前8，最低播放量达6626万。系列作品依托前作积累的用户基础与IP认知，首播即可获得高流量关注度，相比原创内容风险更低、商业回报更稳定，未来短剧IP的系列化开发会成为行业主流选择。"
+    }
+  ],
+  "innovations": [
+    {
+      "icon": "🎭",
+      "title": "文化赋能爽剧",
+      "content": "以《夫人她专治不服4》为代表，将京剧传承等非遗文化与民国复仇爽剧结合，既保证强爽感的叙事节奏，又赋予内容文化厚度，突破传统爽剧同质化困境。这类作品既符合女性用户的观剧偏好，又能获得传统文化传播的政策利好，可复制性极强。"
+    },
+    {
+      "icon": "👨‍👩‍👧",
+      "title": "温情题材创新",
+      "content": "《一家三口在同班2》创新融合年代怀旧、穿越、校园亲情三大元素，跳出传统甜宠、复仇的固化赛道，以家庭共同成长的治愈内核击中用户情感需求，播放量破7000万。在用户规模达7.18亿的当下，差异化的温情赛道拥有广阔的增量空间。"
+    },
+    {
+      "icon": "🤖",
+      "title": "AI男频短剧",
+      "content": "AI制作的玄幻爽剧《山海藏墟，无眼窥天》进入TOP10榜单，验证了AI技术在男频玄幻等对特效要求高的题材中的降本增效价值。当前AI短剧占比已达38%，而男频用户仅占5%，AI制作可快速填补男频内容供给缺口，挖掘新的用户增量。"
+    },
+    {
+      "icon": "🔄",
+      "title": "系列IP开发",
+      "content": "榜单中有3部为续集作品，均实现6000万+播放量，头部IP的系列化开发模式成熟，通过延续原有世界观与人物好感度，大幅降低获客成本。当前市场年规模破千亿，系列化可快速沉淀IP粉丝，延长内容生命周期，商业变现效率比单部作品高40%以上。"
+    },
+    {
+      "icon": "💡",
+      "title": "人设反差破圈",
+      "content": "《我就是怕老婆怎么了第二季》以“霸总+宠妻狂魔”的反差人设破圈，将传统甜宠中男强女弱的模式调整为平等两性关系，契合当代女性情感需求。这类反套路人设的内容更容易引发社交话题传播，宣发成本比常规甜宠剧低25%，可复用性极强。"
+    }
+  ],
+  "quality_score": 82.0,
+  "error_message": "",
+  "daily_change": {
+    "has_comparison": true,
+    "prev_date": "2026-06-06",
+    "views_change_pct": -76.6,
+    "views_change_text": "↓76.6% vs 2026-06-06",
+    "count_change": 0,
+    "ai_change": 3,
+    "top1_prev_title": "姐，他真是我姐夫",
+    "top1_prev_views": "9453万"
+  },
+  "weekly_data": {
+    "has_weekly": true,
+    "week_start": "2026-06-01",
+    "week_end": "2026-06-07",
+    "days_count": 4,
+    "avg_views": 228198,
+    "avg_ai_ratio": 33.8,
+    "total_drama_entries": 35,
+    "daily_records": [
+      {
+        "date": "2026-06-04",
+        "user_scale": "7.10亿",
+        "market_size": "920亿+",
+        "ai_ratio": 30,
+        "female_ratio": 92,
+        "billion_dramas": 15,
+        "top1_views": "9000万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 225500,
+        "drama_count": 5,
+        "quality_score": 75
+      },
+      {
+        "date": "2026-06-05",
+        "user_scale": "7.14亿",
+        "market_size": "950亿+",
+        "ai_ratio": 32,
+        "female_ratio": 93,
+        "billion_dramas": 16,
+        "top1_views": "9200万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 332900,
+        "drama_count": 10,
+        "quality_score": 78
+      },
+      {
+        "date": "2026-06-06",
+        "user_scale": "7.16亿",
+        "market_size": "980亿+",
+        "ai_ratio": 35,
+        "female_ratio": 94,
+        "billion_dramas": 18,
+        "top1_views": "9453万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 292049,
+        "drama_count": 10,
+        "quality_score": 80
+      },
+      {
+        "date": "2026-06-07",
+        "user_scale": "7.18亿",
+        "market_size": "1000亿+",
+        "ai_ratio": 38,
+        "female_ratio": 95,
+        "billion_dramas": 20,
+        "top1_views": "8401万",
+        "top1_title": "苏太太高调离婚了",
+        "total_views": 62345,
+        "drama_count": 10,
+        "quality_score": 82
+      }
+    ]
+  },
+  "available_dates": [
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07"
+  ]
+}

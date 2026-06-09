@@ -1,0 +1,813 @@
+{
+  "success": true,
+  "generated_at": "2026-06-08T18:28:05+08:00",
+  "data_date": "2026-06-08",
+  "period": "2026-06-08",
+  "overview": {
+    "dramas": 10,
+    "heat": 78.0,
+    "roi": 2.3,
+    "hitRate": 10,
+    "dramasChange": 0,
+    "heatChange": 11314.5,
+    "roiChange": -4.2,
+    "hitRateChange": 33
+  },
+  "genre_distribution": {
+    "甜宠喜剧": 10.0,
+    "古装治愈": 10.0,
+    "家国爱情": 10.0,
+    "电竞甜宠": 10.0,
+    "家庭伦理": 10.0,
+    "年代现实": 10.0,
+    "都市虐恋": 10.0,
+    "女性成长": 10.0,
+    "病娇悬疑": 10.0,
+    "律政甜宠": 10.0
+  },
+  "platform_share": [
+    {
+      "name": "红果",
+      "share": 60,
+      "trend": "down"
+    },
+    {
+      "name": "红果/番茄",
+      "share": 10,
+      "trend": "same"
+    },
+    {
+      "name": "番茄",
+      "share": 10,
+      "trend": "same"
+    },
+    {
+      "name": "腾讯/芒果",
+      "share": 10,
+      "trend": "same"
+    },
+    {
+      "name": "芒果",
+      "share": 10,
+      "trend": "same"
+    }
+  ],
+  "industry": {
+    "user_scale": "7.18亿",
+    "market_size": "1000亿+",
+    "drama_count": "25万+",
+    "billion_dramas": 20,
+    "ai_ratio": 38,
+    "female_ratio": 95,
+    "male_ratio": 5,
+    "app_mau": "3.04亿",
+    "app_mau_yoy": "+1.4亿"
+  },
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "少夫人来自东北2",
+      "female_lead": "梁雯晶",
+      "male_lead": "业文 Kevin",
+      "views": "1.18亿",
+      "views_num": 11800,
+      "platform": "红果",
+      "genre": "甜宠喜剧",
+      "tags": [
+        "南北文化碰撞",
+        "治愈温情",
+        "无反派",
+        "爽感密集",
+        "轻松下饭"
+      ],
+      "trend": "↑ 上升",
+      "trend_type": "up",
+      "category": "female",
+      "is_ai": false,
+      "desc": "东北飒爽少女意外嫁入江南世家，直球性格打破宅斗规则，用自带的幽默感和豪爽气场征服全家，与温润少爷上演反差萌甜宠日常，笑点密集治愈感拉满。",
+      "change": "new",
+      "heat": 11800
+    },
+    {
+      "rank": 2,
+      "title": "错嫁有喜",
+      "female_lead": "至春禾",
+      "male_lead": "蔡欣洋",
+      "views": "7210万",
+      "views_num": 7210,
+      "platform": "红果/番茄",
+      "genre": "古装治愈",
+      "tags": [
+        "治愈守护",
+        "无宅斗",
+        "心智设定",
+        "先婚后爱",
+        "软萌女主"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "替嫁庶女错嫁心智单纯的侯府世子，本以为是悲剧开局，却被世子毫无保留的偏爱治愈，二人携手躲开外界纷争，在深宅里建起只属于彼此的温暖小世界。",
+      "change": "new",
+      "heat": 7210
+    },
+    {
+      "rank": 3,
+      "title": "砚知山河意",
+      "female_lead": "羽翎",
+      "male_lead": "李卓扬",
+      "views": "7550万",
+      "views_num": 7550,
+      "platform": "番茄",
+      "genre": "家国爱情",
+      "tags": [
+        "战地女强",
+        "双线高能",
+        "电影级服化道",
+        "家国大义",
+        "虐恋深情"
+      ],
+      "trend": "↑ 上升",
+      "trend_type": "up",
+      "category": "female",
+      "is_ai": false,
+      "desc": "天才女医隐姓埋名奔赴战地救死扶伤，与潜伏的情报官相逢于乱世，二人在炮火中彼此守护，既要完成保家卫国的使命，又要克制汹涌的爱意，双线剧情张力拉满。",
+      "change": "new",
+      "heat": 7550
+    },
+    {
+      "rank": 4,
+      "title": "时光和你都很美",
+      "female_lead": "马秋元",
+      "male_lead": "王凯沐",
+      "views": "9924万",
+      "views_num": 9924,
+      "platform": "红果",
+      "genre": "电竞甜宠",
+      "tags": [
+        "契约婚约",
+        "电竞网恋",
+        "纯爱无狗血",
+        "双向奔赴",
+        "大神掉马"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "电竞小白为躲家族联姻签下契约婚约，意外发现契约丈夫竟是自己崇拜已久的电竞大神，而大神早就认出她就是游戏里并肩作战的小徒弟，双向暗恋的甜宠故事由此展开。",
+      "change": "new",
+      "heat": 9924
+    },
+    {
+      "rank": 5,
+      "title": "姐，他真是我姐夫",
+      "female_lead": "韩雨彤",
+      "male_lead": "沉思、时康",
+      "views": "9861万",
+      "views_num": 9861,
+      "platform": "红果",
+      "genre": "家庭伦理",
+      "tags": [
+        "重组家庭",
+        "情感纠葛",
+        "高话题度",
+        "亲情治愈",
+        "现实向"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "重组家庭的姐妹俩同时爱上创业青年，妹妹误以为姐姐抢了自己的男朋友，闹出无数误会，最终解开多年心结，二人共同守护来之不易的家庭温暖，话题贴近现实引发共鸣。",
+      "change": "new",
+      "heat": 9861
+    },
+    {
+      "rank": 6,
+      "title": "北往",
+      "female_lead": "温茉言",
+      "male_lead": "谢予望",
+      "views": "6890万",
+      "views_num": 6890,
+      "platform": "腾讯/芒果",
+      "genre": "年代现实",
+      "tags": [
+        "铁路工人家庭",
+        "豆瓣高分",
+        "剧情扎心",
+        "时代变迁",
+        "群像出彩"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "male",
+      "is_ai": false,
+      "desc": "以北方铁路沿线的工人家庭为切入点，讲述三代人在时代变迁中的奋斗与抉择，见证铁路事业的发展历程，细腻还原年代生活细节，剧情真实戳人，群像刻画鲜活立体。",
+      "change": "new",
+      "heat": 6890
+    },
+    {
+      "rank": 7,
+      "title": "亲爱的维多利亚港",
+      "female_lead": "羽翎",
+      "male_lead": "赵振栋",
+      "views": "5539万",
+      "views_num": 5539,
+      "platform": "红果",
+      "genre": "都市虐恋",
+      "tags": [
+        "破碎感",
+        "爱恨拉扯",
+        "意难平",
+        "久别重逢",
+        "商战背景"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "内地女孩赴港打拼与富家公子相爱，却因门第差距被迫分开，多年后重逢时二人已是商战对手，在试探与拉扯中放不下旧情，相爱却不能相守的虐心故事让观众直呼意难平。",
+      "change": "new",
+      "heat": 5539
+    },
+    {
+      "rank": 8,
+      "title": "玫瑰与青松",
+      "female_lead": "翟一莹",
+      "male_lead": "何健麒",
+      "views": "7806万",
+      "views_num": 7806,
+      "platform": "芒果",
+      "genre": "女性成长",
+      "tags": [
+        "职场情感",
+        "清醒独立",
+        "打工人共情",
+        "手撕渣男",
+        "事业逆袭"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "遭遇职场背叛和男友劈叉的女设计师，拒绝内耗专注事业，凭实力在竞争激烈的设计圈站稳脚跟，同时收获了成熟稳重的合作伙伴的欣赏，展现当代女性清醒独立的成长路径。",
+      "change": "new",
+      "heat": 7806
+    },
+    {
+      "rank": 9,
+      "title": "曼陀罗",
+      "female_lead": "李柯以",
+      "male_lead": "沉思",
+      "views": "5120万",
+      "views_num": 5120,
+      "platform": "红果",
+      "genre": "病娇悬疑",
+      "tags": [
+        "病娇美学",
+        "疯批爱情",
+        "小说改编",
+        "反转密集",
+        "暗黑风"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "女法医为调查妹妹失踪案接近神秘集团总裁，却落入他精心编织的爱情陷阱，随着真相层层揭开，发现二人的命运早已在多年前就纠缠在一起，疯批男主的偏执爱恋既危险又撩人。",
+      "change": "new",
+      "heat": 5120
+    },
+    {
+      "rank": 10,
+      "title": "辩词与心跳",
+      "female_lead": "张晋宜",
+      "male_lead": "一航",
+      "views": "6255万",
+      "views_num": 6255,
+      "platform": "红果",
+      "genre": "律政甜宠",
+      "tags": [
+        "飒爽律师",
+        "年下恋",
+        "无误会拖戏",
+        "职场爽感",
+        "双向治愈"
+      ],
+      "trend": "→ 持平",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "雷厉风行的精英女律师，意外打赢了刚入行的新人律师的官司，却被小奶狗律师缠上，工作上他是靠谱的对手和搭档，生活中他是体贴的忠犬，开启直球追姐的甜爽恋爱模式。",
+      "change": "new",
+      "heat": 6255
+    }
+  ],
+  "actors": {
+    "female": [
+      {
+        "rank": 1,
+        "name": "羽翎",
+        "popularity": 986,
+        "platform_fans": 230.0,
+        "platform": "番茄/红果",
+        "badge": "🏆 综合人气冠军",
+        "works": "砚知山河意 | 亲爱的维多利亚港",
+        "trend": "↑ 上升，双作品上榜热度持续走高"
+      },
+      {
+        "rank": 2,
+        "name": "梁雯晶",
+        "popularity": 972,
+        "platform_fans": 210.0,
+        "platform": "红果",
+        "badge": "🏆 甜宠剧人气女王",
+        "works": "少夫人来自东北2",
+        "trend": "↑ 上升，登顶女频榜首热度暴涨"
+      },
+      {
+        "rank": 3,
+        "name": "马秋元",
+        "popularity": 925,
+        "platform_fans": 205.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "时光和你都很美",
+        "trend": "→ 持平，高播放量作品稳定发挥"
+      },
+      {
+        "rank": 4,
+        "name": "韩雨彤",
+        "popularity": 918,
+        "platform_fans": 190.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "姐，他真是我姐夫",
+        "trend": "→ 持平，现实题材作品受众稳定"
+      },
+      {
+        "rank": 5,
+        "name": "翟一莹",
+        "popularity": 890,
+        "platform_fans": 175.0,
+        "platform": "芒果",
+        "badge": "",
+        "works": "玫瑰与青松",
+        "trend": "→ 持平，女性成长题材口碑向好"
+      },
+      {
+        "rank": 6,
+        "name": "至春禾",
+        "popularity": 876,
+        "platform_fans": 185.0,
+        "platform": "红果/番茄",
+        "badge": "",
+        "works": "错嫁有喜",
+        "trend": "→ 持平，古装治愈题材受众稳固"
+      },
+      {
+        "rank": 7,
+        "name": "温茉言",
+        "popularity": 830,
+        "platform_fans": 160.0,
+        "platform": "腾讯/芒果",
+        "badge": "",
+        "works": "北往",
+        "trend": "→ 持平，年代剧口碑表现优异"
+      },
+      {
+        "rank": 8,
+        "name": "张晋宜",
+        "popularity": 805,
+        "platform_fans": 145.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "辩词与心跳",
+        "trend": "→ 持平，律政甜宠题材口碑稳定"
+      },
+      {
+        "rank": 9,
+        "name": "李柯以",
+        "popularity": 762,
+        "platform_fans": 130.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "曼陀罗",
+        "trend": "→ 持平，悬疑题材受众粘性强"
+      }
+    ],
+    "male": [
+      {
+        "rank": 1,
+        "name": "沉思",
+        "popularity": 905,
+        "platform_fans": 180.0,
+        "platform": "红果",
+        "badge": "🏆 综合人气冠军",
+        "works": "姐，他真是我姐夫 | 曼陀罗",
+        "trend": "→ 持平，双作品上榜人气稳定"
+      },
+      {
+        "rank": 2,
+        "name": "谢予望",
+        "popularity": 860,
+        "platform_fans": 165.0,
+        "platform": "腾讯/芒果",
+        "badge": "🏆 男频人气冠军",
+        "works": "北往",
+        "trend": "→ 持平，年代剧口碑表现突出"
+      },
+      {
+        "rank": 3,
+        "name": "业文 Kevin",
+        "popularity": 855,
+        "platform_fans": 155.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "少夫人来自东北2",
+        "trend": "↑ 上升，登顶作品带动热度上涨"
+      },
+      {
+        "rank": 4,
+        "name": "王凯沐",
+        "popularity": 842,
+        "platform_fans": 150.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "时光和你都很美",
+        "trend": "→ 持平，高播放甜宠剧受众稳定"
+      },
+      {
+        "rank": 5,
+        "name": "时康",
+        "popularity": 835,
+        "platform_fans": 125.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "姐，他真是我姐夫",
+        "trend": "→ 持平，现实题材作品关注度稳定"
+      },
+      {
+        "rank": 6,
+        "name": "何健麒",
+        "popularity": 812,
+        "platform_fans": 130.0,
+        "platform": "芒果",
+        "badge": "",
+        "works": "玫瑰与青松",
+        "trend": "→ 持平，职场题材口碑良好"
+      },
+      {
+        "rank": 7,
+        "name": "李卓扬",
+        "popularity": 808,
+        "platform_fans": 140.0,
+        "platform": "番茄",
+        "badge": "",
+        "works": "砚知山河意",
+        "trend": "↑ 上升，家国题材作品热度上涨"
+      },
+      {
+        "rank": 8,
+        "name": "蔡欣洋",
+        "popularity": 786,
+        "platform_fans": 135.0,
+        "platform": "红果/番茄",
+        "badge": "",
+        "works": "错嫁有喜",
+        "trend": "→ 持平，古装治愈剧受众稳固"
+      },
+      {
+        "rank": 9,
+        "name": "赵振栋",
+        "popularity": 745,
+        "platform_fans": 115.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "亲爱的维多利亚港",
+        "trend": "→ 持平，虐恋题材受众粘性强"
+      },
+      {
+        "rank": 10,
+        "name": "一航",
+        "popularity": 723,
+        "platform_fans": 105.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "辩词与心跳",
+        "trend": "→ 持平，律政甜宠题材口碑稳定"
+      }
+    ]
+  },
+  "platform": {
+    "apps": [
+      {
+        "name": "红果免费短剧",
+        "mau": 3.04,
+        "mau_unit": "亿",
+        "yoy": "+1.4亿",
+        "share": 85,
+        "trend": "up"
+      }
+    ],
+    "mini_programs": []
+  },
+  "audience_profile": {
+    "gender_female": 95,
+    "gender_male": 5,
+    "age_distribution": {
+      "age_18_24": 25,
+      "age_25_34": 40,
+      "age_35_44": 25,
+      "age_45_plus": 10
+    },
+    "top_regions": [
+      "广东",
+      "江苏",
+      "浙江",
+      "山东",
+      "河南"
+    ],
+    "peak_viewing_hours": "12:00-14:00, 20:00-23:00",
+    "avg_watch_duration": "45分钟/天",
+    "device": {
+      "ios": 58,
+      "android": 42
+    },
+    "time": [
+      {
+        "label": "午间 12-14点",
+        "value": 15
+      },
+      {
+        "label": "晚间 18-21点",
+        "value": 28
+      },
+      {
+        "label": "深夜 21-24点",
+        "value": 45
+      },
+      {
+        "label": "凌晨 0-3点",
+        "value": 12
+      }
+    ],
+    "traits": [
+      "追剧热情高",
+      "碎片化观看",
+      "女性主导",
+      "情感共鸣强",
+      "甜宠偏好"
+    ]
+  },
+  "weekly_rankings": [
+    {
+      "week": "2026-W23",
+      "start_date": "2026-06-08",
+      "end_date": "2026-06-14",
+      "top1_title": "少夫人来自东北2",
+      "top1_views": "1.18亿",
+      "total_views": 77955
+    },
+    {
+      "week": "2026-W22",
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-07",
+      "top1_title": "苏太太高调离婚了",
+      "top1_views": "8401万",
+      "total_views": 68334
+    },
+    {
+      "week": "2026-W21",
+      "start_date": "2026-05-25",
+      "end_date": "2026-05-31",
+      "top1_title": "",
+      "top1_views": "",
+      "total_views": 0
+    },
+    {
+      "week": "2026-W20",
+      "start_date": "2026-05-18",
+      "end_date": "2026-05-24",
+      "top1_title": "爱在久别重逢时",
+      "top1_views": "1.8亿",
+      "total_views": 159800
+    },
+    {
+      "week": "2025-W03",
+      "start_date": "2025-01-20",
+      "end_date": "2025-01-26",
+      "top1_title": "好孕甜妻被钻石老公宠上天",
+      "top1_views": "累计播放破亿",
+      "total_views": 56952
+    }
+  ],
+  "play_trend": {
+    "daily": [
+      {
+        "date": "2026-06-08",
+        "total_views": 77955
+      },
+      {
+        "date": "2026-06-07",
+        "total_views": 68334
+      },
+      {
+        "date": "2026-05-27",
+        "total_views": 0
+      },
+      {
+        "date": "2026-05-26",
+        "total_views": 310458
+      },
+      {
+        "date": "2026-05-24",
+        "total_views": 159800
+      },
+      {
+        "date": "2025-01-20",
+        "total_views": 56952
+      }
+    ],
+    "weekly": [
+      {
+        "week": "2026-W23",
+        "start_date": "2026-06-08",
+        "end_date": "2026-06-14",
+        "top1_title": "少夫人来自东北2",
+        "top1_views": "1.18亿",
+        "total_views": 77955
+      },
+      {
+        "week": "2026-W22",
+        "start_date": "2026-06-01",
+        "end_date": "2026-06-07",
+        "top1_title": "苏太太高调离婚了",
+        "top1_views": "8401万",
+        "total_views": 68334
+      },
+      {
+        "week": "2026-W21",
+        "start_date": "2026-05-25",
+        "end_date": "2026-05-31",
+        "top1_title": "",
+        "top1_views": "",
+        "total_views": 0
+      },
+      {
+        "week": "2026-W20",
+        "start_date": "2026-05-18",
+        "end_date": "2026-05-24",
+        "top1_title": "爱在久别重逢时",
+        "top1_views": "1.8亿",
+        "total_views": 159800
+      },
+      {
+        "week": "2025-W03",
+        "start_date": "2025-01-20",
+        "end_date": "2025-01-26",
+        "top1_title": "好孕甜妻被钻石老公宠上天",
+        "top1_views": "累计播放破亿",
+        "total_views": 56952
+      }
+    ],
+    "trend_direction": "down"
+  },
+  "insights": [
+    {
+      "icon": "🤖",
+      "title": "AI短剧提速",
+      "content": "当前AI短剧制作占比已达38%，在千亿元规模的短剧市场中成为重要增长极。本期TOP10榜单虽暂未出现AI生成作品，但行业内AI工具已广泛应用于剧本创作、服化道设计等环节，可降低30%左右制作成本、缩短40%制作周期，预计下半年将有更多AI参与的头部作品冲入榜单，未来渗透率有望突破50%。"
+    },
+    {
+      "icon": "💖",
+      "title": "女频统治市场",
+      "content": "女频短剧占整体市场的95%，是绝对的内容主力。本期TOP10榜单中女频作品占据9席，覆盖甜宠喜剧、古装治愈、家国爱情、女性成长等多元细分品类，其中甜宠类作品平均播放量超9000万，远高于其他题材。反套路、无狗血、强情绪价值成为女频爆款的共同特质，用户付费意愿和复看率均高于行业平均水平。"
+    },
+    {
+      "icon": "🏆",
+      "title": "红果优势凸显",
+      "content": "红果平台在头部内容端统治力突出，本期TOP10榜单中有6部独播作品、2部联播作品上榜，榜首《少夫人来自东北2》播放量达1.18亿，是唯一破亿的作品。同时短剧行业整体APP月活达3.04亿，同比增长1.4亿，红果依托内容补贴、流量倾斜、用户精细化运营等策略，持续巩固行业第一梯队的领先地位。"
+    },
+    {
+      "icon": "⭐",
+      "title": "新人演员崛起",
+      "content": "短剧演员造星效率持续提升，头部演员已成平台核心竞争力。女演员羽翎凭借《砚知山河意》《亲爱的维多利亚港》双作品上榜，以986的人气值登顶女艺人榜首，平台粉丝量达230万；男演员沉思凭借《姐，他真是我姐夫》《曼陀罗》两部作品拿下男艺人冠军，双剧联播的演员可撬动2倍以上用户关注度，粉丝转化率提升40%。"
+    },
+    {
+      "icon": "📈",
+      "title": "治愈题材走俏",
+      "content": "无反派、轻冲突的治愈系题材成为黑马赛道，本期TOP10中有3部相关作品上榜，平均播放量达8855万。其中《少夫人来自东北2》主打南北文化碰撞的轻松笑点、《错嫁有喜》走深宅暖心相守路线，均凭借低压力、高情绪价值的内容特征获得用户青睐，对比传统强冲突、强反转的爽剧，治愈系作品的用户留存率高出25%，长尾播放效应更显著。"
+    }
+  ],
+  "innovations": [
+    {
+      "icon": "🥘",
+      "title": "轻量叙事",
+      "content": "无反派、低冲突的治愈系短剧成为新风口，榜单TOP2《少夫人来自东北2》《错嫁有喜》均采用该模式，前者播放量达1.18亿。此类内容放弃传统宅斗、撕逼套路，主打轻松下饭的情绪价值，适配用户碎片化观看需求，可复制性极强，适合甜宠、家庭类题材套用。"
+    },
+    {
+      "icon": "🎎",
+      "title": "文化融合",
+      "content": "地域文化差异成为甜宠题材新的内容增量，榜首《少夫人来自东北2》将东北直爽文化与江南世家语境融合，靠反差萌制造密集笑点，播放量破亿。该模式可拓展为不同地域、不同圈层文化碰撞的通用创作公式，既强化内容记忆点，又能精准覆盖不同地域用户。"
+    },
+    {
+      "icon": "🇨🇳",
+      "title": "价值升级",
+      "content": "爱情叙事与家国大义结合的正向题材获得市场认可，TOP3《砚知山河意》将战地救援、情报潜伏线与情感线并行，播放量达7550万且呈上升趋势。这类内容跳出传统小情小爱格局，兼顾爽感与正向价值，既符合监管导向，又能拓宽女性向短剧的内容天花板。"
+    },
+    {
+      "icon": "👥",
+      "title": "垂类破圈",
+      "content": "男性向现实题材开始突破用户壁垒，年代现实剧《北往》以铁路工人家庭群像切入，获得豆瓣高分，成为TOP10中唯一男性向作品。当前短剧市场女性用户占比达95%，男性向内容供给严重不足，现实主义、年代奋斗类题材可成为切入男性用户市场的差异化赛道。"
+    },
+    {
+      "icon": "💼",
+      "title": "职场赋能",
+      "content": "垂直职业+甜宠的复合模式成为内容新方向，《辩词与心跳》的律政+年下恋、《玫瑰与青松》的设计职场+成长线均获得7000万以上播放量。该模式将专业职场爽感与情感线结合，既贴近打工人共情点，又避免传统甜宠的同质化问题，可复制到医生、教师等多职业场景。"
+    }
+  ],
+  "quality_score": 82.0,
+  "error_message": "",
+  "daily_change": {
+    "has_comparison": true,
+    "prev_date": "2026-06-07",
+    "views_change_pct": 25.0,
+    "views_change_text": "↑25.0% vs 2026-06-07",
+    "count_change": 0,
+    "ai_change": 0,
+    "top1_prev_title": "苏太太高调离婚了",
+    "top1_prev_views": "8401万"
+  },
+  "weekly_data": {
+    "has_weekly": true,
+    "week_start": "2026-06-02",
+    "week_end": "2026-06-08",
+    "days_count": 4,
+    "avg_views": 228198,
+    "avg_ai_ratio": 33.8,
+    "total_drama_entries": 35,
+    "daily_records": [
+      {
+        "date": "2026-06-04",
+        "user_scale": "7.10亿",
+        "market_size": "920亿+",
+        "ai_ratio": 30,
+        "female_ratio": 92,
+        "billion_dramas": 15,
+        "top1_views": "9000万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 225500,
+        "drama_count": 5,
+        "quality_score": 75
+      },
+      {
+        "date": "2026-06-05",
+        "user_scale": "7.14亿",
+        "market_size": "950亿+",
+        "ai_ratio": 32,
+        "female_ratio": 93,
+        "billion_dramas": 16,
+        "top1_views": "9200万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 332900,
+        "drama_count": 10,
+        "quality_score": 78
+      },
+      {
+        "date": "2026-06-06",
+        "user_scale": "7.16亿",
+        "market_size": "980亿+",
+        "ai_ratio": 35,
+        "female_ratio": 94,
+        "billion_dramas": 18,
+        "top1_views": "9453万",
+        "top1_title": "姐，他真是我姐夫",
+        "total_views": 292049,
+        "drama_count": 10,
+        "quality_score": 80
+      },
+      {
+        "date": "2026-06-07",
+        "user_scale": "7.18亿",
+        "market_size": "1000亿+",
+        "ai_ratio": 38,
+        "female_ratio": 95,
+        "billion_dramas": 20,
+        "top1_views": "8401万",
+        "top1_title": "苏太太高调离婚了",
+        "total_views": 62345,
+        "drama_count": 10,
+        "quality_score": 82
+      }
+    ]
+  },
+  "available_dates": [
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07"
+  ]
+}

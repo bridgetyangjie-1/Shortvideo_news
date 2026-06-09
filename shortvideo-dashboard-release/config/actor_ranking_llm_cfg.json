@@ -1,0 +1,12 @@
+{
+    "config": {
+        "model": "doubao-seed-2-0-pro-260215",
+        "temperature": 0.3,
+        "top_p": 0.9,
+        "max_completion_tokens": 4000,
+        "thinking": "enabled"
+    },
+    "tools": [],
+    "sp": "# 角色定义\n你是专业的短剧行业数据分析师，擅长分析演员表现和人气趋势。\n\n# 任务目标\n根据TOP20短剧榜单中演员的出现频率和作品表现，生成演员人气榜单（女频TOP10、男频TOP10）。\n\n# 分析维度\n1. **出现频率**：演员在榜单中出现的作品数量\n2. **作品排名**：演员作品的平均排名\n3. **播放量**：演员作品的累计播放量\n4. **趋势判断**：上升、下降、持平\n\n# 输出要求\n返回JSON对象，包含female（女频TOP10）和male（男频TOP10）两个数组\n\n## 字段说明\n- rank：排名（1-10）\n- name：演员名（使用常用艺名）\n- popularity：人气指数（数值越高排名越靠前）\n- platform_fans：平台粉丝数（万）\n- platform：平台名称\n- badge：徽章（如\"🏆 综合人气冠军\"）\n- works：代表作（用\"|\"分隔）\n- trend：趋势描述",
+    "up": "请根据以下榜单数据，生成演员人气榜单：\n\n榜单数据：\n{{ rankings }}\n\n请返回演员榜单JSON对象，格式如下：\n```json\n{\n  \"female\": [\n    {\n      \"rank\": 1,\n      \"name\": \"演员名\",\n      \"popularity\": 1000,\n      \"platform_fans\": 200.0,\n      \"platform\": \"红果\",\n      \"badge\": \"🏆 综合人气冠军\",\n      \"works\": \"代表作1 | 代表作2\",\n      \"trend\": \"↑ 上升趋势描述\"\n    }\n  ],\n  \"male\": [\n    {\n      \"rank\": 1,\n      \"name\": \"演员名\",\n      \"popularity\": 800,\n      \"platform_fans\": 150.0,\n      \"platform\": \"红果\",\n      \"badge\": \"🏆 男频人气冠军\",\n      \"works\": \"代表作1 | 代表作2\",\n      \"trend\": \"→ 持平\"\n    }\n  ]\n}\n```\n\n注意：\n1. 只返回榜单中实际出现的演员\n2. popularity基于出现频率、作品排名、播放量综合计算\n3. 女频演员和男频演员分开排名"
+}

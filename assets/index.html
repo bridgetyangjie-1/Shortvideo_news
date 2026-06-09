@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>短剧行业数据指挥中心 - DeepSeek Powered</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Microsoft YaHei', sans-serif; background: #0b0d14; color: #e2e8f0; min-height: 100vh; line-height: 1.6; }
+body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 60%; background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12), transparent 55%); pointer-events: none; z-index: -1; }
+
+.container { max-width: 1440px; margin: 0 auto; padding: 24px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* 数据来源标签 */
+.source-tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-left: 4px; vertical-align: middle; }
+.source-tag.tier1 { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+.source-tag.tier2 { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+.source-tag.tier3 { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
+.source-label { font-size: 11px; padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px; }
+.source-label.tier1 { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+.source-label.tier2 { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+.source-label.tier3 { background: rgba(139, 92, 246, 0.1); color: #a78bfa; }
+
+/* 来源说明区 */
+.source-legend { display: flex; gap: 12px; margin-bottom: 16px; padding: 10px 16px; background: rgba(30, 34, 48, 0.3); border-radius: 8px; }
+.source-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #94a3b8; }
+
+/* 头部 */
+.header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 24px; }
+.header-left h1 { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #e0e7ff 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header-meta { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.ai-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 16px; font-size: 11px; color: #818cf8; font-weight: 600; }
+.tier-badge { padding: 5px 10px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 16px; font-size: 11px; color: #4ade80; }
+.time-badge { font-size: 12px; color: #64748b; }
+.live-tag { padding: 6px 14px; background: rgba(34, 197, 94, 0.2); border-radius: 20px; font-size: 12px; color: #4ade80; font-weight: 600; }
+
+/* 基础卡片样式 */
+.glass-card { background: rgba(22, 25, 37, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; margin-bottom: 24px; transition: all 0.3s; }
+.glass-card:hover { border-color: rgba(129, 140, 248, 0.4); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+.section-title { font-size: 16px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* KPI网格 */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi-card { background: rgba(30, 34, 48, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; position: relative; }
+.kpi-source { position: absolute; bottom: 8px; right: 12px; font-size: 10px; }
+.kpi-icon { font-size: 24px; margin-bottom: 8px; }
+.kpi-value { font-size: 26px; font-weight: 800; color: #f8fafc; margin-bottom: 4px; }
+.kpi-value.gradient { background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.kpi-value.pink { color: #f472b6; }
+.kpi-value.yellow { color: #fbbf24; }
+.kpi-label { font-size: 12px; color: #64748b; font-weight: 500; }
+
+/* 行业快讯 */
+.news-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+.news-item { background: rgba(30, 34, 48, 0.4); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 280px; border: 1px solid rgba(255,255,255,0.03); }
+.news-type { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.news-type.data { background: rgba(34, 197, 94, 0.2); color: #4ade80; border-left: 2px solid #4ade80; }
+.news-type.warn { background: rgba(244, 63, 94, 0.2); color: #fb7185; border-left: 2px solid #fb7185; }
+.news-type.biz { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-left: 2px solid #fb7185; }
+.news-content { font-size: 13px; color: #cbd5e1; }
+
+/* 两列布局 */
+.main-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; margin-bottom: 24px; }
+
+/* 榜单表格 */
+.rank-table { width: 100%; border-collapse: collapse; }
+.rank-table th { padding: 14px 12px; background: rgba(30, 34, 48, 0.8); color: #94a3b8; font-weight: 600; text-align: left; font-size: 12px; }
+.rank-table td { padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+.rank-table tr:hover td { background: rgba(255,255,255,0.02); }
+.text-center { text-align: center; }
+
+/* 排名徽章 */
+.rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; font-size: 13px; }
+.rank-gold { background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff; box-shadow: 0 2px 6px rgba(217,119,6,0.3); }
+.rank-silver { background: linear-gradient(135deg, #94a3b8, #475569); color: #fff; }
+.rank-bronze { background: linear-gradient(135deg, #b45309, #78350f); color: #fff; }
+.rank-normal { background: rgba(51, 65, 85, 0.5); color: #94a3b8; }
+
+/* 制作厂牌标签 */
+.producer-tag { font-size: 12px; color: #cbd5e1; font-weight: 500; background: rgba(59, 130, 246, 0.1); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); }
+
+/* AI题材标签 */
+.ai-tag { display: inline-block; padding: 4px 8px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 6px; font-size: 12px; color: #818cf8; font-weight: 600; }
+.genre-tags { margin-top: 4px; display: flex; gap: 4px; flex-wrap: wrap; }
+.core-tag { display: inline-block; padding: 2px 6px; background: rgba(255,255,255,0.05); border-radius: 4px; font-size: 11px; color: #cbd5e1; }
+
+/* 异动点评 */
+.insight-item { background: rgba(30, 34, 48, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 3px solid #a78bfa; }
+.insight-item-title { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
+.insight-item-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+
+/* 演员榜 */
+.actor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.actor-col-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; padding: 6px 12px; border-radius: 6px; }
+.actor-col-title.female { background: rgba(244, 114, 182, 0.1); color: #f472b6; }
+.actor-col-title.male { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+.actor-item { display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(30,34,48,0.3); border-radius: 6px; margin-bottom: 6px; }
+.actor-rank { width: 20px; height: 20px; border-radius: 4px; background: rgba(51,65,85,0.5); color: #94a3b8; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.actor-name { font-size: 13px; color: #f8fafc; font-weight: 600; }
+.actor-pop { font-size: 12px; font-weight: 700; margin-left: auto; }
+.actor-pop.female { color: #f472b6; }
+.actor-pop.male { color: #60a5fa; }
+
+/* 题材分布 */
+.sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
+.genre-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.genre-name { font-size: 13px; color: #cbd5e1; width: 80px; }
+.genre-bar { flex: 1; height: 8px; background: rgba(51,65,85,0.3); border-radius: 4px; overflow: hidden; }
+.genre-bar-fill { height: 100%; background: linear-gradient(90deg, #818cf8, #60a5fa); border-radius: 4px; }
+.genre-bar-fill.green { background: linear-gradient(90deg, #4ade80, #22c55e); }
+
+/* 响应式 */
+@media (max-width: 1200px) { .main-grid { grid-template-columns: 1fr; } .sub-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px) { .kpi-grid { grid-template-columns: 1fr; } .actor-grid { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 16px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header">
+    <div class="header-left">
+      <h1>📊 短剧行业数据指挥中心</h1>
+      <div class="header-meta">
+        <span class="ai-badge"><i class="fas fa-robot"></i> DeepSeek Powered</span>
+        <span class="tier-badge">📊 Tier1 爬取 + 🔍 Tier2 搜补 + 🤖 Tier3 推理</span>
+        <span class="time-badge" id="update-time">更新时间: --</span>
+      </div>
+    </div>
+    <div class="header-right" style="display: flex; align-items: center; gap: 16px;">
+      <div class="date-selector" style="display: flex; align-items: center; gap: 8px;">
+        <label for="date-select" style="font-size: 12px; color: #94a3b8;">查看历史：</label>
+        <select id="date-select" style="padding: 8px 12px; background: rgba(30, 34, 48, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #e0e7ff; font-size: 13px; cursor: pointer;">
+          <option value="latest">今日最新</option>
+        </select>
+      </div>
+      <div class="live-tag"><i class="fas fa-circle" style="font-size: 8px; margin-right: 6px;"></i>实时监控中</div>
+    </div>
+  </div>
+
+  <!-- 数据来源说明 -->
+  <div class="source-legend">
+    <div class="source-legend-item"><span class="source-tag tier1">📊 Tier1</span> 工作流直接爬取（排名、播放量、平台）</div>
+    <div class="source-legend-item"><span class="source-tag tier2">🔍 Tier2</span> DeepSeek联网搜补（厂牌、爽点、集数）</div>
+    <div class="source-legend-item"><span class="source-tag tier3">🤖 Tier3</span> DeepSeek推理分析（洞察、画像、趋势）</div>
+  </div>
+
+  <!-- KPI卡片 -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-value" id="kpi-users">--</div>
+      <div class="kpi-label">大盘用户规模</div>
+      <div class="kpi-source"><span class="source-tag tier1">📊 爬取</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-value yellow" id="kpi-market">--</div>
+      <div class="kpi-label">市场规模</div>
+      <div class="kpi-source"><span class="source-tag tier1">📊 爬取</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">📱</div>
+      <div class="kpi-value" id="kpi-mau">--</div>
+      <div class="kpi-label">APP月活</div>
+      <div class="kpi-source"><span class="source-tag tier1">📊 爬取</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🤖</div>
+      <div class="kpi-value gradient" id="kpi-ai">--</div>
+      <div class="kpi-label">AI短剧渗透率</div>
+      <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">👩</div>
+      <div class="kpi-value pink" id="kpi-female">--</div>
+      <div class="kpi-label">女频占比</div>
+      <div class="kpi-source"><span class="source-tag tier1">📊 爬取</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🎬</div>
+      <div class="kpi-value" id="kpi-drama">--</div>
+      <div class="kpi-label">剧集总量</div>
+      <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🔥</div>
+      <div class="kpi-value yellow" id="kpi-hit">--</div>
+      <div class="kpi-label">破亿爆款剧</div>
+      <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-value gradient" id="kpi-roi">--</div>
+      <div class="kpi-label">首日ROI参考</div>
+      <div class="kpi-source"><span class="source-tag tier3">🤖 推理</span></div>
+    </div>
+  </div>
+
+  <!-- 行业快讯 -->
+  <div class="glass-card">
+    <div class="section-title"><i class="fas fa-newspaper" style="color:#4ade80;"></i> 每日行业快讯 <span class="source-tag tier2">🔍 DeepSeek搜补</span></div>
+    <div class="news-grid" id="news-container"></div>
+  </div>
+
+  <!-- 两列布局 -->
+  <div class="main-grid">
+    <div class="glass-card">
+      <div class="section-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> 榜单 TOP8 <span class="source-tag tier1">📊 爬取</span> + <span class="source-tag tier2">🔍 搜补厂牌/爽点</span></div>
+      <table class="rank-table">
+        <thead>
+          <tr>
+            <th style="width: 50px;">排名</th>
+            <th>剧目 <span class="source-tag tier1">📊</span></th>
+            <th>制作厂牌 <span class="source-tag tier2">🔍</span></th>
+            <th>题材 & 核心爽点 <span class="source-tag tier2">🔍</span></th>
+            <th>播放量 <span class="source-tag tier1">📊</span></th>
+            <th>平台 <span class="source-tag tier1">📊</span></th>
+          </tr>
+        </thead>
+        <tbody id="rankings-container"></tbody>
+      </table>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      
+      <div class="glass-card" style="flex: 1;">
+        <div class="section-title"><i class="fas fa-bolt" style="color:#fbbf24;"></i> AI 异动点评 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+        <div id="insights-container"></div>
+      </div>
+      
+      <div class="glass-card">
+        <div class="section-title"><i class="fas fa-star" style="color:#a78bfa;"></i> 演员热力榜 <span class="source-tag tier2">🔍 搜补人气值</span></div>
+        <div class="actor-grid">
+          <div>
+            <div class="actor-col-title female">👩 女频演员</div>
+            <div id="actors-female-container"></div>
+          </div>
+          <div>
+            <div class="actor-col-title male">👨 男频演员</div>
+            <div id="actors-male-container"></div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="sub-grid">
+    <div class="glass-card">
+      <div class="section-title"><i class="fas fa-chart-pie" style="color:#60a5fa;"></i> 题材分布 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div id="genre-container" style="margin-top: 20px;"></div>
+    </div>
+    
+    <div class="glass-card">
+      <div class="section-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div id="audience-container" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;"></div>
+    </div>
+    
+    <div class="glass-card">
+      <div class="section-title"><i class="fas fa-mobile-alt" style="color:#4ade80;"></i> 主流分发平台份额 <span class="source-tag tier1">📊 爬取</span></div>
+      <div id="platform-container" style="margin-top: 20px;"></div>
+    </div>
+  </div>
+  
+  <div class="glass-card">
+    <div class="section-title"><i class="fas fa-chart-area" style="color:#a78bfa;"></i> 播放量趋势 (近7日) <span class="source-tag tier1">📊 爬取</span></div>
+    <div style="height: 250px;">
+      <canvas id="trendChart"></canvas>
+    </div>
+  </div>
+  
+</div>
+
+<script>
+// ==========================================
+// 1. 结构化兜底数据 (防止白屏) - DeepSeek 2026-06-09
+// ==========================================
+const fallbackData = {
+    "data_date": "2026-06-09",
+    "industry": { "user_scale": "7.18亿", "market_size": "1000亿+", "app_mau": "3.04亿", "ai_ratio": 38, "female_ratio": 95, "drama_count": "25万+", "billion_dramas": 20 },
+    "daily_news": [
+        { "type": "数据", "icon": "📊", "content": "DataEye发布6月首周短剧热度榜，都市逆袭题材占据TOP10中6席，单部最高消耗破千万。" },
+        { "type": "预警", "icon": "⚠️", "content": "广电总局拟要求短剧投流需备案，未过审内容不得投放，6月底前完成整改。" },
+        { "type": "数据", "icon": "💰", "content": "抖音内测短剧按有效观看时长分账，创作者分成比例提升至70%，6月10日上线。" },
+        { "type": "数据", "icon": "🏢", "content": "腾讯视频推出繁星计划，投资10亿扶持精品短剧，单部最高补贴500万。" },
+        { "type": "数据", "icon": "🤝", "content": "快手短剧宣布与头部MCN机构合作，共建10个短剧孵化基地，年产量目标500部。" }
+    ],
+    "insights": [
+        { "icon": "📊", "title": "大盘平稳", "content": "今日各平台消耗与榜单题材无显著异动特征，维持常规投流策略。" }
+    ],
+    "rankings": [
+        { "rank": 1, "title": "我在八零年代当后妈", "episodes_count": 82, "female_lead": "徐梦洁", "male_lead": "未知", "production_house": "点众", "core_trope": ["穿越年代","后妈逆袭","打脸极品亲戚"], "views": "1.2亿+", "views_num": 12000, "platform": "红果", "trend": "new", "heat": 12000 },
+        { "rank": 2, "title": "裴总每天都想父凭子贵", "episodes_count": 95, "female_lead": "未知", "male_lead": "陈哲远", "production_house": "九州", "core_trope": ["带球跑","总裁追妻","萌宝助攻"], "views": "9800万+", "views_num": 9800, "platform": "红果", "trend": "new", "heat": 9800 },
+        { "rank": 3, "title": "厉总，你找错夫人了", "episodes_count": 90, "female_lead": "未知", "male_lead": "张集骏", "production_house": "点众", "core_trope": ["替身新娘","追妻火葬场","真假千金"], "views": "8500万+", "views_num": 8500, "platform": "红果", "trend": "new", "heat": 8500 },
+        { "rank": 4, "title": "哎呀！皇后娘娘来打工", "episodes_count": 85, "female_lead": "未知", "male_lead": "曾辉", "production_house": "九州", "core_trope": ["古穿今","职场逆袭","皇后反差"], "views": "7200万+", "views_num": 7200, "platform": "红果", "trend": "new", "heat": 7200 },
+        { "rank": 5, "title": "离婚后，她带六宝惊艳全球", "episodes_count": 92, "female_lead": "张晋宜", "male_lead": "未知", "production_house": "九州", "core_trope": ["带球跑","天才萌宝","全球惊艳"], "views": "5800万+", "views_num": 5800, "platform": "红果", "trend": "new", "heat": 5800 },
+        { "rank": 6, "title": "我在精神病院学斩神", "episodes_count": 100, "female_lead": "未知", "male_lead": "曾辉", "production_house": "未知厂牌", "core_trope": ["异能觉醒","精神病院","都市玄幻"], "views": "6500万+", "views_num": 6500, "platform": "红果", "trend": "same", "heat": 6500 },
+        { "rank": 7, "title": "闪婚后，傅先生马甲藏不住了", "episodes_count": 88, "female_lead": "未知", "male_lead": "李菲", "production_house": "麦芽", "core_trope": ["闪婚","隐藏身份","马甲大佬"], "views": "4500万+", "views_num": 4500, "platform": "红果", "trend": "new", "heat": 4500 },
+        { "rank": 8, "title": "前夫，请滚远点", "episodes_count": 78, "female_lead": "李柯以", "male_lead": "张集骏", "production_house": "麦芽", "core_trope": ["离婚逆袭","渣男后悔","女主独美"], "views": "3100万+", "views_num": 3100, "platform": "红果", "trend": "new", "heat": 3100 }
+    ],
+    "actors": {
+        "female": [
+            { "rank": 1, "name": "徐梦洁", "popularity": 982, "works": "我在八零年代当后妈" },
+            { "rank": 2, "name": "王格格", "popularity": 921, "works": "重生之我在霸总短剧里当保姆" },
+            { "rank": 3, "name": "赵佳", "popularity": 873, "works": "我的26岁女房客" },
+            { "rank": 4, "name": "李柯以", "popularity": 850, "works": "前夫请滚远点" },
+            { "rank": 5, "name": "张晋宜", "popularity": 820, "works": "离婚后前夫跪求复合" }
+        ],
+        "male": [
+            { "rank": 1, "name": "李菲", "popularity": 956, "works": "闪婚后傅先生马甲藏不住了" },
+            { "rank": 2, "name": "张集骏", "popularity": 898, "works": "前夫请滚远点" },
+            { "rank": 3, "name": "曾辉", "popularity": 880, "works": "我在精神病院学斩神" },
+            { "rank": 4, "name": "王皓祯", "popularity": 850, "works": "重生后她成了霸总的白月光" },
+            { "rank": 5, "name": "陈哲远", "popularity": 820, "works": "裴总每天都想父凭子贵" }
+        ]
+    },
+    "genre_distribution": {
+        "genres": [
+            {"name": "穿越年代", "percentage": 25},
+            {"name": "都市甜宠", "percentage": 20},
+            {"name": "离婚逆袭", "percentage": 15},
+            {"name": "带球跑", "percentage": 12},
+            {"name": "古穿今", "percentage": 10}
+        ]
+    },
+    "audience_profile": { "traits": ["女性主导", "下沉市场", "碎片化观看", "iOS 58%", "20:00-22:00高峰"], "peak_viewing_hours": "20:00-22:00", "avg_watch_duration": "45分钟" },
+    "platform": { "apps": [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}] },
+    "play_trend": {
+        "daily": [
+            { "date": "2026-06-09", "total_views": 64000 }
+        ],
+        "weekly": [
+            { "week": "2026-W23", "start_date": "2026-06-08", "end_date": "2026-06-14", "top1_title": "我在八零年代当后妈", "top1_views": "1.2亿+", "total_views": 64000 }
+        ]
+    }
+};
+
+// ==========================================
+// 2. 动态渲染逻辑
+// ==========================================
+// 加载历史日期列表
+async function loadHistoryDates() {
+    try {
+        const res = await fetch('./assets/data/all_history.json');
+        if (res.ok) {
+            const history = await res.json();
+            const select = document.getElementById('date-select');
+            (history.records || []).reverse().forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r.date;
+                opt.textContent = r.date;
+                select.appendChild(opt);
+            });
+        }
+    } catch (e) { console.warn('历史数据加载失败', e); }
+    
+    // 绑定日期选择事件
+    document.getElementById('date-select').addEventListener('change', async (e) => {
+        const selected = e.target.value;
+        if (selected === 'latest') {
+            await loadHistoryDates();
+renderDashboard();
+        } else {
+            await renderDashboard(selected);
+        }
+    });
+}
+
+async function renderDashboard(dateParam = null) {
+    let data = fallbackData;
+    try {
+        let url = './assets/data/latest.json';
+        if (dateParam) {
+            url = `./assets/data/history/${dateParam}.json`;
+        }
+        const res = await fetch(url);
+        if (res.ok) { data = await res.json(); console.log('JSON数据加载成功:', data); }
+    } catch (e) { console.warn('JSON拉取失败，启用兜底数据', e); }
+
+    // 基础指标
+    document.getElementById('update-time').innerText = `更新时间: ${data.data_date}`;
+    document.getElementById('kpi-users').innerText = data.industry?.user_scale || '--';
+    document.getElementById('kpi-market').innerText = data.industry?.market_size || '--';
+    document.getElementById('kpi-mau').innerText = data.industry?.app_mau || '--';
+    document.getElementById('kpi-ai').innerText = (data.industry?.ai_ratio || '--') + '%';
+    document.getElementById('kpi-female').innerText = (data.industry?.female_ratio || '--') + '%';
+    document.getElementById('kpi-drama').innerText = data.industry?.drama_count || '--';
+    document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas || '--';
+    document.getElementById('kpi-roi').innerText = data.industry?.roi || '--'; // 动态加载
+
+    // 行业快讯
+    document.getElementById('news-container').innerHTML = (data.daily_news || []).map(n => {
+        let typeClass = n.type === '预警' ? 'warn' : n.type === '商业' ? 'biz' : 'data';
+        return `<div class="news-item"><span class="news-type ${typeClass}">${n.type}</span><span class="news-content">${n.content}</span></div>`;
+    }).join('');
+
+    // 榜单 (恢复制作厂牌)
+    document.getElementById('rankings-container').innerHTML = (data.rankings || []).slice(0, 8).map(r => {
+        let rankClass = r.rank === 1 ? 'rank-gold' : r.rank === 2 ? 'rank-silver' : r.rank === 3 ? 'rank-bronze' : 'rank-normal';
+        let tags = (r.core_trope || r.tags || []).slice(0, 2).map((t) => `<span class="core-tag">${t}</span>`).join('');
+        return `
+            <tr>
+                <td class="text-center"><span class="rank-badge ${rankClass}">${r.rank}</span></td>
+                <td>
+                    <div style="font-weight: 600; color: #f8fafc; font-size: 14px;">${r.title}</div>
+                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">${r.female_lead || '--'} / ${r.male_lead || '--'} · ${r.episodes_count || '?'}集</div>
+                </td>
+                <td><span class="producer-tag">${r.production_house || '待DeepSeek补全'}</span></td>
+                <td><span class="ai-tag">${r.genre || '综合'}</span><br><div class="genre-tags">${tags}</div></td>
+                <td style="font-weight: 700; color: ${r.rank <= 3 ? '#fbbf24' : '#4ade80'};">${r.views}</td>
+                <td style="font-size: 12px; color: #94a3b8;">${r.platform}</td>
+            </tr>`;
+    }).join('');
+
+    // 异动点评
+    document.getElementById('insights-container').innerHTML = (data.insights || []).slice(0, 2).map(i => `
+        <div class="insight-item">
+            <div class="insight-item-title">${i.icon || '⚡'} ${i.title}</div>
+            <div class="insight-item-desc">${i.content}</div>
+        </div>`).join('');
+
+    // 演员榜
+    const renderActor = (a, colorClass) => `
+        <div class="actor-item">
+            <span class="actor-rank" style="${a.rank <= 3 ? 'background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff;' : ''}">${a.rank}</span>
+            <span class="actor-name">${a.name}</span>
+            <span class="actor-pop ${colorClass}">${a.popularity}</span>
+        </div>`;
+    document.getElementById('actors-female-container').innerHTML = (data.actors?.female || []).slice(0, 5).map(a => renderActor(a, 'female')).join('');
+    document.getElementById('actors-male-container').innerHTML = (data.actors?.male || []).slice(0, 5).map(a => renderActor(a, 'male')).join('');
+
+    // 题材分布
+    if (data.genre_distribution?.genres && data.genre_distribution.genres.length > 0) {
+        document.getElementById('genre-container').innerHTML = data.genre_distribution.genres.slice(0, 4).map(g => `
+            <div class="genre-item">
+                <span class="genre-name">${g.name}</span>
+                <div class="genre-bar"><div class="genre-bar-fill" style="width:${g.percentage}%"></div></div>
+                <span style="font-size: 12px; color: #818cf8; font-weight: 700;">${g.percentage}%</span>
+            </div>`).join('');
+    } else {
+        document.getElementById('genre-container').innerHTML = '<div style="color: #64748b; font-size: 12px;">题材分布数据待补充</div>';
+    }
+
+    // 观众画像
+    if (data.audience_profile?.traits && data.audience_profile.traits.length > 0) {
+        document.getElementById('audience-container').innerHTML = data.audience_profile.traits.map(t => 
+            `<span style="padding: 4px 10px; background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.2); border-radius: 6px; font-size: 11px; color: #f472b6;">${t}</span>`
+        ).join('');
+    } else {
+        document.getElementById('audience-container').innerHTML = '<span style="color: #64748b; font-size: 12px;">观众画像数据待补充</span>';
+    }
+
+    // 平台份额
+    if (data.platform?.apps && data.platform.apps.length > 0) {
+        document.getElementById('platform-container').innerHTML = data.platform.apps.map(p => `
+            <div class="genre-item">
+                <span class="genre-name" style="width: 80px; color: #f8fafc;">${p.name}</span>
+                <div class="genre-bar"><div class="genre-bar-fill green" style="width:${p.share}%"></div></div>
+                <span style="font-size: 12px; color: #4ade80; font-weight: 700;">${p.share}%</span>
+            </div>`).join('');
+    }
+
+    // 趋势图表
+    if (data.play_trend?.daily) {
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.play_trend.daily.map(d => d.date),
+                datasets: [{
+                    label: '播放量',
+                    data: data.play_trend.daily.map(d => d.total_views),
+                    borderColor: '#818cf8',
+                    backgroundColor: 'rgba(129, 140, 248, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+    }
+}
+
+renderDashboard();
+</script>
+</body>
+</html>

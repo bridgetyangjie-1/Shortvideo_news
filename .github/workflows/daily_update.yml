@@ -1,0 +1,101 @@
+name: 🚀 Daily Short-Drama Dashboard Update
+
+# 触发条件
+on:
+  schedule:
+    # 每天北京时间早上 9:00 执行 (UTC 时间 1:00)
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    # 允许手动触发，方便测试
+
+# 任务流程
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      COZE_WORKSPACE_PATH: ${{ github.workspace }}
+    
+    steps:
+      - name: 📥 拉取代码库
+        uses: actions/checkout@v4
+
+      - name: 🐍 设置Python环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install uv
+          uv sync
+
+      - name: 🚀 运行短剧数据采集工作流
+        run: |
+          echo "开始运行短剧数据采集工作流..."
+          uv run python src/main.py
+
+      - name: 📊 更新历史数据
+        run: |
+          TODAY=$(date +'%Y-%m-%d')
+          
+          # 检查是否有新数据
+          if [ -f "assets/data/latest.json" ] && [ -s "assets/data/latest.json" ]; then
+            echo "有新数据，更新历史记录..."
+            
+            # 复制到历史目录
+            mkdir -p assets/data/history
+            cp assets/data/latest.json assets/data/history/${TODAY}.json
+            
+            # 更新 all_history.json（合并所有历史）
+            python3 -c "
+import json
+import os
+
+history_dir = 'assets/data/history'
+all_data = []
+
+for f in sorted(os.listdir(history_dir)):
+    if f.endswith('.json'):
+        with open(os.path.join(history_dir, f)) as fp:
+            data = json.load(fp)
+            data['date'] = f.replace('.json', '')
+            all_data.append(data)
+
+with open('assets/data/all_history.json', 'w') as fp:
+    json.dump(all_data, fp, ensure_ascii=False, indent=2)
+"
+          else
+            echo "⚠️ 今日数据未生成，请检查日志。"
+          fi
+
+      - name: 🚀 提交并推送数据更新
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add assets/data/
+          
+          if git diff --staged --quiet; then
+            echo "数据无变化，跳过推送。"
+          else
+            git commit -m "📊 数据更新 [$(date +'%Y-%m-%d')]"
+            git push
+          fi
+
+      - name: ✅ 完成
+        run: |
+          echo "========================================"
+          echo "短剧数据采集流程完成！"
+          echo ""
+          echo "📌 数据文件："
+          echo "  - assets/data/latest.json (最新数据)"
+          echo "  - assets/data/history/YYYY-MM-DD.json (历史记录)"
+          echo "  - assets/data/all_history.json (全部历史)"
+          echo ""
+          echo "💡 提示："
+          echo "  本工作流使用 DeepSeek API 运行"
+          echo "  请确保 DEEPSEEK_API_KEY Secret 已正确配置"
+          echo "========================================"

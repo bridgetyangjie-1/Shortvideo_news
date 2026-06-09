@@ -1,0 +1,66 @@
+{
+  "daily_play_trend": [
+    {
+      "date": "2026-06-09",
+      "total_views": 0
+    }
+  ],
+  "weekly_rankings": [
+    {
+      "week": "2026-W23",
+      "start_date": "2026-06-08",
+      "end_date": "2026-06-14",
+      "top1_title": "我在八零年代当后妈",
+      "top1_views": "热力值98.2",
+      "total_views": 0
+    }
+  ],
+  "last_updated": "2026-06-09 18:31:06",
+  "last_rankings": [
+    {
+      "title": "我在八零年代当后妈",
+      "rank": 1
+    },
+    {
+      "title": "闪婚后，傅先生马甲藏不住了",
+      "rank": 2
+    },
+    {
+      "title": "重生之我在霸总短剧里当保姆",
+      "rank": 3
+    },
+    {
+      "title": "前夫，请滚远点",
+      "rank": 4
+    },
+    {
+      "title": "我的26岁女房客",
+      "rank": 5
+    },
+    {
+      "title": "离婚后，前夫跪求复合",
+      "rank": 6
+    },
+    {
+      "title": "我在精神病院学斩神",
+      "rank": 7
+    },
+    {
+      "title": "重生后，她成了霸总的白月光",
+      "rank": 8
+    },
+    {
+      "title": "闪婚老公是千亿总裁",
+      "rank": 9
+    },
+    {
+      "title": "逆袭！从保安到首富",
+      "rank": 10
+    }
+  ],
+  "platform_share": {
+    "抖音": 70,
+    "快手": 20,
+    "微信": 10
+  }
+}

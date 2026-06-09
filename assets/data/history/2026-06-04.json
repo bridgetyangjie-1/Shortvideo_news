@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "generated_at": "2026-06-04T12:30:00+08:00",
+  "data_date": "2026-06-04",
+  "industry": {
+    "user_scale": "7.10亿",
+    "market_size": "920亿+",
+    "drama_count": "22万+",
+    "billion_dramas": 15,
+    "ai_ratio": 30,
+    "female_ratio": 92,
+    "male_ratio": 8,
+    "app_mau": "2.85亿",
+    "app_mau_yoy": "+70%"
+  },
+  "rankings": [
+    {"rank": 1, "title": "姐，他真是我姐夫", "female_lead": "韩雨彤", "male_lead": "沉思", "views": "9000万", "views_num": 9000, "platform": "红果", "genre": "都市轻喜甜宠"},
+    {"rank": 2, "title": "错嫁有喜", "female_lead": "至春禾", "male_lead": "蔡欣洋", "views": "16亿", "views_num": 160000, "platform": "多平台", "genre": "古装甜宠"},
+    {"rank": 3, "title": "今天裴总和月亮谈恋爱了吗", "female_lead": "李柯以", "male_lead": "张翅", "views": "4.5亿", "views_num": 45000, "platform": "红果", "genre": "都市甜宠"},
+    {"rank": 4, "title": "沉乔未晚", "female_lead": "郭宇欣", "male_lead": "王道铁", "views": "6500万", "views_num": 6500, "platform": "红果", "genre": "都市情感"},
+    {"rank": 5, "title": "潮夜不眠", "female_lead": "余茵", "male_lead": "申浩男", "views": "6000万", "views_num": 6000, "platform": "红果", "genre": "都市情感"}
+  ],
+  "actors": {
+    "female": [
+      {"rank": 1, "name": "韩雨彤", "popularity": 880, "platform_fans": 270, "works": "姐，他真是我姐夫"},
+      {"rank": 2, "name": "李柯以", "popularity": 850, "platform_fans": 260, "works": "今天裴总..."},
+      {"rank": 3, "name": "至春禾", "popularity": 800, "platform_fans": 240, "works": "错嫁有喜"}
+    ],
+    "male": [
+      {"rank": 1, "name": "沉思", "popularity": 860, "platform_fans": 250, "works": "姐，他真是我姐夫"},
+      {"rank": 2, "name": "蔡欣洋", "popularity": 820, "platform_fans": 240, "works": "错嫁有喜"},
+      {"rank": 3, "name": "张翅", "popularity": 800, "platform_fans": 230, "works": "今天裴总..."}
+    ]
+  },
+  "insights": [
+    {"icon": "💡", "title": "女频主导", "content": "女频剧持续占榜单主导地位"},
+    {"icon": "📊", "title": "红果垄断", "content": "红果平台占据TOP榜单80%份额"}
+  ],
+  "quality_score": 75
+}
