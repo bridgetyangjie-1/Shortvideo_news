@@ -69,7 +69,7 @@ class PlatformData(BaseModel):
 
 class IndustryData(BaseModel):
     """行业数据"""
-    user_scale: str = Field(default="", description="用户规模")
+    user_scale: Any = Field(default="", description="用户规模（支持字符串或字典格式）")
     market_size: str = Field(default="", description="市场规模")
     drama_count: str = Field(default="", description="短剧数量")
     billion_dramas: int = Field(default=0, description="过亿短剧数")
@@ -114,7 +114,7 @@ class AgeDistribution(BaseModel):
 class RegionDistribution(BaseModel):
     """地域分布"""
     name: str = Field(default="", description="省份/城市名")
-    value: int = Field(default=0, description="占比")
+    value: float = Field(default=0.0, description="占比百分比")
 
 
 class AudienceProfile(BaseModel):
@@ -360,6 +360,7 @@ class PushNodeInput(BaseModel):
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     quality_score: float = Field(default=0.0, description="数据质量分数")
+    error_message: str = Field(default="", description="错误信息")
 
 
 class PushNodeOutput(BaseModel):

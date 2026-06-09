@@ -62,9 +62,23 @@ def main():
                 logger.info(f"TOP1: {rankings[0].get('title', 'N/A')}")
             
             # 保存结果到文件供后续步骤使用
-            output_path = os.path.join(os.environ['COZE_WORKSPACE_PATH'], 'assets', 'data', 'latest.json')
+            output_path = os.path.join(os.environ.get('COZE_WORKSPACE_PATH', os.getcwd()), 'assets', 'data', 'latest.json')
+            
+            # 将Pydantic对象转换为可序列化的字典
+            serializable_result = {}
+            for key, value in result.items():
+                if hasattr(value, 'model_dump'):
+                    serializable_result[key] = value.model_dump()
+                elif isinstance(value, list):
+                    serializable_result[key] = [
+                        item.model_dump() if hasattr(item, 'model_dump') else item
+                        for item in value
+                    ]
+                else:
+                    serializable_result[key] = value
+            
             with open(output_path, 'w', encoding='utf-8') as f:
-                json.dump(result, f, ensure_ascii=False, indent=2)
+                json.dump(serializable_result, f, ensure_ascii=False, indent=2)
             logger.info(f"数据已保存到: {output_path}")
             
             return True

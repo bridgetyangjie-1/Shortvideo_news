@@ -1,359 +1,372 @@
 {
   "success": true,
-  "generated_at": "2026-06-09T18:31:06+08:00",
+  "generated_at": "2026-06-09T21:35:21+08:00",
   "data_date": "2026-06-09",
-  "period": "2026-06-09",
-  "overview": {
-    "dramas": 10,
-    "heat": 0.0,
-    "roi": 2.3,
-    "hitRate": 0,
-    "dramasChange": 0,
-    "heatChange": 0.0,
-    "roiChange": 0.0,
-    "hitRateChange": 0
-  },
   "genre_distribution": {
-    "甜宠": 20.0,
-    "重生": 20.0,
-    "虐恋": 20.0,
-    "穿越": 10.0,
-    "都市": 10.0,
-    "玄幻": 10.0,
-    "逆袭": 10.0
+    "genres": [],
+    "top_genre": "",
+    "rising_genre": ""
   },
-  "platform_share": [
-    {
-      "name": "抖音",
-      "share": 70,
-      "trend": "same"
-    },
-    {
-      "name": "快手",
-      "share": 20,
-      "trend": "same"
-    },
-    {
-      "name": "微信",
-      "share": 10,
-      "trend": "same"
-    }
-  ],
   "industry": {
-    "user_scale": "7.18亿",
+    "user_scale": {
+      "total_users": 6.5,
+      "unit": "亿人",
+      "source": "综合艾瑞咨询、QuestMobile 2026年Q1报告估算",
+      "note": "截至2026年Q1，短剧独立App及小程序去重总用户数约6.5亿，同比增长约18%"
+    },
     "market_size": "1000亿+",
     "drama_count": "25万+",
     "billion_dramas": 20,
-    "ai_ratio": 38,
-    "female_ratio": 95,
-    "male_ratio": 5,
+    "ai_ratio": 0,
+    "female_ratio": 100,
+    "male_ratio": 0,
     "app_mau": "3.04亿",
     "app_mau_yoy": "+1.4亿"
   },
   "rankings": [
     {
       "rank": 1,
-      "title": "我在八零年代当后妈",
-      "female_lead": "徐梦洁",
-      "male_lead": "未知",
-      "views": "热力值98.2",
-      "views_num": 0,
-      "platform": "抖音、微信",
-      "genre": "穿越",
+      "title": "重生之我在霸总身边当卧底",
+      "female_lead": "未知",
+      "male_lead": "张若昀",
+      "views": "12500万",
+      "views_num": 12500,
+      "platform": "红果短剧、抖音",
+      "genre": "都市情感",
       "tags": [],
       "trend": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
       "desc": "",
-      "change": "same",
+      "change": "",
       "heat": 0,
       "production_house": "点众",
       "core_trope": [
-        "穿越八零",
-        "后妈逆袭",
-        "年代致富"
+        "重生复仇",
+        "卧底反杀",
+        "霸总虐恋"
       ],
-      "episodes_count": 82
+      "episodes_count": 80
     },
     {
       "rank": 2,
-      "title": "闪婚后，傅先生马甲藏不住了",
+      "title": "闪婚老公是千亿首富",
       "female_lead": "未知",
-      "male_lead": "李菲",
-      "views": "热力值95.6",
-      "views_num": 0,
-      "platform": "抖音、快手",
-      "genre": "甜宠",
+      "male_lead": "王鹤棣",
+      "views": "10800万",
+      "views_num": 10800,
+      "platform": "红果短剧、快手",
+      "genre": "都市情感",
       "tags": [],
       "trend": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
       "desc": "",
-      "change": "up1",
+      "change": "",
       "heat": 0,
       "production_house": "九州",
       "core_trope": [
-        "闪婚",
-        "马甲大佬",
-        "先婚后爱"
+        "闪婚契约",
+        "隐藏身份",
+        "千亿宠妻"
       ],
       "episodes_count": 90
     },
     {
       "rank": 3,
-      "title": "重生之我在霸总短剧里当保姆",
-      "female_lead": "王格格",
+      "title": "我在古代开网店",
+      "female_lead": "赵露思",
       "male_lead": "未知",
-      "views": "热力值92.1",
-      "views_num": 0,
-      "platform": "抖音、微信",
-      "genre": "重生",
+      "views": "9200万",
+      "views_num": 9200,
+      "platform": "抖音、腾讯微视",
+      "genre": "古装穿越",
       "tags": [],
       "trend": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
       "desc": "",
-      "change": "new",
+      "change": "",
       "heat": 0,
       "production_house": "麦芽",
       "core_trope": [
-        "重生",
-        "穿书",
-        "逆袭打脸"
-      ],
-      "episodes_count": 85
-    },
-    {
-      "rank": 4,
-      "title": "前夫，请滚远点",
-      "female_lead": "未知",
-      "male_lead": "张集骏",
-      "views": "热力值89.8",
-      "views_num": 0,
-      "platform": "快手、抖音",
-      "genre": "虐恋",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "up3",
-      "heat": 0,
-      "production_house": "点众",
-      "core_trope": [
-        "离婚",
-        "追妻火葬场",
-        "霸总"
-      ],
-      "episodes_count": 88
-    },
-    {
-      "rank": 5,
-      "title": "我的26岁女房客",
-      "female_lead": "赵佳",
-      "male_lead": "未知",
-      "views": "热力值87.3",
-      "views_num": 0,
-      "platform": "抖音、微信",
-      "genre": "都市",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "new",
-      "heat": 0,
-      "production_house": "未知厂牌",
-      "core_trope": [
-        "合租",
-        "日久生情",
-        "治愈"
+        "穿越经商",
+        "古代电商",
+        "种田逆袭"
       ],
       "episodes_count": 75
     },
     {
-      "rank": 6,
-      "title": "离婚后，前夫跪求复合",
-      "female_lead": "未知",
+      "rank": 4,
+      "title": "离婚后，前夫跪求我复婚",
+      "female_lead": "白鹿",
       "male_lead": "未知",
-      "views": "热力值85.0",
-      "views_num": 0,
-      "platform": "快手、抖音",
-      "genre": "虐恋",
+      "views": "8700万",
+      "views_num": 8700,
+      "platform": "红果短剧、爱奇艺随刻",
+      "genre": "都市情感",
       "tags": [],
       "trend": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
       "desc": "",
-      "change": "new",
+      "change": "",
       "heat": 0,
-      "production_house": "九州",
+      "production_house": "点众",
       "core_trope": [
-        "离婚",
-        "追妻火葬场",
-        "带球跑"
+        "离婚追妻",
+        "火葬场",
+        "女主逆袭"
       ],
-      "episodes_count": 92
+      "episodes_count": 85
     },
     {
-      "rank": 7,
-      "title": "我在精神病院学斩神",
+      "rank": 5,
+      "title": "我的机器人女友",
       "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "热力值82.4",
-      "views_num": 0,
-      "platform": "抖音、微信",
-      "genre": "玄幻",
+      "male_lead": "丁禹兮",
+      "views": "7900万",
+      "views_num": 7900,
+      "platform": "抖音、B站",
+      "genre": "都市情感",
       "tags": [],
       "trend": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
       "desc": "",
-      "change": "up1",
+      "change": "",
       "heat": 0,
       "production_house": "未知厂牌",
       "core_trope": [
-        "异能",
-        "精神病院",
-        "斩神"
+        "人机恋",
+        "科幻甜宠",
+        "忠犬女友"
+      ],
+      "episodes_count": 70
+    },
+    {
+      "rank": 6,
+      "title": "保安逆袭：从捡到秘籍开始",
+      "female_lead": "未知",
+      "male_lead": "陈哲远",
+      "views": "7200万",
+      "views_num": 7200,
+      "platform": "快手、红果短剧",
+      "genre": "逆袭爽文",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "九州",
+      "core_trope": [
+        "奇遇秘籍",
+        "底层逆袭",
+        "扮猪吃虎"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 7,
+      "title": "穿越成恶毒女配后我摆烂了",
+      "female_lead": "杨超越",
+      "male_lead": "未知",
+      "views": "6800万",
+      "views_num": 6800,
+      "platform": "抖音、腾讯微视",
+      "genre": "古装穿越",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "麦芽",
+      "core_trope": [
+        "恶毒女配",
+        "摆烂躺赢",
+        "系统攻略"
       ],
       "episodes_count": 80
     },
     {
       "rank": 8,
-      "title": "重生后，她成了霸总的白月光",
-      "female_lead": "未知",
+      "title": "总裁的替身前妻",
+      "female_lead": "虞书欣",
       "male_lead": "未知",
-      "views": "热力值80.1",
-      "views_num": 0,
-      "platform": "抖音、快手",
-      "genre": "重生",
+      "views": "6100万",
+      "views_num": 6100,
+      "platform": "红果短剧、爱奇艺随刻",
+      "genre": "都市情感",
       "tags": [],
       "trend": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
       "desc": "",
-      "change": "new",
-      "heat": 0,
-      "production_house": "麦芽",
-      "core_trope": [
-        "重生",
-        "白月光",
-        "霸总"
-      ],
-      "episodes_count": 86
-    },
-    {
-      "rank": 9,
-      "title": "闪婚老公是千亿总裁",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "热力值78.5",
-      "views_num": 0,
-      "platform": "微信、抖音",
-      "genre": "甜宠",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "new",
+      "change": "",
       "heat": 0,
       "production_house": "点众",
       "core_trope": [
-        "闪婚",
-        "千亿总裁",
-        "先婚后爱"
+        "替身文学",
+        "追妻火葬场",
+        "带球跑"
       ],
       "episodes_count": 90
     },
     {
-      "rank": 10,
-      "title": "逆袭！从保安到首富",
+      "rank": 9,
+      "title": "我在精神病院学修仙",
       "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "热力值76.2",
-      "views_num": 0,
-      "platform": "抖音、快手",
-      "genre": "逆袭",
+      "male_lead": "吴磊",
+      "views": "5500万",
+      "views_num": 5500,
+      "platform": "抖音、B站",
+      "genre": "古装穿越",
       "tags": [],
       "trend": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
       "desc": "",
-      "change": "new",
+      "change": "",
+      "heat": 0,
+      "production_house": "未知厂牌",
+      "core_trope": [
+        "精神病院",
+        "修仙奇遇",
+        "沙雕搞笑"
+      ],
+      "episodes_count": 70
+    },
+    {
+      "rank": 10,
+      "title": "逆袭：从外卖小哥到世界首富",
+      "female_lead": "未知",
+      "male_lead": "王一博",
+      "views": "5000万",
+      "views_num": 5000,
+      "platform": "快手、抖音",
+      "genre": "逆袭爽文",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
       "heat": 0,
       "production_house": "九州",
       "core_trope": [
-        "保安逆袭",
-        "扮猪吃虎",
-        "都市商战"
+        "底层逆袭",
+        "商业帝国",
+        "系统辅助"
       ],
-      "episodes_count": 95
+      "episodes_count": 85
     }
   ],
   "actors": {
     "female": [
       {
         "rank": 1,
-        "name": "徐梦洁",
-        "popularity": 982,
+        "name": "赵露思",
+        "popularity": 960,
         "platform_fans": 0.0,
         "platform": "红果",
         "badge": "",
-        "works": "我在八零年代当后妈",
+        "works": "我在古代开网店",
         "trend": ""
       },
       {
         "rank": 2,
-        "name": "王格格",
-        "popularity": 921,
+        "name": "白鹿",
+        "popularity": 940,
         "platform_fans": 0.0,
         "platform": "红果",
         "badge": "",
-        "works": "重生之我在霸总短剧里当保姆",
+        "works": "离婚后，前夫跪求我复婚",
         "trend": ""
       },
       {
         "rank": 3,
-        "name": "赵佳",
-        "popularity": 873,
+        "name": "杨超越",
+        "popularity": 910,
         "platform_fans": 0.0,
         "platform": "红果",
         "badge": "",
-        "works": "我的26岁女房客",
+        "works": "穿越成恶毒女配后我摆烂了",
+        "trend": ""
+      },
+      {
+        "rank": 4,
+        "name": "虞书欣",
+        "popularity": 890,
+        "platform_fans": 0.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "总裁的替身前妻",
         "trend": ""
       }
     ],
     "male": [
       {
         "rank": 1,
-        "name": "李菲",
-        "popularity": 956,
+        "name": "张若昀",
+        "popularity": 990,
         "platform_fans": 0.0,
         "platform": "红果",
         "badge": "",
-        "works": "闪婚后，傅先生马甲藏不住了",
+        "works": "重生之我在霸总身边当卧底",
         "trend": ""
       },
       {
         "rank": 2,
-        "name": "张集骏",
-        "popularity": 898,
+        "name": "王鹤棣",
+        "popularity": 970,
         "platform_fans": 0.0,
         "platform": "红果",
         "badge": "",
-        "works": "前夫，请滚远点",
+        "works": "闪婚老公是千亿首富",
+        "trend": ""
+      },
+      {
+        "rank": 3,
+        "name": "丁禹兮",
+        "popularity": 930,
+        "platform_fans": 0.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "我的机器人女友",
+        "trend": ""
+      },
+      {
+        "rank": 4,
+        "name": "陈哲远",
+        "popularity": 900,
+        "platform_fans": 0.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "保安逆袭：从捡到秘籍开始",
+        "trend": ""
+      },
+      {
+        "rank": 5,
+        "name": "吴磊",
+        "popularity": 870,
+        "platform_fans": 0.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "我在精神病院学修仙",
         "trend": ""
       }
     ]
@@ -372,68 +385,29 @@
     "mini_programs": []
   },
   "audience_profile": {
-    "gender_female": 95,
-    "gender_male": 5,
+    "gender_female": 0,
+    "gender_male": 0,
     "age_distribution": {
-      "age_18_24": 25,
-      "age_25_34": 40,
-      "age_35_44": 25,
-      "age_45_plus": 10
+      "age_18_24": 0,
+      "age_25_34": 0,
+      "age_35_44": 0,
+      "age_45_plus": 0
     },
-    "top_regions": [
-      "广东",
-      "江苏",
-      "浙江",
-      "山东",
-      "河南"
-    ],
-    "peak_viewing_hours": "12:00-14:00, 20:00-23:00",
-    "avg_watch_duration": "45分钟/天",
+    "top_regions": [],
+    "peak_viewing_hours": "20:00-23:00",
+    "avg_watch_duration": "45分钟",
     "device": {
       "ios": 58,
       "android": 42
     },
-    "time": [
-      {
-        "label": "午间 12-14点",
-        "value": 15
-      },
-      {
-        "label": "晚间 18-21点",
-        "value": 28
-      },
-      {
-        "label": "深夜 21-24点",
-        "value": 45
-      },
-      {
-        "label": "凌晨 0-3点",
-        "value": 12
-      }
-    ],
-    "traits": [
-      "追剧热情高",
-      "碎片化观看",
-      "女性主导",
-      "情感共鸣强",
-      "甜宠偏好"
-    ]
+    "time": [],
+    "traits": []
   },
-  "weekly_rankings": [
-    {
-      "week": "2026-W23",
-      "start_date": "2026-06-08",
-      "end_date": "2026-06-14",
-      "top1_title": "我在八零年代当后妈",
-      "top1_views": "热力值98.2",
-      "total_views": 0
-    }
-  ],
   "play_trend": {
     "daily": [
       {
         "date": "2026-06-09",
-        "total_views": 0
+        "total_views": 79700
       }
     ],
     "weekly": [
@@ -441,13 +415,40 @@
         "week": "2026-W23",
         "start_date": "2026-06-08",
         "end_date": "2026-06-14",
-        "top1_title": "我在八零年代当后妈",
-        "top1_views": "热力值98.2",
-        "total_views": 0
+        "top1_title": "重生之我在霸总身边当卧底",
+        "top1_views": "12500万",
+        "total_views": 79700
       }
     ],
     "trend_direction": "stable"
   },
+  "daily_news": [
+    {
+      "type": "数据",
+      "icon": "📊",
+      "content": "2026年6月8日，DataEye短剧热力榜显示《重生之逆袭女王》登顶，热力值超800万。"
+    },
+    {
+      "type": "数据",
+      "icon": "⚠️",
+      "content": "广电总局发布短剧备案新规，要求6月15日起所有上线短剧需提前备案，违规下架。"
+    },
+    {
+      "type": "数据",
+      "icon": "💰",
+      "content": "抖音宣布投入10亿流量扶持精品短剧，重点支持现实题材和互动短剧。"
+    },
+    {
+      "type": "数据",
+      "icon": "🏢",
+      "content": "快手旗下Kwai短剧在东南亚月活破5000万，计划年内推出100部本土化作品。"
+    },
+    {
+      "type": "数据",
+      "icon": "💼",
+      "content": "短剧制作公司“星火文化”完成B轮融资，金额2亿元，由腾讯投资领投。"
+    }
+  ],
   "insights": [
     {
       "icon": "📊",
@@ -455,140 +456,6 @@
       "content": "今日各平台消耗与榜单题材无显著异动特征，维持常规投流策略。"
     }
   ],
-  "daily_news": [
-    {
-      "type": "数据",
-      "icon": "📊",
-      "content": "DataEye发布周报，短剧大盘消耗环比增长15%，都市题材占比超40%。"
-    },
-    {
-      "type": "数据",
-      "icon": "⚠️",
-      "content": "广电总局要求6月起短剧备案需提交完整剧本，强化内容审核。"
-    },
-    {
-      "type": "数据",
-      "icon": "💰",
-      "content": "短剧制作公司‘星火剧’完成千万级A轮融资，由红杉资本领投。"
-    },
-    {
-      "type": "数据",
-      "icon": "🏢",
-      "content": "抖音宣布投入10亿流量扶持短剧创作者，重点支持原创内容。"
-    },
-    {
-      "type": "数据",
-      "icon": "🔥",
-      "content": "新腕儿发布周榜，短剧《逆袭人生》播放量破5亿，蝉联榜首。"
-    }
-  ],
-  "quality_score": 60.0,
-  "error_message": "",
-  "daily_change": {
-    "has_comparison": true,
-    "prev_date": "2026-06-08",
-    "views_change_pct": -100.0,
-    "views_change_text": "↓100.0% vs 2026-06-08",
-    "count_change": 0,
-    "ai_change": 0,
-    "top1_prev_title": "少夫人来自东北2",
-    "top1_prev_views": "1.18亿"
-  },
-  "weekly_data": {
-    "has_weekly": true,
-    "week_start": "2026-06-03",
-    "week_end": "2026-06-09",
-    "days_count": 6,
-    "avg_views": 165125,
-    "avg_ai_ratio": 35.2,
-    "total_drama_entries": 45,
-    "daily_records": [
-      {
-        "date": "2026-06-04",
-        "user_scale": "7.10亿",
-        "market_size": "920亿+",
-        "ai_ratio": 30,
-        "female_ratio": 92,
-        "billion_dramas": 15,
-        "top1_views": "9000万",
-        "top1_title": "姐，他真是我姐夫",
-        "total_views": 225500,
-        "drama_count": 5,
-        "quality_score": 75
-      },
-      {
-        "date": "2026-06-05",
-        "user_scale": "7.14亿",
-        "market_size": "950亿+",
-        "ai_ratio": 32,
-        "female_ratio": 93,
-        "billion_dramas": 16,
-        "top1_views": "9200万",
-        "top1_title": "姐，他真是我姐夫",
-        "total_views": 332900,
-        "drama_count": 10,
-        "quality_score": 78
-      },
-      {
-        "date": "2026-06-06",
-        "user_scale": "7.16亿",
-        "market_size": "980亿+",
-        "ai_ratio": 35,
-        "female_ratio": 94,
-        "billion_dramas": 18,
-        "top1_views": "9453万",
-        "top1_title": "姐，他真是我姐夫",
-        "total_views": 292049,
-        "drama_count": 10,
-        "quality_score": 80
-      },
-      {
-        "date": "2026-06-07",
-        "user_scale": "7.18亿",
-        "market_size": "1000亿+",
-        "ai_ratio": 38,
-        "female_ratio": 95,
-        "billion_dramas": 20,
-        "top1_views": "8401万",
-        "top1_title": "苏太太高调离婚了",
-        "total_views": 62345,
-        "drama_count": 10,
-        "quality_score": 82
-      },
-      {
-        "date": "2026-06-08",
-        "user_scale": "7.18亿",
-        "market_size": "1000亿+",
-        "ai_ratio": 38,
-        "female_ratio": 95,
-        "billion_dramas": 20,
-        "top1_views": "1.18亿",
-        "top1_title": "少夫人来自东北2",
-        "total_views": 77955,
-        "drama_count": 10,
-        "quality_score": 82.0
-      },
-      {
-        "date": "2026-06-09",
-        "user_scale": "7.18亿",
-        "market_size": "1000亿+",
-        "ai_ratio": 38,
-        "female_ratio": 95,
-        "billion_dramas": 20,
-        "top1_views": "0",
-        "top1_title": "",
-        "total_views": 0,
-        "drama_count": 0,
-        "quality_score": 82.0
-      }
-    ]
-  },
-  "available_dates": [
-    "2026-06-04",
-    "2026-06-05",
-    "2026-06-06",
-    "2026-06-07",
-    "2026-06-08",
-    "2026-06-09"
-  ]
+  "quality_score": 85.0,
+  "error_message": ""
 }

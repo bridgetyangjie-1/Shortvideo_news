@@ -1,0 +1,19 @@
+{
+  "daily_play_trend": [
+    {
+      "date": "2026-06-09",
+      "total_views": 79700
+    }
+  ],
+  "weekly_rankings": [
+    {
+      "week": "2026-W23",
+      "start_date": "2026-06-08",
+      "end_date": "2026-06-14",
+      "top1_title": "重生之我在霸总身边当卧底",
+      "top1_views": "12500万",
+      "total_views": 79700
+    }
+  ],
+  "last_updated": "2026-06-09 21:35:21"
+}
