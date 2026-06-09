@@ -29,8 +29,9 @@ jobs:
       - name: Run daily update workflow
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          PYTHONPATH: ${{ github.workspace }}/src
         run: |
-          uv run python src/main.py
+          uv run python src/run_github.py
 
       - name: Commit changes
         run: |
