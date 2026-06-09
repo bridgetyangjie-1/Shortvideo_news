@@ -60,7 +60,7 @@ def search_node(
 - 尝试标注数据来源
 - 如果某些数据无法获取，标注"暂无数据"
 """
-        
+
         # 执行搜索
         logger.info(f"开始搜索短剧行业数据，日期: {data_date}")
         response = client.search(
@@ -69,6 +69,33 @@ def search_node(
             temperature=0.3,
             max_tokens=8192
         )
+        
+        # 🔍 新增：搜索红果平台标签数据
+        tag_search_prompt = f"""请搜索红果短剧平台的"最热"分类页面数据。
+
+重点关注：
+1. 热门短剧的标签信息（如都市、甜宠、重生、穿越、马甲、打脸等）
+2. 各标签对应的短剧数量和播放量热度
+3. 红果平台的标签分类体系：
+   - 背景标签：现代、都市、古代、乡村、年代、架空、职场、民国、校园等
+   - 主题标签：现言、女性成长、脑洞、奇幻、玄幻、古言、战神、仙侠、悬疑等
+   - 设定标签：打脸虐渣、大男主、大女主、马甲、重生、穿越、系统、先婚后爱等
+
+请返回：
+- TOP20热门短剧的剧名和标签列表
+- 统计各标签出现的次数和热度
+
+日期参考：{data_date}
+"""
+
+        tag_response = client.search(
+            query=tag_search_prompt,
+            system_prompt="你是一个数据分析专家，擅长从短剧平台提取标签分类数据。请返回具体的标签统计信息。",
+            temperature=0.3,
+            max_tokens=4096
+        )
+        
+        logger.info(f"标签数据搜索完成，长度: {len(tag_response)} 字符")
         
         # 处理搜索结果
         # DeepSeek的搜索会返回整合后的文本，我们需要将其转换为结构化格式
@@ -86,7 +113,20 @@ def search_node(
             "raw_content": response  # 保留完整内容供后续节点处理
         })
         
-        logger.info(f"搜索完成，获取到数据长度: {len(response)} 字符")
+        # 🔍 新增：添加标签数据记录
+        search_results.append({
+            "keyword": "红果平台标签数据",
+            "title": f"红果短剧标签分布 {data_date}",
+            "url": "deepseek-search-tags",
+            "snippet": tag_response[:500] if len(tag_response) > 500 else tag_response,
+            "summary": tag_response,
+            "site_name": "DeepSeek联网搜索",
+            "publish_time": data_date,
+            "raw_content": tag_response,  # 保留完整内容供标签分析节点处理
+            "type": "tag_data"  # 标记为标签数据
+        })
+        
+        logger.info(f"搜索完成，获取到数据长度: {len(response)} 字符，标签数据长度: {len(tag_response)} 字符")
         
         return SearchNodeOutput(
             data_date=data_date,

@@ -118,12 +118,8 @@ def create_graph():
         metadata={"type": "agent", "llm_cfg": "config/audience_profile_llm_cfg.json"}
     )
     
-    # 7. 题材分布节点（大模型）
-    builder.add_node(
-        "genre_distribution_node", 
-        genre_distribution_node, 
-        metadata={"type": "agent", "llm_cfg": "config/genre_distribution_llm_cfg.json"}
-    )
+    # 7. 题材分布节点（统计节点，不需要LLM）
+    builder.add_node("genre_distribution_node", genre_distribution_node)
     
     # 8. 异动点评节点（大模型）- 异动触发式
     builder.add_node(

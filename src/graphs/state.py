@@ -141,11 +141,42 @@ class GenreStats(BaseModel):
     trend: str = Field(default="same", description="趋势：up/down/same")
 
 
+# ==================== 红果标签数据结构 (v1.2) ====================
+
+class TagHeat(BaseModel):
+    """标签热度"""
+    name: str = Field(..., description="标签名称（如都市、甜宠、重生）")
+    category: str = Field(default="", description="标签类别（背景/主题/设定）")
+    count: int = Field(default=0, description="出现次数")
+    avg_views: int = Field(default=0, description="平均播放量（万）")
+    heat: int = Field(default=0, description="热度指数（加权计算）")
+
+
+class TagDistribution(BaseModel):
+    """标签分布"""
+    background_tags: List[TagHeat] = Field(default=[], description="背景标签分布")
+    theme_tags: List[TagHeat] = Field(default=[], description="主题标签分布")
+    setting_tags: List[TagHeat] = Field(default=[], description="设定标签分布")
+    top_tag: str = Field(default="", description="最热门标签")
+    rising_tag: str = Field(default="", description="上升最快标签")
+
+
 class GenreDistribution(BaseModel):
     """题材分布"""
     genres: List[GenreStats] = Field(default=[], description="各题材统计")
     top_genre: str = Field(default="", description="最热门题材")
     rising_genre: str = Field(default="", description="上升最快题材")
+    # 🔍 新增：标签分布数据（v1.2）
+    background_tags: List[TagHeat] = Field(default=[], description="背景标签分布（现代/古代等）")
+    theme_tags: List[TagHeat] = Field(default=[], description="主题标签分布（甜宠/复仇等）")
+    setting_tags: List[TagHeat] = Field(default=[], description="设定标签分布（重生/穿越等）")
+    top_tag: str = Field(default="", description="最热门标签")
+    rising_tag: str = Field(default="", description="上升最快标签")
+    background_tags: List[TagHeat] = Field(default=[], description="背景标签（现代/古代/都市等）")
+    theme_tags: List[TagHeat] = Field(default=[], description="主题标签（甜宠/复仇/玄幻等）")
+    setting_tags: List[TagHeat] = Field(default=[], description="设定标签（重生/穿越/马甲等）")
+    top_tag: str = Field(default="", description="最热门标签")
+    rising_tag: str = Field(default="", description="上升最快标签")
 
 
 class OverviewStats(BaseModel):
@@ -428,6 +459,7 @@ class GenreStat(BaseModel):
 class GenreDistributionInput(BaseModel):
     """题材分布节点输入"""
     enriched_rankings: List[DramaRanking] = Field(default=[], description="补充后的完整榜单")
+    search_results: List[Dict[str, Any]] = Field(default=[], description="搜索结果（包含标签数据）")
 
 
 class GenreDistributionOutput(BaseModel):
@@ -435,6 +467,12 @@ class GenreDistributionOutput(BaseModel):
     genres: List[GenreStat] = Field(default=[], description="各题材统计")
     total_count: int = Field(default=0, description="总短剧数")
     total_views: int = Field(default=0, description="总播放量(万)")
+    # 🔍 新增：标签分布数据
+    background_tags: List[TagHeat] = Field(default=[], description="背景标签分布")
+    theme_tags: List[TagHeat] = Field(default=[], description="主题标签分布")
+    setting_tags: List[TagHeat] = Field(default=[], description="设定标签分布")
+    top_tag: str = Field(default="", description="最热门标签")
+    rising_tag: str = Field(default="", description="上升最快标签")
 
 
 # ==================== 历史数据节点 ====================

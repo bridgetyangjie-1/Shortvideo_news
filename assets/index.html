@@ -257,6 +257,11 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     <div class="glass-card">
       <div class="section-title"><i class="fas fa-chart-pie" style="color:#60a5fa;"></i> 题材分布 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
       <div id="genre-container" style="margin-top: 20px;"></div>
+      <!-- 🔍 新增：标签热度分布 (v1.2) -->
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div style="font-size: 13px; color: #a78bfa; margin-bottom: 12px;"><i class="fas fa-tags"></i> 热门标签分布</div>
+        <div id="tags-container" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+      </div>
     </div>
     
     <div class="glass-card">
@@ -448,6 +453,35 @@ async function renderDashboard(dateParam = null) {
             </div>`).join('');
     } else {
         document.getElementById('genre-container').innerHTML = '<div style="color: #64748b; font-size: 12px;">题材分布数据待补充</div>';
+    }
+
+    // 🔍 新增：标签热度分布渲染 (v1.2)
+    const tagsContainer = document.getElementById('tags-container');
+    if (tagsContainer) {
+        const allTags = [];
+        // 合并三类标签
+        if (data.genre_distribution?.background_tags) {
+            data.genre_distribution.background_tags.forEach(t => allTags.push({...t, type: '背景', color: '#60a5fa'}));
+        }
+        if (data.genre_distribution?.theme_tags) {
+            data.genre_distribution.theme_tags.forEach(t => allTags.push({...t, type: '主题', color: '#f472b6'}));
+        }
+        if (data.genre_distribution?.setting_tags) {
+            data.genre_distribution.setting_tags.forEach(t => allTags.push({...t, type: '设定', color: '#4ade80'}));
+        }
+        
+        if (allTags.length > 0) {
+            // 按热度排序，取TOP10
+            allTags.sort((a, b) => b.heat - a.heat);
+            tagsContainer.innerHTML = allTags.slice(0, 12).map(t => 
+                `<span style="padding: 6px 12px; background: rgba(${t.color === '#60a5fa' ? '96,165,250' : t.color === '#f472b6' ? '244,114,182' : '74,222,128'}, 0.15); border: 1px solid ${t.color}; border-radius: 8px; font-size: 12px; color: ${t.color}; display: inline-flex; align-items: center; gap: 4px;">
+                    <span style="font-weight: 600;">${t.name}</span>
+                    <span style="font-size: 10px; opacity: 0.7;">${t.count}部</span>
+                </span>`
+            ).join('');
+        } else {
+            tagsContainer.innerHTML = '<span style="color: #64748b; font-size: 12px;">标签数据待补充</span>';
+        }
     }
 
     // 观众画像
