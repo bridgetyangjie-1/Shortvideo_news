@@ -11,6 +11,8 @@ from pydantic import BaseModel
 
 class Context(BaseModel):
     """简化版Context，用于GitHub Actions环境"""
+    model_config = {"arbitrary_types_allowed": True}
+    
     user_id: str = "github_actions"
     logger: logging.Logger = logging.getLogger("workflow")
     
