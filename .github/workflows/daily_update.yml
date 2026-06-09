@@ -1,0 +1,47 @@
+name: Daily Update
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Install dependencies
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync
+
+      - name: Run workflow
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEPSEEK_API_KEY }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          export PYTHONPATH="${GITHUB_WORKSPACE}/src"
+          uv run python src/run_github.py
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add assets/data/
+          git diff --quiet && git diff --staged --quiet || git commit -m "auto: 每日数据更新"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
