@@ -9,7 +9,7 @@ from typing import List, Dict, Any
 
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
-from coze_coding_utils.runtime_ctx.context import Context
+from utils.runtime import Context
 
 from graphs.state import (
     HistoryDataInput,
