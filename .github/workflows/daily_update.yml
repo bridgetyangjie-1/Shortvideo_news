@@ -30,7 +30,7 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
-          uv run python src/main.py
+          uv run python run_workflow.py
 
       - name: Commit changes
         run: |
