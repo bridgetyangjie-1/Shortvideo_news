@@ -1,5 +1,17 @@
 # 短剧行业研究数据自动更新工作流
 
+## ⚠️ 重要注意事项
+
+**Coze Coding内部依赖无法在GitHub Actions等外部环境使用！**
+
+以下模块只能在Coze Coding平台内部运行：
+- `coze_coding_dev_sdk` - Coze内部SDK
+- `coze_coding_utils` - Coze内部工具库
+- `cozeloop` - Coze内部循环库
+- `S3SyncStorage` - Coze内部对象存储
+
+**GitHub Actions入口**: `src/run_github.py`（不依赖任何Coze内部模块）
+
 ## 项目概述
 - **名称**: 短剧行业研究数据自动更新工作流
 - **功能**: 使用DeepSeek API自动抓取短剧行业热榜数据，生成多维度分析报告
