@@ -10,7 +10,7 @@ from typing import List, Dict, Any
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
-from utils.runtime import Context
+from coze_coding_utils.runtime_ctx.context import Context
 
 from tools.deepseek_api import DeepSeekClient
 from graphs.state import NewsNodeInput, NewsNodeOutput, DailyNews
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> NewsNodeOutput:
     """
     title: 行业快讯搜索
-    desc: 使用DeepSeek联网搜索短剧行业新闻，提炼为3-5条快讯
+    desc: 使用DeepSeek联网搜索短剧行业新闻，提炼为5条快讯（100字缩写+原文链接）
     integrations: DeepSeek API
     """
     ctx = runtime.context
@@ -40,7 +40,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         _cfg = {"config": {"temperature": 0.3}, "sp": "", "up": ""}
     
     sp = _cfg.get("sp", "")
-    up = _cfg.get("up", "")
+    up_template = _cfg.get("up", "")
     temperature = _cfg.get("config", {}).get("temperature", 0.3)
     
     # 计算日期
@@ -54,42 +54,60 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         client = DeepSeekClient()
         
         # 使用DeepSeek联网搜索行业快讯
-        search_prompt = f"""请搜索互联网，获取最新的短剧行业快讯，重点关注：
-1. 新腕儿、DataEye等平台的最新战报
-2. 广电总局、抖音、微信等平台的短剧新规和政策
-3. 短剧行业的融资动态
-4. 大厂（抖音、快手、腾讯等）的短剧业务动态
+        search_prompt = f"""请搜索互联网，获取短剧行业最近一周最重要的新闻，重点关注：
+1. 新腕儿、DataEye、短剧自习室等平台的最新战报和数据分析
+2. 广电总局、抖音、微信、快手等平台的短剧新规和政策变化
+3. 短剧行业的融资动态、IPO消息
+4. 头部厂牌（九州、点众、麦芽等）的重要动向
+5. 技术创新（AI短剧、AI编剧等）的突破性进展
 
 日期参考：{date_str}
 
-请返回3-5条最重要的快讯，每条包含：icon(emoji图标)、title(标题)、content(内容摘要)、source(来源)
+🚨【核心铁律】
+- 必须返回5条新闻
+- 每条content不超过100字
+- 每条必须有source_url（可访问的原文链接）
+
+输出格式（合法JSON数组）：
+[
+  {
+    "type": "预警/商业/数据",
+    "icon": "emoji图标",
+    "title": "标题（15字以内）",
+    "content": "内容缩写（不超过100字）",
+    "source_url": "原文链接URL"
+  }
+]
 """
         
         # 执行搜索并提炼
         response = client.chat(
             messages=[
-                {"role": "system", "content": sp or "你是专业的短剧行业分析师，擅长从新闻中提炼关键快讯。"},
+                {"role": "system", "content": sp or "你是专业的短剧行业分析师，擅长从新闻中提炼关键快讯并提供原文链接。"},
                 {"role": "user", "content": search_prompt}
             ],
             temperature=temperature,
-            max_tokens=3000
+            max_tokens=4000
         )
+        
+        logger.info(f"DeepSeek响应: {response[:500]}...")
         
         # 尝试解析JSON数组
         json_match = re.search(r'\[[\s\S]*\]', response)
         if json_match:
             try:
-                news_list = json.loads(json_match.group())
+                news_list: List[Dict[str, Any]] = json.loads(json_match.group())
                 for item in news_list[:5]:
                     if isinstance(item, dict):
                         daily_news.append(DailyNews(
+                            type=item.get("type", "数据"),
                             icon=item.get("icon", "📰"),
-                            title=item.get("title", ""),
-                            content=item.get("content", ""),
-                            source=item.get("source", "")
+                            title=item.get("title", "")[:15],
+                            content=item.get("content", "")[:100],
+                            source_url=item.get("source_url", "")
                         ))
-            except json.JSONDecodeError:
-                pass
+            except json.JSONDecodeError as je:
+                logger.warning(f"JSON解析失败: {je}")
         
         logger.info(f"DeepSeek提炼 {len(daily_news)} 条快讯")
         
@@ -99,10 +117,11 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
     # 如果没有数据，返回默认快讯
     if not daily_news:
         daily_news.append(DailyNews(
+            type="数据",
             icon="📊",
             title="行业数据更新",
-            content=f"今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿",
-            source="行业报告"
+            content="今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿。",
+            source_url=""
         ))
     
     return NewsNodeOutput(daily_news=daily_news[:5])

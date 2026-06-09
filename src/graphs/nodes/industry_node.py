@@ -9,7 +9,7 @@ from datetime import datetime
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
-from utils.runtime import Context
+from coze_coding_utils.runtime_ctx.context import Context
 from tools.deepseek_api import DeepSeekClient
 
 from graphs.state import (

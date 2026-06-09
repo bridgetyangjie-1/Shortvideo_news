@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>短剧行业数据指挥中心 - DeepSeek Powered</title>
+<title>短剧行业数据看板 - Bridget Yang</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 <style>
@@ -126,11 +126,12 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
   <!-- 头部 -->
   <div class="header">
     <div class="header-left">
-      <h1>📊 短剧行业数据指挥中心</h1>
+      <h1>📊 短剧行业数据看板</h1>
       <div class="header-meta">
         <span class="ai-badge"><i class="fas fa-robot"></i> DeepSeek Powered</span>
         <span class="tier-badge">📊 Tier1 爬取 + 🔍 Tier2 搜补 + 🤖 Tier3 推理</span>
         <span class="time-badge" id="update-time">更新时间: --</span>
+        <span style="font-size: 12px; color: #a78bfa; margin-left: 8px;">by Bridget Yang</span>
       </div>
     </div>
     <div class="header-right" style="display: flex; align-items: center; gap: 16px;">
@@ -395,10 +396,11 @@ async function renderDashboard(dateParam = null) {
     document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas || '--';
     document.getElementById('kpi-roi').innerText = data.industry?.roi || '--'; // 动态加载
 
-    // 行业快讯
+    // 行业快讯（添加原文链接）
     document.getElementById('news-container').innerHTML = (data.daily_news || []).map(n => {
         let typeClass = n.type === '预警' ? 'warn' : n.type === '商业' ? 'biz' : 'data';
-        return `<div class="news-item"><span class="news-type ${typeClass}">${n.type}</span><span class="news-content">${n.content}</span></div>`;
+        let linkHtml = n.source_url ? `<a href="${n.source_url}" target="_blank" style="font-size: 11px; color: #818cf8; margin-left: 8px; text-decoration: none;">原文链接</a>` : '';
+        return `<div class="news-item" style="flex-direction: column; align-items: flex-start;"><span class="news-type ${typeClass}">${n.type}</span><span class="news-content" style="font-size: 13px; color: #cbd5e1;">${n.content}${linkHtml}</span></div>`;
     }).join('');
 
     // 榜单 (恢复制作厂牌)
@@ -498,5 +500,19 @@ async function renderDashboard(dateParam = null) {
 
 renderDashboard();
 </script>
+
+<!-- 作者声明 -->
+<footer style="text-align: center; padding: 32px 24px; margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(22, 25, 37, 0.4);">
+  <div style="font-size: 14px; color: #94a3b8; margin-bottom: 8px;">
+    <strong style="color: #a78bfa;">短剧行业数据看板</strong> © 2026
+  </div>
+  <div style="font-size: 12px; color: #64748b;">
+    作者：<span style="color: #818cf8; font-weight: 600;">Bridget Yang</span> · 数据来源：DeepSeek联网搜索 · 自动更新：GitHub Actions
+  </div>
+  <div style="font-size: 11px; color: #475569; margin-top: 8px;">
+    本看板仅供行业研究参考，数据可能存在偏差，不构成投资建议。
+  </div>
+</footer>
+
 </body>
 </html>

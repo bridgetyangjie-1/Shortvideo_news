@@ -8,6 +8,9 @@ import logging
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
+from langchain_core.runnables import RunnableConfig
+from langgraph.runtime import Runtime
+from coze_coding_utils.runtime_ctx.context import Context
 from graphs.state import (
     PushNodeInput, 
     PushNodeOutput,
@@ -66,11 +69,12 @@ def _load_all_history() -> Dict[str, Any]:
     return {"dates": [], "data": {}}
 
 
-def push_node(state: PushNodeInput) -> PushNodeOutput:
+def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> PushNodeOutput:
     """
     title: 数据输出
     desc: 将处理完成的数据保存为JSON文件，支持历史数据归档
     """
+    ctx = runtime.context
     _ensure_dirs()
     
     # 获取数据日期

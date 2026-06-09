@@ -98,7 +98,9 @@ class DailyNews(BaseModel):
     """每日行业快讯"""
     type: str = Field(default="数据", description="快讯类型：预警/商业/数据")
     icon: str = Field(default="📊", description="emoji图标")
-    content: str = Field(default="", description="快讯内容（不超过40字）")
+    title: str = Field(default="", description="新闻标题（15字以内）")
+    content: str = Field(default="", description="快讯内容缩写（不超过100字）")
+    source_url: str = Field(default="", description="原文地址链接")
 
 
 # ==================== 新增数据结构 ====================

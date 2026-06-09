@@ -5,8 +5,11 @@ GitHub Actions专用简化运行时模块
 
 import os
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, TypeVar, Generic
 from pydantic import BaseModel
+
+# 泛型类型变量
+T = TypeVar('T')
 
 
 class Context(BaseModel):
@@ -23,21 +26,17 @@ class Context(BaseModel):
         pass
 
 
-class Runtime:
-    """简化版Runtime包装器"""
-    def __init__(self, context: Context):
-        self.context = context
-    
-    @property
-    def context(self) -> Context:
-        return self._context
-    
-    @context.setter  
-    def context(self, value: Context):
-        self._context = value
+# 使用langgraph.runtime的Runtime，让它支持泛型
+from langgraph.runtime import Runtime as LangGraphRuntime
+
+# Runtime已经是泛型类，直接使用即可
+# Runtime[Context] 表示Runtime的context属性是Context类型
+
+# 为了兼容性，导出Runtime和Context
+__all__ = ['Context', 'Runtime']
 
 
-def get_runtime() -> Runtime:
+def get_runtime() -> LangGraphRuntime[Context]:
     """获取运行时实例"""
     ctx = Context()
-    return Runtime(ctx)
+    return LangGraphRuntime(context=ctx)
