@@ -10,7 +10,7 @@
 | v1.1.0 | - | 2026-06-09 | 标题改为"短剧行业数据看板"，添加作者Bridget Yang |
 | v1.1.1 | - | 2026-06-10 | AI异动点评改为"行业大事件"，生成具体事件+数据 |
 | v1.2.0 | - | 2026-06-10 | 题材分布新增标签热度，修复数据渲染问题 |
-| **当前版本** | `v1.4.0` | 2026-06-10 | **Gemini终极升级：DuckDuckGo RAG架构 + fallback机制** |
+| **当前版本** | `v1.5.0 - Kimi (Moonshot) API替代DeepSeek/DuckDuckGo` | 2026-06-10 | **Gemini终极升级：DuckDuckGo RAG架构 + fallback机制** |
 
 **回滚到标准版本**：
 ```bash
@@ -21,7 +21,7 @@ git checkout v1.0.0
 
 ## ⚠️ 重要注意事项
 
-### DuckDuckGo RAG架构（v1.4.0）
+### DuckDuckGo RAG架构（v1.5.0 - Kimi (Moonshot) API替代DeepSeek/DuckDuckGo）
 **专业搜索引擎替代LLM内置搜索，实现真正的RAG模式**
 
 核心改动：
