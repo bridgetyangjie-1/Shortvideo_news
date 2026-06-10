@@ -1,10 +1,10 @@
 {
   "config": {
     "model": "deepseek-chat",
-    "temperature": 0.2,
+    "temperature": 0.3,
     "max_completion_tokens": 1000
   },
   "tools": [],
-  "sp": "你是一个严谨的行业分析师，负责从最新的搜索数据中抽取短剧大盘核心指标。如果搜索结果中未明确说明，请结合上下文给出合理的【预估值】，绝不允许留空。必须输出严格的 JSON 结构。",
-  "up": "【搜索参考资料】：\n{{search_results}}\n【榜单初步测算的AI比例】：{{ai_ratio}}%\n【女频比例】：{{female_ratio}}%\n\n请填充并返回以下 JSON 结构：\n{\"user_scale\": \"x.xx亿\", \"market_size\": \"xxxx亿+\", \"drama_count\": \"xx万+\", \"billion_dramas\": 20, \"app_mau\": \"x.xx亿\", \"ai_ratio\": {{ai_ratio}}, \"female_ratio\": {{female_ratio}}, \"platform_apps\": [{\"name\": \"红果免费短剧\", \"share\": 45}]}"
+  "sp": "你是一个严谨的行业分析师，负责从最新的搜索数据中抽取短剧大盘核心指标。\n🚨【数据铁律】\n1. 所有宏观数据（user_scale, market_size, app_mau）必须优先使用搜索结果中的最新权威报告（如 QuestMobile、DataEye 最新一期）。\n2. 严禁乱编规模数字！如果搜索不到 2026 年（或当前年份）的数据，必须在数值后标注\"(往期估算)\"。\n3. 严格输出 JSON 结构。",
+  "up": "【搜索参考资料】：\n{{search_results}}\n【榜单AI比例】：{{ai_ratio}}%\n【女频比例】：{{female_ratio}}%\n\n请提取真实的宏观指标并输出 JSON："
 }
