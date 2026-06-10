@@ -10,7 +10,7 @@
 | v1.1.0 | - | 2026-06-09 | 标题改为"短剧行业数据看板"，添加作者Bridget Yang |
 | v1.1.1 | - | 2026-06-10 | AI异动点评改为"行业大事件"，生成具体事件+数据 |
 | v1.2.0 | - | 2026-06-10 | 题材分布新增标签热度，修复数据渲染问题 |
-| **当前版本** | `v1.5.0 - Kimi (Moonshot) API替代DeepSeek/DuckDuckGo` | 2026-06-10 | **Gemini终极升级：DuckDuckGo RAG架构 + fallback机制** |
+| **当前版本** | `v1.5.0` | 2026-06-10 | **切换到Kimi (Moonshot) API替代DeepSeek/DuckDuckGo** |
 
 **回滚到标准版本**：
 ```bash
@@ -21,18 +21,22 @@ git checkout v1.0.0
 
 ## ⚠️ 重要注意事项
 
-### DuckDuckGo RAG架构（v1.5.0 - Kimi (Moonshot) API替代DeepSeek/DuckDuckGo）
-**专业搜索引擎替代LLM内置搜索，实现真正的RAG模式**
+### Kimi (Moonshot) API架构（v1.5.0）
+**国内联网搜索能力强，可穿透微信、知乎等数据孤岛**
 
 核心改动：
-- **deepseek_api.py**: `search()`方法使用DuckDuckGo真实爬取网页，失败时自动fallback到DeepSeek
-- **enrich_node**: 先用DuckDuckGo搜索每部剧真实资料，再喂给LLM提取演员/厂牌
-- **insights_node**: 先用DuckDuckGo搜索行业事件，再生成爆款归因+买量建议
+- **moonshot_api.py**: 新建MoonshotClient工具类，使用OpenAI SDK标准格式
+- **所有节点**: DeepSeekClient → MoonshotClient
+- **删除**: deepseek_api.py（已废弃）
 
-验证结果：
-- ✅ DuckDuckGo在GitHub Actions生产环境正常工作
-- ✅ 沙箱环境网络受限时自动fallback到DeepSeek
-- ✅ 双重保障确保数据获取不中断
+优势：
+- ✅ Kimi自带联网搜索能力（无需额外搜索引擎）
+- ✅ 国内数据源覆盖强（微信公众号、小红书、知乎等）
+- ✅ 32k上下文窗口，支持长文本处理
+- ✅ base_url: https://api.moonshot.cn/v1，模型: moonshot-v1-32k
+
+⚠️ GitHub Actions环境变量：
+- `MOONSHOT_API_KEY` - 已配置
 
 ### Coze依赖限制
 **Coze Coding内部依赖无法在GitHub Actions等外部环境使用！**

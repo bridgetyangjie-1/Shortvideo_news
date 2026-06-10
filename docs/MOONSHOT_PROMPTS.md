@@ -1,6 +1,18 @@
-# DeepSeek API 调用说明文档
+# Moonshot (Kimi) API 调用说明文档
 
-> 本文档记录所有使用 DeepSeek API 进行数据爬取/搜索的节点，包括爬取目的、搜索内容、Prompt 配置等。
+> 本文档记录所有使用 Moonshot (Kimi) API 进行数据爬取/搜索的节点，包括爬取目的、搜索内容、Prompt 配置等。
+> 
+> **v1.5.0更新**: 已从DeepSeek切换到Kimi (Moonshot) API，使用OpenAI SDK标准格式。
+
+---
+
+## API配置
+
+| 配置项 | 值 |
+|--------|-----|
+| base_url | https://api.moonshot.cn/v1 |
+| 默认模型 | moonshot-v1-32k |
+| 环境变量 | MOONSHOT_API_KEY |
 
 ---
 
