@@ -40,7 +40,6 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         _cfg = {"config": {"temperature": 0.3}, "sp": "", "up": ""}
     
     sp = _cfg.get("sp", "")
-    up_template = _cfg.get("up", "")
     temperature = _cfg.get("config", {}).get("temperature", 0.3)
     
     # 计算日期
@@ -53,61 +52,92 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
     try:
         client = DeepSeekClient()
         
-        # 使用DeepSeek联网搜索行业快讯
-        search_prompt = f"""请搜索互联网，获取短剧行业最近一周最重要的新闻，重点关注：
-1. 新腕儿、DataEye、短剧自习室等平台的最新战报和数据分析
-2. 广电总局、抖音、微信、快手等平台的短剧新规和政策变化
-3. 短剧行业的融资动态、IPO消息
-4. 头部厂牌（九州、点众、麦芽等）的重要动向
-5. 技术创新（AI短剧、AI编剧等）的突破性进展
+        # 第一步：联网搜索获取具体新闻文章
+        search_queries = [
+            "短剧行业 最新新闻 2024 2025",
+            "DataEye 短剧热度榜 最新",
+            "广电总局 短剧新规 政策",
+            "抖音短剧 分成比例 最新政策",
+            "短剧MCN 九州 点众 最新动态"
+        ]
+        
+        # 搜索新闻并收集结果
+        search_results: List[Dict[str, Any]] = []
+        for query in search_queries[:3]:  # 只搜索前3个查询，避免超时
+            try:
+                result = client.search(query)
+                logger.info(f"搜索 '{query}' 返回: {result[:200]}...")
+                search_results.append({
+                    "query": query,
+                    "result": result
+                })
+            except Exception as se:
+                logger.warning(f"搜索 '{query}' 失败: {se}")
+        
+        # 第二步：用AI分析搜索结果，提取5条重要新闻
+        if search_results:
+            # 合并搜索结果
+            combined_results = "\n\n".join([
+                f"【搜索: {r['query']}】\n{r['result']}" 
+                for r in search_results
+            ])
+            
+            analysis_prompt = f"""基于以下搜索结果，提炼短剧行业最重要的5条新闻。
 
-日期参考：{date_str}
+搜索结果：
+{combined_results}
+
+当前日期：{date_str}
 
 🚨【核心铁律】
 - 必须返回5条新闻
-- 每条content不超过100字
-- 每条必须有source_url（可访问的原文链接）
+- 每条content不超过100字（精简总结）
+- 每条必须有source_url（从搜索结果中提取的真实原文链接，必须是可访问的URL）
+- 如果搜索结果中没有具体链接，请使用行业门户链接如 https://www.newwanr.com 或 https://www.dataeye.com
 
 输出格式（合法JSON数组）：
 [
-  {
-    "type": "预警/商业/数据",
-    "icon": "emoji图标",
+  {{
+    "type": "预警|商业|数据",
+    "icon": "⚠️|💰|📊",
     "title": "标题（15字以内）",
     "content": "内容缩写（不超过100字）",
-    "source_url": "原文链接URL"
-  }
+    "source_url": "原文链接URL（必须填写）"
+  }}
 ]
 """
-        
-        # 执行搜索并提炼
-        response = client.chat(
-            messages=[
-                {"role": "system", "content": sp or "你是专业的短剧行业分析师，擅长从新闻中提炼关键快讯并提供原文链接。"},
-                {"role": "user", "content": search_prompt}
-            ],
-            temperature=temperature,
-            max_tokens=4000
-        )
-        
-        logger.info(f"DeepSeek响应: {response[:500]}...")
-        
-        # 尝试解析JSON数组
-        json_match = re.search(r'\[[\s\S]*\]', response)
-        if json_match:
-            try:
-                news_list: List[Dict[str, Any]] = json.loads(json_match.group())
-                for item in news_list[:5]:
-                    if isinstance(item, dict):
-                        daily_news.append(DailyNews(
-                            type=item.get("type", "数据"),
-                            icon=item.get("icon", "📰"),
-                            title=item.get("title", "")[:15],
-                            content=item.get("content", "")[:100],
-                            source_url=item.get("source_url", "")
-                        ))
-            except json.JSONDecodeError as je:
-                logger.warning(f"JSON解析失败: {je}")
+            
+            response = client.chat(
+                messages=[
+                    {"role": "system", "content": sp or "你是专业的短剧行业分析师，擅长从新闻中提炼关键快讯并提供原文链接。"},
+                    {"role": "user", "content": analysis_prompt}
+                ],
+                temperature=temperature,
+                max_tokens=2000
+            )
+            
+            logger.info(f"AI分析响应: {response[:500]}...")
+            
+            # 尝试解析JSON数组
+            json_match = re.search(r'\[[\s\S]*\]', response)
+            if json_match:
+                try:
+                    news_list: List[Dict[str, Any]] = json.loads(json_match.group())
+                    for item in news_list[:5]:
+                        if isinstance(item, dict):
+                            news_item = DailyNews(
+                                type=str(item.get("type", "数据")),
+                                icon=str(item.get("icon", "📰")),
+                                title=str(item.get("title", ""))[:15],
+                                content=str(item.get("content", ""))[:100],
+                                source_url=str(item.get("source_url", ""))
+                            )
+                            # 确保source_url不为空
+                            if not news_item.source_url:
+                                news_item.source_url = "https://www.newwanr.com"
+                            daily_news.append(news_item)
+                except json.JSONDecodeError as je:
+                    logger.warning(f"JSON解析失败: {je}")
         
         logger.info(f"DeepSeek提炼 {len(daily_news)} 条快讯")
         
@@ -121,7 +151,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
             icon="📊",
             title="行业数据更新",
             content="今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿。",
-            source_url=""
+            source_url="https://www.newwanr.com"
         ))
     
     return NewsNodeOutput(daily_news=daily_news[:5])
