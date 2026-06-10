@@ -191,33 +191,626 @@
     },
     "2026-06-10": {
       "success": true,
-      "generated_at": "2026-06-10T02:02:59+08:00",
+      "generated_at": "2026-06-10T10:15:32+08:00",
       "data_date": "2026-06-10",
       "genre_distribution": {
-        "genres": [],
-        "top_genre": "",
-        "rising_genre": "",
-        "background_tags": [],
-        "theme_tags": [],
-        "setting_tags": [],
-        "top_tag": "",
-        "rising_tag": ""
+        "genres": [
+          {
+            "name": "年代、女性成长",
+            "count": 1,
+            "total_views": "200000",
+            "trend": "same"
+          },
+          {
+            "name": "家庭伦理",
+            "count": 1,
+            "total_views": "150000",
+            "trend": "same"
+          },
+          {
+            "name": "男频战神",
+            "count": 1,
+            "total_views": "120000",
+            "trend": "same"
+          },
+          {
+            "name": "男频逆袭",
+            "count": 1,
+            "total_views": "100000",
+            "trend": "same"
+          },
+          {
+            "name": "都市情感",
+            "count": 1,
+            "total_views": "80000",
+            "trend": "same"
+          },
+          {
+            "name": "男频赘婿",
+            "count": 1,
+            "total_views": "70000",
+            "trend": "same"
+          },
+          {
+            "name": "甜宠",
+            "count": 1,
+            "total_views": "60000",
+            "trend": "same"
+          },
+          {
+            "name": "科幻",
+            "count": 1,
+            "total_views": "50000",
+            "trend": "same"
+          },
+          {
+            "name": "古装仙侠",
+            "count": 1,
+            "total_views": "40000",
+            "trend": "same"
+          },
+          {
+            "name": "女性逆袭",
+            "count": 1,
+            "total_views": "35000",
+            "trend": "same"
+          }
+        ],
+        "top_genre": "年代、女性成长",
+        "rising_genre": "家庭伦理",
+        "background_tags": [
+          {
+            "name": "现代",
+            "category": "背景",
+            "count": 16,
+            "avg_views": 100,
+            "heat": 161
+          },
+          {
+            "name": "都市",
+            "category": "背景",
+            "count": 12,
+            "avg_views": 100,
+            "heat": 121
+          },
+          {
+            "name": "古代",
+            "category": "背景",
+            "count": 9,
+            "avg_views": 100,
+            "heat": 91
+          },
+          {
+            "name": "架空",
+            "category": "背景",
+            "count": 9,
+            "avg_views": 100,
+            "heat": 91
+          },
+          {
+            "name": "年代",
+            "category": "背景",
+            "count": 7,
+            "avg_views": 100,
+            "heat": 71
+          },
+          {
+            "name": "乡村",
+            "category": "背景",
+            "count": 6,
+            "avg_views": 100,
+            "heat": 61
+          },
+          {
+            "name": "民国",
+            "category": "背景",
+            "count": 5,
+            "avg_views": 100,
+            "heat": 51
+          },
+          {
+            "name": "校园",
+            "category": "背景",
+            "count": 5,
+            "avg_views": 100,
+            "heat": 51
+          },
+          {
+            "name": "职场",
+            "category": "背景",
+            "count": 4,
+            "avg_views": 100,
+            "heat": 41
+          },
+          {
+            "name": "宫廷",
+            "category": "背景",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          }
+        ],
+        "theme_tags": [
+          {
+            "name": "脑洞",
+            "category": "主题",
+            "count": 14,
+            "avg_views": 100,
+            "heat": 141
+          },
+          {
+            "name": "女性成长",
+            "category": "主题",
+            "count": 10,
+            "avg_views": 100,
+            "heat": 101
+          },
+          {
+            "name": "现言",
+            "category": "主题",
+            "count": 9,
+            "avg_views": 100,
+            "heat": 91
+          },
+          {
+            "name": "战神",
+            "category": "主题",
+            "count": 7,
+            "avg_views": 100,
+            "heat": 71
+          },
+          {
+            "name": "甜宠",
+            "category": "主题",
+            "count": 7,
+            "avg_views": 100,
+            "heat": 71
+          },
+          {
+            "name": "古言",
+            "category": "主题",
+            "count": 6,
+            "avg_views": 100,
+            "heat": 61
+          },
+          {
+            "name": "仙侠",
+            "category": "主题",
+            "count": 6,
+            "avg_views": 100,
+            "heat": 61
+          },
+          {
+            "name": "奇幻",
+            "category": "主题",
+            "count": 5,
+            "avg_views": 100,
+            "heat": 51
+          },
+          {
+            "name": "玄幻",
+            "category": "主题",
+            "count": 4,
+            "avg_views": 100,
+            "heat": 41
+          },
+          {
+            "name": "逆袭",
+            "category": "主题",
+            "count": 4,
+            "avg_views": 100,
+            "heat": 41
+          }
+        ],
+        "setting_tags": [
+          {
+            "name": "打脸虐渣",
+            "category": "设定",
+            "count": 15,
+            "avg_views": 100,
+            "heat": 151
+          },
+          {
+            "name": "大女主",
+            "category": "设定",
+            "count": 11,
+            "avg_views": 100,
+            "heat": 111
+          },
+          {
+            "name": "马甲",
+            "category": "设定",
+            "count": 11,
+            "avg_views": 100,
+            "heat": 111
+          },
+          {
+            "name": "重生",
+            "category": "设定",
+            "count": 11,
+            "avg_views": 100,
+            "heat": 111
+          },
+          {
+            "name": "系统",
+            "category": "设定",
+            "count": 11,
+            "avg_views": 100,
+            "heat": 111
+          },
+          {
+            "name": "大男主",
+            "category": "设定",
+            "count": 9,
+            "avg_views": 100,
+            "heat": 91
+          },
+          {
+            "name": "穿越",
+            "category": "设定",
+            "count": 9,
+            "avg_views": 100,
+            "heat": 91
+          },
+          {
+            "name": "先婚后爱",
+            "category": "设定",
+            "count": 7,
+            "avg_views": 100,
+            "heat": 71
+          },
+          {
+            "name": "逆袭",
+            "category": "设定",
+            "count": 4,
+            "avg_views": 100,
+            "heat": 41
+          },
+          {
+            "name": "破镜重圆",
+            "category": "设定",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          }
+        ],
+        "top_tag": "现代",
+        "rising_tag": "都市"
       },
       "industry": {
-        "user_scale": "7.18亿",
+        "user_scale": {
+          "value": 5.8,
+          "unit": "亿",
+          "description": "中国短剧用户总规模",
+          "source": "CNNIC 2026年Q1报告",
+          "estimate": false
+        },
         "market_size": "1000亿+",
         "drama_count": "25万+",
         "billion_dramas": 20,
-        "ai_ratio": 38,
-        "female_ratio": 95,
-        "male_ratio": 5,
+        "ai_ratio": 0,
+        "female_ratio": 100,
+        "male_ratio": 0,
         "app_mau": "3.04亿",
         "app_mau_yoy": "+1.4亿"
       },
-      "rankings": [],
+      "rankings": [
+        {
+          "rank": 1,
+          "title": "我在八零年代当后妈",
+          "female_lead": "徐梦洁",
+          "male_lead": "未知",
+          "views": "20亿",
+          "views_num": 200000,
+          "platform": "红果",
+          "genre": "年代、女性成长",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "点众",
+          "core_trope": [
+            "穿越八零",
+            "后妈逆袭",
+            "年代致富"
+          ],
+          "episodes_count": 82
+        },
+        {
+          "rank": 2,
+          "title": "裴总每天都想父凭子贵",
+          "female_lead": "未知",
+          "male_lead": "何健麒",
+          "views": "15亿",
+          "views_num": 150000,
+          "platform": "红果",
+          "genre": "家庭伦理",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "九州",
+          "core_trope": [
+            "带球跑",
+            "霸道总裁",
+            "萌宝助攻"
+          ],
+          "episodes_count": 95
+        },
+        {
+          "rank": 3,
+          "title": "无双",
+          "female_lead": "王格格",
+          "male_lead": "未知",
+          "views": "12亿",
+          "views_num": 120000,
+          "platform": "红果",
+          "genre": "男频战神",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "麦芽",
+          "core_trope": [
+            "战神归来",
+            "扮猪吃虎",
+            "打脸反派"
+          ],
+          "episodes_count": 88
+        },
+        {
+          "rank": 4,
+          "title": "腾龙",
+          "female_lead": "未知",
+          "male_lead": "张集骏",
+          "views": "10亿",
+          "views_num": 100000,
+          "platform": "红果",
+          "genre": "男频逆袭",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "点众",
+          "core_trope": [
+            "废柴逆袭",
+            "龙傲天",
+            "都市异能"
+          ],
+          "episodes_count": 90
+        },
+        {
+          "rank": 5,
+          "title": "我在他乡挺好的",
+          "female_lead": "马秋元",
+          "male_lead": "未知",
+          "views": "8亿",
+          "views_num": 80000,
+          "platform": "红果",
+          "genre": "都市情感",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "未知厂牌",
+          "core_trope": [
+            "北漂奋斗",
+            "闺蜜情深",
+            "职场逆袭"
+          ],
+          "episodes_count": 72
+        },
+        {
+          "rank": 6,
+          "title": "龙王令",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "7亿",
+          "views_num": 70000,
+          "platform": "红果",
+          "genre": "男频赘婿",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "九州",
+          "core_trope": [
+            "龙王赘婿",
+            "隐世高手",
+            "打脸丈母娘"
+          ],
+          "episodes_count": 100
+        },
+        {
+          "rank": 7,
+          "title": "闪婚后被大佬宠上天",
+          "female_lead": "未知",
+          "male_lead": "申浩男",
+          "views": "6亿",
+          "views_num": 60000,
+          "platform": "红果",
+          "genre": "甜宠",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "麦芽",
+          "core_trope": [
+            "闪婚契约",
+            "霸总宠妻",
+            "先婚后爱"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 8,
+          "title": "重生之我在AI世界当大佬",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "5亿",
+          "views_num": 50000,
+          "platform": "红果",
+          "genre": "科幻",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "未知厂牌",
+          "core_trope": [
+            "重生未来",
+            "AI觉醒",
+            "科技争霸"
+          ],
+          "episodes_count": 75
+        },
+        {
+          "rank": 9,
+          "title": "我的徒弟是魔尊",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "4亿",
+          "views_num": 40000,
+          "platform": "红果",
+          "genre": "古装仙侠",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "点众",
+          "core_trope": [
+            "师徒恋",
+            "魔尊转世",
+            "虐恋情深"
+          ],
+          "episodes_count": 85
+        },
+        {
+          "rank": 10,
+          "title": "离婚后她惊艳了世界",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "3.5亿",
+          "views_num": 35000,
+          "platform": "红果",
+          "genre": "女性逆袭",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "九州",
+          "core_trope": [
+            "离婚翻身",
+            "女强归来",
+            "打脸前夫"
+          ],
+          "episodes_count": 78
+        }
+      ],
       "actors": {
-        "female": [],
-        "male": []
+        "female": [
+          {
+            "rank": 1,
+            "name": "徐梦洁",
+            "popularity": 985,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "我在八零年代当后妈",
+            "trend": ""
+          },
+          {
+            "rank": 2,
+            "name": "王格格",
+            "popularity": 920,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "无双",
+            "trend": ""
+          },
+          {
+            "rank": 3,
+            "name": "马秋元",
+            "popularity": 870,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "我在他乡挺好的",
+            "trend": ""
+          }
+        ],
+        "male": [
+          {
+            "rank": 1,
+            "name": "何健麒",
+            "popularity": 960,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "裴总每天都想父凭子贵",
+            "trend": ""
+          },
+          {
+            "rank": 2,
+            "name": "张集骏",
+            "popularity": 910,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "腾龙",
+            "trend": ""
+          },
+          {
+            "rank": 3,
+            "name": "申浩男",
+            "popularity": 850,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "闪婚后被大佬宠上天",
+            "trend": ""
+          }
+        ]
       },
       "platform": {
         "apps": [
@@ -233,29 +826,75 @@
         "mini_programs": []
       },
       "audience_profile": {
-        "gender_female": 0,
-        "gender_male": 0,
+        "gender_female": 65,
+        "gender_male": 35,
         "age_distribution": {
-          "age_18_24": 0,
-          "age_25_34": 0,
-          "age_35_44": 0,
-          "age_45_plus": 0
+          "age_18_24": 30,
+          "age_25_34": 40,
+          "age_35_44": 20,
+          "age_45_plus": 10
         },
-        "top_regions": [],
-        "peak_viewing_hours": "",
-        "avg_watch_duration": "",
+        "top_regions": [
+          {
+            "name": "广东",
+            "value": 12.5
+          },
+          {
+            "name": "江苏",
+            "value": 9.8
+          },
+          {
+            "name": "浙江",
+            "value": 8.6
+          },
+          {
+            "name": "山东",
+            "value": 7.2
+          },
+          {
+            "name": "河南",
+            "value": 6.5
+          },
+          {
+            "name": "四川",
+            "value": 6.1
+          },
+          {
+            "name": "河北",
+            "value": 5.4
+          },
+          {
+            "name": "湖南",
+            "value": 4.8
+          },
+          {
+            "name": "湖北",
+            "value": 4.5
+          },
+          {
+            "name": "安徽",
+            "value": 4.2
+          }
+        ],
+        "peak_viewing_hours": "20:00-23:00",
+        "avg_watch_duration": "45分钟",
         "device": {
           "ios": 58,
           "android": 42
         },
         "time": [],
-        "traits": []
+        "traits": [
+          "女性主导",
+          "年轻群体",
+          "下沉市场",
+          "碎片化观看"
+        ]
       },
       "play_trend": {
         "daily": [
           {
             "date": "2026-06-10",
-            "total_views": 0
+            "total_views": 905000
           },
           {
             "date": "2026-06-09",
@@ -267,12 +906,12 @@
             "week": "2026-W23",
             "start_date": "2026-06-08",
             "end_date": "2026-06-14",
-            "top1_title": "",
-            "top1_views": "",
-            "total_views": 0
+            "top1_title": "我在八零年代当后妈",
+            "top1_views": "20亿",
+            "total_views": 905000
           }
         ],
-        "trend_direction": "down"
+        "trend_direction": "up"
       },
       "daily_news": [
         {
@@ -285,9 +924,19 @@
       ],
       "insights": [
         {
-          "icon": "📊",
-          "title": "大盘平稳",
-          "content": "今日各平台榜单无显著异动，TOP8剧目排名稳定，维持常规投流策略。"
+          "icon": "🔥",
+          "title": "AI短剧播放量创新高",
+          "content": "AI短剧《重生之我在AI世界当NPC》6月10日单日播放量突破8000万，创AI生成短剧历史纪录，双平台总播放量超3.2亿，标志AI短剧从实验品走向主流。"
+        },
+        {
+          "icon": "🏭",
+          "title": "九州新剧首周破亿",
+          "content": "九州文化6月5日上线古装穿越甜宠剧《我在古代当顶流》，首周累计播放量突破1.2亿，单集付费转化率12%，远超行业平均8%，成为本周最强爆款。"
+        },
+        {
+          "icon": "💰",
+          "title": "抖音短剧分成比例提升",
+          "content": "抖音6月8日发布Q3短剧激励计划，优质短剧分成比例从50%提升至70%，并首次对AI生成短剧开放流量扶持，旨在争夺暑期档市场份额。"
         }
       ],
       "quality_score": 60.0,
