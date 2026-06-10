@@ -10,7 +10,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.deepseek_api import DeepSeekClient
+from tools.moonshot_api import MoonshotClient
 
 from graphs.state import (
     InsightsNodeInput,
@@ -57,7 +57,7 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
             industry_data = state.industry
         
         # 初始化DeepSeek客户端
-        client = DeepSeekClient()
+        client = MoonshotClient()
         
         # 🚨 第一步：使用 DuckDuckGo 真实检索最新大事件
         search_query = f"短剧行业 最新爆款 融资 政策 动态 {state.data_date}"

@@ -10,7 +10,7 @@ from typing import Dict, Any, List
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.deepseek_api import DeepSeekClient
+from tools.moonshot_api import MoonshotClient
 from jinja2 import Template
 from graphs.state import ProcessNodeInput, ProcessNodeOutput
 
@@ -70,7 +70,7 @@ def process_node(
         })
         
         # 初始化DeepSeek客户端
-        client = DeepSeekClient()
+        client = MoonshotClient()
         
         # 构建消息
         messages = [

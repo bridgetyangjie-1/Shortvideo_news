@@ -9,7 +9,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.deepseek_api import DeepSeekClient
+from tools.moonshot_api import MoonshotClient
 
 from graphs.state import (
     ActorRankingNodeInput, 
@@ -50,7 +50,7 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         })
         
         # 初始化DeepSeek客户端
-        client = DeepSeekClient()
+        client = MoonshotClient()
         
         # 构建消息
         messages = [

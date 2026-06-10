@@ -12,7 +12,7 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 
-from tools.deepseek_api import DeepSeekClient
+from tools.moonshot_api import MoonshotClient
 from graphs.state import NewsNodeInput, NewsNodeOutput, DailyNews
 
 # 配置日志
@@ -50,7 +50,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
     daily_news: List[DailyNews] = []
     
     try:
-        client = DeepSeekClient()
+        client = MoonshotClient()
         
         # 第一步：联网搜索获取具体新闻文章
         search_queries = [

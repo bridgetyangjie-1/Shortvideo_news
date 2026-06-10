@@ -10,7 +10,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.deepseek_api import DeepSeekClient
+from tools.moonshot_api import MoonshotClient
 
 from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking
 
@@ -36,7 +36,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         temperature = _cfg.get("config", {}).get("temperature", 0.3)
         
         # 初始化DeepSeek客户端
-        client = DeepSeekClient()
+        client = MoonshotClient()
         
         # 🚨 Gemini核心修复：先在Python层真实搜索每部剧的资料
         real_search_context = ""

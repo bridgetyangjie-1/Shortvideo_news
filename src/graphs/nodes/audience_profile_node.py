@@ -12,7 +12,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.deepseek_api import DeepSeekClient
+from tools.moonshot_api import MoonshotClient
 
 from graphs.state import (
     AudienceProfileInput,
@@ -39,7 +39,7 @@ def audience_profile_node(
     
     try:
         # 初始化DeepSeek客户端
-        client = DeepSeekClient()
+        client = MoonshotClient()
         
         # 使用DeepSeek联网搜索观众画像数据
         search_query = """请搜索互联网，获取短剧观众的画像数据，包括：

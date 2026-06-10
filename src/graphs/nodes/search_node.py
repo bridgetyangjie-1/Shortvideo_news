@@ -9,7 +9,7 @@ from typing import Dict, Any, List
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.deepseek_api import DeepSeekClient
+from tools.moonshot_api import MoonshotClient
 from graphs.state import SearchNodeInput, SearchNodeOutput
 
 
@@ -36,30 +36,37 @@ def search_node(
     
     try:
         # 初始化DeepSeek客户端
-        client = DeepSeekClient()
+        client = MoonshotClient()
         
-        # 构建搜索提示词
-        search_prompt = f"""请搜索互联网，获取最新的短剧行业数据。重点关注以下数据源：
+        # 构建搜索提示词 - 强调真实数据
+        search_prompt = f"""你必须联网搜索，获取真实的短剧行业数据。禁止编造任何剧名或数据！
 
-1. DataEye短剧热力榜 - 热播短剧排名、播放量数据
-2. 云合数据短剧报告 - 有效播放、市占率分析
-3. 红果短剧周榜 - 红果平台热门短剧排名
-4. QuestMobile短剧用户分析 - 用户规模、画像数据
-5. 其他公开的短剧榜单数据源
+请搜索以下真实数据源：
+1. DataEye短剧热力榜 (dataeye.cn) - 真实热播短剧排名
+2. 新腕儿短剧榜单 - 眭剧热度排行
+3. 红果短剧官方榜单 - 红果平台热门短剧
+4. 抖音短剧热榜 - 抖音平台热播数据
 
 日期参考：{data_date}
 
-请返回：
-1. 今日/本周热播短剧TOP10榜单（包含剧名、播放量、平台）
-2. 行业宏观数据（用户规模、市场规模、增长趋势）
-3. 重点平台数据（红果、抖音等平台的MAU、活跃度）
-4. 最新演员人气数据
+严格要求：
+- 只返回你在网页上真实看到的剧名和数据
+- 如果某平台无法搜索到，标注"该平台数据暂无法获取"
+- 剧名必须是真实存在的短剧（如《我在八零年代当后妈》《重生之我在霸总身边当卧底》等）
+- 播放量必须是真实数据，不要编造
 
-格式要求：
-- 返回具体的数值和事实
-- 尝试标注数据来源
-- 如果某些数据无法获取，标注"暂无数据"
-"""
+请返回JSON格式：
+{
+  "top10": [
+    {"rank": 1, "title": "真实剧名", "views": "真实播放量", "platform": "真实平台"}
+  ],
+  "industry_data": {
+    "user_scale": "用户规模数据",
+    "market_size": "市场规模数据"
+  }
+}
+
+如果无法获取真实数据，请如实说明原因。"""
 
         # 执行搜索 - 使用 DuckDuckGo
         logger.info(f"开始搜索短剧行业数据，日期: {data_date}")

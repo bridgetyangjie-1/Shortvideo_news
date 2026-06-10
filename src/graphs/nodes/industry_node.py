@@ -10,7 +10,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.deepseek_api import DeepSeekClient
+from tools.moonshot_api import MoonshotClient
 
 from graphs.state import (
     IndustryNodeInput,
@@ -49,7 +49,7 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         temperature = _cfg.get("config", {}).get("temperature", 0.2)
         
         # 3. 使用DeepSeek联网搜索行业数据
-        client = DeepSeekClient()
+        client = MoonshotClient()
         
         search_query = f"""请搜索互联网，获取最新的短剧行业宏观数据，包括：
 1. 用户规模（总用户数）
