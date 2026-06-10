@@ -18,7 +18,6 @@ from graphs.state import (
     AudienceProfileInput,
     AudienceProfileOutput,
     AudienceProfile,
-    GenderDistribution,
     AgeDistribution,
     RegionDistribution
 )
@@ -87,34 +86,31 @@ def audience_profile_node(
                 ]
             }
         
-        # 构建输出
-        gender = GenderDistribution(
-            female=profile_data.get("gender", {}).get("female", 95),
-            male=profile_data.get("gender", {}).get("male", 5)
-        )
-        
-        age = AgeDistribution(
+        # 构建输出 - 使用正确的字段名匹配state.py中的AudienceProfile定义
+        age_distribution = AgeDistribution(
             age_18_24=profile_data.get("age", {}).get("18-24", 35),
             age_25_34=profile_data.get("age", {}).get("25-34", 40),
             age_35_44=profile_data.get("age", {}).get("35-44", 18),
             age_45_plus=profile_data.get("age", {}).get("45+", 7)
         )
         
-        regions = [
+        top_regions = [
             RegionDistribution(
                 name=region.get("name", ""),
-                value=region.get("value", 0)
+                value=float(region.get("value", 0))
             )
             for region in profile_data.get("regions", [])[:10]
         ]
         
-        # 构建观众画像对象
+        # 构建观众画像对象 - 使用state.py中定义的字段名
         audience_profile = AudienceProfile(
-            gender=gender,
-            age=age,
-            regions=regions,
-            peak_viewing_hours=profile_data.get("peak_hours", ""),
-            avg_watch_duration=profile_data.get("avg_duration", "")
+            gender_female=profile_data.get("gender", {}).get("female", 95),
+            gender_male=profile_data.get("gender", {}).get("male", 5),
+            age_distribution=age_distribution,
+            top_regions=top_regions,
+            peak_viewing_hours=profile_data.get("peak_hours", "21:00-23:00"),
+            avg_watch_duration=profile_data.get("avg_duration", "45分钟"),
+            traits=["女性主导", "年轻群体", "下沉市场", "碎片化观看"]
         )
         
         return AudienceProfileOutput(audience_profile=audience_profile)
@@ -123,12 +119,16 @@ def audience_profile_node(
         logger.error(f"获取观众画像失败: {str(e)}")
         # 返回默认值
         default_profile = AudienceProfile(
-            gender=GenderDistribution(female=95, male=5),
-            age=AgeDistribution(age_18_24=35, age_25_34=40, age_35_44=18, age_45_plus=7),
-            regions=[
-                RegionDistribution(name="广东", value=12),
-                RegionDistribution(name="江苏", value=9),
-                RegionDistribution(name="浙江", value=8)
-            ]
+            gender_female=95,
+            gender_male=5,
+            age_distribution=AgeDistribution(age_18_24=35, age_25_34=40, age_35_44=18, age_45_plus=7),
+            top_regions=[
+                RegionDistribution(name="广东", value=12.0),
+                RegionDistribution(name="江苏", value=9.0),
+                RegionDistribution(name="浙江", value=8.0)
+            ],
+            peak_viewing_hours="21:00-23:00",
+            avg_watch_duration="45分钟",
+            traits=["女性主导", "年轻群体", "下沉市场"]
         )
         return AudienceProfileOutput(audience_profile=default_profile)
