@@ -382,9 +382,9 @@ renderDashboard();
 async function renderDashboard(dateParam = null) {
     let data = fallbackData;
     try {
-        let url = './assets/data/latest.json';
+        let url = './data/latest.json';
         if (dateParam) {
-            url = `./assets/data/history/${dateParam}.json`;
+            url = `./data/history/${dateParam}.json`;
         }
         const res = await fetch(url);
         if (res.ok) { data = await res.json(); console.log('JSON数据加载成功:', data); }
