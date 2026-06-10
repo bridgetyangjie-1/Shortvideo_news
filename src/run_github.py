@@ -59,7 +59,12 @@ def main():
             rankings = result.get('rankings', [])
             logger.info(f"榜单数量: {len(rankings)}")
             if rankings:
-                logger.info(f"TOP1: {rankings[0].get('title', 'N/A')}")
+                # rankings可能是Pydantic对象列表或字典列表
+                first_ranking = rankings[0]
+                if hasattr(first_ranking, 'title'):
+                    logger.info(f"TOP1: {first_ranking.title}")
+                elif isinstance(first_ranking, dict):
+                    logger.info(f"TOP1: {first_ranking.get('title', 'N/A')}")
             
             # push_node已经保存数据，无需重复保存
             # 只检查保存结果

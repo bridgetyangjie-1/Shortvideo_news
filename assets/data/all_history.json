@@ -191,81 +191,108 @@
     },
     "2026-06-10": {
       "success": true,
-      "generated_at": "2026-06-10T11:30:45+08:00",
+      "generated_at": "2026-06-10T14:04:35+08:00",
       "data_date": "2026-06-10",
       "genre_distribution": {
         "genres": [
           {
-            "name": "打脸虐渣、大女主、重生",
-            "count": 2,
-            "total_views": "16600",
-            "trend": "same"
-          },
-          {
-            "name": "重生、打脸虐渣、大女主",
+            "name": "现代、都市、女性成长",
             "count": 1,
             "total_views": "12000",
             "trend": "same"
           },
           {
-            "name": "先婚后爱、甜宠、马甲",
+            "name": "现代、都市、奇幻、悬疑",
+            "count": 1,
+            "total_views": "9000",
+            "trend": "same"
+          },
+          {
+            "name": "都市、年代、女性成长",
             "count": 1,
             "total_views": "8500",
             "trend": "same"
           },
           {
-            "name": "穿越、经商、系统",
+            "name": "现代、都市、战神",
             "count": 1,
             "total_views": "7200",
             "trend": "same"
           },
           {
-            "name": "大男主、打脸虐渣、逆袭",
+            "name": "古代、架空、古言、脑洞",
+            "count": 1,
+            "total_views": "6800",
+            "trend": "same"
+          },
+          {
+            "name": "现代、都市、现言、先婚后爱",
             "count": 1,
             "total_views": "6500",
             "trend": "same"
           },
           {
-            "name": "脑洞、奇幻",
+            "name": "现代、都市、脑洞、奇幻",
             "count": 1,
-            "total_views": "6100",
+            "total_views": "6000",
             "trend": "same"
           },
           {
-            "name": "穿越、系统、打脸虐渣",
+            "name": "现代、都市、现言、虐恋",
             "count": 1,
             "total_views": "5800",
             "trend": "same"
           },
           {
-            "name": "大女主、打脸虐渣、逆袭",
+            "name": "现代、都市、现言",
             "count": 1,
             "total_views": "5500",
             "trend": "same"
           },
           {
-            "name": "甜宠、逆袭",
+            "name": "年代、乡村、女性成长、脑洞",
             "count": 1,
             "total_views": "5200",
             "trend": "same"
           }
         ],
-        "top_genre": "打脸虐渣、大女主、重生",
-        "rising_genre": "重生、打脸虐渣、大女主",
+        "top_genre": "现代、都市、女性成长",
+        "rising_genre": "现代、都市、奇幻、悬疑",
         "background_tags": [
           {
             "name": "现代",
             "category": "背景",
-            "count": 22,
+            "count": 21,
             "avg_views": 100,
-            "heat": 221
+            "heat": 211
           },
           {
             "name": "都市",
             "category": "背景",
-            "count": 15,
+            "count": 19,
             "avg_views": 100,
-            "heat": 151
+            "heat": 191
+          },
+          {
+            "name": "年代",
+            "category": "背景",
+            "count": 8,
+            "avg_views": 100,
+            "heat": 81
+          },
+          {
+            "name": "古代",
+            "category": "背景",
+            "count": 7,
+            "avg_views": 100,
+            "heat": 71
+          },
+          {
+            "name": "架空",
+            "category": "背景",
+            "count": 7,
+            "avg_views": 100,
+            "heat": 71
           },
           {
             "name": "乡村",
@@ -275,32 +302,11 @@
             "heat": 61
           },
           {
-            "name": "年代",
-            "category": "背景",
-            "count": 6,
-            "avg_views": 100,
-            "heat": 61
-          },
-          {
-            "name": "架空",
-            "category": "背景",
-            "count": 6,
-            "avg_views": 100,
-            "heat": 61
-          },
-          {
-            "name": "古代",
-            "category": "背景",
-            "count": 5,
-            "avg_views": 100,
-            "heat": 51
-          },
-          {
             "name": "职场",
             "category": "背景",
-            "count": 5,
+            "count": 4,
             "avg_views": 100,
-            "heat": 51
+            "heat": 41
           },
           {
             "name": "民国",
@@ -312,39 +318,25 @@
           {
             "name": "校园",
             "category": "背景",
-            "count": 2,
+            "count": 4,
             "avg_views": 100,
-            "heat": 21
-          },
-          {
-            "name": "荒岛",
-            "category": "背景",
-            "count": 1,
-            "avg_views": 100,
-            "heat": 11
+            "heat": 41
           }
         ],
         "theme_tags": [
           {
             "name": "脑洞",
             "category": "主题",
-            "count": 16,
+            "count": 15,
             "avg_views": 100,
-            "heat": 161
-          },
-          {
-            "name": "甜宠",
-            "category": "主题",
-            "count": 12,
-            "avg_views": 100,
-            "heat": 121
+            "heat": 151
           },
           {
             "name": "女性成长",
             "category": "主题",
-            "count": 11,
+            "count": 13,
             "avg_views": 100,
-            "heat": 111
+            "heat": 131
           },
           {
             "name": "逆袭",
@@ -356,16 +348,44 @@
           {
             "name": "现言",
             "category": "主题",
+            "count": 9,
+            "avg_views": 100,
+            "heat": 91
+          },
+          {
+            "name": "奇幻",
+            "category": "主题",
             "count": 7,
             "avg_views": 100,
             "heat": 71
           },
           {
-            "name": "玄幻",
+            "name": "战神",
+            "category": "主题",
+            "count": 7,
+            "avg_views": 100,
+            "heat": 71
+          },
+          {
+            "name": "甜宠",
+            "category": "主题",
+            "count": 7,
+            "avg_views": 100,
+            "heat": 71
+          },
+          {
+            "name": "悬疑",
             "category": "主题",
             "count": 5,
             "avg_views": 100,
             "heat": 51
+          },
+          {
+            "name": "玄幻",
+            "category": "主题",
+            "count": 4,
+            "avg_views": 100,
+            "heat": 41
           },
           {
             "name": "古言",
@@ -373,46 +393,32 @@
             "count": 4,
             "avg_views": 100,
             "heat": 41
-          },
-          {
-            "name": "战神",
-            "category": "主题",
-            "count": 4,
-            "avg_views": 100,
-            "heat": 41
-          },
-          {
-            "name": "奇幻",
-            "category": "主题",
-            "count": 3,
-            "avg_views": 100,
-            "heat": 31
-          },
-          {
-            "name": "仙侠",
-            "category": "主题",
-            "count": 3,
-            "avg_views": 100,
-            "heat": 31
           }
         ],
         "setting_tags": [
           {
-            "name": "马甲",
+            "name": "重生",
             "category": "设定",
-            "count": 19,
+            "count": 14,
             "avg_views": 100,
-            "heat": 191
+            "heat": 141
           },
           {
-            "name": "打脸虐渣",
+            "name": "马甲",
             "category": "设定",
             "count": 13,
             "avg_views": 100,
             "heat": 131
           },
           {
-            "name": "大男主",
+            "name": "系统",
+            "category": "设定",
+            "count": 12,
+            "avg_views": 100,
+            "heat": 121
+          },
+          {
+            "name": "大女主",
             "category": "设定",
             "count": 11,
             "avg_views": 100,
@@ -426,32 +432,18 @@
             "heat": 101
           },
           {
-            "name": "大女主",
+            "name": "穿越",
             "category": "设定",
             "count": 9,
             "avg_views": 100,
             "heat": 91
           },
           {
-            "name": "系统",
+            "name": "打脸虐渣",
             "category": "设定",
-            "count": 8,
+            "count": 5,
             "avg_views": 100,
-            "heat": 81
-          },
-          {
-            "name": "穿越",
-            "category": "设定",
-            "count": 7,
-            "avg_views": 100,
-            "heat": 71
-          },
-          {
-            "name": "重生",
-            "category": "设定",
-            "count": 6,
-            "avg_views": 100,
-            "heat": 61
+            "heat": 51
           },
           {
             "name": "先婚后爱",
@@ -461,11 +453,11 @@
             "heat": 51
           },
           {
-            "name": "豪门",
+            "name": "复仇",
             "category": "设定",
-            "count": 2,
+            "count": 1,
             "avg_views": 100,
-            "heat": 21
+            "heat": 11
           }
         ],
         "top_tag": "现代",
@@ -475,9 +467,8 @@
         "user_scale": {
           "value": 5.8,
           "unit": "亿",
-          "description": "短剧行业总用户数（含泛用户）",
-          "source": "CNNIC 2026年Q1互联网报告、DataEye短剧白皮书",
-          "estimate": false
+          "description": "短剧行业总用户数（含短视频平台内短剧用户及独立短剧App用户）",
+          "source": "综合艾瑞咨询、QuestMobile 2026年Q1报告预估"
         },
         "market_size": "1000亿+",
         "drama_count": "25万+",
@@ -491,13 +482,13 @@
       "rankings": [
         {
           "rank": 1,
-          "title": "重生之我在霸总短剧里当保姆",
-          "female_lead": "王格格",
+          "title": "我在80年代当后妈",
+          "female_lead": "徐梦洁",
           "male_lead": "未知",
-          "views": "1.2亿",
-          "views_num": 12000,
-          "platform": "抖音、快手、红果",
-          "genre": "重生、打脸虐渣、大女主",
+          "views": "8500万+",
+          "views_num": 8500,
+          "platform": "抖音、红果",
+          "genre": "都市、年代、女性成长",
           "tags": [],
           "trend": "",
           "trend_type": "same",
@@ -508,21 +499,21 @@
           "heat": 0,
           "production_house": "点众",
           "core_trope": [
-            "重生逆袭",
-            "打脸虐渣",
-            "身份反转"
+            "穿越年代",
+            "后妈逆袭",
+            "打脸亲戚"
           ],
           "episodes_count": 80
         },
         {
           "rank": 2,
-          "title": "离婚后，前夫跪求我复婚",
+          "title": "无双",
           "female_lead": "未知",
-          "male_lead": "张集骏",
-          "views": "9800万",
-          "views_num": 9800,
-          "platform": "抖音、红果",
-          "genre": "打脸虐渣、大女主、重生",
+          "male_lead": "何健麒",
+          "views": "7200万+",
+          "views_num": 7200,
+          "platform": "抖音、快手",
+          "genre": "现代、都市、战神",
           "tags": [],
           "trend": "",
           "trend_type": "same",
@@ -533,21 +524,21 @@
           "heat": 0,
           "production_house": "九州",
           "core_trope": [
-            "重生复仇",
-            "追妻火葬场",
-            "打脸渣男"
+            "战神归来",
+            "扮猪吃虎",
+            "复仇打脸"
           ],
           "episodes_count": 90
         },
         {
           "rank": 3,
-          "title": "闪婚后，被大佬宠上天",
-          "female_lead": "徐艺真",
+          "title": "哎呀！皇后娘娘来打工",
+          "female_lead": "王格格",
           "male_lead": "未知",
-          "views": "8500万",
-          "views_num": 8500,
-          "platform": "抖音、快手",
-          "genre": "先婚后爱、甜宠、马甲",
+          "views": "6800万+",
+          "views_num": 6800,
+          "platform": "抖音、红果",
+          "genre": "古代、架空、古言、脑洞",
           "tags": [],
           "trend": "",
           "trend_type": "same",
@@ -558,21 +549,21 @@
           "heat": 0,
           "production_house": "麦芽",
           "core_trope": [
-            "先婚后爱",
-            "马甲大佬",
-            "甜宠逆袭"
+            "皇后穿越",
+            "职场逆袭",
+            "古代人震惊"
           ],
-          "episodes_count": 80
+          "episodes_count": 75
         },
         {
           "rank": 4,
-          "title": "我在古代当网红",
+          "title": "闪婚后，傅先生马甲藏不住了",
           "female_lead": "未知",
-          "male_lead": "孙樾",
-          "views": "7200万",
-          "views_num": 7200,
-          "platform": "抖音、红果",
-          "genre": "穿越、经商、系统",
+          "male_lead": "申浩男",
+          "views": "6500万+",
+          "views_num": 6500,
+          "platform": "红果、抖音",
+          "genre": "现代、都市、现言、先婚后爱",
           "tags": [],
           "trend": "",
           "trend_type": "same",
@@ -583,21 +574,21 @@
           "heat": 0,
           "production_house": "点众",
           "core_trope": [
-            "穿越经商",
-            "系统金手指",
-            "古代直播"
+            "先婚后爱",
+            "隐藏身份",
+            "霸总独宠"
           ],
           "episodes_count": 85
         },
         {
           "rank": 5,
-          "title": "总裁的替身前妻",
+          "title": "我在他乡挺好的（短剧版）",
           "female_lead": "马秋元",
           "male_lead": "未知",
-          "views": "6800万",
-          "views_num": 6800,
-          "platform": "抖音、快手",
-          "genre": "打脸虐渣、大女主、重生",
+          "views": "1.2亿",
+          "views_num": 12000,
+          "platform": "腾讯视频、微视",
+          "genre": "现代、都市、女性成长",
           "tags": [],
           "trend": "",
           "trend_type": "same",
@@ -606,48 +597,23 @@
           "desc": "",
           "change": "",
           "heat": 0,
-          "production_house": "九州",
+          "production_house": "腾讯视频",
           "core_trope": [
-            "替身文学",
-            "重生复仇",
-            "追妻火葬场"
+            "北漂奋斗",
+            "闺蜜情深",
+            "职场逆袭"
           ],
-          "episodes_count": 90
+          "episodes_count": 100
         },
         {
           "rank": 6,
-          "title": "逆袭！从保安到首富",
+          "title": "重生之我在AI世界当大佬",
           "female_lead": "未知",
-          "male_lead": "申浩男",
-          "views": "6500万",
-          "views_num": 6500,
-          "platform": "抖音、红果",
-          "genre": "大男主、打脸虐渣、逆袭",
-          "tags": [],
-          "trend": "",
-          "trend_type": "same",
-          "category": "female",
-          "is_ai": false,
-          "desc": "",
-          "change": "",
-          "heat": 0,
-          "production_house": "麦芽",
-          "core_trope": [
-            "战神归来",
-            "扮猪吃虎",
-            "打脸逆袭"
-          ],
-          "episodes_count": 80
-        },
-        {
-          "rank": 7,
-          "title": "我的机器人女友",
-          "female_lead": "未知",
-          "male_lead": "何健麒",
-          "views": "6100万",
-          "views_num": 6100,
+          "male_lead": "张集骏",
+          "views": "6000万+",
+          "views_num": 6000,
           "platform": "抖音、快手",
-          "genre": "脑洞、奇幻",
+          "genre": "现代、都市、脑洞、奇幻",
           "tags": [],
           "trend": "",
           "trend_type": "same",
@@ -658,46 +624,21 @@
           "heat": 0,
           "production_house": "未知厂牌",
           "core_trope": [
-            "人机恋",
-            "奇幻甜宠",
-            "身份秘密"
+            "重生未来",
+            "AI系统",
+            "科技大佬"
           ],
-          "episodes_count": 70
+          "episodes_count": 80
         },
         {
-          "rank": 8,
-          "title": "穿越后我成了团宠",
-          "female_lead": "赵佳",
-          "male_lead": "未知",
-          "views": "5800万",
+          "rank": 7,
+          "title": "前妻别跑",
+          "female_lead": "未知",
+          "male_lead": "何健麒",
+          "views": "5800万+",
           "views_num": 5800,
           "platform": "抖音、红果",
-          "genre": "穿越、系统、打脸虐渣",
-          "tags": [],
-          "trend": "",
-          "trend_type": "same",
-          "category": "female",
-          "is_ai": false,
-          "desc": "",
-          "change": "",
-          "heat": 0,
-          "production_house": "点众",
-          "core_trope": [
-            "穿越团宠",
-            "系统金手指",
-            "打脸虐渣"
-          ],
-          "episodes_count": 85
-        },
-        {
-          "rank": 9,
-          "title": "豪门千金归来",
-          "female_lead": "未知",
-          "male_lead": "白方文",
-          "views": "5500万",
-          "views_num": 5500,
-          "platform": "抖音、快手",
-          "genre": "大女主、打脸虐渣、逆袭",
+          "genre": "现代、都市、现言、虐恋",
           "tags": [],
           "trend": "",
           "trend_type": "same",
@@ -708,21 +649,21 @@
           "heat": 0,
           "production_house": "九州",
           "core_trope": [
-            "真假千金",
-            "豪门复仇",
-            "打脸逆袭"
+            "追妻火葬场",
+            "破镜重圆",
+            "霸总追妻"
           ],
-          "episodes_count": 80
+          "episodes_count": 90
         },
         {
-          "rank": 10,
-          "title": "保安队长爱上我",
-          "female_lead": "张楚萱",
+          "rank": 8,
+          "title": "我在精神病院学斩神",
+          "female_lead": "赵佳",
           "male_lead": "未知",
-          "views": "5200万",
-          "views_num": 5200,
-          "platform": "抖音、红果",
-          "genre": "甜宠、逆袭",
+          "views": "9000万",
+          "views_num": 9000,
+          "platform": "腾讯视频、B站",
+          "genre": "现代、都市、奇幻、悬疑",
           "tags": [],
           "trend": "",
           "trend_type": "same",
@@ -731,117 +672,157 @@
           "desc": "",
           "change": "",
           "heat": 0,
-          "production_house": "麦芽",
+          "production_house": "腾讯视频",
           "core_trope": [
-            "身份反转",
-            "甜宠逆袭",
-            "扮猪吃虎"
+            "精神病院",
+            "隐藏大佬",
+            "斩神觉醒"
           ],
-          "episodes_count": 75
+          "episodes_count": 80
+        },
+        {
+          "rank": 9,
+          "title": "我的26岁女房客",
+          "female_lead": "未知",
+          "male_lead": "白方文",
+          "views": "5500万+",
+          "views_num": 5500,
+          "platform": "抖音、快手",
+          "genre": "现代、都市、现言",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "未知厂牌",
+          "core_trope": [
+            "合租情缘",
+            "大叔配萝莉",
+            "治愈救赎"
+          ],
+          "episodes_count": 70
+        },
+        {
+          "rank": 10,
+          "title": "逆袭之我的1997",
+          "female_lead": "余茵",
+          "male_lead": "未知",
+          "views": "5200万+",
+          "views_num": 5200,
+          "platform": "红果、抖音",
+          "genre": "年代、乡村、女性成长、脑洞",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "点众",
+          "core_trope": [
+            "重生1997",
+            "乡村逆袭",
+            "创业致富"
+          ],
+          "episodes_count": 85
         }
       ],
       "actors": {
         "female": [
           {
             "rank": 1,
-            "name": "王格格",
+            "name": "徐梦洁",
             "popularity": 985,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "重生之我在霸总短剧里当保姆",
+            "works": "我在80年代当后妈",
             "trend": ""
           },
           {
             "rank": 2,
-            "name": "徐艺真",
-            "popularity": 920,
+            "name": "王格格",
+            "popularity": 950,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "闪婚后，被大佬宠上天",
+            "works": "哎呀！皇后娘娘来打工",
             "trend": ""
           },
           {
             "rank": 3,
             "name": "马秋元",
-            "popularity": 880,
+            "popularity": 930,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "总裁的替身前妻",
+            "works": "我在他乡挺好的（短剧版）",
             "trend": ""
           },
           {
             "rank": 4,
             "name": "赵佳",
-            "popularity": 850,
+            "popularity": 900,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "穿越后我成了团宠",
+            "works": "我在精神病院学斩神",
             "trend": ""
           },
           {
             "rank": 5,
-            "name": "张楚萱",
-            "popularity": 820,
+            "name": "余茵",
+            "popularity": 870,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "保安队长爱上我",
+            "works": "逆袭之我的1997",
             "trend": ""
           }
         ],
         "male": [
           {
             "rank": 1,
-            "name": "张集骏",
-            "popularity": 960,
+            "name": "何健麒",
+            "popularity": 980,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "离婚后，前夫跪求我复婚",
+            "works": "无双、前妻别跑",
             "trend": ""
           },
           {
             "rank": 2,
-            "name": "孙樾",
-            "popularity": 900,
+            "name": "申浩男",
+            "popularity": 940,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "我在古代当网红",
+            "works": "闪婚后，傅先生马甲藏不住了",
             "trend": ""
           },
           {
             "rank": 3,
-            "name": "申浩男",
-            "popularity": 870,
+            "name": "张集骏",
+            "popularity": 910,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "逆袭！从保安到首富",
+            "works": "重生之我在AI世界当大佬",
             "trend": ""
           },
           {
             "rank": 4,
-            "name": "何健麒",
-            "popularity": 840,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "我的机器人女友",
-            "trend": ""
-          },
-          {
-            "rank": 5,
             "name": "白方文",
-            "popularity": 810,
+            "popularity": 880,
             "platform_fans": 0.0,
             "platform": "红果",
             "badge": "",
-            "works": "豪门千金归来",
+            "works": "我的26岁女房客",
             "trend": ""
           }
         ]
@@ -928,7 +909,7 @@
         "daily": [
           {
             "date": "2026-06-10",
-            "total_views": 73400
+            "total_views": 72500
           },
           {
             "date": "2026-06-09",
@@ -940,9 +921,9 @@
             "week": "2026-W23",
             "start_date": "2026-06-08",
             "end_date": "2026-06-14",
-            "top1_title": "重生之我在霸总短剧里当保姆",
-            "top1_views": "1.2亿",
-            "total_views": 73400
+            "top1_title": "我在80年代当后妈",
+            "top1_views": "8500万+",
+            "total_views": 72500
           }
         ],
         "trend_direction": "stable"
@@ -951,57 +932,57 @@
         {
           "type": "数据",
           "icon": "📊",
-          "title": "2024年短剧市场规模504亿",
-          "content": "2024年中国微短剧市场规模达504亿元，同比增长34%，首次超过电影票房（425亿元）。用户规模达5.76亿，占网民52.4%。",
+          "title": "2024年短剧市场规模超电影票",
+          "content": "2024年中国微短剧市场规模达504亿元，首次超过电影票房（约425亿），同比增长35%。用户规模达5.76亿，占网民总数52.4%。",
           "source_url": "https://www.dataeye.com"
         },
         {
           "type": "预警",
           "icon": "⚠️",
-          "title": "广电总局实施分类分层审核",
-          "content": "2024年6月起，广电总局要求所有微短剧实行分类分层审核：投资100万以上需总局备案，30-100万由省级备案，30万以下平台自审但需报备。大量低俗内容被下架。",
+          "title": "广电总局实施短剧备案新规",
+          "content": "2024年6月1日起，所有微短剧纳入备案管理。投资超100万需广电总局备案，30-100万由平台自审并备案，低于30万需平台重点审核特定题材。",
           "source_url": "https://www.nrta.gov.cn"
         },
         {
           "type": "商业",
           "icon": "💰",
-          "title": "AI短剧成本下降90%",
-          "content": "2025年2月，快手推出首部全AI生成短剧《山海奇镜》，制作成本仅15万元（传统150万元），播放量达2.3亿次。预计2025年AI短剧将占整体产量的15%。",
+          "title": "ReelShort海外月流水破",
+          "content": "中文在线旗下ReelShort全球下载量突破1亿次，2025年2月海外单月流水超5000万美元，在美国iOS娱乐榜长期排名前10。",
+          "source_url": "https://www.newwanr.com"
+        },
+        {
+          "type": "商业",
+          "icon": "💰",
+          "title": "快手投30亿流量扶持短剧创作者",
+          "content": "2025年3月，快手升级“星芒短剧”计划，投入30亿流量和10亿现金，重点扶持现实题材和科幻题材短剧创作者。",
           "source_url": "https://www.newwanr.com"
         },
         {
           "type": "数据",
           "icon": "📊",
-          "title": "微信小程序短剧头部效应加剧",
-          "content": "2025年1月，微信小程序短剧Top 10贡献80%流水（2024年同期65%）。爆款《我在80年代当后妈》单月流水破1.2亿元，但同期3000部剧中仅12%盈利。",
+          "title": "AI短剧成本降低90%",
+          "content": "2025年3月，快手发布“可灵AI”短剧生成平台，用户输入剧本即可生成3分钟短剧，制作成本降低90%，AI参与比例超30%。",
           "source_url": "https://www.dataeye.com"
-        },
-        {
-          "type": "商业",
-          "icon": "💰",
-          "title": "短剧出海本土化制作兴起",
-          "content": "2025年2月，中文在线旗下ReelShort在巴西推出首部本土原创短剧《Rio Love Story》，单集成本5万美元，用户留存率比翻译剧高40%。预计本土原创占比将从10%升至30%。",
-          "source_url": "https://www.newwanr.com"
         }
       ],
       "insights": [
         {
-          "icon": "💰",
-          "title": "抖音分成比例大调整",
-          "content": "抖音6月9日发布新政策，针对优质短剧（单集播放超500万或付费转化超10%），平台与制作方分成比例从50%:50%调整为30%:70%，制作方分成提升至70%，"
+          "icon": "🔥",
+          "title": "AI编剧剧播放破亿",
+          "content": "百度文心一言全程编剧的《代码恋人》累计播放量突破1.5亿，成为首部播放量破亿的纯AI编剧短剧，工具效率提升42倍。"
         },
         {
           "icon": "🏭",
-          "title": "九州文化月产15部",
-          "content": "九州文化男频爽剧《都市至尊仙医》首周播放量达9200万，成为本周厂牌内最爆款。同时，九州6月产能提升至月产15部（较5月增加3部），重点押注“都市+逆袭”赛道。"
+          "title": "点众AI混合制作产能",
+          "content": "点众科技AI短剧工场投产，将单集成本降低40%、制作周期缩短至3天，6月上线数量从15部提升至28部，首部作品《星际快递员》首日播放1800万。"
         },
         {
-          "icon": "🤖",
-          "title": "字节AI短剧播放破5",
-          "content": "字节跳动旗下“即创”平台6月5日上线“AI短剧一键生成”功能，内测作品《AI觉醒：我的虚拟女友》在抖音累计播放量达5300万，创下AI生成短剧播放量新高。"
+          "icon": "💰",
+          "title": "快手推80%分成计划",
+          "content": "快手发布短剧星火计划，基础分成比例提至65%，爆款剧最高可达80%，并配500万流量包，直接回应抖音70%分成政策。"
         }
       ],
-      "quality_score": 85.0,
+      "quality_score": 60.0,
       "error_message": ""
     }
   }
