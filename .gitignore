@@ -29,6 +29,17 @@ __pycache__/
 *.rmvb
 *.vob
 
+# 截屏图片文件（不应上传）
+assets/image*.png
+assets/image.png
+*.jpeg
+*.jpg
+*.gif
+
+# 日志文件
+*.log
+logs/
+
 # 归档文件
 *.iso
 *.dmg
