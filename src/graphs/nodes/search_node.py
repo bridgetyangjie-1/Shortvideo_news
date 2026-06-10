@@ -61,39 +61,15 @@ def search_node(
 - 如果某些数据无法获取，标注"暂无数据"
 """
 
-        # 执行搜索
+        # 执行搜索 - 使用 DuckDuckGo
         logger.info(f"开始搜索短剧行业数据，日期: {data_date}")
-        response = client.search(
-            query=search_prompt,
-            system_prompt="你是一个专业的数据分析师，擅长从互联网搜索并整理行业数据。请搜索最新的公开数据源，返回具体的事实和数值。",
-            temperature=0.3,
-            max_tokens=8192
-        )
+        response = client.search(query=search_prompt, max_results=5)
         
         # 🔍 新增：搜索红果平台标签数据
-        tag_search_prompt = f"""请搜索红果短剧平台的"最热"分类页面数据。
+        tag_search_prompt = f"""红果短剧平台 最热分类 标签 都市 甜宠 重生 穿越 马甲 打脸
+热门短剧剧名 标签统计 热度排行 {data_date}"""
 
-重点关注：
-1. 热门短剧的标签信息（如都市、甜宠、重生、穿越、马甲、打脸等）
-2. 各标签对应的短剧数量和播放量热度
-3. 红果平台的标签分类体系：
-   - 背景标签：现代、都市、古代、乡村、年代、架空、职场、民国、校园等
-   - 主题标签：现言、女性成长、脑洞、奇幻、玄幻、古言、战神、仙侠、悬疑等
-   - 设定标签：打脸虐渣、大男主、大女主、马甲、重生、穿越、系统、先婚后爱等
-
-请返回：
-- TOP20热门短剧的剧名和标签列表
-- 统计各标签出现的次数和热度
-
-日期参考：{data_date}
-"""
-
-        tag_response = client.search(
-            query=tag_search_prompt,
-            system_prompt="你是一个数据分析专家，擅长从短剧平台提取标签分类数据。请返回具体的标签统计信息。",
-            temperature=0.3,
-            max_tokens=4096
-        )
+        tag_response = client.search(query=tag_search_prompt, max_results=5)
         
         logger.info(f"标签数据搜索完成，长度: {len(tag_response)} 字符")
         

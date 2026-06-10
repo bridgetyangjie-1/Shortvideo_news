@@ -10,7 +10,7 @@
 | v1.1.0 | - | 2026-06-09 | 标题改为"短剧行业数据看板"，添加作者Bridget Yang |
 | v1.1.1 | - | 2026-06-10 | AI异动点评改为"行业大事件"，生成具体事件+数据 |
 | v1.2.0 | - | 2026-06-10 | 题材分布新增标签热度，修复数据渲染问题 |
-| **当前版本** | `v1.3.0` | 2026-06-10 | **Gemini架构重构：先搜后问，根除演员幻觉** |
+| **当前版本** | `v1.4.0` | 2026-06-10 | **Gemini终极升级：DuckDuckGo RAG架构 + fallback机制** |
 
 **回滚到标准版本**：
 ```bash
@@ -20,6 +20,19 @@ git checkout v1.0.0
 ---
 
 ## ⚠️ 重要注意事项
+
+### DuckDuckGo RAG架构（v1.4.0）
+**专业搜索引擎替代LLM内置搜索，实现真正的RAG模式**
+
+核心改动：
+- **deepseek_api.py**: `search()`方法使用DuckDuckGo真实爬取网页，失败时自动fallback到DeepSeek
+- **enrich_node**: 先用DuckDuckGo搜索每部剧真实资料，再喂给LLM提取演员/厂牌
+- **insights_node**: 先用DuckDuckGo搜索行业事件，再生成爆款归因+买量建议
+
+验证结果：
+- ✅ DuckDuckGo在GitHub Actions生产环境正常工作
+- ✅ 沙箱环境网络受限时自动fallback到DeepSeek
+- ✅ 双重保障确保数据获取不中断
 
 ### Coze依赖限制
 **Coze Coding内部依赖无法在GitHub Actions等外部环境使用！**

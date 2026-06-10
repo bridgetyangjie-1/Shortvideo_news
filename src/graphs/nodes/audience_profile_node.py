@@ -61,13 +61,8 @@ def audience_profile_node(
 }
 """
         
-        # 执行搜索
-        response = client.search(
-            query=search_query,
-            system_prompt="你是专业的用户研究分析师，擅长搜索和整理用户画像数据。",
-            temperature=0.3,
-            max_tokens=3000
-        )
+        # 执行搜索 - 使用 DuckDuckGo
+        response = client.search(query=search_query, max_results=5)
         
         # 解析响应
         json_match = re.search(r'\{[\s\S]*\}', response)

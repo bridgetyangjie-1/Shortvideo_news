@@ -160,53 +160,74 @@ class DeepSeekClient:
             logger.error(f"DeepSeek流式调用失败: {e}")
             raise Exception(f"DeepSeek流式调用失败: {e}")
     
-    def search(
-        self,
-        query: str,
-        system_prompt: Optional[str] = None,
-        temperature: float = 0.3,
-        max_tokens: int = 8192
-    ) -> str:
+    def search(self, query: str, max_results: int = 5) -> str:
         """
-        联网搜索（DeepSeek内置搜索能力）
-        
-        DeepSeek的deepseek-chat模型具备联网搜索能力，
-        会自动搜索互联网获取最新信息
+        真正的联网搜索工具 (使用 DuckDuckGo，失败时回退到DeepSeek)
         
         Args:
             query: 搜索查询
-            system_prompt: 系统提示词
-            temperature: 温度参数
-            max_tokens: 最大输出token
-        
+            max_results: 最大返回结果数
+            
         Returns:
-            搜索结果（包含搜索到的信息和模型回复）
+            格式化的搜索结果文本
         """
-        messages = []
+        logger.info(f"正在使用 DuckDuckGo 搜索: {query}")
         
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
+        try:
+            from duckduckgo_search import DDGS
+            with DDGS() as ddgs:
+                results = list(ddgs.text(query, region='wt-wt', safesearch='off', max_results=max_results))
+                
+            if not results:
+                logger.warning("DuckDuckGo未返回结果，回退到DeepSeek...")
+                return self._fallback_search(query)
+                
+            formatted_results = ""
+            for i, r in enumerate(results, 1):
+                formatted_results += f"【来源 {i}】\n"
+                formatted_results += f"标题: {r.get('title', '')}\n"
+                formatted_results += f"摘要: {r.get('body', '')}\n"
+                formatted_results += f"链接: {r.get('href', '')}\n\n"
+                
+            logger.info(f"DuckDuckGo 搜索成功，获取 {len(results)} 条结果")
+            return formatted_results
+            
+        except Exception as e:
+            logger.warning(f"DuckDuckGo 搜索失败: {e}，回退到DeepSeek...")
+            return self._fallback_search(query)
+    
+    def _fallback_search(self, query: str) -> str:
+        """
+        DuckDuckGo失败时的回退方案：使用DeepSeek chat模拟搜索
         
-        # 添加搜索提示
-        search_query = f"""请搜索互联网获取以下信息，并返回详细结果：
+        Args:
+            query: 搜索查询
+            
+        Returns:
+            搜索结果
+        """
+        search_query = f"""请基于你的知识库搜索以下信息，返回详细结果：
 
 {query}
 
 要求：
-1. 优先搜索最新的公开数据源
-2. 返回具体的数据内容，不要只是总结
-3. 如果找到多个来源，整合后返回完整信息
-4. 标注信息来源（如果有）
+1. 返回具体的数据内容，不要只是总结
+2. 如果找到多个来源，整合后返回完整信息
+3. 标注信息来源（如果有）
 """
         
-        messages.append({"role": "user", "content": search_query})
+        messages = [
+            {"role": "system", "content": "你是信息检索专家，返回客观事实。"},
+            {"role": "user", "content": search_query}
+        ]
         
-        return self.chat(
-            messages=messages,
-            model="deepseek-chat",
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
+        try:
+            response = self.chat(messages=messages, temperature=0.3, max_tokens=2000)
+            logger.info("DeepSeek fallback搜索成功")
+            return response
+        except Exception as e:
+            logger.error(f"DeepSeek fallback搜索失败: {e}")
+            return f"搜索失败: {e}"
     
     def search_json(
         self,

@@ -65,7 +65,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         search_results: List[Dict[str, Any]] = []
         for query in search_queries[:3]:  # 只搜索前3个查询，避免超时
             try:
-                result = client.search(query)
+                result = client.search(query, max_results=3)
                 logger.info(f"搜索 '{query}' 返回: {result[:200]}...")
                 search_results.append({
                     "query": query,

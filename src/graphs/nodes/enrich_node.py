@@ -57,13 +57,8 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             logger.info(f"正在搜索剧目《{title}》的真实资料...")
             
             try:
-                # 🚨 调用search方法，真实抓取网页内容
-                search_res = client.search(
-                    query=f"短剧 {title} 演员 主演 制作公司 厂牌 题材",
-                    system_prompt="你是信息检索器，只返回搜索到的客观事实，不需要总结。如果找不到，明确说'未找到'。",
-                    temperature=0.1,
-                    max_tokens=1500
-                )
+                # 🚨 使用 DuckDuckGo 真正具有爬虫能力的 search 方法
+                search_res = client.search(query=f"短剧 《{title}》 演员 主演 制作公司 厂牌", max_results=3)
                 real_search_context += f"\n【剧目：《{title}》真实网页检索结果】:\n{search_res}\n"
                 logger.info(f"搜索《{title}》成功")
             except Exception as e:

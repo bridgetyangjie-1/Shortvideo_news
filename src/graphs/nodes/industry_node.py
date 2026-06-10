@@ -65,13 +65,8 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
 请返回JSON格式的数据，包含以上所有字段。
 """
         
-        # 执行搜索
-        search_response = client.search(
-            query=search_query,
-            system_prompt=sp or "你是专业的行业数据分析师，擅长搜索和整理行业宏观统计数据。",
-            temperature=temperature,
-            max_tokens=3000
-        )
+        # 执行搜索 - 使用 DuckDuckGo
+        search_response = client.search(query=search_query, max_results=5)
         
         # 4. 使用LLM提取JSON
         json_match = re.search(r'\{[\s\S]*\}', search_response)

@@ -59,29 +59,11 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         # 初始化DeepSeek客户端
         client = DeepSeekClient()
         
-        # 🚨 Gemini核心修复：使用search而不是chat，真实联网搜索
-        search_prompt = f"""请搜索短剧行业最近一周的重要事件，重点关注：
-1. 播放量爆款：哪部剧播放量突然暴涨（环比增长超30%）
-2. 厂牌动向：九州、点众、麦芽等头部厂牌的最新爆款或产能变化
-3. 商业事件：融资、IPO、平台新规、分成政策调整
-4. 技术突破：AI短剧新工具上线、AI剧播放量创新高
-
-日期参考：{state.data_date}
-
-请返回具体的新闻事件（带数据和来源），如：
-- "九州新剧《XXX》首周播放破8000万"（来源：DataEye）
-- "抖音短剧分成比例提升至70%"（来源：抖音官方）
-"""
+        # 🚨 第一步：使用 DuckDuckGo 真实检索最新大事件
+        search_query = f"短剧行业 最新爆款 融资 政策 动态 {state.data_date}"
+        search_response = client.search(query=search_query, max_results=5)
         
-        # 🚨 使用search方法，真正触发联网搜索
-        search_response = client.search(
-            query=search_prompt,
-            system_prompt="你是短剧行业情报搜索专家，擅长发现带数据的具体事件。返回真实搜索结果，禁止编造。",
-            temperature=0.3,
-            max_tokens=2500
-        )
-        
-        logger.info(f"真实搜索结果获取成功: {search_response[:300]}...")
+        logger.info(f"事件真实搜索结果: {search_response[:500]}...")
         
         # 第二步：结合榜单数据和搜索结果，生成洞察
         up_tpl = Template(up)
