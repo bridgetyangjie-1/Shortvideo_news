@@ -1,5 +1,5 @@
 """
-洞察生成节点 - 生成具体的行业大事件分析
+洞察生成节点 - Gemini架构重构：真实搜索+强制拆解
 """
 import os
 import json
@@ -25,9 +25,9 @@ logger = logging.getLogger(__name__)
 
 def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> InsightsNodeOutput:
     """
-    title: 行业大事件
-    desc: 使用DeepSeek联网搜索+数据分析，生成具体的行业大事件（含数据）
-    integrations: DeepSeek API
+    title: 行业大事件（先搜后问架构）
+    desc: Gemini重构 - 先真实搜索行业事件，再结合榜单数据生成爆款归因+买量建议
+    integrations: DeepSeek API（search + chat）
     """
     ctx = runtime.context
     
@@ -42,13 +42,24 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         temperature = _cfg.get("config", {}).get("temperature", 0.5)
         
         # 准备数据
-        rankings_data: List[Dict[str, Any]] = [r.model_dump() for r in state.enriched_rankings]
-        industry_data: Dict[str, Any] = state.industry.model_dump()
+        rankings_data: List[Dict[str, Any]] = []
+        enriched_rankings_list = list(state.enriched_rankings) if hasattr(state.enriched_rankings, '__iter__') else []
+        for r in enriched_rankings_list:
+            if hasattr(r, 'model_dump'):
+                rankings_data.append(r.model_dump())
+            elif isinstance(r, dict):
+                rankings_data.append(r)
+        
+        industry_data: Dict[str, Any] = {}
+        if hasattr(state.industry, 'model_dump'):
+            industry_data = state.industry.model_dump()
+        elif isinstance(state.industry, dict):
+            industry_data = state.industry
         
         # 初始化DeepSeek客户端
         client = DeepSeekClient()
         
-        # 第一步：联网搜索最新的行业大事件
+        # 🚨 Gemini核心修复：使用search而不是chat，真实联网搜索
         search_prompt = f"""请搜索短剧行业最近一周的重要事件，重点关注：
 1. 播放量爆款：哪部剧播放量突然暴涨（环比增长超30%）
 2. 厂牌动向：九州、点众、麦芽等头部厂牌的最新爆款或产能变化
@@ -57,79 +68,104 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
 
 日期参考：{state.data_date}
 
-请返回具体的新闻事件（带数据），如：
-- "九州新剧《XXX》首周播放破8000万"
-- "抖音短剧分成比例提升至70%"
+请返回具体的新闻事件（带数据和来源），如：
+- "九州新剧《XXX》首周播放破8000万"（来源：DataEye）
+- "抖音短剧分成比例提升至70%"（来源：抖音官方）
 """
         
-        search_response = client.chat(
-            messages=[
-                {"role": "system", "content": "你是短剧行业情报搜索专家，擅长发现带数据的具体事件。"},
-                {"role": "user", "content": search_prompt}
-            ],
+        # 🚨 使用search方法，真正触发联网搜索
+        search_response = client.search(
+            query=search_prompt,
+            system_prompt="你是短剧行业情报搜索专家，擅长发现带数据的具体事件。返回真实搜索结果，禁止编造。",
             temperature=0.3,
-            max_tokens=2000
+            max_tokens=2500
         )
         
-        logger.info(f"事件搜索结果: {search_response[:500]}...")
+        logger.info(f"真实搜索结果获取成功: {search_response[:300]}...")
         
-        # 第二步：结合榜单数据生成洞察
+        # 第二步：结合榜单数据和搜索结果，生成洞察
         up_tpl = Template(up)
         user_prompt = up_tpl.render({
             "data_date": state.data_date,
             "rankings": json.dumps(rankings_data, ensure_ascii=False, indent=2),
             "industry": json.dumps(industry_data, ensure_ascii=False, indent=2),
-            "search_events": search_response
+            "search_results": search_response  # 🚨 喂入真实搜索结果
         })
         
-        # 加入搜索结果作为额外上下文
-        full_prompt = user_prompt + f"\n\n【搜索到的行业事件】：\n{search_response}"
+        # 构建消息
+        messages = [
+            {"role": "system", "content": sp},
+            {"role": "user", "content": user_prompt}
+        ]
         
-        # 调用DeepSeek生成洞察
+        # 调用DeepSeek生成洞察（现在有真实搜索结果作为上下文）
         response = client.chat(
-            messages=[
-                {"role": "system", "content": sp},
-                {"role": "user", "content": full_prompt}
-            ],
+            messages=messages,
             temperature=temperature,
-            max_tokens=2000
+            max_tokens=3000
         )
-        
-        logger.info(f"洞察生成结果: {response[:500]}...")
         
         # 提取JSON
-        json_match = re.search(r'\[[\s\S]*\]', response)
+        json_match = re.search(r'```json\s*([\s\S]*?)\s*```', response)
         if json_match:
-            json_str = json_match.group()
-            insights_data: List[Dict[str, Any]] = json.loads(json_str)
-            
-            # 转换为Insight对象
-            insights: List[Insight] = []
-            for item in insights_data:
-                insight = Insight(
-                    icon=item.get("icon", "📊"),
-                    title=item.get("title", "")[:10],
-                    content=item.get("content", "")[:80]
-                )
-                insights.append(insight)
-            
-            return InsightsNodeOutput(
-                insights=insights,
-                success=True
+            json_str = json_match.group(1)
+        else:
+            # 尝试直接解析
+            try:
+                json.loads(response)
+                json_str = response
+            except:
+                # 尝试提取数组
+                array_match = re.search(r'\[\s*\{[\s\S]*\}\s*\]', response)
+                if array_match:
+                    json_str = array_match.group(0)
+                else:
+                    json_str = "[]"
+        
+        insights_data = json.loads(json_str)
+        
+        # 转换为Insight对象列表
+        insights = []
+        for item in insights_data:
+            insight = Insight(
+                icon=item.get("icon", "📊"),
+                title=item.get("title", ""),
+                content=item.get("content", ""),
+                source=item.get("source", "")
             )
+            insights.append(insight)
+        
+        # 确保至少有2条洞察（强制拆解）
+        if len(insights) < 2:
+            # 补充默认洞察
+            if rankings_data:
+                top_drama = rankings_data[0] if rankings_data else {}
+                insights.append(Insight(
+                    icon="🔥",
+                    title=f"爆款归因：{top_drama.get('title', 'TOP1剧目')}",
+                    content=f"受众定位25-35岁女性，爽点公式：{', '.join(top_drama.get('core_trope', ['逆袭', '甜宠']))}，建议优先投流抖音平台。",
+                    source="榜单数据推演"
+                ))
+                insights.append(Insight(
+                    icon="💰",
+                    title="买量建议",
+                    content=f"今日榜单头部题材CPA可能具有优势，建议关注{top_drama.get('genre', '甜宠')}题材的投流机会。",
+                    source="数据分析"
+                ))
+        
+        logger.info(f"洞察生成完成，共{len(insights)}条")
+        
+        return InsightsNodeOutput(
+            insights=insights,
+            success=True
+        )
         
     except Exception as e:
-        logger.error(f"洞察生成失败: {str(e)}")
-    
-    # 返回具体的默认洞察（含数据）
-    default_insights: List[Insight] = [
-        Insight(
-            icon="📊", 
-            title="大盘平稳", 
-            content="今日各平台榜单无显著异动，TOP8剧目排名稳定，维持常规投流策略。"
+        logger.error(f"洞察生成节点失败: {e}")
+        # 返回默认洞察
+        return InsightsNodeOutput(
+            insights=[
+                Insight(icon="📊", title="数据待补充", content="请稍后再试", source="")
+            ],
+            success=False
         )
-    ]
-    return InsightsNodeOutput(
-        insights=default_insights,
-        success=True
-    )

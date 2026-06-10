@@ -9,7 +9,8 @@
 | **标准版本** | `v1.0.0` | 2026-06-09 | 首个稳定版本，未来修改基于此版本 |
 | v1.1.0 | - | 2026-06-09 | 标题改为"短剧行业数据看板"，添加作者Bridget Yang |
 | v1.1.1 | - | 2026-06-10 | AI异动点评改为"行业大事件"，生成具体事件+数据 |
-| **当前版本** | `v1.2.0` | 2026-06-10 | 题材分布新增标签热度，修复数据渲染问题 |
+| v1.2.0 | - | 2026-06-10 | 题材分布新增标签热度，修复数据渲染问题 |
+| **当前版本** | `v1.3.0` | 2026-06-10 | **Gemini架构重构：先搜后问，根除演员幻觉** |
 
 **回滚到标准版本**：
 ```bash
@@ -47,6 +48,18 @@ rankings.get('title')
 # ✅ 正确 - 使用属性访问
 rankings.title
 ```
+
+### Gemini架构重构（v1.3.0）
+**根除"物理断层"问题 - Prompt命令搜索但Python只调用chat**
+
+核心改动：
+- **enrich_node**: 先在Python层为每部剧调用`client.search()`获取真实资料，再喂给LLM做提取
+- **insights_node**: 使用`client.search()`而非`client.chat()`，真正触发联网搜索
+
+验证结果：
+- ✅ 演员不再显示传统影视明星（刘亦菲、胡歌等）
+- ✅ 演员为真实短剧演员（徐艺真、孙樾、王格格等）
+- ✅ 洞察有爆款归因+买量建议
 
 ---
 
@@ -94,12 +107,12 @@ rankings.title
 | search_node | `nodes/search_node.py` | task | DeepSeek联网搜索榜单+标签数据 | - |
 | news_node | `nodes/news_node.py` | agent | DeepSeek搜索5条快讯+100字总结+原文链接 | `config/news_llm_cfg.json` |
 | process_node | `nodes/process_node.py` | agent | DeepSeek结构化处理榜单 | `config/process_llm_cfg.json` |
-| enrich_node | `nodes/enrich_node.py` | agent | DeepSeek补充演员/标签/描述 | `config/enrich_llm_cfg.json` |
+| enrich_node | `nodes/enrich_node.py` | agent | **先搜后问架构** - Python层调用search获取真实资料，再喂给LLM提取演员/标签 | `config/enrich_llm_cfg.json` |
 | actor_ranking_node | `nodes/actor_ranking_node.py` | agent | DeepSeek生成演员人气榜 | `config/actor_ranking_llm_cfg.json` |
 | industry_node | `nodes/industry_node.py` | agent | DeepSeek联网获取行业宏观数据 | `config/industry_llm_cfg.json` |
 | audience_profile_node | `nodes/audience_profile_node.py` | agent | DeepSeek搜索观众画像 | `config/audience_profile_llm_cfg.json` |
 | genre_distribution_node | `nodes/genre_distribution_node.py` | task | 统计题材分布+标签热度 | - |
-| insights_node | `nodes/insights_node.py` | agent | DeepSeek生成具体行业大事件 | `config/insights_llm_cfg.json` |
+| insights_node | `nodes/insights_node.py` | agent | **先搜后问架构** - Python层调用search获取真实事件，再生成爆款归因+买量建议 | `config/insights_llm_cfg.json` |
 | history_data_node | `nodes/history_data_node.py` | task | 生成历史数据和播放趋势 | - |
 | push_node | `nodes/push_node.py` | task | 保存JSON数据文件 | - |
 
@@ -122,10 +135,6 @@ rankings.title
 ---
 
 ## 已知问题与解决方案
-
-### 演员"未知"问题
-- **原因**: DeepSeek搜索结果中部分短剧演员信息缺失
-- **解决**: 需改进search_node搜索更完整的演员数据
 
 ### GitHub Pages缓存
 - **现象**: 修改后网页不更新

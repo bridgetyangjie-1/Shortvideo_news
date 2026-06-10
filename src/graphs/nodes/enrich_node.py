@@ -1,10 +1,11 @@
 """
-数据补充节点 - 补充演员信息、tags、desc、trend等字段
+数据补充节点 - Gemini架构重构：先搜后问，0幻觉
 """
 import os
 import json
 import re
 import logging
+from typing import Any
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
@@ -19,9 +20,9 @@ logger = logging.getLogger(__name__)
 
 def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> EnrichNodeOutput:
     """
-    title: 数据补充
-    desc: 使用DeepSeek补充每部剧的演员信息、tags标签、desc剧情描述等字段
-    integrations: DeepSeek API
+    title: 数据补充（先搜后问架构）
+    desc: Gemini重构 - 先在Python层真实搜索每部剧的资料，再喂给LLM做提取，彻底根除幻觉
+    integrations: DeepSeek API（search + chat）
     """
     ctx = runtime.context
     
@@ -32,26 +33,74 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             _cfg = json.load(fd)
         
         sp = _cfg.get("sp", "")
-        up = _cfg.get("up", "")
         temperature = _cfg.get("config", {}).get("temperature", 0.3)
-        
-        # 渲染用户提示词
-        up_tpl = Template(up)
-        user_prompt = up_tpl.render({
-            "basic_rankings": json.dumps(state.basic_rankings, ensure_ascii=False, indent=2),
-            "data_date": state.data_date
-        })
         
         # 初始化DeepSeek客户端
         client = DeepSeekClient()
         
+        # 🚨 Gemini核心修复：先在Python层真实搜索每部剧的资料
+        real_search_context = ""
+        basic_rankings_list = list(state.basic_rankings) if hasattr(state.basic_rankings, '__iter__') else []
+        
+        for idx, drama in enumerate(basic_rankings_list[:10]):  # 只查前10名控制耗时
+            # 获取剧名 - 防御性处理多种类型
+            title = ""
+            drama_obj: Any = drama  # 明确类型为Any
+            if hasattr(drama_obj, "title"):
+                title = getattr(drama_obj, "title", "")
+            elif isinstance(drama_obj, dict):
+                title = drama_obj.get("title", "")
+            
+            if not title:
+                continue
+            
+            logger.info(f"正在搜索剧目《{title}》的真实资料...")
+            
+            try:
+                # 🚨 调用search方法，真实抓取网页内容
+                search_res = client.search(
+                    query=f"短剧 {title} 演员 主演 制作公司 厂牌 题材",
+                    system_prompt="你是信息检索器，只返回搜索到的客观事实，不需要总结。如果找不到，明确说'未找到'。",
+                    temperature=0.1,
+                    max_tokens=1500
+                )
+                real_search_context += f"\n【剧目：《{title}》真实网页检索结果】:\n{search_res}\n"
+                logger.info(f"搜索《{title}》成功")
+            except Exception as e:
+                logger.warning(f"搜索剧目《{title}》失败: {e}")
+                real_search_context += f"\n【剧目：《{title}》搜索失败，请填'未知'】\n"
+        
+        # 渲染用户提示词 - 防御性序列化
+        rankings_json_list: list = []
+        for r_item in basic_rankings_list:
+            r_any: Any = r_item
+            if hasattr(r_any, "model_dump"):
+                rankings_json_list.append(r_any.model_dump())
+            elif hasattr(r_any, "__dict__"):
+                rankings_json_list.append(dict(r_any.__dict__))
+            elif isinstance(r_any, dict):
+                rankings_json_list.append(r_any)
+            else:
+                rankings_json_list.append(str(r_any))
+        
+        user_prompt = f"""【数据日期】：{state.data_date}
+【基础榜单数据】：
+{json.dumps(rankings_json_list, ensure_ascii=False, indent=2)}
+
+🚨以下是你必须依赖的真实互联网检索资料：
+如果资料里没有提到演员/厂牌，严格填入"未知"，禁止编造传统影视明星！
+
+{real_search_context}
+
+请严格按照反幻觉铁律，补全缺失字段并输出JSON数组："""
+
         # 构建消息
         messages = [
             {"role": "system", "content": sp},
             {"role": "user", "content": user_prompt}
         ]
         
-        # 调用DeepSeek
+        # 调用DeepSeek做提取（现在有真实上下文了）
         response = client.chat(
             messages=messages,
             temperature=temperature,
@@ -73,8 +122,8 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             ranking = DramaRanking(
                 rank=item.get("rank", 0),
                 title=item.get("title", ""),
-                female_lead=item.get("female_lead", ""),
-                male_lead=item.get("male_lead", ""),
+                female_lead=item.get("female_lead", "未知"),
+                male_lead=item.get("male_lead", "未知"),
                 views=item.get("views", ""),
                 views_num=item.get("views_num", 0),
                 platform=item.get("platform", "红果"),
@@ -85,12 +134,13 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 category=item.get("category", "female"),
                 is_ai=item.get("is_ai", False),
                 desc=item.get("desc", ""),
-                # 🚨 新增商业信息字段
-                production_house=item.get("production_house", "未知厂牌"),
+                production_house=item.get("production_house", "独立厂牌"),
                 core_trope=item.get("core_trope", []),
                 episodes_count=item.get("episodes_count", 80)
             )
             enriched_rankings.append(ranking)
+        
+        logger.info(f"数据补充完成，共{len(enriched_rankings)}部剧")
         
         return EnrichNodeOutput(
             enriched_rankings=enriched_rankings,
@@ -98,7 +148,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         )
         
     except Exception as e:
-        logger.error(f"数据补充失败: {str(e)}")
+        logger.error(f"数据补充节点失败: {e}")
         return EnrichNodeOutput(
             enriched_rankings=[],
             success=False

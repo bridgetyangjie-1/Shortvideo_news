@@ -70,7 +70,7 @@ class PlatformData(BaseModel):
 class IndustryData(BaseModel):
     """行业数据"""
     user_scale: Any = Field(default="", description="用户规模（支持字符串或字典格式）")
-    market_size: str = Field(default="", description="市场规模")
+    market_size: Any = Field(default="", description="市场规模（支持字符串或字典格式）")
     drama_count: str = Field(default="", description="短剧数量")
     billion_dramas: int = Field(default=0, description="过亿短剧数")
     ai_ratio: int = Field(default=0, description="AI短剧占比(%)")
