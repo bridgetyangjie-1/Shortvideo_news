@@ -124,8 +124,21 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     
     logger.info(f"✅ 数据输出完成 - 最新数据已保存，历史数据已归档")
     
+    # 返回完整数据，确保GraphOutput包含所有数据
     return PushNodeOutput(
         success=True,
         output_path=DATA_FILE_PATH,
-        data_date=data_date
+        data_date=data_date,
+        generated_at=generated_at,
+        industry=state.industry,
+        rankings=[r for r in state.enriched_rankings] if state.enriched_rankings else [],
+        actors=state.actors,
+        platform=state.platform,
+        daily_news=state.daily_news,
+        insights=state.insights,
+        audience_profile=state.audience_profile,
+        genre_distribution=state.genre_distribution,
+        play_trend=state.play_trend,
+        quality_score=state.quality_score or 60.0,
+        error_message=state.error_message or ""
     )
