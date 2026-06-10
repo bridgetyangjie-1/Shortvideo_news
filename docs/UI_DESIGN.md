@@ -5,7 +5,7 @@
 ## 一、整体风格
 
 ### 1.1 品牌标识
-- **标题**: "短剧行业商业决策看板 - DeepSeek Powered"
+- **标题**: "短剧行业数据看板 - Bridget Yang"
 - **AI Badge**: 🤖 DeepSeek Powered + Tier 1+2+3标识
 - **渐变效果**: linear-gradient(135deg, #e0e7ff 0%, #818cf8 100%)
 

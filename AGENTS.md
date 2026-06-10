@@ -1,4 +1,4 @@
-# 短剧行业研究数据自动更新工作流
+# 短剧行业数据看板 - AGENTS规范文档
 
 ---
 
@@ -7,9 +7,9 @@
 | 版本 | Tag | 日期 | 说明 |
 |------|-----|------|------|
 | **标准版本** | `v1.0.0` | 2026-06-09 | 首个稳定版本，未来修改基于此版本 |
-| v1.1.0 | - | 2026-06-09 | 标题改为"短剧行业数据看板"，添加作者Bridget Yang，快讯改为5条+100字+原文链接 |
-| v1.1.1 | - | 2026-06-10 | AI异动点评改为"行业大事件"，生成具体事件+数据（播放量暴涨、分成政策等） |
-| **当前版本** | `v1.2.0` | 2026-06-10 | 题材分布板块新增标签热度分布（背景/主题/设定标签），基于红果平台标签数据 |
+| v1.1.0 | - | 2026-06-09 | 标题改为"短剧行业数据看板"，添加作者Bridget Yang |
+| v1.1.1 | - | 2026-06-10 | AI异动点评改为"行业大事件"，生成具体事件+数据 |
+| **当前版本** | `v1.2.0` | 2026-06-10 | 题材分布新增标签热度，修复数据渲染问题 |
 
 **回滚到标准版本**：
 ```bash
@@ -20,6 +20,7 @@ git checkout v1.0.0
 
 ## ⚠️ 重要注意事项
 
+### Coze依赖限制
 **Coze Coding内部依赖无法在GitHub Actions等外部环境使用！**
 
 以下模块只能在Coze Coding平台内部运行：
@@ -30,58 +31,110 @@ git checkout v1.0.0
 
 **GitHub Actions入口**: `src/run_github.py`（不依赖任何Coze内部模块）
 
+### 数据文件路径
+**index.html在assets目录下，数据路径必须使用相对路径：**
+```javascript
+let url = './data/latest.json';  // ✅ 正确
+let url = './assets/data/latest.json';  // ❌ 错误
+```
+
+### Pydantic对象访问规则
+**禁止对Pydantic对象使用`.get()`方法！**
+```python
+# ❌ 错误 - Pydantic对象没有.get()方法
+rankings.get('title')
+
+# ✅ 正确 - 使用属性访问
+rankings.title
+```
+
+---
+
 ## 项目概述
-- **名称**: 短剧行业研究数据自动更新工作流
-- **功能**: 使用DeepSeek API自动抓取短剧行业热榜数据，生成多维度分析报告
+
+- **名称**: 短剧行业数据看板
+- **作者**: Bridget Yang
+- **功能**: 使用DeepSeek API自动抓取短剧行业数据，生成多维度分析报告
 - **部署方式**: GitHub Actions自动运行，每日北京时间9:00执行
+- **访问地址**: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
+
+---
+
+## 数据结构规则
+
+### 核心数据字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| rankings | List[DramaRanking] | 榜单TOP10短剧 |
+| daily_news | List[DailyNews] | 行业快讯5条 |
+| insights | List[Insight] | 行业大事件3条 |
+| genre_distribution | GenreDistribution | 题材分布+标签热度 |
+| actors | ActorRanking | 演员_TOP10 |
+| industry | IndustryData | 行业宏观数据 |
+| audience_profile | AudienceProfile | 观众画像 |
+
+### 行业快讯规则（v1.1要求）
+- **数量**: 5条
+- **内容**: 100字内总结（DeepSeek提炼）
+- **链接**: 具体原文链接（非门户网站首页）
+- **类型**: data/warn/biz（数据/预警/商业）
+
+### 行业大事件规则（v1.1.1要求）
+- **内容**: 具体事件+真实数据（如"播放量暴涨45%"）
+- **来源**: DeepSeek联网搜索实时事件
+- **禁止**: 泛泛分析（如"女频剧持续领跑"）
 
 ---
 
 ## 节点清单
 
-| 节点名 | 文件位置 | 类型 | 功能描述 | 分支逻辑 | 配置文件 |
-|-------|---------|------|---------|---------|---------|
-| search_node | `nodes/search_node.py` | task | DeepSeek联网搜索短剧榜单数据 | - | - |
-| news_node | `nodes/news_node.py` | agent | DeepSeek联网搜索并提炼行业快讯 | - | `config/news_llm_cfg.json` |
-| process_node | `nodes/process_node.py` | agent | DeepSeek结构化处理榜单(Tier1) | - | `config/process_llm_cfg.json` |
-| enrich_node | `nodes/enrich_node.py` | agent | DeepSeek补充演员/标签/描述(Tier2) | - | `config/enrich_llm_cfg.json` |
-| actor_ranking_node | `nodes/actor_ranking_node.py` | agent | DeepSeek生成演员人气榜 | - | `config/actor_ranking_llm_cfg.json` |
-| industry_node | `nodes/industry_node.py` | agent | DeepSeek联网获取行业宏观数据 | - | `config/industry_llm_cfg.json` |
-| audience_profile_node | `nodes/audience_profile_node.py` | agent | DeepSeek联网搜索观众画像数据 | - | `config/audience_profile_llm_cfg.json` |
-| genre_distribution_node | `nodes/genre_distribution_node.py` | task | 统计题材分布 | - | - |
-| insights_node | `nodes/insights_node.py` | agent | DeepSeek生成行业洞察(Tier3) | - | `config/insights_llm_cfg.json` |
-| history_data_node | `nodes/history_data_node.py` | task | 生成周榜历史和播放趋势 | - | - |
-| push_node | `nodes/push_node.py` | task | 生成JSON、保存本地文件 | - | - |
+| 节点名 | 文件位置 | 类型 | 功能描述 | 配置文件 |
+|-------|---------|------|---------|---------|
+| search_node | `nodes/search_node.py` | task | DeepSeek联网搜索榜单+标签数据 | - |
+| news_node | `nodes/news_node.py` | agent | DeepSeek搜索5条快讯+100字总结+原文链接 | `config/news_llm_cfg.json` |
+| process_node | `nodes/process_node.py` | agent | DeepSeek结构化处理榜单 | `config/process_llm_cfg.json` |
+| enrich_node | `nodes/enrich_node.py` | agent | DeepSeek补充演员/标签/描述 | `config/enrich_llm_cfg.json` |
+| actor_ranking_node | `nodes/actor_ranking_node.py` | agent | DeepSeek生成演员人气榜 | `config/actor_ranking_llm_cfg.json` |
+| industry_node | `nodes/industry_node.py` | agent | DeepSeek联网获取行业宏观数据 | `config/industry_llm_cfg.json` |
+| audience_profile_node | `nodes/audience_profile_node.py` | agent | DeepSeek搜索观众画像 | `config/audience_profile_llm_cfg.json` |
+| genre_distribution_node | `nodes/genre_distribution_node.py` | task | 统计题材分布+标签热度 | - |
+| insights_node | `nodes/insights_node.py` | agent | DeepSeek生成具体行业大事件 | `config/insights_llm_cfg.json` |
+| history_data_node | `nodes/history_data_node.py` | task | 生成历史数据和播放趋势 | - |
+| push_node | `nodes/push_node.py` | task | 保存JSON数据文件 | - |
 
-**类型说明**: task(普通节点) / agent(大模型节点) / condition(条件分支) / looparray(列表循环) / loopcond(条件循环)
-
-**Tier分层**:
-- Tier1(确切事实): DeepSeek联网搜索数据,保持原始准确性
-- Tier2(AI搜补): DeepSeek联网搜索补全缺失字段
-- Tier3(AI推理): 基于数据推理生成洞察和建议
+**类型说明**: task(普通节点) / agent(大模型节点)
 
 ---
 
-## 子图清单
+## 配置文件清单
 
-无子图
+| 文件 | 用途 | 节点 |
+|------|------|------|
+| `config/news_llm_cfg.json` | 快讯搜索+提炼配置 | news_node |
+| `config/process_llm_cfg.json` | 榜单结构化配置 | process_node |
+| `config/enrich_llm_cfg.json` | 数据补充配置 | enrich_node |
+| `config/actor_ranking_llm_cfg.json` | 演员榜生成配置 | actor_ranking_node |
+| `config/industry_llm_cfg.json` | 行业宏观数据配置 | industry_node |
+| `config/audience_profile_llm_cfg.json` | 观众画像配置 | audience_profile_node |
+| `config/insights_llm_cfg.json` | 行业大事件配置 | insights_node |
 
 ---
 
-## 技能使用
+## 已知问题与解决方案
 
-**⚠️ 重要变更**: 所有节点已迁移至使用 **DeepSeek API**，不再依赖Coze内部SDK。
+### 演员"未知"问题
+- **原因**: DeepSeek搜索结果中部分短剧演员信息缺失
+- **解决**: 需改进search_node搜索更完整的演员数据
 
-| 节点 | API调用类型 | 说明 |
-|------|------------|------|
-| search_node | DeepSeek联网搜索 | 搜索短剧榜单数据 |
-| news_node | DeepSeek联网搜索 + 对话 | 搜索快讯并提炼摘要 |
-| process_node | DeepSeek对话 | 结构化处理榜单数据 |
-| enrich_node | DeepSeek对话 | 补充演员/标签/描述 |
-| actor_ranking_node | DeepSeek对话 | 生成演员人气榜 |
-| industry_node | DeepSeek联网搜索 + 对话 | 获取行业宏观数据 |
-| audience_profile_node | DeepSeek联网搜索 | 搜索观众画像数据 |
-| insights_node | DeepSeek对话 | 生成行业洞察 |
+### GitHub Pages缓存
+- **现象**: 修改后网页不更新
+- **解决**: Ctrl+F5强制刷新或清除浏览器缓存
+
+### 数据对象渲染错误
+- **现象**: 显示 `[object Object]`
+- **原因**: 对象类型数据直接显示
+- **解决**: 正确解析对象属性（如`userScale.value + userScale.unit`）
 
 ---
 
@@ -92,97 +145,42 @@ git checkout v1.0.0
 - **名称**: `DEEPSEEK_API_KEY`
 - **值**: 你的DeepSeek API密钥
 
-### 工作流程
-1. 每日北京时间9:00自动触发
-2. 运行Python工作流（使用DeepSeek API）
-3. 生成数据文件到 `assets/data/`
-4. 自动提交并推送到仓库
+### Workflow文件
+路径: `.github/workflows/daily_update.yml`
 
----
-
-## 工具类
-
-| 工具 | 文件位置 | 功能 |
-|------|---------|------|
-| DeepSeekClient | `tools/deepseek_api.py` | DeepSeek API封装（支持对话和联网搜索） |
-
----
-
-## GitHub Actions 自动运行
-
-**重要变更**: 项目已完全迁移至 **DeepSeek API**，可以在GitHub Actions环境中直接运行。
-
-### 工作流程
-1. 每日北京时间9:00自动触发
-2. GitHub Actions运行Python工作流（使用DeepSeek API）
-3. DeepSeek联网搜索获取实时数据
-4. 生成JSON数据文件到 `assets/data/latest.json`
-5. 更新HTML兜底数据
-6. 自动提交并推送到仓库
-
-### 环境变量配置
-在GitHub仓库设置Secret：
-- **名称**: `DEEPSEEK_API_KEY`
-- **值**: 你的DeepSeek API密钥
-
-### 数据同步方案（可选）
-如需从Coze Coding环境同步数据：
-- `storage_key`: `short-drama/latest-{日期}.json`
-- `storage_url`: 对象存储签名URL（30天有效）
-   - 可使用固定Key生成长期有效的签名URL
-
-2. GitHub Actions会自动：
-   - 每天UTC 1:00（北京时间9:00）尝试同步
-   - 或手动触发workflow_dispatch
-
----
-
-## 数据流图
-
-```
-GraphInput(data_date)
-    ↓
-search_node → 搜索榜单数据
-    ↓
-process_node → 结构化处理
-    ↓
-enrich_node → 补充演员/标签/描述
-    ↓
-┌───────────────────────────────────────┐
-│ actor_ranking_node → 演员榜单          │
-│ industry_node → 行业数据               │
-│ audience_profile_node → 观众画像       │
-│ genre_distribution_node → 题材分布     │
-│ history_data_node → 周榜历史/播放趋势  │
-└───────────────────────────────────────┘
-    ↓
-┌───────────────────────────────────────┐
-│ insights_node → 行业洞察               │
-│ innovations_node → 创新点              │
-└───────────────────────────────────────┘
-    ↓
-push_node → 推送数据
-    ↓
-GraphOutput(完整数据)
+关键配置：
+```yaml
+permissions:
+  contents: write  # 必须有写入权限
 ```
 
+### 运行时间
+- **自动触发**: 每日UTC 1:00（北京时间9:00）
+- **手动触发**: workflow_dispatch
+
 ---
 
-## 输出数据结构
+## 文件结构
 
-| 字段 | 类型 | 描述 |
-|-----|------|------|
-| success | bool | 是否成功 |
-| generated_at | str | 生成时间 |
-| data_date | str | 数据日期 |
-| industry | IndustryData | 行业数据（用户规模、市场规模等） |
-| rankings | List[DramaRanking] | TOP10榜单数据 |
-| actors | ActorsData | 演员榜单（女频TOP10 + 男频TOP10） |
-| platform | PlatformData | 平台数据（APP月活等） |
-| audience_profile | AudienceProfile | 观众画像（性别、年龄、地域分布） |
-| genre_distribution | GenreDistribution | 题材分布统计 |
-| weekly_rankings | List[WeeklyRankingItem] | 周榜历史 |
-| play_trend | PlayTrend | 播放量趋势 |
-| insights | List[Insight] | 5条行业洞察 |
-| innovations | List[Innovation] | 5条创新点 |
-| quality_score | float | 数据质量分数 |
+```
+├── assets/
+│   ├── index.html          # 网页看板（动态加载JSON）
+│   └── data/
+│       ├── latest.json     # 最新数据
+│       ├── history/        # 历史数据（按日期）
+│       └── all_history.json # 全部历史汇总
+├── config/
+│   └── *_llm_cfg.json      # 大模型配置文件
+├── src/
+│   ├── graphs/
+│   │   ├── graph.py        # 主图编排
+│   │   ├── state.py        # 数据结构定义
+│   │   └── nodes/          # 节点实现
+│   ├── tools/
+│   │   └── deepseek_api.py # DeepSeek API工具
+│   ├── utils/
+│   │   └── runtime.py      # Context替代类
+│   └── run_github.py       # GitHub Actions入口
+├── AGENTS.md               # 本文件
+└── .gitignore              # 忽略截屏图片等
+```
