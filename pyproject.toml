@@ -21,3 +21,7 @@ packages = ["src"]
 
 [dependency-groups]
 dev = []
+[tool.uv]
+[[tool.uv.index]]
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true
