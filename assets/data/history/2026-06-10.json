@@ -1,179 +1,32 @@
 {
   "success": true,
-  "generated_at": "2026-06-10T17:48:23+08:00",
+  "generated_at": "2026-06-10T09:57:57+08:00",
   "data_date": "2026-06-10",
   "genre_distribution": {
-    "genres": [
-      {
-        "name": "未知",
-        "count": 1,
-        "total_views": "0",
-        "trend": "same"
-      }
-    ],
-    "top_genre": "未知",
+    "genres": [],
+    "top_genre": "",
     "rising_genre": "",
-    "background_tags": [
-      {
-        "name": "都市",
-        "category": "背景",
-        "count": 13,
-        "avg_views": 100,
-        "heat": 131
-      },
-      {
-        "name": "现代",
-        "category": "背景",
-        "count": 3,
-        "avg_views": 100,
-        "heat": 31
-      },
-      {
-        "name": "古代",
-        "category": "背景",
-        "count": 3,
-        "avg_views": 100,
-        "heat": 31
-      },
-      {
-        "name": "职场",
-        "category": "背景",
-        "count": 1,
-        "avg_views": 100,
-        "heat": 11
-      }
-    ],
-    "theme_tags": [
-      {
-        "name": "甜宠",
-        "category": "主题",
-        "count": 13,
-        "avg_views": 100,
-        "heat": 131
-      },
-      {
-        "name": "逆袭",
-        "category": "主题",
-        "count": 5,
-        "avg_views": 100,
-        "heat": 51
-      },
-      {
-        "name": "复仇",
-        "category": "主题",
-        "count": 1,
-        "avg_views": 100,
-        "heat": 11
-      }
-    ],
-    "setting_tags": [
-      {
-        "name": "重生",
-        "category": "设定",
-        "count": 15,
-        "avg_views": 100,
-        "heat": 151
-      },
-      {
-        "name": "马甲",
-        "category": "设定",
-        "count": 11,
-        "avg_views": 100,
-        "heat": 111
-      },
-      {
-        "name": "穿越",
-        "category": "设定",
-        "count": 11,
-        "avg_views": 100,
-        "heat": 111
-      },
-      {
-        "name": "逆袭",
-        "category": "设定",
-        "count": 5,
-        "avg_views": 100,
-        "heat": 51
-      },
-      {
-        "name": "豪门",
-        "category": "设定",
-        "count": 3,
-        "avg_views": 100,
-        "heat": 31
-      },
-      {
-        "name": "复仇",
-        "category": "设定",
-        "count": 1,
-        "avg_views": 100,
-        "heat": 11
-      }
-    ],
-    "top_tag": "都市",
-    "rising_tag": "现代"
+    "background_tags": [],
+    "theme_tags": [],
+    "setting_tags": [],
+    "top_tag": "",
+    "rising_tag": ""
   },
   "industry": {
-    "user_scale": "5.8亿（2026年Q1，中国短剧用户规模）",
+    "user_scale": "7.18亿",
     "market_size": "1000亿+",
     "drama_count": "25万+",
     "billion_dramas": 20,
-    "ai_ratio": 0,
-    "female_ratio": 100,
-    "male_ratio": 0,
+    "ai_ratio": 38,
+    "female_ratio": 95,
+    "male_ratio": 5,
     "app_mau": "3.04亿",
     "app_mau_yoy": "+1.4亿"
   },
-  "rankings": [
-    {
-      "rank": 1,
-      "title": "暂无数据",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "",
-      "views_num": 0,
-      "platform": "红果",
-      "genre": "未知",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "独立厂牌",
-      "core_trope": [
-        "未知"
-      ],
-      "episodes_count": 80
-    }
-  ],
+  "rankings": [],
   "actors": {
-    "female": [
-      {
-        "rank": 1,
-        "name": "未知",
-        "popularity": 800,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "暂无数据",
-        "trend": ""
-      }
-    ],
-    "male": [
-      {
-        "rank": 1,
-        "name": "未知",
-        "popularity": 800,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "暂无数据",
-        "trend": ""
-      }
-    ]
+    "female": [],
+    "male": []
   },
   "platform": {
     "apps": [
@@ -189,57 +42,29 @@
     "mini_programs": []
   },
   "audience_profile": {
-    "gender_female": 65,
-    "gender_male": 35,
+    "gender_female": 95,
+    "gender_male": 5,
     "age_distribution": {
-      "age_18_24": 28,
-      "age_25_34": 42,
-      "age_35_44": 20,
-      "age_45_plus": 10
+      "age_18_24": 35,
+      "age_25_34": 40,
+      "age_35_44": 18,
+      "age_45_plus": 7
     },
     "top_regions": [
       {
         "name": "广东",
-        "value": 12.5
+        "value": 12.0
       },
       {
         "name": "江苏",
-        "value": 9.8
+        "value": 9.0
       },
       {
         "name": "浙江",
-        "value": 8.2
-      },
-      {
-        "name": "山东",
-        "value": 7.6
-      },
-      {
-        "name": "河南",
-        "value": 6.9
-      },
-      {
-        "name": "四川",
-        "value": 6.1
-      },
-      {
-        "name": "河北",
-        "value": 5.4
-      },
-      {
-        "name": "湖南",
-        "value": 5.0
-      },
-      {
-        "name": "安徽",
-        "value": 4.7
-      },
-      {
-        "name": "湖北",
-        "value": 4.3
+        "value": 8.0
       }
     ],
-    "peak_viewing_hours": "20:00-22:00",
+    "peak_viewing_hours": "21:00-23:00",
     "avg_watch_duration": "45分钟",
     "device": {
       "ios": 58,
@@ -249,8 +74,7 @@
     "traits": [
       "女性主导",
       "年轻群体",
-      "下沉市场",
-      "碎片化观看"
+      "下沉市场"
     ]
   },
   "play_trend": {
@@ -269,7 +93,7 @@
         "week": "2026-W23",
         "start_date": "2026-06-08",
         "end_date": "2026-06-14",
-        "top1_title": "暂无数据",
+        "top1_title": "",
         "top1_views": "",
         "total_views": 0
       }
@@ -278,51 +102,18 @@
   },
   "daily_news": [
     {
-      "type": "预警",
-      "icon": "⚠️",
-      "title": "广电总局备案新规",
-      "content": "2025年3月，广电总局要求所有短剧上线前须标注备案号，未备案不得投流。截至4月已备案1.8万部，违规下架风险骤增，制作方需加速合规流程。",
-      "source_url": "https://www.nrta.gov.cn"
-    },
-    {
-      "type": "商业",
-      "icon": "💰",
-      "title": "微信分成比例下调",
-      "content": "2025年4月，微信小程序短剧开发者分成从70%降至55%，引发行业争议。2024年小程序短剧流水超200亿元，头部剧单月充值破1.5亿元，利润空间受压。",
-      "source_url": "https://www.dataeye.com"
-    },
-    {
       "type": "数据",
       "icon": "📊",
-      "title": "短剧市场规模突破700亿",
-      "content": "2024年短剧市场规模达504亿元，同比增长35%，预计2025年突破700亿元。用户规模5.76亿，日均观看时长45分钟，行业增长强劲。",
+      "title": "行业数据更新",
+      "content": "今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿。",
       "source_url": "https://www.newwanr.com"
-    },
-    {
-      "type": "预警",
-      "icon": "⚠️",
-      "title": "短剧诱导付费被曝光",
-      "content": "2025年2月，央视曝光小程序短剧自动续费乱象，单月投诉量超1.2万件。监管压力加大，平台需强化用户提示，否则面临整改风险。",
-      "source_url": "https://www.newwanr.com"
-    },
-    {
-      "type": "商业",
-      "icon": "💰",
-      "title": "AI短剧成本降30%",
-      "content": "2025年1月，快手推出首部AI全流程短剧《山海奇镜》，制作成本仅为传统短剧30%，播放量超5亿次。AI技术加速渗透，或重塑行业成本结构。",
-      "source_url": "https://www.dataeye.com"
     }
   ],
   "insights": [
     {
-      "icon": "🔥",
-      "title": "爆款归因：红果平台“未知”题材霸榜，精准收割女性用户",
-      "content": "今日榜单TOP1剧集核心信息缺失，但结合红果平台100%女性用户占比及行业大盘5.8亿用户规模，可推断该剧为“女频爽文”套路。其爆款归因在于：通过80集长叙事，精准锁定30-50岁下沉女性用户，利用“身份反转+逆袭打脸”核心爽点，如女主从底层逆袭、手撕恶毒配角，每集设置小反转+大高潮，符合“短平快”情绪消费需求。投流预估上，红果大概率采用“原生信息流+情感KOC矩阵”组合，以“第一集免费+付费解锁”模式，重点在抖音、快手投放“冲突前3秒”切片，CPA控制在15-25元区间，ROI目标1:2.5以上。"
-    },
-    {
-      "icon": "💰",
-      "title": "买量建议：家庭伦理题材CPA成本优势明显，可低成本获客",
-      "content": "对比大盘数据，当前家庭伦理题材（如婆媳关系、豪门恩怨）在女性用户中渗透率极高，且因内容接地气、情绪共鸣强，用户主动搜索意愿高，导致其CPA较其他题材低20%-30%。建议买量团队立即切入该题材，采用“情感痛点+生活化场景”作为素材核心，例如“婆婆刁难媳妇”片段，配合“你经历过吗？”等互动文案，在微信生态、快手极速版投放。同时利用红果的“免费短剧+广告变现”模式，优先测试5-10秒完播率，确保CPA控制在10元以下，快速积累用户规模。"
+      "icon": "📊",
+      "title": "数据待补充",
+      "content": "请稍后再试"
     }
   ],
   "quality_score": 60.0,
