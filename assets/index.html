@@ -392,7 +392,13 @@ async function renderDashboard(dateParam = null) {
 
     // 基础指标
     document.getElementById('update-time').innerText = `更新时间: ${data.data_date}`;
-    document.getElementById('kpi-users').innerText = data.industry?.user_scale || '--';
+    // user_scale可能是对象{value, unit}或字符串
+    const userScale = data.industry?.user_scale;
+    if (typeof userScale === 'object' && userScale?.value) {
+        document.getElementById('kpi-users').innerText = `${userScale.value}${userScale.unit || ''}`;
+    } else {
+        document.getElementById('kpi-users').innerText = userScale || '--';
+    }
     document.getElementById('kpi-market').innerText = data.industry?.market_size || '--';
     document.getElementById('kpi-mau').innerText = data.industry?.app_mau || '--';
     document.getElementById('kpi-ai').innerText = (data.industry?.ai_ratio || '--') + '%';
@@ -445,12 +451,18 @@ async function renderDashboard(dateParam = null) {
 
     // 题材分布
     if (data.genre_distribution?.genres && data.genre_distribution.genres.length > 0) {
-        document.getElementById('genre-container').innerHTML = data.genre_distribution.genres.slice(0, 4).map(g => `
+        // 计算总数用于百分比
+        const totalCount = data.genre_distribution.genres.reduce((sum, g) => sum + (g.count || 0), 0);
+        document.getElementById('genre-container').innerHTML = data.genre_distribution.genres.slice(0, 4).map(g => {
+            // 如果有percentage就用，否则根据count计算
+            const percentage = g.percentage || (totalCount > 0 ? Math.round((g.count / totalCount) * 100) : 0);
+            return `
             <div class="genre-item">
                 <span class="genre-name">${g.name}</span>
-                <div class="genre-bar"><div class="genre-bar-fill" style="width:${g.percentage}%"></div></div>
-                <span style="font-size: 12px; color: #818cf8; font-weight: 700;">${g.percentage}%</span>
-            </div>`).join('');
+                <div class="genre-bar"><div class="genre-bar-fill" style="width:${percentage}%"></div></div>
+                <span style="font-size: 12px; color: #818cf8; font-weight: 700;">${percentage}%</span>
+            </div>`;
+        }).join('');
     } else {
         document.getElementById('genre-container').innerHTML = '<div style="color: #64748b; font-size: 12px;">题材分布数据待补充</div>';
     }
