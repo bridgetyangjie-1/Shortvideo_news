@@ -1,441 +1,32 @@
 {
   "success": true,
-  "generated_at": "2026-06-10T18:20:37+08:00",
+  "generated_at": "2026-06-10T10:24:28+08:00",
   "data_date": "2026-06-10",
   "genre_distribution": {
-    "genres": [
-      {
-        "name": "其他",
-        "count": 10,
-        "total_views": "37000",
-        "trend": "same"
-      }
-    ],
-    "top_genre": "其他",
+    "genres": [],
+    "top_genre": "",
     "rising_genre": "",
-    "background_tags": [
-      {
-        "name": "都市",
-        "category": "背景",
-        "count": 7,
-        "avg_views": 100,
-        "heat": 71
-      }
-    ],
-    "theme_tags": [
-      {
-        "name": "甜宠",
-        "category": "主题",
-        "count": 5,
-        "avg_views": 100,
-        "heat": 51
-      },
-      {
-        "name": "逆袭",
-        "category": "主题",
-        "count": 3,
-        "avg_views": 100,
-        "heat": 31
-      }
-    ],
-    "setting_tags": [
-      {
-        "name": "重生",
-        "category": "设定",
-        "count": 12,
-        "avg_views": 100,
-        "heat": 121
-      },
-      {
-        "name": "穿越",
-        "category": "设定",
-        "count": 8,
-        "avg_views": 100,
-        "heat": 81
-      },
-      {
-        "name": "马甲",
-        "category": "设定",
-        "count": 5,
-        "avg_views": 100,
-        "heat": 51
-      },
-      {
-        "name": "逆袭",
-        "category": "设定",
-        "count": 3,
-        "avg_views": 100,
-        "heat": 31
-      },
-      {
-        "name": "豪门",
-        "category": "设定",
-        "count": 2,
-        "avg_views": 100,
-        "heat": 21
-      }
-    ],
-    "top_tag": "都市",
-    "rising_tag": "甜宠"
+    "background_tags": [],
+    "theme_tags": [],
+    "setting_tags": [],
+    "top_tag": "",
+    "rising_tag": ""
   },
   "industry": {
     "user_scale": "7.18亿",
     "market_size": "1000亿+",
     "drama_count": "25万+",
     "billion_dramas": 20,
-    "ai_ratio": 0,
-    "female_ratio": 100,
-    "male_ratio": 0,
+    "ai_ratio": 38,
+    "female_ratio": 95,
+    "male_ratio": 5,
     "app_mau": "3.04亿",
     "app_mau_yoy": "+1.4亿"
   },
-  "rankings": [
-    {
-      "rank": 1,
-      "title": "时空穿越者",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "1.2亿",
-      "views_num": 12000,
-      "platform": "DataEye",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "光影传媒",
-      "core_trope": [
-        "穿越时空",
-        "励志逆袭"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 2,
-      "title": "都市奇缘",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "9500万",
-      "views_num": 9500,
-      "platform": "DataEye",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "XX影视公司",
-      "core_trope": [
-        "都市奇幻",
-        "职场奇遇"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 3,
-      "title": "校园风云",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "8000万",
-      "views_num": 8000,
-      "platform": "DataEye",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "独立厂牌",
-      "core_trope": [
-        "校园生活",
-        "青春成长"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 4,
-      "title": "都市小甜妻",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "3000万",
-      "views_num": 3000,
-      "platform": "红果平台",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "独立厂牌",
-      "core_trope": [
-        "都市爱情",
-        "甜蜜日常"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 5,
-      "title": "重生之嫡女归来",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "2500万",
-      "views_num": 2500,
-      "platform": "红果平台",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "XX影视",
-      "core_trope": [
-        "重生复仇",
-        "嫡女逆袭"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 6,
-      "title": "总裁的马甲女友",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "2000万",
-      "views_num": 2000,
-      "platform": "红果平台",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "光影传媒",
-      "core_trope": [
-        "总裁爱情",
-        "身份秘密"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 7,
-      "title": "穿越之废柴逆袭",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "0",
-      "views_num": 0,
-      "platform": "红果平台",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "XX制作公司",
-      "core_trope": [
-        "穿越逆袭",
-        "废柴变强"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 8,
-      "title": "重生之豪门宠妻",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "0",
-      "views_num": 0,
-      "platform": "红果平台",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "XX影视",
-      "core_trope": [
-        "重生宠爱",
-        "豪门争斗"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 9,
-      "title": "穿越之嫡女重生记",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "0",
-      "views_num": 0,
-      "platform": "红果平台",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "XX传媒",
-      "core_trope": [
-        "嫡女重生",
-        "智斗权谋"
-      ],
-      "episodes_count": 80
-    },
-    {
-      "rank": 10,
-      "title": "重生之总裁的甜妻",
-      "female_lead": "未知",
-      "male_lead": "未知",
-      "views": "0",
-      "views_num": 0,
-      "platform": "红果平台",
-      "genre": "",
-      "tags": [],
-      "trend": "",
-      "trend_type": "same",
-      "category": "female",
-      "is_ai": false,
-      "desc": "",
-      "change": "",
-      "heat": 0,
-      "production_house": "蓝海影视",
-      "core_trope": [
-        "重生爱情",
-        "总裁甜宠"
-      ],
-      "episodes_count": 80
-    }
-  ],
+  "rankings": [],
   "actors": {
-    "female": [
-      {
-        "rank": 1,
-        "name": "未知",
-        "popularity": 985,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "时空穿越者",
-        "trend": ""
-      },
-      {
-        "rank": 2,
-        "name": "未知",
-        "popularity": 975,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "都市奇缘",
-        "trend": ""
-      },
-      {
-        "rank": 3,
-        "name": "未知",
-        "popularity": 965,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "校园风云",
-        "trend": ""
-      },
-      {
-        "rank": 4,
-        "name": "未知",
-        "popularity": 955,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "都市小甜妻",
-        "trend": ""
-      },
-      {
-        "rank": 5,
-        "name": "未知",
-        "popularity": 945,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "重生之嫡女归来",
-        "trend": ""
-      }
-    ],
-    "male": [
-      {
-        "rank": 1,
-        "name": "未知",
-        "popularity": 985,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "时空穿越者",
-        "trend": ""
-      },
-      {
-        "rank": 2,
-        "name": "未知",
-        "popularity": 975,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "都市奇缘",
-        "trend": ""
-      },
-      {
-        "rank": 3,
-        "name": "未知",
-        "popularity": 965,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "校园风云",
-        "trend": ""
-      },
-      {
-        "rank": 4,
-        "name": "未知",
-        "popularity": 955,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "都市小甜妻",
-        "trend": ""
-      },
-      {
-        "rank": 5,
-        "name": "未知",
-        "popularity": 945,
-        "platform_fans": 0.0,
-        "platform": "红果",
-        "badge": "",
-        "works": "重生之嫡女归来",
-        "trend": ""
-      }
-    ]
+    "female": [],
+    "male": []
   },
   "platform": {
     "apps": [
@@ -451,58 +42,30 @@
     "mini_programs": []
   },
   "audience_profile": {
-    "gender_female": 60,
-    "gender_male": 40,
+    "gender_female": 95,
+    "gender_male": 5,
     "age_distribution": {
-      "age_18_24": 30,
+      "age_18_24": 35,
       "age_25_34": 40,
-      "age_35_44": 20,
-      "age_45_plus": 10
+      "age_35_44": 18,
+      "age_45_plus": 7
     },
     "top_regions": [
       {
         "name": "广东",
-        "value": 15.0
+        "value": 12.0
       },
       {
         "name": "江苏",
-        "value": 10.0
+        "value": 9.0
       },
       {
         "name": "浙江",
         "value": 8.0
-      },
-      {
-        "name": "山东",
-        "value": 7.0
-      },
-      {
-        "name": "四川",
-        "value": 6.0
-      },
-      {
-        "name": "河南",
-        "value": 5.0
-      },
-      {
-        "name": "湖南",
-        "value": 4.0
-      },
-      {
-        "name": "湖北",
-        "value": 3.0
-      },
-      {
-        "name": "福建",
-        "value": 3.0
-      },
-      {
-        "name": "北京",
-        "value": 2.0
       }
     ],
-    "peak_viewing_hours": "晚上8-10点",
-    "avg_watch_duration": "30分钟",
+    "peak_viewing_hours": "21:00-23:00",
+    "avg_watch_duration": "45分钟",
     "device": {
       "ios": 58,
       "android": 42
@@ -511,15 +74,14 @@
     "traits": [
       "女性主导",
       "年轻群体",
-      "下沉市场",
-      "碎片化观看"
+      "下沉市场"
     ]
   },
   "play_trend": {
     "daily": [
       {
         "date": "2026-06-10",
-        "total_views": 37000
+        "total_views": 0
       },
       {
         "date": "2026-06-09",
@@ -531,62 +93,29 @@
         "week": "2026-W23",
         "start_date": "2026-06-08",
         "end_date": "2026-06-14",
-        "top1_title": "时空穿越者",
-        "top1_views": "1.2亿",
-        "total_views": 37000
+        "top1_title": "",
+        "top1_views": "",
+        "total_views": 0
       }
     ],
     "trend_direction": "down"
   },
   "daily_news": [
     {
-      "type": "商业",
-      "icon": "💰",
-      "title": "短剧市场规模突破百亿",
-      "content": "2024年中国短剧市场规模突破百亿，同比增长超30%，短视频平台兴起推动短剧成新趋势。",
-      "source_url": "https://www.chinadaily.com.cn/a/202404/01/WS5f2e3e0ca3101e7edbc1445a.html"
-    },
-    {
-      "type": "商业",
-      "icon": "💰",
-      "title": "短剧行业投融资活跃",
-      "content": "2024年短剧行业投融资金额超10亿元，多家平台获资本青睐，同比增长50%。",
-      "source_url": "https://www.36kr.com/p/1590834815538"
-    },
-    {
-      "type": "投流",
+      "type": "数据",
       "icon": "📊",
-      "title": "悬疑爱情短剧受追捧",
-      "content": "DataEye热度榜显示，悬疑和爱情题材短剧在2023年Q1表现突出，受年轻观众喜爱。",
-      "source_url": "https://www.dataeye.com.cn/short-drama-heat-ranking-genre-trends-q1-2023"
-    },
-    {
-      "type": "预警",
-      "icon": "⚠️",
-      "title": "广电总局发布短剧新规",
-      "content": "广电总局出台新规，优化内容结构，提高创作质量，加强播出管理，促短剧行业高质量发展。",
-      "source_url": "https://www.nrta.gov.cn/"
-    },
-    {
-      "type": "预警",
-      "icon": "⚠️",
-      "title": "短剧内容管理规定出台",
-      "content": "广电总局出台短剧内容管理规定，严格内容审核标准，禁止制作传播不良内容短剧。",
-      "source_url": "https://www.thepaper.cn/"
+      "title": "行业数据更新",
+      "content": "今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿。",
+      "source_url": "https://www.newwanr.com"
     }
   ],
   "insights": [
     {
-      "icon": "🔥",
-      "title": "爆款归因：时空穿越者",
-      "content": "今日排名第一的短剧《时空穿越者》以其“穿越时空”和“励志逆袭”的核心主题，精准定位于女性用户市场。爽点公式为“平凡女主角穿越到过去/未来，利用现代知识/未来科技进行逆袭”，满足女性用户对自我实现的幻想。考虑到其1.2亿的播放量，其投流预估可能聚焦于女性用户高频活跃的社交平台，如小红书、微博等，通过精准广告投放和内容营销，实现低成本高效率的用户触达。"
-    },
-    {
-      "icon": "💰",
-      "title": "买量建议：都市奇幻题材或具CPA优势",
-      "content": "根据行业大盘数据，女性用户市场占100%，且app月活用户同比增长1.4亿，显示出女性向内容的用户规模正在迅速扩大。在此背景下，今日榜单中排名第二的《都市奇缘》以其“都市奇幻”和“职场奇遇”的题材，相较于其他类型，可能在CPA上具有优势。建议加大对都市奇幻题材的投入力度，利用其独特的奇幻元素和都市背景，吸引女性用户，同时配合社交媒体和短视频平台的精准广告，以实现较低的获客成本。"
+      "icon": "📊",
+      "title": "数据待补充",
+      "content": "请稍后再试"
     }
   ],
-  "quality_score": 95.0,
+  "quality_score": 60.0,
   "error_message": ""
 }
