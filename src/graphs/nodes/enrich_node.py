@@ -10,7 +10,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient
+from tools.moonshot_api import MoonshotClient, is_api_budget_error
 
 from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking
 
@@ -52,7 +52,9 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 error_message=error_message + "\n"
             )
         
-        for idx, drama in enumerate(basic_rankings_list[:10]):  # 只查前10名控制耗时
+        # 每次 Kimi web_search 通常包含 tool_call + final 两次 API 请求；
+        # 限制到前2名，确保本节点在最终结构化提取前不会触发 5 次预算熔断。
+        for idx, drama in enumerate(basic_rankings_list[:2]):
             # 获取剧名 - 防御性处理多种类型
             title = ""
             drama_obj: Any = drama  # 明确类型为Any
@@ -69,9 +71,15 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             try:
                 # 🚨 使用 Kimi $web_search 进行真实联网检索
                 search_res = client.search(query=f"短剧 《{title}》 演员 主演 制作公司 厂牌", max_results=3)
-                real_search_context += f"\n【剧目：《{title}》真实网页检索结果】:\n{search_res}\n"
+                if hasattr(search_res, "text"):
+                    search_text = search_res.text[:2000]
+                else:
+                    search_text = str(search_res)[:2000]
+                real_search_context += f"\n【剧目：《{title}》真实网页检索结果】:\n{search_text}\n"
                 logger.info(f"搜索《{title}》成功")
             except Exception as e:
+                if is_api_budget_error(e):
+                    raise
                 search_error = f"enrich_node: 搜索剧目《{title}》失败: {e}"
                 logger.warning(search_error)
                 search_errors.append(search_error)
@@ -157,6 +165,8 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         )
         
     except Exception as e:
+        if is_api_budget_error(e):
+            raise
         error_message = f"enrich_node: 数据补充或 JSON 解析失败: {e}"
         logger.error(error_message, exc_info=True)
         return EnrichNodeOutput(

@@ -12,7 +12,7 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 
-from tools.moonshot_api import MoonshotClient
+from tools.moonshot_api import MoonshotClient, is_api_budget_error
 from graphs.state import NewsNodeInput, NewsNodeOutput, DailyNews
 
 # 配置日志
@@ -64,7 +64,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         # 搜索新闻并收集结果
         search_results: List[Dict[str, Any]] = []
         search_errors: List[str] = []
-        for query in search_queries[:3]:  # 只搜索前3个查询，避免超时
+        for query in search_queries[:2]:  # 单节点 API 预算为5次，2次搜索后保留1次分析调用
             try:
                 result = client.search(query, max_results=3)
                 logger.info(f"搜索 '{query}' 返回: {result[:200]}...")
@@ -73,6 +73,8 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                     "result": result
                 })
             except Exception as se:
+                if is_api_budget_error(se):
+                    raise
                 search_error = f"news_node: 搜索 '{query}' 失败: {se}"
                 logger.warning(search_error)
                 search_errors.append(search_error)
@@ -137,6 +139,8 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                             news_item.source_url = "https://www.newwanr.com"
                         daily_news.append(news_item)
             except Exception as parse_error:
+                if is_api_budget_error(parse_error):
+                    raise
                 parse_msg = f"news_node: 快讯 JSON 解析失败: {parse_error}"
                 logger.error(parse_msg, exc_info=True)
                 search_errors.append(parse_msg)
@@ -144,6 +148,8 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         logger.info(f"Kimi 提炼 {len(daily_news)} 条快讯")
         
     except Exception as e:
+        if is_api_budget_error(e):
+            raise
         search_errors = [f"news_node: 快讯生成失败: {e}"]
         logger.warning(search_errors[0], exc_info=True)
     

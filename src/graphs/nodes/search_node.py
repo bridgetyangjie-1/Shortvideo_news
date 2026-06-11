@@ -9,7 +9,7 @@ from typing import Dict, Any, List
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient
+from tools.moonshot_api import MoonshotClient, is_api_budget_error
 from graphs.state import SearchNodeInput, SearchNodeOutput
 
 
@@ -118,6 +118,8 @@ def search_node(
         )
         
     except Exception as e:
+        if is_api_budget_error(e):
+            raise
         error_message = f"search_node: Kimi 联网搜索失败: {e}"
         logger.error(error_message, exc_info=True)
         return SearchNodeOutput(

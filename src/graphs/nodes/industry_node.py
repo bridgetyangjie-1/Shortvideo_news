@@ -10,7 +10,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient
+from tools.moonshot_api import MoonshotClient, is_api_budget_error
 
 from graphs.state import (
     IndustryNodeInput,
@@ -115,6 +115,8 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         )
         
     except Exception as e:
+        if is_api_budget_error(e):
+            raise
         error_message = f"industry_node: 行业数据搜索或 JSON 解析失败: {e}"
         logger.error(error_message, exc_info=True)
         # 返回默认数据

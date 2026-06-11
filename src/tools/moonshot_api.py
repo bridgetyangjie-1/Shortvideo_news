@@ -13,6 +13,14 @@ from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
+API_BUDGET_EXCEEDED_MESSAGE = "API 调用次数过多，已熔断"
+MAX_API_CALLS_PER_CLIENT = 5
+MAX_WEB_SEARCH_ROUNDS = 3
+
+
+def is_api_budget_error(exc: Exception) -> bool:
+    return str(exc) == API_BUDGET_EXCEEDED_MESSAGE
+
 
 class MoonshotClient:
     """Kimi (Moonshot) API 客户端"""
@@ -26,10 +34,13 @@ class MoonshotClient:
         self.client = OpenAI(
             api_key=self.api_key or "missing-moonshot-api-key",
             # 国内 Moonshot/Kimi 控制台常用 .cn 域名；可用 MOONSHOT_BASE_URL 覆盖到 .ai 或私有网关。
-            base_url=os.getenv("MOONSHOT_BASE_URL") or "https://api.moonshot.cn/v1"
+            base_url=os.getenv("MOONSHOT_BASE_URL") or "https://api.moonshot.cn/v1",
+            # 禁用 SDK 隐式重试，所有调用预算由本类的显式熔断器控制。
+            max_retries=0,
         )
         self.model = os.getenv("MOONSHOT_MODEL", "moonshot-v1-32k")
         self.search_model = os.getenv("MOONSHOT_SEARCH_MODEL", self.model)
+        self.api_call_count = 0
         self.web_search_tools = [
             {
                 "type": "builtin_function",
@@ -42,6 +53,12 @@ class MoonshotClient:
     def _ensure_api_key(self) -> None:
         if not self.api_key:
             raise ValueError("MOONSHOT_API_KEY 未设置，无法调用 Kimi (Moonshot) API")
+
+    def _record_api_call(self) -> None:
+        """记录单个节点客户端实例内的 API 调用次数，并在超过预算前熔断。"""
+        if self.api_call_count >= MAX_API_CALLS_PER_CLIENT:
+            raise Exception(API_BUDGET_EXCEEDED_MESSAGE)
+        self.api_call_count += 1
     
     def chat(
         self,
@@ -62,6 +79,7 @@ class MoonshotClient:
         """
         try:
             self._ensure_api_key()
+            self._record_api_call()
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
@@ -209,6 +227,8 @@ class MoonshotClient:
             logger.info(f"Kimi 结构化搜索成功")
             return result
         except Exception as e:
+            if is_api_budget_error(e):
+                raise
             logger.error(f"Kimi 结构化搜索失败: {e}")
             return {}
 
@@ -217,7 +237,7 @@ class MoonshotClient:
         messages: List[Dict[str, Any]],
         temperature: float = 0.3,
         max_tokens: int = 3000,
-        max_rounds: int = 4
+        max_rounds: int = MAX_WEB_SEARCH_ROUNDS
     ) -> str:
         """
         使用 Moonshot 官方 builtin_function.$web_search 完成联网搜索。
@@ -226,11 +246,14 @@ class MoonshotClient:
         原样作为 role=tool 消息返回给模型，Kimi 会在下一轮生成包含搜索结果的回答。
         """
         self._ensure_api_key()
+        if max_rounds > MAX_WEB_SEARCH_ROUNDS:
+            raise ValueError(f"Kimi web search 轮数不能超过 {MAX_WEB_SEARCH_ROUNDS} 轮")
         working_messages: List[Dict[str, Any]] = list(messages)
         finish_reason: Optional[str] = None
         last_content = ""
 
-        for _ in range(max_rounds):
+        for round_idx in range(1, max_rounds + 1):
+            self._record_api_call()
             completion = self.client.chat.completions.create(
                 model=self.search_model,
                 messages=working_messages,
@@ -259,6 +282,8 @@ class MoonshotClient:
                 working_messages.append(assistant_message)
 
                 for tool_call in message.tool_calls:
+                    if round_idx >= MAX_WEB_SEARCH_ROUNDS:
+                        raise RuntimeError(f"Kimi web search 超过 {MAX_WEB_SEARCH_ROUNDS} 轮仍请求工具调用，已终止")
                     tool_name = tool_call.function.name
                     raw_arguments = tool_call.function.arguments or "{}"
                     try:

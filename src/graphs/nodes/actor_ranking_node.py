@@ -9,7 +9,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient
+from tools.moonshot_api import MoonshotClient, is_api_budget_error
 
 from graphs.state import (
     ActorRankingNodeInput, 
@@ -117,6 +117,8 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         )
         
     except Exception as e:
+        if is_api_budget_error(e):
+            raise
         error_message = f"actor_ranking_node: 演员榜单生成或 JSON 解析失败: {e}"
         logger.error(error_message, exc_info=True)
         return ActorRankingNodeOutput(

@@ -12,7 +12,7 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient
+from tools.moonshot_api import MoonshotClient, is_api_budget_error
 
 from graphs.state import (
     AudienceProfileInput,
@@ -100,6 +100,8 @@ def audience_profile_node(
         return AudienceProfileOutput(audience_profile=audience_profile)
         
     except Exception as e:
+        if is_api_budget_error(e):
+            raise
         error_message = f"audience_profile_node: 观众画像搜索或 JSON 解析失败: {e}"
         logger.error(error_message, exc_info=True)
         # 返回默认值

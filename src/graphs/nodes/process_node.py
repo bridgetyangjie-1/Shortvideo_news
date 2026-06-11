@@ -10,7 +10,7 @@ from typing import Dict, Any, List
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient
+from tools.moonshot_api import MoonshotClient, is_api_budget_error
 from jinja2 import Template
 from graphs.state import ProcessNodeInput, ProcessNodeOutput
 
@@ -135,6 +135,8 @@ def process_node(
         )
         
     except Exception as e:
+        if is_api_budget_error(e):
+            raise
         error_message = f"process_node: 数据清洗或 JSON 解析失败: {e}"
         logger.error(error_message, exc_info=True)
         return ProcessNodeOutput(
