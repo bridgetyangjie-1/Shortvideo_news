@@ -6,12 +6,13 @@
 
 | 版本 | Tag | 日期 | 说明 |
 |------|-----|------|------|
-| **当前标准版本** | `v1.6.0` | 2026-06-11 | **Cursor改进合并后的稳定版本，所有后续修改基于此版本** |
+| **当前标准版本** | `v1.7.0` | 2026-06-11 | **双模型协同解耦架构：Kimi搜索+DeepSeek推理** |
+| v1.6.0 | - | 2026-06-11 | Cursor改进合并后的稳定版本（历史版本） |
 | v1.5.0 | - | 2026-06-10 | 切换到Kimi (Moonshot) API（历史版本，不再维护） |
 | v1.4.x | - | 2026-06-10 | DuckDuckGo尝试版本（历史版本，已废弃） |
 | v1.0.0 | - | 2026-06-09 | 首个稳定版本（历史版本，不再维护） |
 
-⚠️ **重要：v1.6.0为当前标准版本，以前的版本代码和MD文件不要再碰！**
+⚠️ **重要：v1.7.0为当前标准版本，以前的版本代码和MD文件不要再碰！**
 
 **Git Tag标记**：
 ```bash
@@ -23,23 +24,28 @@ git push origin v1.6.0
 
 ## ⚠️ 重要注意事项
 
-### v1.6.0标准版本（Cursor改进合并）
+### v1.7.0标准版本（双模型协同解耦架构）
 
-**核心改动（Cursor合并）**：
-- **API预算熔断**: `MAX_API_CALLS_PER_CLIENT = 30`，防止API调用过多
-- **429错误处理**: `is_engine_overloaded_error()` + backoff重试机制
-- **Web搜索轮数限制**: `MAX_WEB_SEARCH_ROUNDS = 3`
-- **观众画像fallback**: 修复解析失败时的兜底处理
-- **上下文大小限制**: 防止超出32k窗口
+**核心架构原则**：
+- **数据采集（I/O层）**：`MoonshotClient.search()` - 国内联网搜索
+- **数据推理（计算层）**：`DeepSeekClient.chat()` - 稳定JSON输出
 
-**MoonshotClient工具类** (`src/tools/moonshot_api.py`):
-- base_url: `https://api.moonshot.cn/v1`（可用`MOONSHOT_BASE_URL`覆盖）
-- 默认模型: `moonshot-v1-32k`
-- 支持方法: `chat()`, `search()`, `safe_chat()`, `safe_search()`
+**双模型协同优势**：
+- Kimi擅长穿透国内数据孤岛（微信、知乎、小红书）
+- DeepSeek擅长稳定输出JSON（无Markdown包裹问题）
+- 双重保障，互不干扰，避免单点故障
+
+**工具类**：
+- `MoonshotClient` (`src/tools/moonshot_api.py`): base_url=https://api.moonshot.cn/v1
+- `DeepSeekClient` (`src/tools/deepseek_api.py`): base_url=https://api.deepseek.com
+
+**节流保护**：
+- 搜索间隔: `time.sleep(2/3)`防止API封禁
+- 429重试: 最多3次backoff重试
 
 ⚠️ GitHub Actions环境变量：
-- `MOONSHOT_API_KEY` - 已配置
-- `MOONSHOT_BASE_URL` - 可选，默认 `https://api.moonshot.cn/v1`
+- `MOONSHOT_API_KEY` - Kimi搜索（已配置）
+- `DEEPSEEK_API_KEY` - DeepSeek推理（需配置）
 
 ### Coze依赖限制
 **Coze Coding内部依赖无法在GitHub Actions等外部环境使用！**
