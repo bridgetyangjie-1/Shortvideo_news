@@ -5,11 +5,13 @@ import os
 import json
 import re
 import logging
+import time
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 from tools.moonshot_api import MoonshotClient
+from tools.deepseek_api import DeepSeekClient
 
 # Fallback for test_run environment
 try:
@@ -65,28 +67,52 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
             "rankings": json.dumps(rankings_data, ensure_ascii=False, indent=2)
         })
         
-        # 初始化 Kimi 客户端
-        client = MoonshotClient()
+        # 初始化双模型客户端
+        kimi_client = MoonshotClient()
+        ds_client = DeepSeekClient()
         
-        # 构建消息
+        # 先用Kimi搜索补充演员信息（小红书/抖音等备用来源）
+        search_context = ""
+        for ranking in state.enriched_rankings[:20]:
+            if ranking.get("female_lead") == "未知" or ranking.get("male_lead") == "未知":
+                title = ranking.get("title", "")
+                search_query = f"短剧《{title}》演员主演 小红书抖音"
+                search_result = kimi_client.search(search_query)
+                search_context += f"\n【《{title}》演员搜索结果】:\n{search_result[:500]}\n"
+                time.sleep(1)
+        
+        # 构建消息（包含搜索补充信息）
+        enhanced_prompt = user_prompt
+        if search_context:
+            enhanced_prompt += f"\n\n🚨以下是演员搜索补充资料（小红书/抖音等）：\n{search_context}"
+        
+        # 调用 DeepSeek 进行推理（生成演员榜JSON）
         messages = [
             {"role": "system", "content": sp},
-            {"role": "user", "content": user_prompt}
+            {"role": "user", "content": enhanced_prompt}
         ]
-        
-        # 调用 Kimi 并解析结构化输出
-        actors_data = client.structured_output(
+        actors_data = ds_client.chat(
             messages=messages,
             temperature=temperature,
             max_tokens=4000
         )
 
-        if not isinstance(actors_data, dict):
-            raise ValueError(f"actor_ranking_node: Kimi 返回类型错误: {type(actors_data)}")
+        # DeepSeek返回的是字符串，需要解析JSON
+        import re
+        json_match = re.search(r'\{[\s\S]*\}', actors_data)
+        if json_match:
+            actors_dict = json.loads(json_match.group())
+        else:
+            logger.error(f"actor_ranking_node: 无法解析JSON, 原始响应: {actors_data[:500]}")
+            actors_dict = {"female": [], "male": []}
+        
+        if not isinstance(actors_dict, dict):
+            logger.error(f"actor_ranking_node: 解析后类型错误: {type(actors_dict)}")
+            actors_dict = {"female": [], "male": []}
         
         # 转换为ActorRanking对象
         female_actors = []
-        for item in actors_data.get("female", []):
+        for item in actors_dict.get("female", []):
             actor = ActorRanking(
                 rank=item.get("rank", 0),
                 name=item.get("name", ""),
@@ -100,7 +126,7 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
             female_actors.append(actor)
         
         male_actors = []
-        for item in actors_data.get("male", []):
+        for item in actors_dict.get("male", []):
             actor = ActorRanking(
                 rank=item.get("rank", 0),
                 name=item.get("name", ""),

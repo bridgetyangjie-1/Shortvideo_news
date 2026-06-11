@@ -1,6 +1,6 @@
 # 短剧行业数据看板 - 改进路线图
 
-> 当前基线：v1.5.0，Kimi (Moonshot) API + GitHub Actions + 静态 Dashboard。  
+> 当前基线：v1.7.2，双模型协同架构（Kimi搜索 + DeepSeek推理）+ GitHub Actions + 静态 Dashboard。  
 > 本文记录代码审视后的风险、优先级和建议改进方向。
 
 ---
@@ -9,12 +9,13 @@
 
 ### 已经稳定的部分
 
-- GitHub Actions 可以定时/手动执行，并将 `assets/data/` 与 `assets/history_data.json` 自动提交。
+- GitHub Actions 可以定时/手动执行，并将 `assets/data/` 与历史数据自动提交。
 - 前端看板已改为读取 `assets/data/latest.json`，并支持历史日期下拉。
-- 前端已展示 `error_message` 数据质量提示，便于发现节点级错误。
-- Kimi 联网搜索已通过官方 `$web_search` 工具调用，不再只依赖 prompt 触发搜索。
-- JSON 解析器已统一收敛到 `MoonshotClient`，解析失败会打印 Kimi 原始返回文本。
+- **双模型协同架构**：Kimi负责联网搜索（I/O层），DeepSeek负责JSON推理（计算层）。
+- JSON 解析器已加固，使用正则提取 + try-except兜底。
 - 节点失败会写入 `error_message`，方便从 `latest.json` 和 Actions 日志定位问题。
+- **榜单扩充到20部剧，演员榜扩充到TOP10**。
+- **小红书/知乎备用搜索**：DataEye爬不到时自动切换来源。
 
 ### 当前主要风险
 

@@ -108,7 +108,7 @@ def process_node(
         if isinstance(result_data, list):
             rankings = [item for item in result_data if isinstance(item, dict)]
         elif isinstance(result_data, dict):
-            raw_rankings = result_data.get("rankings") or result_data.get("top10") or result_data.get("data") or []
+            raw_rankings = result_data.get("rankings") or result_data.get("top20") or result_data.get("top10") or result_data.get("data") or []
             if isinstance(raw_rankings, list):
                 rankings = [item for item in raw_rankings if isinstance(item, dict)]
             quality_score = float(result_data.get("quality_score", 0) or 0)

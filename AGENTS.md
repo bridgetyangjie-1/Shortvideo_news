@@ -6,46 +6,43 @@
 
 | 版本 | Tag | 日期 | 说明 |
 |------|-----|------|------|
-| **当前标准版本** | `v1.7.0` | 2026-06-11 | **双模型协同解耦架构：Kimi搜索+DeepSeek推理** |
-| v1.6.0 | - | 2026-06-11 | Cursor改进合并后的稳定版本（历史版本） |
-| v1.5.0 | - | 2026-06-10 | 切换到Kimi (Moonshot) API（历史版本，不再维护） |
-| v1.4.x | - | 2026-06-10 | DuckDuckGo尝试版本（历史版本，已废弃） |
-| v1.0.0 | - | 2026-06-09 | 首个稳定版本（历史版本，不再维护） |
+| **当前标准版本** | `v1.7.2` | 2026-06-11 | **Tier 7优化：全量搜索20部剧+演员TOP10+小红书备用搜索** |
+| v1.7.0 | - | 2026-06-11 | 双模型协同解耦架构（历史版本） |
+| v1.6.0 | - | 2026-06-11 | Cursor改进合并后的稳定版本（历史版本，不再维护） |
 
-⚠️ **重要：v1.7.0为当前标准版本，以前的版本代码和MD文件不要再碰！**
-
-**Git Tag标记**：
-```bash
-git tag v1.6.0
-git push origin v1.6.0
-```
+⚠️ **重要：v1.7.2为当前标准版本，以前的版本代码和MD文件不要再碰！**
 
 ---
 
 ## ⚠️ 重要注意事项
 
-### v1.7.0标准版本（双模型协同解耦架构）
+### v1.7.2标准版本（双模型协同+Tier 7优化）
 
 **核心架构原则**：
 - **数据采集（I/O层）**：`MoonshotClient.search()` - 国内联网搜索
 - **数据推理（计算层）**：`DeepSeekClient.chat()` - 稳定JSON输出
 
-**双模型协同优势**：
-- Kimi擅长穿透国内数据孤岛（微信、知乎、小红书）
-- DeepSeek擅长稳定输出JSON（无Markdown包裹问题）
-- 双重保障，互不干扰，避免单点故障
+**Tier 7配额优势**：
+- 并发：1,000
+- RPM：100,000
+- 节流时间：缩短到1秒（工作流几十秒完成）
+
+**数据扩充**：
+- 剧榜：TOP20（从TOP10扩充）
+- 演员榜：女频TOP10 + 男频TOP10
+- 备用搜索：DataEye失败 → 小红书搜索演员名称
 
 **工具类**：
 - `MoonshotClient` (`src/tools/moonshot_api.py`): base_url=https://api.moonshot.cn/v1
 - `DeepSeekClient` (`src/tools/deepseek_api.py`): base_url=https://api.deepseek.com
 
 **节流保护**：
-- 搜索间隔: `time.sleep(2/3)`防止API封禁
-- 429重试: 最多3次backoff重试
+- 搜索间隔: `time.sleep(1)`（Tier 7配额充足）
+- 429重试: 最多5次backoff重试（10/20/30/40/50秒）
 
 ⚠️ GitHub Actions环境变量：
-- `MOONSHOT_API_KEY` - Kimi搜索（已配置）
-- `DEEPSEEK_API_KEY` - DeepSeek推理（需配置）
+- `MOONSHOT_API_KEY` - Kimi搜索（已配置，Tier 7付费用户）
+- `DEEPSEEK_API_KEY` - DeepSeek推理（已配置）
 
 ### Coze依赖限制
 **Coze Coding内部依赖无法在GitHub Actions等外部环境使用！**

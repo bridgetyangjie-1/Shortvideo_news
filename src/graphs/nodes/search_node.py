@@ -64,7 +64,7 @@ def search_node(
 
 请返回JSON格式：
 {{
-  "top10": [
+  "top20": [
     {{"rank": 1, "title": "真实剧名", "views": "真实播放量", "platform": "真实平台"}}
   ],
   "industry_data": {{

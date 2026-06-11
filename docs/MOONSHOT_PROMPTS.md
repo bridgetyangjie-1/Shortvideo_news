@@ -1,18 +1,37 @@
-# Moonshot (Kimi) API 调用说明文档
+# 双模型协同架构 API 调用说明
 
-> 本文档记录所有使用 Moonshot (Kimi) API 进行数据爬取/搜索的节点，包括爬取目的、搜索内容、Prompt 配置等。
+> 本文档记录双模型协同架构（Kimi搜索 + DeepSeek推理）的API调用规范。
 > 
-> **v1.5.0更新**: 已从DeepSeek切换到Kimi (Moonshot) API，使用OpenAI SDK标准格式。
+> **v1.7.2更新**: 双模型协同架构，I/O层和计算层分离。
+
+---
+
+## 双模型架构
+
+| 模型 | 角色 | 用途 | API端点 |
+|------|------|------|---------|
+| **Kimi (Moonshot)** | I/O层 | 联网搜索国内数据（微信/知乎/小红书） | https://api.moonshot.cn/v1 |
+| **DeepSeek** | 计算层 | JSON推理输出（稳定格式） | https://api.deepseek.com |
 
 ---
 
 ## API配置
 
+### Kimi配置
 | 配置项 | 值 |
 |--------|-----|
-| base_url | https://api.moonshot.cn/v1（可用 `MOONSHOT_BASE_URL` 覆盖） |
+| base_url | https://api.moonshot.cn/v1 |
 | 默认模型 | moonshot-v1-32k |
 | 环境变量 | MOONSHOT_API_KEY |
+| 功能 | search() 联网搜索 |
+
+### DeepSeek配置
+| 配置项 | 值 |
+|--------|-----|
+| base_url | https://api.deepseek.com |
+| 默认模型 | deepseek-chat |
+| 环境变量 | DEEPSEEK_API_KEY |
+| 功能 | chat() JSON推理 |
 
 ---
 
