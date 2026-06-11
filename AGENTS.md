@@ -4,7 +4,7 @@
 
 ## 当前基线
 
-- 当前标准版本：`v1.7.13`
+- 当前标准版本：`v1.7.14`
 - 访问地址：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - GitHub Actions 入口：`src/run_github.py`
 - 前端入口：`assets/index.html`
@@ -40,6 +40,7 @@ GitHub Actions 运行时不要依赖 Coze 内部 SDK。`src/main.py` 和 Coze �
 ### 榜单与演员
 
 - 剧集榜单目标为 TOP20。
+- 增速极快或刚上线冲榜剧目可设置 `trend_tag` 为 `🔥 飙升` 或 `🚀 新晋`，平稳剧目保持空字符串。
 - 演员榜为女频 TOP10 + 男频 TOP10。
 - 演员搜索优先多轮检索：
   1. `短剧《{title}》主演女演员男主角`

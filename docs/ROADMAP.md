@@ -1,12 +1,13 @@
 # 短剧行业数据看板 - 改进路线图
 
-当前基线：v1.7.13，Kimi/Moonshot 负责联网搜索，DeepSeek 负责 JSON 推理，GitHub Actions 定时生成静态看板数据。
+当前基线：v1.7.14，Kimi/Moonshot 负责联网搜索，DeepSeek 负责 JSON 推理，GitHub Actions 定时生成静态看板数据。
 
 ## 当前稳定能力
 
 - GitHub Actions 每日北京时间 9:00 自动执行 `src/run_github.py`。
 - 前端读取 `assets/data/latest.json`，支持历史数据。
 - 剧集榜单目标为 TOP20。
+- 榜单条目支持 `trend_tag`，可在剧名旁展示“🔥 飙升”或“🚀 新晋”等趋势徽章。
 - 演员榜为女频 TOP10 + 男频 TOP10。
 - 行业快讯固定 5 条，并要求每条包含约 100 字洞察。
 - 搜索关键词使用动态日期，避免把往年数据当作今日数据。
