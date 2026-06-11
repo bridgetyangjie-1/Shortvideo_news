@@ -167,12 +167,6 @@ class GenreDistribution(BaseModel):
     genres: List[GenreStats] = Field(default=[], description="各题材统计")
     top_genre: str = Field(default="", description="最热门题材")
     rising_genre: str = Field(default="", description="上升最快题材")
-    # 🔍 新增：标签分布数据（v1.2）
-    background_tags: List[TagHeat] = Field(default=[], description="背景标签分布（现代/古代等）")
-    theme_tags: List[TagHeat] = Field(default=[], description="主题标签分布（甜宠/复仇等）")
-    setting_tags: List[TagHeat] = Field(default=[], description="设定标签分布（重生/穿越等）")
-    top_tag: str = Field(default="", description="最热门标签")
-    rising_tag: str = Field(default="", description="上升最快标签")
     background_tags: List[TagHeat] = Field(default=[], description="背景标签（现代/古代/都市等）")
     theme_tags: List[TagHeat] = Field(default=[], description="主题标签（甜宠/复仇/玄幻等）")
     setting_tags: List[TagHeat] = Field(default=[], description="设定标签（重生/穿越/马甲等）")

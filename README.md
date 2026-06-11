@@ -67,3 +67,4 @@ python src/run_github.py
 
 - [AGENTS.md](AGENTS.md) - 项目规范和节点清单
 - [docs/DEPLOY.md](docs/DEPLOY.md) - 部署指南
+- [docs/IMPROVEMENT_ROADMAP.md](docs/IMPROVEMENT_ROADMAP.md) - 当前风险和改进路线图
