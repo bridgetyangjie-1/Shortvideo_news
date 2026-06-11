@@ -152,6 +152,11 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     <div class="source-legend-item"><span class="source-tag tier3">🤖 Tier3</span> Kimi推理分析（洞察、画像、趋势）</div>
   </div>
 
+  <div id="quality-warning" class="glass-card" style="display:none; border-color: rgba(251, 191, 36, 0.35); background: rgba(251, 191, 36, 0.06);">
+    <div class="section-title" style="color:#fbbf24; margin-bottom:8px;"><i class="fas fa-triangle-exclamation"></i> 数据质量提示</div>
+    <div id="quality-warning-content" style="font-size:12px; color:#facc15; white-space:pre-wrap; line-height:1.6;"></div>
+  </div>
+
   <!-- KPI卡片 -->
   <div class="kpi-grid">
     <div class="kpi-card">
@@ -393,6 +398,16 @@ async function renderDashboard(dateParam = null) {
 
     // 基础指标
     document.getElementById('update-time').innerText = `更新时间: ${data.data_date}`;
+    const qualityWarning = document.getElementById('quality-warning');
+    const qualityWarningContent = document.getElementById('quality-warning-content');
+    if (data.error_message) {
+        qualityWarning.style.display = 'block';
+        qualityWarningContent.innerText = data.error_message;
+    } else {
+        qualityWarning.style.display = 'none';
+        qualityWarningContent.innerText = '';
+    }
+
     // user_scale可能是对象{value, unit}或字符串
     const userScale = data.industry?.user_scale;
     if (typeof userScale === 'object' && userScale?.value) {

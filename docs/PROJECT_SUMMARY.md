@@ -9,7 +9,7 @@
 ## ⚠️ 核心开发规则（CRITICAL）
 
 > **【规则1：禁止写死HTML数据】**  
-> HTML Dashboard 必须采用 **动态加载JSON数据** 的方式，通过 `fetch('./assets/data/latest.json')` 获取数据并动态渲染。  
+> HTML Dashboard 必须采用 **动态加载JSON数据** 的方式，通过 `fetch('./data/latest.json')` 获取数据并动态渲染。  
 > ❌ **绝对禁止** 将数据直接写死在HTML标签中（如 `<div>7.18亿</div>`）  
 > ✅ **正确做法** 是使用 `<div id="kpi-users"></div>` + JS注入 `document.getElementById('kpi-users').innerText = data.industry.user_scale`  
 >   

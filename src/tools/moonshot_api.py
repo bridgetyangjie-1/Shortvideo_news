@@ -68,6 +68,8 @@ class MoonshotClient:
                 temperature=temperature,
                 max_tokens=max_tokens
             )
+            if not response.choices:
+                raise RuntimeError(f"Kimi chat 返回空 choices，response={response}")
             content = response.choices[0].message.content or ""
             logger.info(f"Kimi chat 成功，返回 {len(content)} 字符")
             return content
@@ -238,6 +240,8 @@ class MoonshotClient:
                 # Kimi 官方要求使用 $web_search 时关闭 thinking。
                 extra_body={"thinking": {"type": "disabled"}}
             )
+            if not completion.choices:
+                raise RuntimeError(f"Kimi web search 返回空 choices，response={completion}")
             choice = completion.choices[0]
             message = choice.message
             finish_reason = choice.finish_reason
