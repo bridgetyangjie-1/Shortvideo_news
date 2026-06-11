@@ -126,6 +126,11 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
 - 严禁填"未知"！如果实在不确定，请从上述名单中选择最可能的演员
 - 必须填写具体的演员名字，不要出现"未知"
 
+🚨【趋势标签判定规则】：
+- 请根据检索到的资料，判断该剧的爆发速度。
+- 如果该剧是刚刚上线几天就冲入榜单，或者新闻中明确提到其播放量增速极快、成为黑马，请将该剧的 `trend_tag` 字段赋值为 "🔥 飙升" 或 "🚀 新晋"。
+- 如果只是老剧平稳表现，该字段请保留为空字符串 ""。
+
 🚨【核心情绪与动机拆解】：
 作为资深用户心理研究员，请深度分析今日上榜短剧的题材与爽点。除了常规字段，你必须推演出 `emotional_analysis` 对象。
 请洞察这些剧情本质上是在为观众提供哪种【心理补偿】，以及它们精准踩中了当代社会的哪些【现实焦虑】。
@@ -144,6 +149,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
       "genre": "题材",
       "tags": ["标签"],
       "trend": "趋势",
+      "trend_tag": "",
       "trend_type": "new/up/down/same",
       "category": "female/male/ai",
       "is_ai": false,
@@ -237,6 +243,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 genre=item.get("genre", ""),
                 tags=item.get("tags", []),
                 trend=item.get("trend", ""),
+                trend_tag=item.get("trend_tag", ""),
                 trend_type=item.get("trend_type", "same"),
                 category=item.get("category", "female"),
                 is_ai=item.get("is_ai", False),
