@@ -2,29 +2,30 @@ name: Daily Update
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # UTC 1:00 = 北京 9:00
+    - cron: '0 1 * * *'
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
-  update:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    permissions:
+      contents: write
 
-      - name: Setup Python
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install uv
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-
-      - name: Install dependencies
         run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
           export PATH="$HOME/.local/bin:$PATH"
           uv sync
 
@@ -32,20 +33,16 @@ jobs:
         env:
           MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
           MOONSHOT_BASE_URL: ${{ secrets.MOONSHOT_BASE_URL }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           export PYTHONPATH="${GITHUB_WORKSPACE}/src"
           uv run python src/run_github.py
 
-      - name: Commit changes
+      - name: Commit and push if changed
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add assets/data/ assets/history_data.json
-          git diff --cached --quiet || git commit -m "auto: 每日数据更新"
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          git add -A
+          git diff --quiet && git diff --staged --quiet || git commit -m "auto: 每日数据更新"
+          git push origin main
