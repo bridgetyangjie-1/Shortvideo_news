@@ -2,7 +2,7 @@
 
 > 本文档记录双模型协同架构（Kimi搜索 + DeepSeek推理）的API调用规范。
 > 
-> **v1.7.13更新**: 行业快讯必须5条+每条100字洞察分析。
+> **v1.7.14更新**: 观众画像改为基于当日 `enriched_rankings` 的 DeepSeek 动态反推；每天推送5条行业快讯的规则继续保留。
 
 ---
 
@@ -48,6 +48,7 @@
 | **industry_node** | 必须标注数据年份 | "所有数据必须标注年份，往年数据禁止作为今日数据" |
 | **actor_ranking_node** | 必须是【今日】榜单演员 | "只分析【今日】榜单中的演员" |
 | **enrich_node** | 必须是【今日】榜单作品 | "只分析【今日榜单】中的作品" |
+| **audience_profile_node** | 必须基于【今日】补全榜单 | "只根据今日 enriched_rankings 反推受众画像，不联网搜索" |
 | **search_node** | 必须是【今日】榜单 | "获取【今日】的最新热播榜单" |
 
 **Prompt模板关键语句**：
@@ -380,38 +381,48 @@ search_queries_options = [
 
 ## 7. audience_profile_node - 观众画像节点
 
-### 为什么爬取
-提取短剧观众画像数据：
-- 性别比例（女70%/男30%）
+### 为什么推理
+基于当日热播榜单的具体剧目反推核心观众画像，避免大盘报告口径滞后或空洞：
+- 性别比例（male/female百分比）
 - 年龄分布（18-24、25-34、35-44、45+）
-- 地域分布（TOP10省份）
+- 地域分布（TOP3-5省份或城市）
+- 4个贴合今日题材爽点的具体受众行为标签
+
+### 输入数据
+`audience_profile_node` 读取 `state.enriched_rankings`，取今日最火的10部短剧及其题材、爽点/标签、主演信息，组装为 DeepSeek 推理上下文。
 
 ### System Prompt (SP)
 ```
-你是一个人口统计学分析师。根据输入的搜索资料，提炼短剧观众的最新画像数据。
-如果资料缺失，请使用2026年短剧行业默认经验数据填充，不得报错。
-必须输出合法的 JSON 对象。
+你是资深短剧行业分析师，擅长根据当日爆款内容结构反推受众画像，并严格输出 JSON。
 ```
 
 #### User Prompt (UP)
 ```
-【搜索资料】：
-{{search_context}}
+【今日榜单】
+{{enriched_rankings_top10}}
 
-请提取并输出 JSON，必须包含：
+请不要联网搜索，不要输出宏观空话。请只基于这批具体剧目的题材结构、情绪爽点、人物关系和消费场景，反推出今日榜单的核心受众画像。
+只输出严格 JSON，不要 Markdown，不要解释，不要额外文本：
 {
-  "gender": {"female": 70, "male": 30}, 
-  "age": {"18-24": 25, "25-34": 40, "35-44": 25, "45+": 10}, 
-  "regions": [{"name": "广东", "value": 15}, {"name": "浙江", "value": 10}]
+  "gender": {"male": 22, "female": 78},
+  "age": {"18-24": 22, "25-34": 43, "35-44": 25, "45+": 10},
+  "regions": [{"name": "广东", "value": 15.5}, {"name": "江苏", "value": 11.8}],
+  "traits": ["偏好强反转高密度剧情", "关注女性逆袭与情绪补偿", "习惯通勤睡前碎片化追更", "对复仇打脸和身份揭晓爽点敏感"]
 }
 ```
+
+### 解析兜底
+- 使用正则提取 JSON，支持模型返回代码块时清洗。
+- 所有字段解析使用 try-except 和 `.get()` 兜底。
+- 解析失败时 `logger.error` 记录原始响应，并返回默认 `AudienceProfile`，禁止中断工作流。
 
 ### 配置文件
 | 参数 | 值 |
 |------|-----|
-| model | moonshot-v1-32k |
-| temperature | 0.1 |
-| max_completion_tokens | 800 |
+| model | deepseek-chat |
+| temperature | 0.2 |
+| max_completion_tokens | 2000 |
+| 配置方式 | 直接调用 `DeepSeekClient.chat()`，不再读取 `config/audience_profile_llm_cfg.json` |
 
 ---
 
@@ -447,12 +458,13 @@ push_node (保存数据)
 
 | 规则 | 说明 |
 |------|------|
-| 禁止Mock | 所有数据必须来自Kimi真实搜索 |
+| 禁止Mock | 可搜索事实必须来自Kimi真实搜索；受众画像必须基于今日榜单DeepSeek推理 |
 | 具体数据 | 禁止泛泛分析，必须有剧目名、播放量等具体数值 |
 | 原文链接 | 行业快讯必须有source_url原文链接，不是门户网站首页 |
 | 100字限制 | 快讯content不超过100字 |
 | 5条快讯 | 行业快讯必须输出5条 |
-| Pydantic访问 | 使用`.field_name`属性访问，禁止`.get()` |
+| 画像动态化 | audience_profile_node禁止搜索大盘画像，必须基于今日enriched_rankings反推 |
+| Pydantic访问 | 状态对象使用`.field_name`属性；模型JSON/dict解析允许`.get()`兜底 |
 
 ---
 
@@ -465,4 +477,4 @@ push_node (保存数据)
 | actor_ranking_node | `config/actor_ranking_llm_cfg.json` |
 | industry_node | `config/industry_llm_cfg.json` |
 | insights_node | `config/insights_llm_cfg.json` |
-| audience_profile_node | `config/audience_profile_llm_cfg.json` |
+| audience_profile_node | 历史配置文件已停用，节点直接调用 `DeepSeekClient.chat()` |
