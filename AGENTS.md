@@ -6,18 +6,35 @@
 
 | 版本 | Tag | 日期 | 说明 |
 |------|-----|------|------|
-| **当前标准版本** | `v1.7.13` | 2026-06-11 | **行业快讯：必须5条+每条100字洞察分析** |
+| **当前标准版本** | `v1.7.14` | 2026-06-11 | **观众画像：基于当日榜单DeepSeek动态反推** |
+| v1.7.13 | - | 2026-06-11 | 行业快讯：必须5条+每条100字洞察分析（历史版本） |
 | v1.7.12 | - | 2026-06-11 | 修复industry_node JSON格式错误 + 演员推理规则强化（历史版本） |
 | v1.7.10 | - | 2026-06-11 | 演员搜索逻辑优化（历史版本） |
 | v1.7.7 | - | 2026-06-11 | 时间铁律强制执行（历史版本） |
 | v1.7.0 | - | 2026-06-11 | 双模型协同解耦架构（历史版本） |
 | v1.6.0 | - | 2026-06-11 | Cursor改进合并后的稳定版本（历史版本，不再维护） |
 
-⚠️ **重要：v1.7.13为当前标准版本，以前的版本代码和MD文件不要再碰！**
+⚠️ **重要：v1.7.14为当前标准版本，以前的版本代码和MD文件不要再碰！**
 
 ---
 
 ## ⚠️ 重要注意事项
+
+### v1.7.14标准版本（观众画像动态反推）
+
+**🚨 观众画像铁律**：
+1. **数据来源铁律**：`audience_profile_node` 不再使用 Kimi 联网搜索大盘画像，必须读取 `state.enriched_rankings`。
+2. **推理模型铁律**：使用 `DeepSeekClient.chat()`，基于今日最火短剧的题材、爽点、主演信息反推核心受众。
+3. **JSON结构铁律**：DeepSeek 必须返回严格 JSON：
+   - `gender`: `male` / `female` 百分比数字
+   - `age`: `18-24` / `25-34` / `35-44` / `45+` 百分比数字
+   - `regions`: 3-5 个省份或城市对象数组，如 `[{"name": "广东", "value": 15.5}]`
+   - `traits`: 4 个具体行为标签，禁止"下沉市场"等泛泛描述
+4. **解析兜底铁律**：Python 层必须 try-except + `.get()` 防御解析，失败时 `logger.error` 并返回默认观众画像，禁止中断工作流。
+
+**前端展示目标**：
+- 观众画像卡片必须呈现可解释的性别、年龄、地域分布。
+- traits 需要体现今日榜单的具体爽点和观看行为，避免空洞标签。
 
 ### v1.7.13标准版本（行业快讯强化）
 
@@ -144,7 +161,7 @@ let url = './assets/data/latest.json';  // ❌ 错误
 
 - **名称**: 短剧行业数据看板
 - **作者**: Bridget Yang
-- **功能**: 使用Kimi (Moonshot) API自动抓取短剧行业数据，生成多维度分析报告
+- **功能**: 使用Kimi (Moonshot) API自动抓取短剧行业数据，并由DeepSeek生成结构化推理分析报告
 - **部署方式**: GitHub Actions自动运行，每日北京时间9:00执行
 - **访问地址**: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 
@@ -187,7 +204,7 @@ let url = './assets/data/latest.json';  // ❌ 错误
 | enrich_node | `nodes/enrich_node.py` | agent | **先搜后问架构** - Python层调用search获取真实资料，再喂给LLM提取演员/标签 | `config/enrich_llm_cfg.json` |
 | actor_ranking_node | `nodes/actor_ranking_node.py` | agent | Kimi生成演员人气榜 | `config/actor_ranking_llm_cfg.json` |
 | industry_node | `nodes/industry_node.py` | agent | Kimi联网获取行业宏观数据 | `config/industry_llm_cfg.json` |
-| audience_profile_node | `nodes/audience_profile_node.py` | agent | Kimi搜索观众画像 | `config/audience_profile_llm_cfg.json` |
+| audience_profile_node | `nodes/audience_profile_node.py` | agent | DeepSeek基于当日榜单动态反推观众画像 | - |
 | genre_distribution_node | `nodes/genre_distribution_node.py` | task | 统计题材分布+标签热度 | - |
 | insights_node | `nodes/insights_node.py` | agent | **先搜后问架构** - Python层调用search获取真实事件，再生成爆款归因+买量建议 | `config/insights_llm_cfg.json` |
 | history_data_node | `nodes/history_data_node.py` | task | 生成历史数据和播放趋势 | - |
@@ -206,7 +223,7 @@ let url = './assets/data/latest.json';  // ❌ 错误
 | `config/enrich_llm_cfg.json` | 数据补充配置 | enrich_node |
 | `config/actor_ranking_llm_cfg.json` | 演员榜生成配置 | actor_ranking_node |
 | `config/industry_llm_cfg.json` | 行业宏观数据配置 | industry_node |
-| `config/audience_profile_llm_cfg.json` | 观众画像配置 | audience_profile_node |
+| `config/audience_profile_llm_cfg.json` | 历史观众画像配置（v1.7.14起节点不再读取） | audience_profile_node |
 | `config/insights_llm_cfg.json` | 行业大事件配置 | insights_node |
 
 ---
