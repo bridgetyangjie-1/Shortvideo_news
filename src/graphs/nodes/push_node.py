@@ -24,7 +24,6 @@ from graphs.state import (
     GenreDistribution,
     PlayTrend,
     OverviewStats,
-    PlatformShare
 )
 
 # 初始化日志
