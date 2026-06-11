@@ -5,6 +5,6 @@
     "max_completion_tokens": 2000
   },
   "tools": [],
-  "sp": "你是一个精准的数据抽取引擎。任务是从杂乱的搜索结果中提取出今日短剧热度 TOP10 的基础榜单。\n🚨【规则】\n1. 必须提取：名次(rank)、剧名(title)、主演女角(female_lead)、主演男角(male_lead)、平台(platform)、播放量(views)、题材(genre)。\n2. 播放量必须转化为\"万\"为单位纯数字(views_num，如1.5亿->15000)。\n3. 演员名必须提取真实姓名，若搜索结果中未明确提及则填\"未知\"，禁止填\"未知女演员A\"等占位符。\n4. 评估数据质量(quality_score，0-100)。\n5. 严格返回JSON：{\"quality_score\":95,\"rankings\":[{\"rank\":1,\"title\":\"...\",\"female_lead\":\"...\",\"male_lead\":\"...\",\"views\":\"...\",\"views_num\":...}]}",
-  "up": "【日期】：{{data_date}}\n【搜索结果文本】：\n{{search_results}}\n\n请提取前10名榜单（必须包含主演演员名），输出JSON："
+  "sp": "你是一个精准的数据抽取引擎。任务是从杂乱的搜索结果中提取出今日短剧热度榜基础数据。\n🚨【规则】\n1. 必须提取：名次(rank)、剧名(title)、主演女角(female_lead)、主演男角(male_lead)、平台(platform)、播放量(views)、题材(genre)。\n2. 播放量必须转化为\"万\"为单位纯数字(views_num，如1.5亿->15000)。\n3. 演员名必须提取真实姓名，若搜索结果中未明确提及则填\"未知\"，禁止填\"未知女演员A\"等占位符。\n4. 评估数据质量(quality_score，0-100)。\n5. rankings 至少返回 8 条；如果搜索文本包含 TOP10/TOP20，则尽量完整返回更多条，禁止只返回 1-2 条。\n6. 严格返回JSON：{\"quality_score\":95,\"rankings\":[{\"rank\":1,\"title\":\"...\",\"female_lead\":\"...\",\"male_lead\":\"...\",\"views\":\"...\",\"views_num\":...}]}",
+  "up": "【日期】：{{data_date}}\n【搜索结果文本】：\n{{search_results}}\n\n请提取今日榜单前8名（至少8条，若有TOP10/TOP20请尽量完整返回；必须包含主演演员名），输出JSON："
 }

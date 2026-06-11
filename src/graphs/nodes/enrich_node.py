@@ -16,6 +16,7 @@ from coze_coding_utils.runtime_ctx.context import Context
 from tools.moonshot_api import MoonshotClient
 from tools.deepseek_api import DeepSeekClient
 
+from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking, default_emotional_analysis
 
 # 初始化日志
@@ -227,6 +228,26 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             logger.error(f"原始响应: {response}")
             search_errors.append(f"JSON解析失败: {parse_error}")
         
+        try:
+            rankings_data, count_warning = ensure_top_rankings(
+                rankings_data,
+                data_date=state.data_date,
+                supplemental_rankings=rankings_json_list,
+                workspace_path=os.getenv("COZE_WORKSPACE_PATH", ""),
+            )
+            if count_warning:
+                logger.warning("enrich_node: %s", count_warning)
+                search_errors.append(f"enrich_node: {count_warning}")
+        except RankingCountError as count_error:
+            error_message = f"enrich_node: {count_error}"
+            logger.error(error_message)
+            return EnrichNodeOutput(
+                enriched_rankings=[],
+                emotional_analysis=emotional_analysis,
+                success=False,
+                error_message=error_message + "\n"
+            )
+
         # 转换为DramaRanking对象
         enriched_rankings: List[DramaRanking] = []
         for item in rankings_data:

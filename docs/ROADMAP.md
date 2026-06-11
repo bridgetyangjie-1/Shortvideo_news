@@ -7,6 +7,7 @@
 - GitHub Actions 每日北京时间 9:00 自动执行 `src/run_github.py`。
 - 前端读取 `assets/data/latest.json`，支持历史数据。
 - 剧集榜单目标为 TOP20。
+- 前端“榜单 TOP8”已有代码层门禁：少于 8 条会补齐到 8 条，补齐失败则拒绝覆盖数据文件。
 - 演员榜为女频 TOP10 + 男频 TOP10。
 - 行业快讯固定 5 条，并要求每条包含约 100 字洞察。
 - 搜索关键词使用动态日期，避免把往年数据当作今日数据。
@@ -26,7 +27,7 @@
 
 在 `push_node` 前增加 `quality_gate_node` 或等价校验逻辑：
 
-- 检查 `rankings` 数量是否达到最低阈值。
+- 检查 `rankings` 数量是否达到最低阈值；当前 TOP8 展示至少需要 8 条。
 - 检查 `rank/title/views/platform` 是否完整。
 - 检查 `views_num` 是否为合理正数。
 - 检查演员是否命中明显非短剧或传统影视明星高风险名单。
