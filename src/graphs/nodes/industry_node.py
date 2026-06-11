@@ -72,7 +72,11 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
 - "短剧 AI生成 比例 趋势"
 - "AI短剧 市场份额 数据"
 
-请返回JSON格式：{"ai_ratio": 数值(百分比), "ai_drama_count": 数量, "ai_trend": "上升/持平/下降"}
+请返回JSON格式，包含以下字段：
+- ai_ratio: AI短剧占比百分比，如25
+- ai_drama_count: AI短剧数量
+- ai_trend: 趋势，值为"上升"、"持平"或"下降"
+
 如果找不到确切数据，请根据行业趋势估算（建议15-25%）。
 """
         
