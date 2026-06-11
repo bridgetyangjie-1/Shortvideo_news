@@ -21,6 +21,7 @@ class DramaRanking(BaseModel):
     genre: str = Field(default="", description="题材类型")
     tags: List[str] = Field(default=[], description="标签列表")
     trend: str = Field(default="", description="趋势描述")
+    trend_tag: str = Field(default="", description="趋势标签，如飙升/新晋")
     trend_type: str = Field(default="same", description="趋势类型：new/up/down/same")
     category: str = Field(default="female", description="分类：female/male/ai")
     is_ai: bool = Field(default=False, description="是否为AI剧")
