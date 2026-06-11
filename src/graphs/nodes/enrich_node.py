@@ -16,7 +16,7 @@ from coze_coding_utils.runtime_ctx.context import Context
 from tools.moonshot_api import MoonshotClient
 from tools.deepseek_api import DeepSeekClient
 
-from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking
+from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking, default_emotional_analysis
 
 # 初始化日志
 logging.basicConfig(level=logging.INFO)
@@ -126,11 +126,50 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
 - 严禁填"未知"！如果实在不确定，请从上述名单中选择最可能的演员
 - 必须填写具体的演员名字，不要出现"未知"
 
-请补全缺失字段并输出JSON数组，不要加```json包裹："""
+🚨【核心情绪与动机拆解】：
+作为资深用户心理研究员，请深度分析今日上榜短剧的题材与爽点。除了常规字段，你必须推演出 `emotional_analysis` 对象。
+请洞察这些剧情本质上是在为观众提供哪种【心理补偿】，以及它们精准踩中了当代社会的哪些【现实焦虑】。
+
+请补全缺失字段并输出纯JSON对象，不要加```json包裹。结构必须为：
+{{
+  "rankings": [
+    {{
+      "rank": 1,
+      "title": "剧名",
+      "female_lead": "女演员",
+      "male_lead": "男演员",
+      "views": "播放量",
+      "views_num": 0,
+      "platform": "平台",
+      "genre": "题材",
+      "tags": ["标签"],
+      "trend": "趋势",
+      "trend_type": "new/up/down/same",
+      "category": "female/male/ai",
+      "is_ai": false,
+      "desc": "剧情描述",
+      "production_house": "制作厂牌",
+      "core_trope": ["核心爽点"],
+      "episodes_count": 80
+    }}
+  ],
+  "emotional_analysis": {{
+    "primary_emotions": [
+      {{"name": "心理补偿", "value": 35}},
+      {{"name": "强力宣泄", "value": 32}},
+      {{"name": "身份逆袭", "value": 28}}
+    ],
+    "target_anxieties": [
+      {{"name": "职场阶层固化", "value": 34}},
+      {{"name": "经济匮乏", "value": 31}},
+      {{"name": "亲密关系失衡", "value": 27}}
+    ]
+  }}
+}}"""
         
         response = ds_client.chat(
             messages=[
-                {"role": "system", "content": sp or "你是数据提取专家。必须输出纯JSON数组，禁止编造传统影视明星。"},
+                {"role": "system", "content": sp or "你是数据提取与短剧用户心理研究专家。必须输出纯JSON对象，禁止编造传统影视明星。"},
                 {"role": "user", "content": user_prompt}
             ],
             temperature=temperature,
@@ -141,6 +180,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         
         # ========== 健壮性解析 ==========
         rankings_data: List[Dict] = []
+        emotional_analysis: Dict[str, List[Dict[str, Any]]] = default_emotional_analysis()
         try:
             # 去除Markdown标记
             clean_response = response.strip()
@@ -152,8 +192,10 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 clean_response = clean_response[:-3]
             clean_response = clean_response.strip()
             
-            # 正则提取JSON数组
-            json_match = re.search(r'\[[\s\S]*\]', clean_response)
+            # 优先提取JSON对象，兼容旧版JSON数组
+            json_match = re.search(r'\{[\s\S]*\}', clean_response)
+            if not json_match:
+                json_match = re.search(r'\[[\s\S]*\]', clean_response)
             if json_match:
                 json_str = json_match.group(0)
                 parsed = json.loads(json_str)
@@ -162,8 +204,17 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                     rankings_data = parsed
                 elif isinstance(parsed, dict):
                     rankings_data = parsed.get("rankings") or parsed.get("data") or []
+                    candidate_analysis = parsed.get("emotional_analysis")
+                    if isinstance(candidate_analysis, dict):
+                        primary_emotions = candidate_analysis.get("primary_emotions")
+                        target_anxieties = candidate_analysis.get("target_anxieties")
+                        if isinstance(primary_emotions, list) and isinstance(target_anxieties, list):
+                            emotional_analysis = {
+                                "primary_emotions": primary_emotions[:3],
+                                "target_anxieties": target_anxieties[:3],
+                            }
             else:
-                raise ValueError("未找到有效JSON数组")
+                raise ValueError("未找到有效JSON对象或数组")
                 
         except Exception as parse_error:
             logger.error(f"enrich_node: JSON解析失败: {parse_error}")
@@ -200,6 +251,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         
         return EnrichNodeOutput(
             enriched_rankings=enriched_rankings,
+            emotional_analysis=emotional_analysis,
             success=True,
             error_message=("\n".join(search_errors) + "\n") if search_errors else ""
         )
