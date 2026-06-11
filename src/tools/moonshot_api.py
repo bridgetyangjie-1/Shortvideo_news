@@ -72,7 +72,7 @@ class MoonshotClient:
         # 预算只统计一次高层请求；429 退避重试不重复扣减预算。
         self._record_api_call()
 
-        for i in range(3):
+        for i in range(5):  # 付费用户：5次重试
             try:
                 return self.client.chat.completions.create(**kwargs)
             except Exception as exc:
@@ -80,9 +80,10 @@ class MoonshotClient:
                     raise
 
                 last_error = exc
-                wait_seconds = 2 ** i + 1
+                # 付费用户更大的重试间隔：10/20/30秒
+                wait_seconds = 10 * (i + 1)
                 logger.warning(
-                    "Kimi %s 请求触发 429/engine_overloaded，第 %s/3 次失败，等待 %s 秒后重试: %s",
+                    "Kimi %s 请求触发 429/engine_overloaded，第 %s/5 次失败，等待 %s 秒后重试: %s",
                     operation_name,
                     i + 1,
                     wait_seconds,
@@ -91,11 +92,11 @@ class MoonshotClient:
                 time.sleep(wait_seconds)
 
         logger.error(
-            "Kimi %s 请求连续 3 次因 429/engine_overloaded 失败，已触发灾难降级: %s",
+            "Kimi %s 请求连续 5 次因 429/engine_overloaded 失败，已触发灾难降级: %s",
             operation_name,
             last_error,
         )
-        raise RuntimeError(f"Kimi {operation_name} 请求连续 3 次 engine_overloaded 失败") from last_error
+        raise RuntimeError(f"Kimi {operation_name} 请求连续 5 次 engine_overloaded 失败") from last_error
 
     def _fallback_value(self, expected_type: Optional[Type[Any]] = None) -> Any:
         if expected_type is list:
