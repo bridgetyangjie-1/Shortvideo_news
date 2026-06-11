@@ -23,8 +23,8 @@ logger = logging.getLogger(__name__)
 def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> NewsNodeOutput:
     """
     title: 行业快讯搜索
-    desc: 使用DeepSeek联网搜索短剧行业新闻，提炼为5条快讯（100字缩写+原文链接）
-    integrations: DeepSeek API
+    desc: 使用 Kimi 联网搜索短剧行业新闻，提炼为5条快讯（100字缩写+原文链接）
+    integrations: Moonshot API
     """
     ctx = runtime.context
     
@@ -63,6 +63,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         
         # 搜索新闻并收集结果
         search_results: List[Dict[str, Any]] = []
+        search_errors: List[str] = []
         for query in search_queries[:3]:  # 只搜索前3个查询，避免超时
             try:
                 result = client.search(query, max_results=3)
@@ -72,7 +73,9 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                     "result": result
                 })
             except Exception as se:
-                logger.warning(f"搜索 '{query}' 失败: {se}")
+                search_error = f"news_node: 搜索 '{query}' 失败: {se}"
+                logger.warning(search_error)
+                search_errors.append(search_error)
         
         # 第二步：用AI分析搜索结果，提取5条重要新闻
         if search_results:
@@ -118,34 +121,37 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
             
             logger.info(f"AI分析响应: {response[:500]}...")
             
-            # 尝试解析JSON数组
-            json_match = re.search(r'\[[\s\S]*\]', response)
-            if json_match:
-                try:
-                    news_list: List[Dict[str, Any]] = json.loads(json_match.group())
-                    for item in news_list[:5]:
-                        if isinstance(item, dict):
-                            news_item = DailyNews(
-                                type=str(item.get("type", "数据")),
-                                icon=str(item.get("icon", "📰")),
-                                title=str(item.get("title", ""))[:15],
-                                content=str(item.get("content", ""))[:100],
-                                source_url=str(item.get("source_url", ""))
-                            )
-                            # 确保source_url不为空
-                            if not news_item.source_url:
-                                news_item.source_url = "https://www.newwanr.com"
-                            daily_news.append(news_item)
-                except json.JSONDecodeError as je:
-                    logger.warning(f"JSON解析失败: {je}")
+            try:
+                news_list = client.extract_json(response, expected_type=list)
+                for item in news_list[:5]:
+                    if isinstance(item, dict):
+                        news_item = DailyNews(
+                            type=str(item.get("type", "数据")),
+                            icon=str(item.get("icon", "📰")),
+                            title=str(item.get("title", ""))[:15],
+                            content=str(item.get("content", ""))[:100],
+                            source_url=str(item.get("source_url") or item.get("source", ""))
+                        )
+                        # 确保source_url不为空
+                        if not news_item.source_url:
+                            news_item.source_url = "https://www.newwanr.com"
+                        daily_news.append(news_item)
+            except Exception as parse_error:
+                parse_msg = f"news_node: 快讯 JSON 解析失败: {parse_error}"
+                logger.error(parse_msg, exc_info=True)
+                search_errors.append(parse_msg)
         
-        logger.info(f"DeepSeek提炼 {len(daily_news)} 条快讯")
+        logger.info(f"Kimi 提炼 {len(daily_news)} 条快讯")
         
     except Exception as e:
-        logger.warning(f"快讯生成失败: {e}")
+        search_errors = [f"news_node: 快讯生成失败: {e}"]
+        logger.warning(search_errors[0], exc_info=True)
     
     # 如果没有数据，返回默认快讯
     if not daily_news:
+        fallback_message = "news_node: 未生成有效快讯，已使用默认快讯兜底。"
+        logger.error(fallback_message)
+        search_errors.append(fallback_message)
         daily_news.append(DailyNews(
             type="数据",
             icon="📊",
@@ -154,4 +160,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
             source_url="https://www.newwanr.com"
         ))
     
-    return NewsNodeOutput(daily_news=daily_news[:5])
+    return NewsNodeOutput(
+        daily_news=daily_news[:5],
+        error_message=("\n".join(search_errors) + "\n") if search_errors else ""
+    )

@@ -27,12 +27,17 @@ logger = logging.getLogger(__name__)
 def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> IndustryNodeOutput:
     """
     title: 行业数据获取
-    desc: 使用DeepSeek联网搜索获取最新的行业宏观数据（用户规模、市场规模、AI短剧占比等）
-    integrations: DeepSeek API
+    desc: 使用 Kimi 联网搜索获取最新的行业宏观数据（用户规模、市场规模、AI短剧占比等）
+    integrations: Moonshot API
     """
     ctx = runtime.context
     
     try:
+        input_error_message = ""
+        if not state.enriched_rankings:
+            input_error_message = "industry_node: enriched_rankings 为空，AI/女频比例只能使用默认或搜索兜底；请检查 enrich_node。\n"
+            logger.error(input_error_message.strip())
+
         # 1. 统计榜单中的AI剧和女男频比例
         ai_count = sum(1 for r in state.enriched_rankings if r.is_ai)
         female_count = sum(1 for r in state.enriched_rankings if r.category == "female")
@@ -48,7 +53,7 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         up = _cfg.get("up", "")
         temperature = _cfg.get("config", {}).get("temperature", 0.2)
         
-        # 3. 使用DeepSeek联网搜索行业数据
+        # 3. 使用 Kimi 联网搜索行业数据
         client = MoonshotClient()
         
         search_query = f"""请搜索互联网，获取最新的短剧行业宏观数据，包括：
@@ -65,19 +70,14 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
 请返回JSON格式的数据，包含以上所有字段。
 """
         
-        # 执行搜索 - 使用 DuckDuckGo
-        search_response = client.search(query=search_query, max_results=5)
-        
-        # 4. 使用LLM提取JSON
-        json_match = re.search(r'\{[\s\S]*\}', search_response)
-        if json_match:
-            data = json.loads(json_match.group())
-        else:
-            # 尝试从响应中提取
-            try:
-                data = json.loads(search_response)
-            except:
-                data = {}
+        # 执行 Kimi 官方 $web_search 并解析 JSON
+        data = client.search_json(
+            query=search_query,
+            system_prompt=sp or "你是专业的行业数据分析师，擅长搜索和整理行业宏观统计数据。",
+            temperature=temperature,
+            max_tokens=3000,
+            expected_type=dict
+        )
         
         # 5. 构建行业数据（使用搜索结果或榜单统计）
         industry = IndustryData(
@@ -110,11 +110,13 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         return IndustryNodeOutput(
             industry=industry,
             platform=platform,
-            success=True
+            success=True,
+            error_message=input_error_message
         )
         
     except Exception as e:
-        logger.error(f"行业数据获取失败: {str(e)}")
+        error_message = f"industry_node: 行业数据搜索或 JSON 解析失败: {e}"
+        logger.error(error_message, exc_info=True)
         # 返回默认数据
         return IndustryNodeOutput(
             industry=IndustryData(
@@ -138,5 +140,6 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
                     trend="up"
                 )]
             ),
-            success=True
+            success=True,
+            error_message=error_message + "\n"
         )

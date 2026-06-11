@@ -40,6 +40,16 @@ def process_node(
     generated_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S+08:00")
     
     try:
+        if not state.search_results:
+            error_message = "process_node: search_results 为空，无法抽取榜单；请先检查 search_node。"
+            logger.error(error_message)
+            return ProcessNodeOutput(
+                basic_rankings=[],
+                quality_score=0.0,
+                success=False,
+                error_message=error_message + "\n"
+            )
+
         # 读取LLM配置
         cfg_file = os.path.join(
             os.getenv("COZE_WORKSPACE_PATH", "."), 
@@ -69,7 +79,7 @@ def process_node(
             "search_results": search_text
         })
         
-        # 初始化DeepSeek客户端
+        # 初始化 Kimi 客户端
         client = MoonshotClient()
         
         # 构建消息
@@ -78,56 +88,35 @@ def process_node(
             {"role": "user", "content": user_prompt}
         ]
         
-        # 调用DeepSeek
-        response = client.chat(
+        # 调用 Kimi 并用统一解析器提取 JSON，解析失败会打印 raw_text
+        result_data = client.structured_output(
             messages=messages,
             temperature=temperature,
             max_tokens=4096
         )
-        
-        # 解析JSON结果
+
         rankings: List[Dict[str, Any]] = []
         quality_score = 0.0
-        
-        # 尝试提取JSON块
-        json_pattern = r'```json\s*([\s\S]*?)\s*```'
-        json_matches = re.findall(json_pattern, response)
-        
-        if json_matches:
-            try:
-                result_data = json.loads(json_matches[0])
-                if isinstance(result_data, list):
-                    rankings = result_data
-                else:
-                    rankings = result_data.get("rankings", [])
-                    quality_score = float(result_data.get("quality_score", 0))
-            except json.JSONDecodeError:
-                try:
-                    result_data = json.loads(response)
-                    if isinstance(result_data, list):
-                        rankings = result_data
-                    else:
-                        rankings = result_data.get("rankings", [])
-                        quality_score = float(result_data.get("quality_score", 0))
-                except:
-                    pass
+
+        if isinstance(result_data, list):
+            rankings = [item for item in result_data if isinstance(item, dict)]
+        elif isinstance(result_data, dict):
+            raw_rankings = result_data.get("rankings") or result_data.get("top10") or result_data.get("data") or []
+            if isinstance(raw_rankings, list):
+                rankings = [item for item in raw_rankings if isinstance(item, dict)]
+            quality_score = float(result_data.get("quality_score", 0) or 0)
         else:
-            try:
-                result_data = json.loads(response)
-                if isinstance(result_data, list):
-                    rankings = result_data
-                else:
-                    rankings = result_data.get("rankings", [])
-                    quality_score = float(result_data.get("quality_score", 0))
-            except:
-                pass
+            raise ValueError(f"process_node 解析结果类型错误: {type(result_data)}")
         
         # 检查数据质量
         if not rankings:
+            error_message = "process_node: Kimi JSON 已解析但未提取到 rankings/top10 榜单数据；请检查 search_node 返回内容。"
+            logger.error(error_message)
             return ProcessNodeOutput(
                 basic_rankings=[],
                 quality_score=0.0,
-                success=False
+                success=False,
+                error_message=error_message + "\n"
             )
         
         # 计算数据质量分数
@@ -146,10 +135,12 @@ def process_node(
         )
         
     except Exception as e:
-        logger.error(f"数据清洗失败: {e}")
+        error_message = f"process_node: 数据清洗或 JSON 解析失败: {e}"
+        logger.error(error_message, exc_info=True)
         return ProcessNodeOutput(
             data_date=data_date,
             basic_rankings=[],
             quality_score=0.0,
-            success=False
+            success=False,
+            error_message=error_message + "\n"
         )

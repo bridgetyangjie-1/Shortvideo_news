@@ -27,11 +27,12 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
     """
     title: 行业大事件（先搜后问架构）
     desc: Gemini重构 - 先真实搜索行业事件，再结合榜单数据生成爆款归因+买量建议
-    integrations: DeepSeek API（search + chat）
+    integrations: Moonshot API（search + chat）
     """
     ctx = runtime.context
     
     try:
+        input_error_message = ""
         # 读取配置文件
         cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), config["metadata"]["llm_cfg"])
         with open(cfg_file, "r", encoding="utf-8") as fd:
@@ -44,6 +45,10 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         # 准备数据
         rankings_data: List[Dict[str, Any]] = []
         enriched_rankings_list = list(state.enriched_rankings) if hasattr(state.enriched_rankings, '__iter__') else []
+        if not enriched_rankings_list:
+            input_error_message = "insights_node: enriched_rankings 为空，洞察无法基于真实榜单生成；请检查 enrich_node。\n"
+            logger.error(input_error_message.strip())
+
         for r in enriched_rankings_list:
             if hasattr(r, 'model_dump'):
                 rankings_data.append(r.model_dump())
@@ -56,10 +61,10 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         elif isinstance(state.industry, dict):
             industry_data = state.industry
         
-        # 初始化DeepSeek客户端
+        # 初始化 Kimi 客户端
         client = MoonshotClient()
         
-        # 🚨 第一步：使用 DuckDuckGo 真实检索最新大事件
+        # 🚨 第一步：使用 Kimi $web_search 真实检索最新大事件
         search_query = f"短剧行业 最新爆款 融资 政策 动态 {state.data_date}"
         search_response = client.search(query=search_query, max_results=5)
         
@@ -80,35 +85,19 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
             {"role": "user", "content": user_prompt}
         ]
         
-        # 调用DeepSeek生成洞察（现在有真实搜索结果作为上下文）
-        response = client.chat(
+        # 调用 Kimi 生成洞察（现在有真实搜索结果作为上下文）
+        insights_data = client.structured_output(
             messages=messages,
             temperature=temperature,
-            max_tokens=3000
+            max_tokens=3000,
+            expected_type=list
         )
-        
-        # 提取JSON
-        json_match = re.search(r'```json\s*([\s\S]*?)\s*```', response)
-        if json_match:
-            json_str = json_match.group(1)
-        else:
-            # 尝试直接解析
-            try:
-                json.loads(response)
-                json_str = response
-            except:
-                # 尝试提取数组
-                array_match = re.search(r'\[\s*\{[\s\S]*\}\s*\]', response)
-                if array_match:
-                    json_str = array_match.group(0)
-                else:
-                    json_str = "[]"
-        
-        insights_data = json.loads(json_str)
         
         # 转换为Insight对象列表
         insights = []
         for item in insights_data:
+            if not isinstance(item, dict):
+                continue
             insight = Insight(
                 icon=item.get("icon", "📊"),
                 title=item.get("title", ""),
@@ -139,15 +128,18 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         
         return InsightsNodeOutput(
             insights=insights,
-            success=True
+            success=True,
+            error_message=input_error_message
         )
         
     except Exception as e:
-        logger.error(f"洞察生成节点失败: {e}")
+        error_message = f"insights_node: 洞察生成、搜索或 JSON 解析失败: {e}"
+        logger.error(error_message, exc_info=True)
         # 返回默认洞察
         return InsightsNodeOutput(
             insights=[
                 Insight(icon="📊", title="数据待补充", content="请稍后再试", source="")
             ],
-            success=False
+            success=False,
+            error_message=error_message + "\n"
         )

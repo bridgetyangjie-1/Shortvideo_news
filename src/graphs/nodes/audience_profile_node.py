@@ -32,16 +32,16 @@ def audience_profile_node(
 ) -> AudienceProfileOutput:
     """
     title: 📊 获取观众画像数据
-    desc: 使用DeepSeek联网搜索QuestMobile、DataEye等报告，获取短剧观众画像数据
-    integrations: DeepSeek API
+    desc: 使用 Kimi 联网搜索QuestMobile、DataEye等报告，获取短剧观众画像数据
+    integrations: Moonshot API
     """
     ctx = runtime.context
     
     try:
-        # 初始化DeepSeek客户端
+        # 初始化 Kimi 客户端
         client = MoonshotClient()
         
-        # 使用DeepSeek联网搜索观众画像数据
+        # 使用 Kimi 联网搜索观众画像数据
         search_query = """请搜索互联网，获取短剧观众的画像数据，包括：
 1. 性别分布（女性/男性占比）
 2. 年龄分布（18-24岁、25-34岁、35-44岁、45岁以上各年龄段占比）
@@ -61,25 +61,14 @@ def audience_profile_node(
 }
 """
         
-        # 执行搜索 - 使用 DuckDuckGo
-        response = client.search(query=search_query, max_results=5)
-        
-        # 解析响应
-        json_match = re.search(r'\{[\s\S]*\}', response)
-        if json_match:
-            profile_data = json.loads(json_match.group())
-        else:
-            profile_data = {
-                "gender": {"female": 95, "male": 5},
-                "age": {"18-24": 35, "25-34": 40, "35-44": 18, "45+": 7},
-                "regions": [
-                    {"name": "广东", "value": 12},
-                    {"name": "江苏", "value": 9},
-                    {"name": "浙江", "value": 8},
-                    {"name": "山东", "value": 7},
-                    {"name": "河南", "value": 6}
-                ]
-            }
+        # 执行 Kimi 官方 $web_search 并解析响应
+        profile_data = client.search_json(
+            query=search_query,
+            system_prompt="你是专业的用户研究分析师，擅长搜索和整理用户画像数据。",
+            temperature=0.3,
+            max_tokens=3000,
+            expected_type=dict
+        )
         
         # 构建输出 - 使用正确的字段名匹配state.py中的AudienceProfile定义
         age_distribution = AgeDistribution(
@@ -111,7 +100,8 @@ def audience_profile_node(
         return AudienceProfileOutput(audience_profile=audience_profile)
         
     except Exception as e:
-        logger.error(f"获取观众画像失败: {str(e)}")
+        error_message = f"audience_profile_node: 观众画像搜索或 JSON 解析失败: {e}"
+        logger.error(error_message, exc_info=True)
         # 返回默认值
         default_profile = AudienceProfile(
             gender_female=95,
@@ -126,4 +116,7 @@ def audience_profile_node(
             avg_watch_duration="45分钟",
             traits=["女性主导", "年轻群体", "下沉市场"]
         )
-        return AudienceProfileOutput(audience_profile=default_profile)
+        return AudienceProfileOutput(
+            audience_profile=default_profile,
+            error_message=error_message + "\n"
+        )

@@ -33,6 +33,9 @@ def history_data_node(
     # 获取当前数据
     rankings = state.enriched_rankings
     data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
+    error_messages: List[str] = []
+    if not rankings:
+        error_messages.append("history_data_node: enriched_rankings 为空，当日播放趋势将记录为 0；请检查 enrich_node。")
     
     # 历史数据文件路径
     history_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", "."), "assets", "history_data.json")
@@ -113,7 +116,7 @@ def history_data_node(
         with open(history_file, "w", encoding="utf-8") as f:
             json.dump(history_data, f, ensure_ascii=False, indent=2)
     except Exception as e:
-        pass  # 保存失败不影响返回
+        error_messages.append(f"history_data_node: 保存历史趋势文件失败: {e}")
     
     # ========== 4. 构建输出数据 ==========
     # 构建每日播放趋势
@@ -163,5 +166,6 @@ def history_data_node(
     
     return HistoryDataOutput(
         play_trend=play_trend,
-        weekly_rankings=weekly_trend
+        weekly_rankings=weekly_trend,
+        error_message=("\n".join(error_messages) + "\n") if error_messages else ""
     )
