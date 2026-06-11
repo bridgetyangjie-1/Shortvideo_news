@@ -1,6 +1,7 @@
 # Dashboard UI 设计规范
 
-> Gemini 提供的短剧行业商业决策看板设计规范 - Kimi Powered
+> Gemini 提供的短剧行业商业决策看板设计规范 - Kimi + DeepSeek Powered
+> **版本**: v1.7.13
 
 ## 一、整体风格
 
