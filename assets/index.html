@@ -128,7 +128,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     <div class="header-left">
       <h1>📊 短剧行业数据看板</h1>
       <div class="header-meta">
-        <span class="ai-badge"><i class="fas fa-robot"></i> DeepSeek Powered</span>
+        <span class="ai-badge"><i class="fas fa-robot"></i> Kimi Powered</span>
         <span class="tier-badge">📊 Tier1 爬取 + 🔍 Tier2 搜补 + 🤖 Tier3 推理</span>
         <span class="time-badge" id="update-time">更新时间: --</span>
         <span style="font-size: 12px; color: #a78bfa; margin-left: 8px;">by Bridget Yang</span>
@@ -148,8 +148,8 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
   <!-- 数据来源说明 -->
   <div class="source-legend">
     <div class="source-legend-item"><span class="source-tag tier1">📊 Tier1</span> 工作流直接爬取（排名、播放量、平台）</div>
-    <div class="source-legend-item"><span class="source-tag tier2">🔍 Tier2</span> DeepSeek联网搜补（厂牌、爽点、集数）</div>
-    <div class="source-legend-item"><span class="source-tag tier3">🤖 Tier3</span> DeepSeek推理分析（洞察、画像、趋势）</div>
+    <div class="source-legend-item"><span class="source-tag tier2">🔍 Tier2</span> Kimi联网搜补（厂牌、爽点、集数）</div>
+    <div class="source-legend-item"><span class="source-tag tier3">🤖 Tier3</span> Kimi推理分析（洞察、画像、趋势）</div>
   </div>
 
   <!-- KPI卡片 -->
@@ -206,7 +206,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
   <!-- 行业快讯 -->
   <div class="glass-card">
-    <div class="section-title"><i class="fas fa-newspaper" style="color:#4ade80;"></i> 每日行业快讯 <span class="source-tag tier2">🔍 DeepSeek搜补</span></div>
+    <div class="section-title"><i class="fas fa-newspaper" style="color:#4ade80;"></i> 每日行业快讯 <span class="source-tag tier2">🔍 Kimi搜补</span></div>
     <div class="news-grid" id="news-container"></div>
   </div>
 
@@ -232,7 +232,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     <div style="display: flex; flex-direction: column; gap: 24px;">
       
       <div class="glass-card" style="flex: 1;">
-        <div class="section-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 行业大事件 <span class="source-tag tier3">🤖 DeepSeek分析</span></div>
+        <div class="section-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 行业大事件 <span class="source-tag tier3">🤖 Kimi分析</span></div>
         <div id="insights-container"></div>
       </div>
       
@@ -255,7 +255,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
   
   <div class="sub-grid">
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-chart-pie" style="color:#60a5fa;"></i> 题材分布 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div class="section-title"><i class="fas fa-chart-pie" style="color:#60a5fa;"></i> 题材分布 <span class="source-tag tier3">🤖 Kimi推理</span></div>
       <div id="genre-container" style="margin-top: 20px;"></div>
       <!-- 🔍 新增：标签热度分布 (v1.2) -->
       <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
@@ -265,7 +265,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     </div>
     
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div class="section-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像 <span class="source-tag tier3">🤖 Kimi推理</span></div>
       <div id="audience-container" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;"></div>
     </div>
     
@@ -286,7 +286,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
 <script>
 // ==========================================
-// 1. 结构化兜底数据 (防止白屏) - DeepSeek 2026-06-09
+// 1. 结构化兜底数据 (防止白屏) - Kimi 2026-06-09
 // ==========================================
 const fallbackData = {
     "data_date": "2026-06-09",
@@ -354,29 +354,30 @@ const fallbackData = {
 // 加载历史日期列表
 async function loadHistoryDates() {
     try {
-        const res = await fetch('./assets/data/all_history.json');
+        const res = await fetch('./data/all_history.json');
         if (res.ok) {
             const history = await res.json();
             const select = document.getElementById('date-select');
-            (history.records || []).reverse().forEach(r => {
+            const dates = history.dates || (history.records || []).map(r => r.date);
+            select.innerHTML = '<option value="latest">今日最新</option>';
+            [...dates].reverse().forEach(date => {
                 const opt = document.createElement('option');
-                opt.value = r.date;
-                opt.textContent = r.date;
+                opt.value = date;
+                opt.textContent = date;
                 select.appendChild(opt);
             });
         }
     } catch (e) { console.warn('历史数据加载失败', e); }
     
     // 绑定日期选择事件
-    document.getElementById('date-select').addEventListener('change', async (e) => {
-        const selected = e.target.value;
-        if (selected === 'latest') {
-            await loadHistoryDates();
-renderDashboard();
-        } else {
-            await renderDashboard(selected);
-        }
-    });
+    const select = document.getElementById('date-select');
+    if (!select.dataset.bound) {
+        select.addEventListener('change', async (e) => {
+            const selected = e.target.value;
+            await renderDashboard(selected === 'latest' ? null : selected);
+        });
+        select.dataset.bound = 'true';
+    }
 }
 
 async function renderDashboard(dateParam = null) {
@@ -425,7 +426,7 @@ async function renderDashboard(dateParam = null) {
                     <div style="font-weight: 600; color: #f8fafc; font-size: 14px;">${r.title}</div>
                     <div style="font-size: 11px; color: #64748b; margin-top: 2px;">${r.female_lead || '--'} / ${r.male_lead || '--'} · ${r.episodes_count || '?'}集</div>
                 </td>
-                <td><span class="producer-tag">${r.production_house || '待DeepSeek补全'}</span></td>
+                <td><span class="producer-tag">${r.production_house || '待Kimi补全'}</span></td>
                 <td><span class="ai-tag">${r.genre || '综合'}</span><br><div class="genre-tags">${tags}</div></td>
                 <td style="font-weight: 700; color: ${r.rank <= 3 ? '#fbbf24' : '#4ade80'};">${r.views}</td>
                 <td style="font-size: 12px; color: #94a3b8;">${r.platform}</td>
@@ -518,7 +519,10 @@ async function renderDashboard(dateParam = null) {
     // 趋势图表
     if (data.play_trend?.daily) {
         const ctx = document.getElementById('trendChart').getContext('2d');
-        new Chart(ctx, {
+        if (window.trendChartInstance) {
+            window.trendChartInstance.destroy();
+        }
+        window.trendChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: data.play_trend.daily.map(d => d.date),
@@ -544,6 +548,7 @@ async function renderDashboard(dateParam = null) {
     }
 }
 
+loadHistoryDates();
 renderDashboard();
 </script>
 
@@ -553,7 +558,7 @@ renderDashboard();
     <strong style="color: #a78bfa;">短剧行业数据看板</strong> © 2026
   </div>
   <div style="font-size: 12px; color: #64748b;">
-    作者：<span style="color: #818cf8; font-weight: 600;">Bridget Yang</span> · 数据来源：DeepSeek联网搜索 · 自动更新：GitHub Actions
+    作者：<span style="color: #818cf8; font-weight: 600;">Bridget Yang</span> · 数据来源：Kimi联网搜索 · 自动更新：GitHub Actions
   </div>
   <div style="font-size: 11px; color: #475569; margin-top: 8px;">
     本看板仅供行业研究参考，数据可能存在偏差，不构成投资建议。

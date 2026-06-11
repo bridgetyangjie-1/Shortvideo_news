@@ -1,7 +1,7 @@
 # 短剧行业数据看板
 
 > **作者**: Bridget Yang
-> **版本**: v1.2.0
+> **版本**: v1.5.0
 > **更新**: 每日北京时间9:00自动更新
 
 ---
@@ -26,7 +26,7 @@
 
 ## 🛠 技术栈
 
-- **数据源**: DeepSeek API联网搜索
+- **数据源**: Kimi (Moonshot) API 联网搜索
 - **自动化**: GitHub Actions
 - **前端**: 纯HTML + Chart.js
 - **部署**: GitHub Pages
@@ -44,7 +44,7 @@ assets/
 
 src/
 ├── graphs/          # LangGraph工作流
-├── tools/           # DeepSeek API工具
+├── tools/           # Kimi (Moonshot) API工具
 └── run_github.py    # GitHub Actions入口
 ```
 
@@ -56,8 +56,8 @@ src/
 # 安装依赖
 uv sync
 
-# 运行工作流（需要DEEPSEEK_API_KEY）
-export DEEPSEEK_API_KEY=your_api_key
+# 运行工作流（需要MOONSHOT_API_KEY）
+export MOONSHOT_API_KEY=your_api_key
 python src/run_github.py
 ```
 

@@ -10,7 +10,7 @@
 
 | 配置项 | 值 |
 |--------|-----|
-| base_url | https://api.moonshot.cn/v1 |
+| base_url | https://api.moonshot.ai/v1 |
 | 默认模型 | moonshot-v1-32k |
 | 环境变量 | MOONSHOT_API_KEY |
 
@@ -142,7 +142,7 @@ search_queries = [
 ### 配置文件
 | 参数 | 值 |
 |------|-----|
-| model | deepseek-chat |
+| model | moonshot-v1-32k |
 | temperature | 0.2 |
 | max_completion_tokens | 2000 |
 
@@ -179,7 +179,7 @@ search_queries = [
 ### 配置文件
 | 参数 | 值 |
 |------|-----|
-| model | deepseek-chat |
+| model | moonshot-v1-32k |
 | temperature | 0.3 |
 | max_completion_tokens | 2000 |
 
@@ -214,7 +214,7 @@ search_queries = [
 ### 配置文件
 | 参数 | 值 |
 |------|-----|
-| model | deepseek-chat |
+| model | moonshot-v1-32k |
 | temperature | 0.2 |
 | max_completion_tokens | 1500 |
 
@@ -262,7 +262,7 @@ search_queries = [
 ### 配置文件
 | 参数 | 值 |
 |------|-----|
-| model | deepseek-chat |
+| model | moonshot-v1-32k |
 | temperature | 0.2 |
 | max_completion_tokens | 1000 |
 
@@ -313,7 +313,7 @@ search_queries = [
 ### 配置文件
 | 参数 | 值 |
 |------|-----|
-| model | deepseek-chat |
+| model | moonshot-v1-32k |
 | temperature | 0.1 |
 | max_completion_tokens | 2000 |
 
@@ -350,7 +350,7 @@ search_queries = [
 ### 配置文件
 | 参数 | 值 |
 |------|-----|
-| model | deepseek-chat |
+| model | moonshot-v1-32k |
 | temperature | 0.1 |
 | max_completion_tokens | 800 |
 
@@ -388,7 +388,7 @@ push_node (保存数据)
 
 | 规则 | 说明 |
 |------|------|
-| 禁止Mock | 所有数据必须来自DeepSeek真实搜索 |
+| 禁止Mock | 所有数据必须来自Kimi真实搜索 |
 | 具体数据 | 禁止泛泛分析，必须有剧目名、播放量等具体数值 |
 | 原文链接 | 行业快讯必须有source_url原文链接，不是门户网站首页 |
 | 100字限制 | 快讯content不超过100字 |

@@ -40,8 +40,8 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add assets/data/
-          git diff --quiet && git diff --staged --quiet || git commit -m "auto: 每日数据更新"
+          git add assets/data/ assets/history_data.json
+          git diff --cached --quiet || git commit -m "auto: 每日数据更新"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
