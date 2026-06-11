@@ -10,7 +10,14 @@ from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient, is_api_budget_error
+from tools.moonshot_api import MoonshotClient
+
+# Fallback for test_run environment
+try:
+    from tools.moonshot_api import is_api_budget_error
+except ImportError:
+    def is_api_budget_error(exc: Exception) -> bool:
+        return str(exc) == "API \u8c03\u7528\u6b21\u6570\u8fc7\u591a\uff0c\u5df2\u718f\u65ad"
 
 from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking
 
@@ -70,11 +77,8 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             
             try:
                 # 🚨 使用 Kimi $web_search 进行真实联网检索
-                search_res = client.search(query=f"短剧 《{title}》 演员 主演 制作公司 厂牌", max_results=3)
-                if hasattr(search_res, "text"):
-                    search_text = search_res.text[:2000]
-                else:
-                    search_text = str(search_res)[:2000]
+                search_res: str = client.search(query=f"短剧 《{title}》 演员 主演 制作公司 厂牌", max_results=3)
+                search_text = search_res[:2000] if len(search_res) > 2000 else search_res
                 real_search_context += f"\n【剧目：《{title}》真实网页检索结果】:\n{search_text}\n"
                 logger.info(f"搜索《{title}》成功")
             except Exception as e:

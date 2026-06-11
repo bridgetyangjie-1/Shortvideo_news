@@ -8,7 +8,14 @@ from typing import Any, Dict, List
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient, is_api_budget_error
+from tools.moonshot_api import MoonshotClient
+
+# Fallback for test_run environment
+try:
+    from tools.moonshot_api import is_api_budget_error
+except ImportError:
+    def is_api_budget_error(exc: Exception) -> bool:
+        return str(exc) == "API \u8c03\u7528\u6b21\u6570\u8fc7\u591a\uff0c\u5df2\u718f\u65ad"
 
 from graphs.state import (
     AudienceProfileInput,
