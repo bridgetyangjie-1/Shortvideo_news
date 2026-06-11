@@ -123,6 +123,9 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .audience-traits { display: flex; flex-wrap: wrap; gap: 8px; }
 .audience-trait { padding: 5px 10px; background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.22); border-radius: 6px; font-size: 11px; color: #f472b6; line-height: 1.4; }
 
+/* 核心情绪与动机拆解 */
+.emotion-chart { width: 100%; height: 320px; background: radial-gradient(circle at 50% 35%, rgba(129, 140, 248, 0.12), rgba(15, 23, 42, 0.18) 58%, rgba(15, 23, 42, 0.05)); border: 1px solid rgba(129, 140, 248, 0.12); border-radius: 14px; }
+
 /* 响应式 */
 @media (max-width: 1200px) { .main-grid { grid-template-columns: 1fr; } .sub-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 768px) { .kpi-grid { grid-template-columns: 1fr; } .actor-grid { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 16px; } }
@@ -265,8 +268,8 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     </div>
     
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-mobile-alt" style="color:#4ade80;"></i> 主流分发平台份额 <span class="source-tag tier1">📊 爬取</span></div>
-      <div id="platform-container" style="margin-top: 20px;"></div>
+      <div class="section-title"><i class="fas fa-brain" style="color:#a78bfa;"></i> 🎬 核心情绪与动机拆解 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div id="emotionChart" class="emotion-chart"></div>
     </div>
   </div>
   
@@ -342,6 +345,18 @@ const fallbackData = {
         ],
         "traits": ["偏好强反转高密度剧情", "关注女性逆袭与情绪补偿", "习惯通勤睡前碎片化追更", "对复仇打脸和身份揭晓爽点敏感"]
     },
+    "emotional_analysis": {
+        "primary_emotions": [
+            { "name": "心理补偿", "value": 36 },
+            { "name": "强力宣泄", "value": 32 },
+            { "name": "身份逆袭", "value": 29 }
+        ],
+        "target_anxieties": [
+            { "name": "职场阶层固化", "value": 34 },
+            { "name": "经济匮乏", "value": 31 },
+            { "name": "亲密关系失衡", "value": 27 }
+        ]
+    },
     "platform": { "apps": [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}] },
     "play_trend": {
         "daily": [
@@ -395,6 +410,19 @@ const mockAudienceProfile = {
         { name: "山东", value: 8.4 }
     ],
     traits: ["偏好强反转高密度剧情", "关注女性逆袭与情绪补偿", "习惯通勤睡前碎片化追更", "对复仇打脸和身份揭晓爽点敏感"]
+};
+
+const mockEmotionalAnalysis = {
+    primary_emotions: [
+        { name: "心理补偿", value: 36 },
+        { name: "强力宣泄", value: 32 },
+        { name: "身份逆袭", value: 29 }
+    ],
+    target_anxieties: [
+        { name: "职场阶层固化", value: 34 },
+        { name: "经济匮乏", value: 31 },
+        { name: "亲密关系失衡", value: 27 }
+    ]
 };
 
 function cloneAudienceProfile(profile) {
@@ -522,6 +550,112 @@ function renderAudienceProfile(rawProfile) {
     });
 }
 
+function normalizeEmotionMetric(item, fallback) {
+    const source = item && typeof item === 'object' ? item : {};
+    const name = source.name || source.label || source.emotion || source.anxiety || fallback.name;
+    const value = safePercent(source.value ?? source.share ?? source.percentage, fallback.value);
+    return { name, value: Math.max(0, Math.min(100, value)) };
+}
+
+function normalizeEmotionalAnalysis(rawAnalysis) {
+    const source = rawAnalysis && typeof rawAnalysis === 'object' ? rawAnalysis : {};
+    const normalizeList = (list, fallbackList) => {
+        const sourceList = Array.isArray(list) ? list : [];
+        return fallbackList.map((fallback, index) => normalizeEmotionMetric(sourceList[index], fallback));
+    };
+
+    return {
+        primary_emotions: normalizeList(source.primary_emotions, mockEmotionalAnalysis.primary_emotions),
+        target_anxieties: normalizeList(source.target_anxieties, mockEmotionalAnalysis.target_anxieties)
+    };
+}
+
+function renderEmotionChart(rawAnalysis) {
+    const chartEl = document.getElementById('emotionChart');
+    if (!chartEl) return;
+
+    const analysis = normalizeEmotionalAnalysis(rawAnalysis);
+    if (!window.echarts) {
+        chartEl.innerHTML = '<div style="color:#64748b; font-size:12px; padding:24px;">ECharts未加载，情绪动机图表暂不可用</div>';
+        return;
+    }
+
+    if (window.emotionChartInstance) window.emotionChartInstance.dispose();
+
+    const emotionLabels = analysis.primary_emotions.map(item => `情绪·${item.name}`);
+    const anxietyLabels = analysis.target_anxieties.map(item => `焦虑·${item.name}`);
+    const indicators = [...emotionLabels, ...anxietyLabels].map(name => ({ name, max: 100 }));
+    const emotionValues = [
+        ...analysis.primary_emotions.map(item => item.value),
+        ...analysis.target_anxieties.map(() => 0)
+    ];
+    const anxietyValues = [
+        ...analysis.primary_emotions.map(() => 0),
+        ...analysis.target_anxieties.map(item => item.value)
+    ];
+
+    window.emotionChartInstance = echarts.init(chartEl, 'dark');
+    window.emotionChartInstance.setOption({
+        backgroundColor: 'transparent',
+        color: ['#f472b6', '#60a5fa'],
+        tooltip: {
+            trigger: 'item',
+            backgroundColor: 'rgba(15, 23, 42, 0.92)',
+            borderColor: 'rgba(129, 140, 248, 0.35)',
+            textStyle: { color: '#e2e8f0' }
+        },
+        legend: {
+            bottom: 4,
+            itemWidth: 10,
+            itemHeight: 10,
+            textStyle: { color: '#94a3b8', fontSize: 11 },
+            data: ['情绪驱动', '现实焦虑']
+        },
+        radar: {
+            center: ['50%', '48%'],
+            radius: '66%',
+            startAngle: 90,
+            splitNumber: 4,
+            indicator: indicators,
+            axisName: { color: '#cbd5e1', fontSize: 11, lineHeight: 16 },
+            axisLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.22)' } },
+            splitLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.15)' } },
+            splitArea: {
+                areaStyle: {
+                    color: [
+                        'rgba(129, 140, 248, 0.04)',
+                        'rgba(96, 165, 250, 0.02)'
+                    ]
+                }
+            }
+        },
+        series: [{
+            name: '核心情绪与动机拆解',
+            type: 'radar',
+            symbol: 'circle',
+            symbolSize: 6,
+            lineStyle: { width: 2 },
+            areaStyle: { opacity: 0.24 },
+            data: [
+                {
+                    value: emotionValues,
+                    name: '情绪驱动',
+                    itemStyle: { color: '#f472b6' },
+                    lineStyle: { color: '#f472b6' },
+                    areaStyle: { color: 'rgba(244, 114, 182, 0.28)' }
+                },
+                {
+                    value: anxietyValues,
+                    name: '现实焦虑',
+                    itemStyle: { color: '#60a5fa' },
+                    lineStyle: { color: '#60a5fa' },
+                    areaStyle: { color: 'rgba(96, 165, 250, 0.22)' }
+                }
+            ]
+        }]
+    });
+}
+
 async function renderDashboard(dateParam = null) {
     let data = fallbackData;
     try {
@@ -644,15 +778,8 @@ async function renderDashboard(dateParam = null) {
     // 观众画像
     renderAudienceProfile(data.audience_profile);
 
-    // 平台份额
-    if (data.platform?.apps && data.platform.apps.length > 0) {
-        document.getElementById('platform-container').innerHTML = data.platform.apps.map(p => `
-            <div class="genre-item">
-                <span class="genre-name" style="width: 80px; color: #f8fafc;">${p.name}</span>
-                <div class="genre-bar"><div class="genre-bar-fill green" style="width:${p.share}%"></div></div>
-                <span style="font-size: 12px; color: #4ade80; font-weight: 700;">${p.share}%</span>
-            </div>`).join('');
-    }
+    // 核心情绪与动机拆解
+    renderEmotionChart(data.emotional_analysis);
 
     // 趋势图表
     if (data.play_trend?.daily) {
@@ -691,6 +818,7 @@ renderDashboard();
 window.addEventListener('resize', () => {
     if (window.genderChartInstance) window.genderChartInstance.resize();
     if (window.ageChartInstance) window.ageChartInstance.resize();
+    if (window.emotionChartInstance) window.emotionChartInstance.resize();
 });
 </script>
 

@@ -198,13 +198,6 @@ class OverviewStats(BaseModel):
     hitRateChange: int = Field(default=0, description="爆款率环比变化(%)")
 
 
-class PlatformShare(BaseModel):
-    """平台份额"""
-    name: str = Field(default="", description="平台名称")
-    share: int = Field(default=0, description="市场份额(%)")
-    trend: str = Field(default="same", description="趋势：up/down/same")
-
-
 class WeeklyRankingItem(BaseModel):
     """周榜条目"""
     week: str = Field(default="", description="周次（如2026-W21）")
@@ -228,6 +221,22 @@ class PlayTrend(BaseModel):
     trend_direction: str = Field(default="stable", description="整体趋势：up/down/stable")
 
 
+def default_emotional_analysis() -> Dict[str, List[Dict[str, Any]]]:
+    """核心情绪与现实焦虑拆解默认结构"""
+    return {
+        "primary_emotions": [
+            {"name": "心理补偿", "value": 35},
+            {"name": "强力宣泄", "value": 32},
+            {"name": "身份逆袭", "value": 28},
+        ],
+        "target_anxieties": [
+            {"name": "职场阶层固化", "value": 34},
+            {"name": "经济匮乏", "value": 31},
+            {"name": "亲密关系失衡", "value": 27},
+        ],
+    }
+
+
 # ==================== 全局状态 ====================
 
 class GlobalState(BaseModel):
@@ -244,6 +253,10 @@ class GlobalState(BaseModel):
     # 新增字段
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
+    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+        default_factory=default_emotional_analysis,
+        description="核心情绪与现实焦虑拆解，包含primary_emotions与target_anxieties",
+    )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     weekly_rankings: List[WeeklyRankingItem] = Field(default=[], description="周榜历史")
     quality_score: float = Field(default=0.0, description="数据质量分数 (0-100)")
@@ -277,7 +290,10 @@ class GraphOutput(BaseModel):
     # 概览统计（Dashboard页面1）
     overview: OverviewStats = Field(default_factory=OverviewStats, description="概览统计数据")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布数据")
-    platform_share: List[PlatformShare] = Field(default_factory=list, description="平台份额")
+    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+        default_factory=default_emotional_analysis,
+        description="核心情绪与现实焦虑拆解，包含primary_emotions与target_anxieties",
+    )
     # 详细数据
     industry: IndustryData = Field(default_factory=IndustryData, description="行业数据")
     rankings: List[DramaRanking] = Field(default=[], description="榜单数据")
@@ -332,6 +348,10 @@ class EnrichNodeInput(BaseModel):
 class EnrichNodeOutput(BaseModel):
     """数据补充节点输出"""
     enriched_rankings: List[DramaRanking] = Field(default=[], description="补充后的完整榜单")
+    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+        default_factory=default_emotional_analysis,
+        description="核心情绪与现实焦虑拆解",
+    )
     error_message: str = Field(default="", description="错误信息")
 
 
@@ -406,6 +426,10 @@ class PushNodeInput(BaseModel):
     insights: List[Insight] = Field(default=[], description="异动点评列表")
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
+    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+        default_factory=default_emotional_analysis,
+        description="核心情绪与现实焦虑拆解",
+    )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     quality_score: float = Field(default=0.0, description="数据质量分数")
     error_message: str = Field(default="", description="错误信息")
@@ -424,6 +448,10 @@ class PushNodeOutput(BaseModel):
     insights: List[Insight] = Field(default=[], description="异动点评列表")
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
+    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+        default_factory=default_emotional_analysis,
+        description="核心情绪与现实焦虑拆解",
+    )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     quality_score: float = Field(default=0.0, description="数据质量分数")
     error_message: str = Field(default="", description="错误信息")
