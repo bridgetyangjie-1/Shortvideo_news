@@ -25,8 +25,8 @@ class MoonshotClient:
         
         self.client = OpenAI(
             api_key=self.api_key or "missing-moonshot-api-key",
-            # 官方 Kimi API 文档使用 .ai 域名；保留环境变量便于私有/国内网关覆盖。
-            base_url=os.getenv("MOONSHOT_BASE_URL", "https://api.moonshot.ai/v1")
+            # 国内 Moonshot/Kimi 控制台常用 .cn 域名；可用 MOONSHOT_BASE_URL 覆盖到 .ai 或私有网关。
+            base_url=os.getenv("MOONSHOT_BASE_URL") or "https://api.moonshot.cn/v1"
         )
         self.model = os.getenv("MOONSHOT_MODEL", "moonshot-v1-32k")
         self.search_model = os.getenv("MOONSHOT_SEARCH_MODEL", self.model)

@@ -56,15 +56,15 @@ def search_node(
 - 播放量必须是真实数据，不要编造
 
 请返回JSON格式：
-{
+{{
   "top10": [
-    {"rank": 1, "title": "真实剧名", "views": "真实播放量", "platform": "真实平台"}
+    {{"rank": 1, "title": "真实剧名", "views": "真实播放量", "platform": "真实平台"}}
   ],
-  "industry_data": {
+  "industry_data": {{
     "user_scale": "用户规模数据",
     "market_size": "市场规模数据"
-  }
-}
+  }}
+}}
 
 如果无法获取真实数据，请如实说明原因。"""
 

@@ -33,10 +33,11 @@ git checkout v1.0.0
 - ✅ Kimi自带联网搜索能力（无需额外搜索引擎）
 - ✅ 国内数据源覆盖强（微信公众号、小红书、知乎等）
 - ✅ 32k上下文窗口，支持长文本处理
-- ✅ base_url: https://api.moonshot.ai/v1，模型: moonshot-v1-32k
+- ✅ base_url: https://api.moonshot.cn/v1（可用`MOONSHOT_BASE_URL`覆盖），模型: moonshot-v1-32k
 
 ⚠️ GitHub Actions环境变量：
 - `MOONSHOT_API_KEY` - 已配置
+- `MOONSHOT_BASE_URL` - 可选，默认 `https://api.moonshot.cn/v1`
 
 ### Coze依赖限制
 **Coze Coding内部依赖无法在GitHub Actions等外部环境使用！**
