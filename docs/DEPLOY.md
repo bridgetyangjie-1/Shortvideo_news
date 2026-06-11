@@ -87,9 +87,10 @@ curl -X POST http://localhost:9000/run \
 
 ### 5.3 指定日期查询
 ```bash
+# data_date使用当日日期，如：2026-06-11
 curl -X POST http://localhost:9000/run \
   -H "Content-Type: application/json" \
-  -d '{"data_date": "2025-01-20"}'
+  -d '{"data_date": "今日日期"}'
 ```
 
 ---
