@@ -15,7 +15,7 @@ from openai import OpenAI
 logger = logging.getLogger(__name__)
 
 API_BUDGET_EXCEEDED_MESSAGE = "API 调用次数过多，已熔断"
-MAX_API_CALLS_PER_CLIENT = 5
+MAX_API_CALLS_PER_CLIENT = 30
 MAX_WEB_SEARCH_ROUNDS = 3
 
 
@@ -69,10 +69,11 @@ class MoonshotClient:
     def _create_completion_with_backoff(self, operation_name: str, **kwargs: Any) -> Any:
         """Moonshot 请求底座：仅对 429/engine_overloaded 做有限指数退避重试。"""
         last_error: Optional[Exception] = None
+        # 预算只统计一次高层请求；429 退避重试不重复扣减预算。
+        self._record_api_call()
 
         for i in range(3):
             try:
-                self._record_api_call()
                 return self.client.chat.completions.create(**kwargs)
             except Exception as exc:
                 if not is_engine_overloaded_error(exc):
@@ -94,7 +95,7 @@ class MoonshotClient:
             operation_name,
             last_error,
         )
-        raise RuntimeError(f"Kimi {operation_name} 请求连续 3 次过载失败") from last_error
+        raise RuntimeError(f"Kimi {operation_name} 请求连续 3 次 engine_overloaded 失败") from last_error
 
     def _fallback_value(self, expected_type: Optional[Type[Any]] = None) -> Any:
         if expected_type is list:
