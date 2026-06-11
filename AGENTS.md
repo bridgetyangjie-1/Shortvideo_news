@@ -6,34 +6,36 @@
 
 | 版本 | Tag | 日期 | 说明 |
 |------|-----|------|------|
-| **标准版本** | `v1.0.0` | 2026-06-09 | 首个稳定版本，未来修改基于此版本 |
-| v1.1.0 | - | 2026-06-09 | 标题改为"短剧行业数据看板"，添加作者Bridget Yang |
-| v1.1.1 | - | 2026-06-10 | AI异动点评改为"行业大事件"，生成具体事件+数据 |
-| v1.2.0 | - | 2026-06-10 | 题材分布新增标签热度，修复数据渲染问题 |
-| **当前版本** | `v1.5.0` | 2026-06-10 | **切换到Kimi (Moonshot) API替代DeepSeek/DuckDuckGo** |
+| **当前标准版本** | `v1.6.0` | 2026-06-11 | **Cursor改进合并后的稳定版本，所有后续修改基于此版本** |
+| v1.5.0 | - | 2026-06-10 | 切换到Kimi (Moonshot) API（历史版本，不再维护） |
+| v1.4.x | - | 2026-06-10 | DuckDuckGo尝试版本（历史版本，已废弃） |
+| v1.0.0 | - | 2026-06-09 | 首个稳定版本（历史版本，不再维护） |
 
-**回滚到标准版本**：
+⚠️ **重要：v1.6.0为当前标准版本，以前的版本代码和MD文件不要再碰！**
+
+**Git Tag标记**：
 ```bash
-git checkout v1.0.0
+git tag v1.6.0
+git push origin v1.6.0
 ```
 
 ---
 
 ## ⚠️ 重要注意事项
 
-### Kimi (Moonshot) API架构（v1.5.0）
-**国内联网搜索能力强，可穿透微信、知乎等数据孤岛**
+### v1.6.0标准版本（Cursor改进合并）
 
-核心改动：
-- **moonshot_api.py**: 新建MoonshotClient工具类，使用OpenAI SDK标准格式
-- **所有节点**: DeepSeekClient → MoonshotClient
-- **删除**: deepseek_api.py（已废弃）
+**核心改动（Cursor合并）**：
+- **API预算熔断**: `MAX_API_CALLS_PER_CLIENT = 30`，防止API调用过多
+- **429错误处理**: `is_engine_overloaded_error()` + backoff重试机制
+- **Web搜索轮数限制**: `MAX_WEB_SEARCH_ROUNDS = 3`
+- **观众画像fallback**: 修复解析失败时的兜底处理
+- **上下文大小限制**: 防止超出32k窗口
 
-优势：
-- ✅ Kimi自带联网搜索能力（无需额外搜索引擎）
-- ✅ 国内数据源覆盖强（微信公众号、小红书、知乎等）
-- ✅ 32k上下文窗口，支持长文本处理
-- ✅ base_url: https://api.moonshot.cn/v1（可用`MOONSHOT_BASE_URL`覆盖），模型: moonshot-v1-32k
+**MoonshotClient工具类** (`src/tools/moonshot_api.py`):
+- base_url: `https://api.moonshot.cn/v1`（可用`MOONSHOT_BASE_URL`覆盖）
+- 默认模型: `moonshot-v1-32k`
+- 支持方法: `chat()`, `search()`, `safe_chat()`, `safe_search()`
 
 ⚠️ GitHub Actions环境变量：
 - `MOONSHOT_API_KEY` - 已配置
@@ -58,30 +60,6 @@ let url = './assets/data/latest.json';  // ❌ 错误
 ```
 
 ### Pydantic对象访问规则
-**禁止对Pydantic对象使用`.get()`方法！**
-```python
-# ❌ 错误 - Pydantic对象没有.get()方法
-rankings.get('title')
-
-# ✅ 正确 - 使用属性访问
-rankings.title
-```
-
-### Gemini架构重构（v1.3.0）
-**根除"物理断层"问题 - Prompt命令搜索但Python只调用chat**
-
-核心改动：
-- **enrich_node**: 先在Python层为每部剧调用`client.search()`获取真实资料，再喂给LLM做提取
-- **insights_node**: 使用`client.search()`而非`client.chat()`，真正触发联网搜索
-
-验证结果：
-- ✅ 演员不再显示传统影视明星（刘亦菲、胡歌等）
-- ✅ 演员为真实短剧演员（徐艺真、孙樾、王格格等）
-- ✅ 洞察有爆款归因+买量建议
-
----
-
-## 项目概述
 
 - **名称**: 短剧行业数据看板
 - **作者**: Bridget Yang
