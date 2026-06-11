@@ -108,13 +108,9 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .actor-pop.female { color: #f472b6; }
 .actor-pop.male { color: #60a5fa; }
 
-/* 题材分布 */
+/* 近一周热门标签 */
 .sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
-.genre-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.genre-name { font-size: 13px; color: #cbd5e1; width: 80px; }
-.genre-bar { flex: 1; height: 8px; background: rgba(51,65,85,0.3); border-radius: 4px; overflow: hidden; }
-.genre-bar-fill { height: 100%; background: linear-gradient(90deg, #818cf8, #60a5fa); border-radius: 4px; }
-.genre-bar-fill.green { background: linear-gradient(90deg, #4ade80, #22c55e); }
+.hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 
 /* 核心观众画像 */
 .audience-layout { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
@@ -247,13 +243,8 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
   
   <div class="sub-grid">
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-chart-pie" style="color:#60a5fa;"></i> 题材分布 <span class="source-tag tier3">🤖 Kimi推理</span></div>
-      <div id="genre-container" style="margin-top: 20px;"></div>
-      <!-- 🔍 新增：标签热度分布 (v1.2) -->
-      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-        <div style="font-size: 13px; color: #a78bfa; margin-bottom: 12px;"><i class="fas fa-tags"></i> 热门标签分布</div>
-        <div id="tags-container" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
-      </div>
+      <div class="section-title">🏷️ 近一周热门标签 <span class="source-tag tier1">📊 本地统计</span></div>
+      <div id="hot-tags-container" class="hot-tags-cloud"></div>
     </div>
     
     <div class="glass-card">
@@ -326,12 +317,17 @@ const fallbackData = {
         ]
     },
     "genre_distribution": {
-        "genres": [
-            {"name": "穿越年代", "percentage": 25},
-            {"name": "都市甜宠", "percentage": 20},
-            {"name": "离婚逆袭", "percentage": 15},
-            {"name": "带球跑", "percentage": 12},
-            {"name": "古穿今", "percentage": 10}
+        "hot_tags": [
+            { "name": "穿越年代", "value": 1 },
+            { "name": "带球跑", "value": 2 },
+            { "name": "总裁追妻", "value": 1 },
+            { "name": "萌宝助攻", "value": 1 },
+            { "name": "替身新娘", "value": 1 },
+            { "name": "追妻火葬场", "value": 1 },
+            { "name": "真假千金", "value": 1 },
+            { "name": "古穿今", "value": 1 },
+            { "name": "职场逆袭", "value": 1 },
+            { "name": "离婚逆袭", "value": 1 }
         ]
     },
     "audience_profile": {
@@ -730,50 +726,49 @@ async function renderDashboard(dateParam = null) {
     document.getElementById('actors-female-container').innerHTML = (data.actors?.female || []).slice(0, 5).map(a => renderActor(a, 'female')).join('');
     document.getElementById('actors-male-container').innerHTML = (data.actors?.male || []).slice(0, 5).map(a => renderActor(a, 'male')).join('');
 
-    // 题材分布
-    if (data.genre_distribution?.genres && data.genre_distribution.genres.length > 0) {
-        // 计算总数用于百分比
-        const totalCount = data.genre_distribution.genres.reduce((sum, g) => sum + (g.count || 0), 0);
-        document.getElementById('genre-container').innerHTML = data.genre_distribution.genres.slice(0, 4).map(g => {
-            // 如果有percentage就用，否则根据count计算
-            const percentage = g.percentage || (totalCount > 0 ? Math.round((g.count / totalCount) * 100) : 0);
-            return `
-            <div class="genre-item">
-                <span class="genre-name">${g.name}</span>
-                <div class="genre-bar"><div class="genre-bar-fill" style="width:${percentage}%"></div></div>
-                <span style="font-size: 12px; color: #818cf8; font-weight: 700;">${percentage}%</span>
-            </div>`;
-        }).join('');
-    } else {
-        document.getElementById('genre-container').innerHTML = '<div style="color: #64748b; font-size: 12px;">题材分布数据待补充</div>';
-    }
+    // 近一周热门标签
+    const hotTagsContainer = document.getElementById('hot-tags-container');
+    if (hotTagsContainer) {
+        hotTagsContainer.textContent = '';
+        const hotTags = Array.isArray(data.genre_distribution?.hot_tags) ? data.genre_distribution.hot_tags : [];
 
-    // 🔍 新增：标签热度分布渲染 (v1.2)
-    const tagsContainer = document.getElementById('tags-container');
-    if (tagsContainer) {
-        const allTags = [];
-        // 合并三类标签
-        if (data.genre_distribution?.background_tags) {
-            data.genre_distribution.background_tags.forEach(t => allTags.push({...t, type: '背景', color: '#60a5fa'}));
+        if (hotTags.length > 0) {
+            hotTags.forEach((tag) => {
+                const tagName = typeof tag.name === 'string' ? tag.name.trim() : '';
+                const tagValue = Number.isInteger(tag.value) ? tag.value : parseInt(tag.value, 10);
+                if (!tagName || !Number.isFinite(tagValue)) return;
+
+                const pill = document.createElement('span');
+                pill.style.background = '#2d3436';
+                pill.style.color = '#dfe6e9';
+                pill.style.padding = '4px 10px';
+                pill.style.borderRadius = '16px';
+                pill.style.fontSize = '13px';
+                pill.style.border = '1px solid #636e72';
+                pill.style.display = 'inline-flex';
+                pill.style.alignItems = 'center';
+
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = tagName;
+
+                const valueSpan = document.createElement('span');
+                valueSpan.style.color = '#74b9ff';
+                valueSpan.style.marginLeft = '4px';
+                valueSpan.style.fontWeight = 'bold';
+                valueSpan.textContent = String(tagValue);
+
+                pill.appendChild(nameSpan);
+                pill.appendChild(valueSpan);
+                hotTagsContainer.appendChild(pill);
+            });
         }
-        if (data.genre_distribution?.theme_tags) {
-            data.genre_distribution.theme_tags.forEach(t => allTags.push({...t, type: '主题', color: '#f472b6'}));
-        }
-        if (data.genre_distribution?.setting_tags) {
-            data.genre_distribution.setting_tags.forEach(t => allTags.push({...t, type: '设定', color: '#4ade80'}));
-        }
-        
-        if (allTags.length > 0) {
-            // 按热度排序，取TOP10
-            allTags.sort((a, b) => b.heat - a.heat);
-            tagsContainer.innerHTML = allTags.slice(0, 12).map(t => 
-                `<span style="padding: 6px 12px; background: rgba(${t.color === '#60a5fa' ? '96,165,250' : t.color === '#f472b6' ? '244,114,182' : '74,222,128'}, 0.15); border: 1px solid ${t.color}; border-radius: 8px; font-size: 12px; color: ${t.color}; display: inline-flex; align-items: center; gap: 4px;">
-                    <span style="font-weight: 600;">${t.name}</span>
-                    <span style="font-size: 10px; opacity: 0.7;">${t.count}部</span>
-                </span>`
-            ).join('');
-        } else {
-            tagsContainer.innerHTML = '<span style="color: #64748b; font-size: 12px;">标签数据待补充</span>';
+
+        if (!hotTagsContainer.children.length) {
+            const emptyText = document.createElement('span');
+            emptyText.style.color = '#64748b';
+            emptyText.style.fontSize = '12px';
+            emptyText.textContent = '热门标签数据待补充';
+            hotTagsContainer.appendChild(emptyText);
         }
     }
 

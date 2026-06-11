@@ -155,36 +155,12 @@ class GenreStats(BaseModel):
     trend: str = Field(default="same", description="趋势：up/down/same")
 
 
-# ==================== 红果标签数据结构 (v1.2) ====================
-
-class TagHeat(BaseModel):
-    """标签热度"""
-    name: str = Field(..., description="标签名称（如都市、甜宠、重生）")
-    category: str = Field(default="", description="标签类别（背景/主题/设定）")
-    count: int = Field(default=0, description="出现次数")
-    avg_views: int = Field(default=0, description="平均播放量（万）")
-    heat: int = Field(default=0, description="热度指数（加权计算）")
-
-
-class TagDistribution(BaseModel):
-    """标签分布"""
-    background_tags: List[TagHeat] = Field(default=[], description="背景标签分布")
-    theme_tags: List[TagHeat] = Field(default=[], description="主题标签分布")
-    setting_tags: List[TagHeat] = Field(default=[], description="设定标签分布")
-    top_tag: str = Field(default="", description="最热门标签")
-    rising_tag: str = Field(default="", description="上升最快标签")
-
-
 class GenreDistribution(BaseModel):
-    """题材分布"""
-    genres: List[GenreStats] = Field(default=[], description="各题材统计")
-    top_genre: str = Field(default="", description="最热门题材")
-    rising_genre: str = Field(default="", description="上升最快题材")
-    background_tags: List[TagHeat] = Field(default=[], description="背景标签（现代/古代/都市等）")
-    theme_tags: List[TagHeat] = Field(default=[], description="主题标签（甜宠/复仇/玄幻等）")
-    setting_tags: List[TagHeat] = Field(default=[], description="设定标签（重生/穿越/马甲等）")
-    top_tag: str = Field(default="", description="最热门标签")
-    rising_tag: str = Field(default="", description="上升最快标签")
+    """近一周热门标签"""
+    hot_tags: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="近一周热门标签，元素格式为 {'name': 标签名, 'value': 出现次数}",
+    )
 
 
 class OverviewStats(BaseModel):
@@ -253,7 +229,7 @@ class GlobalState(BaseModel):
     insights: List[Insight] = Field(default=[], description="异动点评列表（最多2条）")
     # 新增字段
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
-    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
     emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
         default_factory=default_emotional_analysis,
         description="核心情绪与现实焦虑拆解，包含primary_emotions与target_anxieties",
@@ -290,7 +266,7 @@ class GraphOutput(BaseModel):
     period: str = Field(default="", description="数据周期（如 2026-05-15_2026-05-21）")
     # 概览统计（Dashboard页面1）
     overview: OverviewStats = Field(default_factory=OverviewStats, description="概览统计数据")
-    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布数据")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签数据")
     emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
         default_factory=default_emotional_analysis,
         description="核心情绪与现实焦虑拆解，包含primary_emotions与target_anxieties",
@@ -426,7 +402,7 @@ class PushNodeInput(BaseModel):
     daily_news: List[DailyNews] = Field(default=[], description="每日行业快讯")
     insights: List[Insight] = Field(default=[], description="异动点评列表")
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
-    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
     emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
         default_factory=default_emotional_analysis,
         description="核心情绪与现实焦虑拆解",
@@ -448,7 +424,7 @@ class PushNodeOutput(BaseModel):
     daily_news: List[DailyNews] = Field(default=[], description="每日行业快讯")
     insights: List[Insight] = Field(default=[], description="异动点评列表")
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
-    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
     emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
         default_factory=default_emotional_analysis,
         description="核心情绪与现实焦虑拆解",
@@ -504,14 +480,13 @@ class GenreStat(BaseModel):
 
 
 class GenreDistributionInput(BaseModel):
-    """题材分布节点输入"""
+    """热门标签节点输入"""
     enriched_rankings: List[DramaRanking] = Field(default=[], description="补充后的完整榜单")
-    search_results: List[Dict[str, Any]] = Field(default=[], description="搜索结果（包含标签数据）")
 
 
 class GenreDistributionOutput(BaseModel):
-    """题材分布节点输出"""
-    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布数据")
+    """热门标签节点输出"""
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签数据")
     total_count: int = Field(default=0, description="总短剧数")
     total_views: int = Field(default=0, description="总播放量(万)")
     error_message: str = Field(default="", description="错误信息")
