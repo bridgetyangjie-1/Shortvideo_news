@@ -72,7 +72,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                 result = kimi_client.search(query, max_results=3)
                 logger.info(f"Kimi搜索 '{query}' 成功")
                 search_results.append(f"【搜索: {query}】\n{result}")
-                time.sleep(3)  # 🚨 节流阀，防止并发封禁
+                time.sleep(1)  # 🚨 节流阀（Tier 7配额充足）
             except Exception as se:
                 search_error = f"news_node: Kimi搜索 '{query}' 失败: {se}"
                 logger.warning(search_error)

@@ -58,8 +58,8 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 error_message=error_message + "\n"
             )
         
-        # 搜索前3部剧（控制API调用次数）
-        for idx, drama in enumerate(basic_rankings_list[:3]):
+        # 搜索全部剧集（Tier 7配额充足）
+        for idx, drama in enumerate(basic_rankings_list):
             # 获取剧名
             title = ""
             drama_obj: Any = drama
@@ -81,7 +81,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 search_text = search_res[:2000] if len(search_res) > 2000 else search_res
                 real_search_context += f"\n【剧目：《{title}》真实检索】:\n{search_text}\n"
                 logger.info(f"搜索《{title}》成功")
-                time.sleep(2)  # 🚨 节流阀
+                time.sleep(1)  # 🚨 节流阀（Tier 7配额充足，缩短间隔）
             except Exception as e:
                 search_error = f"enrich_node: 搜索《{title}》失败: {e}"
                 logger.warning(search_error)

@@ -76,7 +76,7 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         search_query = f"短剧行业 最新爆款 融资 政策 动态 {state.data_date}"
         search_response = kimi_client.search(query=search_query, max_results=5)
         logger.info(f"Kimi搜索成功: {search_response[:300]}...")
-        time.sleep(3)  # 🚨 节流阀
+        time.sleep(1)  # 🚨 节流阀（Tier 7配额充足）
         
         # ========== 推理阶段：DeepSeek生成JSON ==========
         up_tpl = Template(up)
