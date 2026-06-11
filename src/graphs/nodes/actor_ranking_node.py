@@ -25,12 +25,21 @@ logger = logging.getLogger(__name__)
 def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> ActorRankingNodeOutput:
     """
     title: 演员榜单生成
-    desc: 使用DeepSeek根据TOP20榜单生成演员人气榜（女频TOP10、男频TOP10）
-    integrations: DeepSeek API
+    desc: 使用 Kimi 根据TOP20榜单生成演员人气榜（女频TOP10、男频TOP10）
+    integrations: Moonshot API
     """
     ctx = runtime.context
     
     try:
+        if not state.enriched_rankings:
+            error_message = "actor_ranking_node: enriched_rankings 为空，无法生成演员榜；请检查 enrich_node。"
+            logger.error(error_message)
+            return ActorRankingNodeOutput(
+                actors=ActorsData(),
+                success=False,
+                error_message=error_message + "\n"
+            )
+
         # 读取配置文件
         cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), config["metadata"]["llm_cfg"])
         with open(cfg_file, "r", encoding="utf-8") as fd:
@@ -49,7 +58,7 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
             "rankings": json.dumps(rankings_data, ensure_ascii=False, indent=2)
         })
         
-        # 初始化DeepSeek客户端
+        # 初始化 Kimi 客户端
         client = MoonshotClient()
         
         # 构建消息
@@ -58,21 +67,15 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
             {"role": "user", "content": user_prompt}
         ]
         
-        # 调用DeepSeek
-        response = client.chat(
+        # 调用 Kimi 并解析结构化输出
+        actors_data = client.structured_output(
             messages=messages,
             temperature=temperature,
             max_tokens=4000
         )
-        
-        # 提取JSON
-        json_match = re.search(r'```json\s*([\s\S]*?)\s*```', response)
-        if json_match:
-            json_str = json_match.group(1)
-        else:
-            json_str = response
-        
-        actors_data = json.loads(json_str)
+
+        if not isinstance(actors_data, dict):
+            raise ValueError(f"actor_ranking_node: Kimi 返回类型错误: {type(actors_data)}")
         
         # 转换为ActorRanking对象
         female_actors = []
@@ -114,8 +117,10 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         )
         
     except Exception as e:
-        logger.error(f"演员榜单生成失败: {str(e)}")
+        error_message = f"actor_ranking_node: 演员榜单生成或 JSON 解析失败: {e}"
+        logger.error(error_message, exc_info=True)
         return ActorRankingNodeOutput(
             actors=ActorsData(),
-            success=False
+            success=False,
+            error_message=error_message + "\n"
         )

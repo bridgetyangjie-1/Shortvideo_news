@@ -46,6 +46,10 @@ def genre_distribution_node(
         # 获取数据
         rankings = state.enriched_rankings if state.enriched_rankings else []
         search_results = state.search_results if state.search_results else []
+        input_error_message = ""
+        if not rankings:
+            input_error_message = "genre_distribution_node: enriched_rankings 为空，题材分布无法统计；请检查 enrich_node。\n"
+            logger.error(input_error_message.strip())
         
         logger.info(f"题材分布节点输入: 榜单数={len(rankings)}, 搜索结果数={len(search_results)}")
         
@@ -249,13 +253,16 @@ def genre_distribution_node(
         return GenreDistributionOutput(
             genre_distribution=genre_distribution,
             total_count=len(rankings),
-            total_views=total_views
+            total_views=total_views,
+            error_message=input_error_message
         )
         
     except Exception as e:
-        logger.error(f"统计题材分布失败: {str(e)}")
+        error_message = f"genre_distribution_node: 统计题材分布失败: {e}"
+        logger.error(error_message, exc_info=True)
         return GenreDistributionOutput(
             genre_distribution=GenreDistribution(),
             total_count=0,
-            total_views=0
+            total_views=0,
+            error_message=error_message + "\n"
         )

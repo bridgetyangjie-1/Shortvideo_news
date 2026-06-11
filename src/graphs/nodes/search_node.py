@@ -24,8 +24,8 @@ def search_node(
 ) -> SearchNodeOutput:
     """
     title: 📊 抓取短剧行业数据
-    desc: 使用DeepSeek联网搜索从多个公开数据源搜索短剧榜单信息
-    integrations: DeepSeek API
+    desc: 使用 Kimi 联网搜索从多个公开数据源搜索短剧榜单信息
+    integrations: Moonshot API
     """
     ctx = runtime.context
     
@@ -35,7 +35,7 @@ def search_node(
         data_date = datetime.now().strftime("%Y-%m-%d")
     
     try:
-        # 初始化DeepSeek客户端
+        # 初始化 Kimi 客户端
         client = MoonshotClient()
         
         # 构建搜索提示词 - 强调真实数据
@@ -68,7 +68,7 @@ def search_node(
 
 如果无法获取真实数据，请如实说明原因。"""
 
-        # 执行搜索 - 使用 DuckDuckGo
+        # 执行 Kimi 官方 $web_search 联网搜索
         logger.info(f"开始搜索短剧行业数据，日期: {data_date}")
         response = client.search(query=search_prompt, max_results=5)
         
@@ -81,17 +81,17 @@ def search_node(
         logger.info(f"标签数据搜索完成，长度: {len(tag_response)} 字符")
         
         # 处理搜索结果
-        # DeepSeek的搜索会返回整合后的文本，我们需要将其转换为结构化格式
+        # Kimi 搜索会返回整合后的文本，我们需要将其转换为结构化格式
         search_results: List[Dict[str, Any]] = []
         
         # 将搜索结果作为一条整合记录
         search_results.append({
             "keyword": "短剧行业综合数据",
             "title": f"短剧行业数据报告 {data_date}",
-            "url": "deepseek-search",
+            "url": "moonshot-web-search",
             "snippet": response[:500] if len(response) > 500 else response,
             "summary": response,
-            "site_name": "DeepSeek联网搜索",
+            "site_name": "Kimi联网搜索",
             "publish_time": data_date,
             "raw_content": response  # 保留完整内容供后续节点处理
         })
@@ -100,10 +100,10 @@ def search_node(
         search_results.append({
             "keyword": "红果平台标签数据",
             "title": f"红果短剧标签分布 {data_date}",
-            "url": "deepseek-search-tags",
+            "url": "moonshot-web-search-tags",
             "snippet": tag_response[:500] if len(tag_response) > 500 else tag_response,
             "summary": tag_response,
-            "site_name": "DeepSeek联网搜索",
+            "site_name": "Kimi联网搜索",
             "publish_time": data_date,
             "raw_content": tag_response,  # 保留完整内容供标签分析节点处理
             "type": "tag_data"  # 标记为标签数据
@@ -118,9 +118,11 @@ def search_node(
         )
         
     except Exception as e:
-        logger.error(f"搜索失败: {str(e)}")
+        error_message = f"search_node: Kimi 联网搜索失败: {e}"
+        logger.error(error_message, exc_info=True)
         return SearchNodeOutput(
             data_date=data_date,
             search_results=[],
-            success=False
+            success=False,
+            error_message=error_message + "\n"
         )

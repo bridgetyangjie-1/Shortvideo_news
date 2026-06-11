@@ -85,6 +85,7 @@ class Insight(BaseModel):
     icon: str = Field(default="", description="emoji图标")
     title: str = Field(default="", description="洞察标题（10字以内）")
     content: str = Field(default="", description="洞察详细描述（150-200字）")
+    source: str = Field(default="", description="洞察来源说明")
 
 
 class Innovation(BaseModel):
@@ -239,7 +240,7 @@ class GlobalState(BaseModel):
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     quality_score: float = Field(default=0.0, description="数据质量分数 (0-100)")
-    error_message: str = Field(default="", description="错误信息")
+    error_message: Annotated[str, operator.add] = Field(default="", description="错误信息")
 
 
 # ==================== 工作流输入输出 ====================
@@ -295,6 +296,7 @@ class SearchNodeOutput(BaseModel):
     """数据抓取节点输出"""
     data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
     search_results: List[Dict[str, Any]] = Field(default=[], description="搜索结果列表")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 初步处理节点 ====================
@@ -309,6 +311,7 @@ class ProcessNodeOutput(BaseModel):
     """初步处理节点输出"""
     basic_rankings: List[Dict[str, Any]] = Field(default=[], description="基础榜单数据")
     quality_score: float = Field(default=0.0, description="数据质量分数")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 数据补充节点 ====================
@@ -322,6 +325,7 @@ class EnrichNodeInput(BaseModel):
 class EnrichNodeOutput(BaseModel):
     """数据补充节点输出"""
     enriched_rankings: List[DramaRanking] = Field(default=[], description="补充后的完整榜单")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 演员榜单生成节点 ====================
@@ -334,6 +338,7 @@ class ActorRankingNodeInput(BaseModel):
 class ActorRankingNodeOutput(BaseModel):
     """演员榜单生成节点输出"""
     actors: ActorsData = Field(default_factory=ActorsData, description="演员榜单")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 行业数据节点 ====================
@@ -348,6 +353,7 @@ class IndustryNodeOutput(BaseModel):
     """行业数据节点输出"""
     industry: IndustryData = Field(default_factory=IndustryData, description="行业数据")
     platform: PlatformData = Field(default_factory=PlatformData, description="平台数据")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 洞察生成节点 ====================
@@ -363,6 +369,7 @@ class InsightsNodeInput(BaseModel):
 class InsightsNodeOutput(BaseModel):
     """洞察生成节点输出"""
     insights: List[Insight] = Field(default=[], description="异动点评列表")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 每日快讯节点 ====================
@@ -375,6 +382,7 @@ class NewsNodeInput(BaseModel):
 class NewsNodeOutput(BaseModel):
     """每日快讯节点输出"""
     daily_news: List[DailyNews] = Field(default=[], description="每日行业快讯")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 数据推送节点 ====================
@@ -440,6 +448,7 @@ class AudienceProfileInput(BaseModel):
 class AudienceProfileOutput(BaseModel):
     """观众画像节点输出"""
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 题材分布节点 ====================
@@ -467,6 +476,7 @@ class GenreDistributionOutput(BaseModel):
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布数据")
     total_count: int = Field(default=0, description="总短剧数")
     total_views: int = Field(default=0, description="总播放量(万)")
+    error_message: str = Field(default="", description="错误信息")
 
 
 # ==================== 历史数据节点 ====================
@@ -498,3 +508,4 @@ class HistoryDataInput(BaseModel):
 class HistoryDataOutput(BaseModel):
     """历史数据节点输出"""
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
+    error_message: str = Field(default="", description="错误信息")

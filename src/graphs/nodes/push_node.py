@@ -100,11 +100,14 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     }
     
     # 保存最新数据
-    _save_json_file(output_data, DATA_FILE_PATH)
+    error_messages: List[str] = []
+    if not _save_json_file(output_data, DATA_FILE_PATH):
+        error_messages.append(f"push_node: 保存最新数据失败: {DATA_FILE_PATH}")
     
     # 保存历史数据（按日期归档）
     history_file = os.path.join(HISTORY_DIR, f"{data_date}.json")
-    _save_json_file(output_data, history_file)
+    if not _save_json_file(output_data, history_file):
+        error_messages.append(f"push_node: 保存历史数据失败: {history_file}")
     
     # 更新历史索引
     all_history = _load_all_history()
@@ -120,7 +123,8 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         all_history["dates"] = all_history["dates"][-30:]
     
     # 保存历史索引
-    _save_json_file(all_history, ALL_HISTORY_PATH)
+    if not _save_json_file(all_history, ALL_HISTORY_PATH):
+        error_messages.append(f"push_node: 保存历史索引失败: {ALL_HISTORY_PATH}")
     
     logger.info(f"✅ 数据输出完成 - 最新数据已保存，历史数据已归档")
     
@@ -140,5 +144,5 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         genre_distribution=state.genre_distribution,
         play_trend=state.play_trend,
         quality_score=state.quality_score or 60.0,
-        error_message=state.error_message or ""
+        error_message=(state.error_message or "") + (("\n".join(error_messages) + "\n") if error_messages else "")
     )
