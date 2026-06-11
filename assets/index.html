@@ -390,11 +390,12 @@ async function renderDashboard(dateParam = null) {
     document.getElementById('kpi-drama').innerText = data.industry?.drama_count || '--';
     document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas || '--';
 
-    // 行业快讯（添加原文链接）
+    // 行业快讯（添加原文链接和洞察分析）
     document.getElementById('news-container').innerHTML = (data.daily_news || []).map(n => {
         let typeClass = n.type === '预警' ? 'warn' : n.type === '商业' ? 'biz' : 'data';
         let linkHtml = n.source_url ? `<a href="${n.source_url}" target="_blank" style="font-size: 11px; color: #818cf8; margin-left: 8px; text-decoration: none;">原文链接</a>` : '';
-        return `<div class="news-item" style="flex-direction: column; align-items: flex-start;"><span class="news-type ${typeClass}">${n.type}</span><span class="news-content" style="font-size: 13px; color: #cbd5e1;">${n.content}${linkHtml}</span></div>`;
+        let insightHtml = n.insight ? `<div style="font-size: 12px; color: #94a3b8; margin-top: 6px; padding-left: 8px; border-left: 2px solid #4f46e5; line-height: 1.5;">💡 ${n.insight}</div>` : '';
+        return `<div class="news-item" style="flex-direction: column; align-items: flex-start;"><span class="news-type ${typeClass}">${n.type}</span><span class="news-content" style="font-size: 13px; color: #cbd5e1;">${n.content}${linkHtml}</span>${insightHtml}</div>`;
     }).join('');
 
     // 榜单 (恢复制作厂牌)

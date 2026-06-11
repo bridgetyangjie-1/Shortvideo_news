@@ -101,6 +101,7 @@ class DailyNews(BaseModel):
     icon: str = Field(default="📊", description="emoji图标")
     title: str = Field(default="", description="新闻标题（15字以内）")
     content: str = Field(default="", description="快讯内容缩写（不超过100字）")
+    insight: str = Field(default="", description="深度洞察分析（100字左右）")
     source_url: str = Field(default="", description="原文地址链接")
 
 

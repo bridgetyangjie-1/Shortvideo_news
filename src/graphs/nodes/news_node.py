@@ -149,6 +149,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                         icon=str(item.get("icon", "📊")),
                         title=str(item.get("title", ""))[:15],
                         content=str(item.get("content", ""))[:100],
+                        insight=str(item.get("insight", ""))[:150],
                         source_url=str(item.get("source_url") or item.get("source", "") or "https://www.newwanr.com")
                     )
                     daily_news.append(news_item)
