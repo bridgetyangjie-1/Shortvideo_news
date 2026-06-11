@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>短剧行业数据看板 - Bridget Yang</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -114,6 +115,13 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .genre-bar { flex: 1; height: 8px; background: rgba(51,65,85,0.3); border-radius: 4px; overflow: hidden; }
 .genre-bar-fill { height: 100%; background: linear-gradient(90deg, #818cf8, #60a5fa); border-radius: 4px; }
 .genre-bar-fill.green { background: linear-gradient(90deg, #4ade80, #22c55e); }
+
+/* 核心观众画像 */
+.audience-layout { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+.audience-charts { display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap; }
+.audience-chart { width: 180px; height: 180px; background: rgba(15, 23, 42, 0.36); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; }
+.audience-traits { display: flex; flex-wrap: wrap; gap: 8px; }
+.audience-trait { padding: 5px 10px; background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.22); border-radius: 6px; font-size: 11px; color: #f472b6; line-height: 1.4; }
 
 /* 响应式 */
 @media (max-width: 1200px) { .main-grid { grid-template-columns: 1fr; } .sub-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -246,8 +254,14 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     </div>
     
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像 <span class="source-tag tier3">🤖 Kimi推理</span></div>
-      <div id="audience-container" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;"></div>
+      <div class="section-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div class="audience-layout">
+        <div class="audience-charts">
+          <div id="genderChart" class="audience-chart"></div>
+          <div id="ageChart" class="audience-chart"></div>
+        </div>
+        <div id="audience-container" class="audience-traits"></div>
+      </div>
     </div>
     
     <div class="glass-card">
@@ -317,7 +331,17 @@ const fallbackData = {
             {"name": "古穿今", "percentage": 10}
         ]
     },
-    "audience_profile": { "traits": ["女性主导", "下沉市场", "碎片化观看", "iOS 58%", "20:00-22:00高峰"], "peak_viewing_hours": "20:00-22:00", "avg_watch_duration": "45分钟" },
+    "audience_profile": {
+        "gender": { "female": 78, "male": 22 },
+        "age": { "18-24": 22, "25-34": 43, "35-44": 25, "45+": 10 },
+        "regions": [
+            { "name": "广东", "value": 15.5 },
+            { "name": "江苏", "value": 11.8 },
+            { "name": "浙江", "value": 9.6 },
+            { "name": "山东", "value": 8.4 }
+        ],
+        "traits": ["偏好强反转高密度剧情", "关注女性逆袭与情绪补偿", "习惯通勤睡前碎片化追更", "对复仇打脸和身份揭晓爽点敏感"]
+    },
     "platform": { "apps": [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}] },
     "play_trend": {
         "daily": [
@@ -359,6 +383,143 @@ async function loadHistoryDates() {
         });
         select.dataset.bound = 'true';
     }
+}
+
+const mockAudienceProfile = {
+    gender: { female: 78, male: 22 },
+    age: { "18-24": 22, "25-34": 43, "35-44": 25, "45+": 10 },
+    regions: [
+        { name: "广东", value: 15.5 },
+        { name: "江苏", value: 11.8 },
+        { name: "浙江", value: 9.6 },
+        { name: "山东", value: 8.4 }
+    ],
+    traits: ["偏好强反转高密度剧情", "关注女性逆袭与情绪补偿", "习惯通勤睡前碎片化追更", "对复仇打脸和身份揭晓爽点敏感"]
+};
+
+function cloneAudienceProfile(profile) {
+    return JSON.parse(JSON.stringify(profile));
+}
+
+function safePercent(value, fallback = 0) {
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (typeof value === 'string') {
+        const matched = value.replace(',', '').match(/-?\d+(\.\d+)?/);
+        if (matched) return Number(matched[0]);
+    }
+    return fallback;
+}
+
+function normalizeAudienceProfile(profile) {
+    const source = profile && typeof profile === 'object' ? profile : {};
+    const hasNewGender = source.gender && typeof source.gender === 'object';
+    const hasNewAge = source.age && typeof source.age === 'object';
+
+    if (!hasNewGender || !hasNewAge || !Array.isArray(source.traits)) {
+        return cloneAudienceProfile(mockAudienceProfile);
+    }
+
+    const traits = source.traits
+        .filter((item) => typeof item === 'string' && item.trim())
+        .map((item) => item.trim());
+    mockAudienceProfile.traits.forEach((item) => {
+        if (traits.length < 4 && !traits.includes(item)) traits.push(item);
+    });
+
+    return {
+        gender: {
+            female: safePercent(source.gender.female, mockAudienceProfile.gender.female),
+            male: safePercent(source.gender.male, mockAudienceProfile.gender.male)
+        },
+        age: {
+            "18-24": safePercent(source.age["18-24"], mockAudienceProfile.age["18-24"]),
+            "25-34": safePercent(source.age["25-34"], mockAudienceProfile.age["25-34"]),
+            "35-44": safePercent(source.age["35-44"], mockAudienceProfile.age["35-44"]),
+            "45+": safePercent(source.age["45+"], mockAudienceProfile.age["45+"])
+        },
+        regions: Array.isArray(source.regions) ? source.regions : cloneAudienceProfile(mockAudienceProfile.regions),
+        traits: traits.slice(0, 4)
+    };
+}
+
+function renderAudienceProfile(rawProfile) {
+    const profile = normalizeAudienceProfile(rawProfile);
+    const traitsContainer = document.getElementById('audience-container');
+    traitsContainer.innerHTML = profile.traits.map(t => `<span class="audience-trait">${t}</span>`).join('');
+
+    if (!window.echarts) {
+        console.warn('ECharts未加载，跳过观众画像图表渲染');
+        return;
+    }
+
+    const genderEl = document.getElementById('genderChart');
+    const ageEl = document.getElementById('ageChart');
+    if (!genderEl || !ageEl) return;
+
+    if (window.genderChartInstance) window.genderChartInstance.dispose();
+    if (window.ageChartInstance) window.ageChartInstance.dispose();
+
+    const female = profile.gender.female;
+    const male = profile.gender.male;
+    window.genderChartInstance = echarts.init(genderEl, 'dark');
+    window.genderChartInstance.setOption({
+        backgroundColor: 'transparent',
+        title: {
+            text: `${female}%`,
+            subtext: '女性占比',
+            left: 'center',
+            top: '36%',
+            textStyle: { color: '#f472b6', fontSize: 22, fontWeight: 800 },
+            subtextStyle: { color: '#94a3b8', fontSize: 11 }
+        },
+        tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
+        series: [{
+            name: '性别分布',
+            type: 'pie',
+            radius: ['62%', '82%'],
+            center: ['50%', '50%'],
+            avoidLabelOverlap: true,
+            label: { show: false, position: 'center' },
+            labelLine: { show: false },
+            data: [
+                { value: female, name: '女性', itemStyle: { color: '#f472b6' } },
+                { value: male, name: '男性', itemStyle: { color: '#60a5fa' } }
+            ]
+        }]
+    });
+
+    const ageKeys = ["18-24", "25-34", "35-44", "45+"];
+    window.ageChartInstance = echarts.init(ageEl, 'dark');
+    window.ageChartInstance.setOption({
+        backgroundColor: 'transparent',
+        grid: { left: 32, right: 12, top: 28, bottom: 28 },
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}%' },
+        xAxis: {
+            type: 'category',
+            data: ageKeys,
+            axisLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.35)' } },
+            axisTick: { show: false },
+            axisLabel: { color: '#94a3b8', fontSize: 10 }
+        },
+        yAxis: {
+            type: 'value',
+            splitLine: { show: false },
+            axisLabel: { color: '#64748b', fontSize: 10, formatter: '{value}%' }
+        },
+        series: [{
+            name: '年龄分布',
+            type: 'bar',
+            barWidth: 18,
+            data: ageKeys.map(key => profile.age[key]),
+            itemStyle: {
+                borderRadius: [6, 6, 0, 0],
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: '#a78bfa' },
+                    { offset: 1, color: '#60a5fa' }
+                ])
+            }
+        }]
+    });
 }
 
 async function renderDashboard(dateParam = null) {
@@ -481,13 +642,7 @@ async function renderDashboard(dateParam = null) {
     }
 
     // 观众画像
-    if (data.audience_profile?.traits && data.audience_profile.traits.length > 0) {
-        document.getElementById('audience-container').innerHTML = data.audience_profile.traits.map(t => 
-            `<span style="padding: 4px 10px; background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.2); border-radius: 6px; font-size: 11px; color: #f472b6;">${t}</span>`
-        ).join('');
-    } else {
-        document.getElementById('audience-container').innerHTML = '<span style="color: #64748b; font-size: 12px;">观众画像数据待补充</span>';
-    }
+    renderAudienceProfile(data.audience_profile);
 
     // 平台份额
     if (data.platform?.apps && data.platform.apps.length > 0) {
@@ -533,6 +688,10 @@ async function renderDashboard(dateParam = null) {
 
 loadHistoryDates();
 renderDashboard();
+window.addEventListener('resize', () => {
+    if (window.genderChartInstance) window.genderChartInstance.resize();
+    if (window.ageChartInstance) window.ageChartInstance.resize();
+});
 </script>
 
 <!-- 作者声明 -->

@@ -12,11 +12,9 @@ from coze_coding_utils.runtime_ctx.context import Context
 from tools.deepseek_api import DeepSeekClient
 
 from graphs.state import (
-    AgeDistribution,
     AudienceProfile,
     AudienceProfileInput,
     AudienceProfileOutput,
-    RegionDistribution,
 )
 
 logger = logging.getLogger(__name__)
@@ -29,30 +27,26 @@ DEFAULT_TRAITS = [
     "对复仇打脸和身份揭晓爽点敏感",
 ]
 
+DEFAULT_GENDER = {"female": 78, "male": 22}
+DEFAULT_AGE = {"18-24": 22, "25-34": 43, "35-44": 25, "45+": 10}
+DEFAULT_REGIONS = [
+    {"name": "广东", "value": 15.5},
+    {"name": "江苏", "value": 11.8},
+    {"name": "浙江", "value": 9.6},
+    {"name": "山东", "value": 8.4},
+]
 
-def _default_regions() -> List[RegionDistribution]:
-    return [
-        RegionDistribution(name="广东", value=15.5),
-        RegionDistribution(name="江苏", value=11.8),
-        RegionDistribution(name="浙江", value=9.6),
-        RegionDistribution(name="山东", value=8.4),
-    ]
+
+def _default_regions() -> List[Dict[str, Any]]:
+    return [region.copy() for region in DEFAULT_REGIONS]
 
 
 def _default_audience_profile() -> AudienceProfile:
     return AudienceProfile(
-        gender_female=78,
-        gender_male=22,
-        age_distribution=AgeDistribution(
-            age_18_24=22,
-            age_25_34=43,
-            age_35_44=25,
-            age_45_plus=10,
-        ),
-        top_regions=_default_regions(),
-        peak_viewing_hours="20:00-23:30",
-        avg_watch_duration="35分钟",
-        traits=DEFAULT_TRAITS,
+        gender=DEFAULT_GENDER.copy(),
+        age=DEFAULT_AGE.copy(),
+        regions=_default_regions(),
+        traits=DEFAULT_TRAITS.copy(),
     )
 
 
@@ -93,7 +87,7 @@ def _safe_text(value: Any, default: str) -> str:
 def _safe_traits(value: Any) -> List[str]:
     try:
         if not isinstance(value, list):
-            return DEFAULT_TRAITS
+            return DEFAULT_TRAITS.copy()
 
         traits = []
         for item in value:
@@ -104,9 +98,15 @@ def _safe_traits(value: Any) -> List[str]:
                 if isinstance(text, str) and text.strip():
                     traits.append(text.strip())
 
-        return (traits[:4] or DEFAULT_TRAITS)[:4]
+        for default_trait in DEFAULT_TRAITS:
+            if len(traits) >= 4:
+                break
+            if default_trait not in traits:
+                traits.append(default_trait)
+
+        return traits[:4]
     except Exception:
-        return DEFAULT_TRAITS
+        return DEFAULT_TRAITS.copy()
 
 
 def _extract_region_value(region: Dict[str, Any]) -> Any:
@@ -119,12 +119,12 @@ def _extract_region_value(region: Dict[str, Any]) -> Any:
         return 0.0
 
 
-def _build_top_regions(raw_regions: Any) -> List[RegionDistribution]:
+def _build_top_regions(raw_regions: Any) -> List[Dict[str, Any]]:
     try:
         if not isinstance(raw_regions, list):
             return _default_regions()
 
-        top_regions: List[RegionDistribution] = []
+        top_regions: List[Dict[str, Any]] = []
         for region in raw_regions[:5]:
             if not isinstance(region, dict):
                 continue
@@ -139,7 +139,7 @@ def _build_top_regions(raw_regions: Any) -> List[RegionDistribution]:
                 continue
 
             value = float(_safe_number(_extract_region_value(region), 0.0))
-            top_regions.append(RegionDistribution(name=name, value=value))
+            top_regions.append({"name": name, "value": value})
 
         return top_regions or _default_regions()
     except Exception:
@@ -228,13 +228,23 @@ def _build_rankings_context(state: AudienceProfileInput) -> str:
                 "题材未知",
             )
             tags_text = _format_list(
-                _get_field(item, "tags", "爽点", "hot_tags", default=[]),
+                _get_field(item, "core_trope", "tags", "爽点", "hot_tags", default=[]),
                 "暂无标签",
+            )
+            female_lead = _safe_text(
+                _get_field(item, "female_lead", "女主", "女演员", default=""),
+                "",
+            )
+            male_lead = _safe_text(
+                _get_field(item, "male_lead", "男主", "男演员", default=""),
+                "",
             )
             actors_text = _format_list(
                 _get_field(item, "actors", "主演", default=[]),
                 "暂无主演信息",
             )
+            if female_lead or male_lead:
+                actors_text = f"{female_lead or '女主待补'} / {male_lead or '男主待补'}"
 
             lines.append(
                 f"{idx}. 《{title}》｜题材：{genre}｜爽点/标签：{tags_text}｜主演：{actors_text}"
@@ -285,51 +295,44 @@ def _build_prompt(rankings_context: str) -> str:
 """
 
 
+def _build_gender(raw_gender: Any) -> Dict[str, float]:
+    try:
+        gender = _as_dict(raw_gender)
+        female = float(_safe_number(gender.get("female"), DEFAULT_GENDER["female"]))
+        male = float(_safe_number(gender.get("male"), DEFAULT_GENDER["male"]))
+        if female <= 0 and male <= 0:
+            return DEFAULT_GENDER.copy()
+        return {"female": female, "male": male}
+    except Exception:
+        return DEFAULT_GENDER.copy()
+
+
+def _build_age(raw_age: Any) -> Dict[str, float]:
+    try:
+        age = _as_dict(raw_age)
+        result = {
+            "18-24": float(_safe_number(age.get("18-24"), DEFAULT_AGE["18-24"])),
+            "25-34": float(_safe_number(age.get("25-34"), DEFAULT_AGE["25-34"])),
+            "35-44": float(_safe_number(age.get("35-44"), DEFAULT_AGE["35-44"])),
+            "45+": float(_safe_number(age.get("45+"), DEFAULT_AGE["45+"])),
+        }
+        if sum(result.values()) <= 0:
+            return DEFAULT_AGE.copy()
+        return result
+    except Exception:
+        return DEFAULT_AGE.copy()
+
+
 def _build_audience_profile(profile_data: Any) -> AudienceProfile:
     try:
         safe_profile = _as_dict(profile_data)
-        default_profile = _default_audience_profile()
-        gender = _as_dict(safe_profile.get("gender"))
-        age = _as_dict(safe_profile.get("age"))
-
-        age_distribution = AgeDistribution(
-            age_18_24=_safe_number(
-                age.get("18-24"),
-                default_profile.age_distribution.age_18_24,
-            ),
-            age_25_34=_safe_number(
-                age.get("25-34"),
-                default_profile.age_distribution.age_25_34,
-            ),
-            age_35_44=_safe_number(
-                age.get("35-44"),
-                default_profile.age_distribution.age_35_44,
-            ),
-            age_45_plus=_safe_number(
-                age.get("45+"),
-                default_profile.age_distribution.age_45_plus,
-            ),
-        )
+        if not safe_profile:
+            return _default_audience_profile()
 
         return AudienceProfile(
-            gender_female=_safe_number(
-                gender.get("female"),
-                default_profile.gender_female,
-            ),
-            gender_male=_safe_number(
-                gender.get("male"),
-                default_profile.gender_male,
-            ),
-            age_distribution=age_distribution,
-            top_regions=_build_top_regions(safe_profile.get("regions")),
-            peak_viewing_hours=_safe_text(
-                safe_profile.get("peak_hours"),
-                default_profile.peak_viewing_hours,
-            ),
-            avg_watch_duration=_safe_text(
-                safe_profile.get("avg_duration"),
-                default_profile.avg_watch_duration,
-            ),
+            gender=_build_gender(safe_profile.get("gender")),
+            age=_build_age(safe_profile.get("age")),
+            regions=_build_top_regions(safe_profile.get("regions")),
             traits=_safe_traits(safe_profile.get("traits")),
         )
     except Exception as exc:

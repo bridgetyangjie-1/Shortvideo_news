@@ -123,16 +123,27 @@ class RegionDistribution(BaseModel):
 
 class AudienceProfile(BaseModel):
     """观众画像"""
-    gender_female: int = Field(default=0, description="女性用户占比")
-    gender_male: int = Field(default=0, description="男性用户占比")
-    age_distribution: AgeDistribution = Field(default_factory=AgeDistribution, description="年龄分布")
-    top_regions: List[RegionDistribution] = Field(default=[], description="TOP地域分布")
-    peak_viewing_hours: str = Field(default="", description="高峰观看时段")
-    avg_watch_duration: str = Field(default="", description="平均观看时长")
-    # 新增字段
-    device: Dict[str, int] = Field(default_factory=lambda: {"ios": 58, "android": 42}, description="设备分布")
-    time: List[Dict[str, Any]] = Field(default_factory=list, description="观看时段分布")
-    traits: List[str] = Field(default_factory=list, description="用户特征标签")
+    gender: Dict[str, float] = Field(
+        default_factory=lambda: {"female": 0, "male": 0},
+        description="性别分布百分比，包含female/male",
+    )
+    age: Dict[str, float] = Field(
+        default_factory=lambda: {"18-24": 0, "25-34": 0, "35-44": 0, "45+": 0},
+        description="年龄分布百分比，包含18-24/25-34/35-44/45+",
+    )
+    regions: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="地域分布，元素包含name省份和value比例",
+    )
+    traits: List[str] = Field(
+        default_factory=lambda: [
+            "偏好强反转高密度剧情",
+            "关注女性成长与逆袭补偿",
+            "习惯碎片化连续追更",
+            "对身份反差爽点敏感",
+        ],
+        description="4个具体受众特征标签",
+    )
 
 
 class GenreStats(BaseModel):
@@ -440,6 +451,7 @@ class GenderDistribution(BaseModel):
 class AudienceProfileInput(BaseModel):
     """观众画像节点输入"""
     data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
+    enriched_rankings: List[DramaRanking] = Field(default_factory=list, description="补充后的完整榜单")
 
 
 class AudienceProfileOutput(BaseModel):
