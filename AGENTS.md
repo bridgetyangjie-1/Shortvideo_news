@@ -40,6 +40,7 @@ GitHub Actions 运行时不要依赖 Coze 内部 SDK。`src/main.py` 和 Coze �
 ### 榜单与演员
 
 - 剧集榜单目标为 TOP20。
+- 前端“榜单 TOP8”必须严格显示 8 条；`rankings` 少于 8 条时必须补齐或拒绝发布，禁止直接覆盖 `latest.json`。
 - 演员榜为女频 TOP10 + 男频 TOP10。
 - 演员搜索优先多轮检索：
   1. `短剧《{title}》主演女演员男主角`

@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
+from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from graphs.state import (
     PushNodeInput, 
     PushNodeOutput,
@@ -79,6 +80,38 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     # 获取数据日期
     data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
     generated_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S+08:00")
+
+    error_messages: List[str] = []
+    try:
+        ranking_dicts, count_warning = ensure_top_rankings(
+            state.enriched_rankings,
+            data_date=data_date,
+            workspace_path=WORKSPACE_PATH,
+        )
+        output_rankings = [DramaRanking(**item) for item in ranking_dicts]
+        if count_warning:
+            logger.warning("push_node: %s", count_warning)
+            error_messages.append(f"push_node: {count_warning}")
+    except RankingCountError as count_error:
+        error_message = f"push_node: {count_error}"
+        logger.error(error_message)
+        return PushNodeOutput(
+            success=False,
+            output_path=DATA_FILE_PATH,
+            data_date=data_date,
+            generated_at=generated_at,
+            industry=state.industry,
+            rankings=[],
+            actors=state.actors,
+            platform=state.platform,
+            daily_news=state.daily_news,
+            insights=state.insights,
+            audience_profile=state.audience_profile,
+            genre_distribution=state.genre_distribution,
+            play_trend=state.play_trend,
+            quality_score=0.0,
+            error_message=(state.error_message or "") + error_message + "\n"
+        )
     
     # 构建完整数据结构
     output_data = {
@@ -87,7 +120,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "data_date": data_date,
         "genre_distribution": state.genre_distribution.model_dump() if state.genre_distribution else {},
         "industry": state.industry.model_dump() if state.industry else {},
-        "rankings": [r.model_dump() for r in state.enriched_rankings] if state.enriched_rankings else [],
+        "rankings": [r.model_dump() for r in output_rankings],
         "actors": state.actors.model_dump() if state.actors else {"female": [], "male": []},
         "platform": state.platform.model_dump() if state.platform else {},
         "audience_profile": state.audience_profile.model_dump() if state.audience_profile else {},
@@ -99,7 +132,6 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     }
     
     # 保存最新数据
-    error_messages: List[str] = []
     if not _save_json_file(output_data, DATA_FILE_PATH):
         error_messages.append(f"push_node: 保存最新数据失败: {DATA_FILE_PATH}")
     
@@ -134,7 +166,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         data_date=data_date,
         generated_at=generated_at,
         industry=state.industry,
-        rankings=[r for r in state.enriched_rankings] if state.enriched_rankings else [],
+        rankings=output_rankings,
         actors=state.actors,
         platform=state.platform,
         daily_news=state.daily_news,

@@ -19,6 +19,7 @@ except ImportError:
     def is_api_budget_error(exc: Exception) -> bool:
         return str(exc) == "API \u8c03\u7528\u6b21\u6570\u8fc7\u591a\uff0c\u5df2\u718f\u65ad"
 from jinja2 import Template
+from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from graphs.state import ProcessNodeInput, ProcessNodeOutput
 
 
@@ -126,6 +127,27 @@ def process_node(
                 error_message=error_message + "\n"
             )
         
+        count_warning = ""
+
+        try:
+            rankings, count_warning = ensure_top_rankings(
+                rankings,
+                data_date=data_date,
+                workspace_path=os.getenv("COZE_WORKSPACE_PATH", "."),
+            )
+        except RankingCountError as count_error:
+            error_message = f"process_node: {count_error}"
+            logger.error(error_message)
+            return ProcessNodeOutput(
+                basic_rankings=[],
+                quality_score=0.0,
+                success=False,
+                error_message=error_message + "\n"
+            )
+
+        if count_warning:
+            logger.warning("process_node: %s", count_warning)
+
         # 计算数据质量分数
         if quality_score == 0:
             required_fields = ["rank", "title", "views"]
@@ -138,7 +160,8 @@ def process_node(
         return ProcessNodeOutput(
             basic_rankings=rankings,
             quality_score=quality_score,
-            success=True
+            success=True,
+            error_message=(count_warning + "\n") if count_warning else ""
         )
         
     except Exception as e:
