@@ -10,7 +10,7 @@
 
 | 配置项 | 值 |
 |--------|-----|
-| base_url | https://api.moonshot.ai/v1 |
+| base_url | https://api.moonshot.cn/v1（可用 `MOONSHOT_BASE_URL` 覆盖） |
 | 默认模型 | moonshot-v1-32k |
 | 环境变量 | MOONSHOT_API_KEY |
 

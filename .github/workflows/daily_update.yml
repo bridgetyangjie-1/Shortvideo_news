@@ -31,6 +31,7 @@ jobs:
       - name: Run workflow
         env:
           MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
+          MOONSHOT_BASE_URL: ${{ secrets.MOONSHOT_BASE_URL }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           export PYTHONPATH="${GITHUB_WORKSPACE}/src"
