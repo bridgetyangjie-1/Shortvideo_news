@@ -58,8 +58,24 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         up = _cfg.get("up", "")
         temperature = _cfg.get("config", {}).get("temperature", 0.3)
         
-        # 将榜单数据转换为JSON字符串
-        rankings_data = [r.model_dump() for r in state.enriched_rankings]
+        # 将榜单数据转换为普通字典，兼容 Pydantic 模型和历史 dict 输入。
+        rankings_data = []
+        for r in state.enriched_rankings:
+            if hasattr(r, "model_dump"):
+                rankings_data.append(r.model_dump())
+            elif isinstance(r, dict):
+                rankings_data.append(r)
+            else:
+                logger.warning(f"actor_ranking_node: 跳过无法序列化的榜单项: {type(r)}")
+
+        if not rankings_data:
+            error_message = "actor_ranking_node: enriched_rankings 无可用数据，无法生成演员榜。"
+            logger.error(error_message)
+            return ActorRankingNodeOutput(
+                actors=ActorsData(),
+                success=False,
+                error_message=error_message + "\n"
+            )
         
         # 渲染用户提示词
         up_tpl = Template(up)
@@ -73,7 +89,7 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         
         # 先用Kimi搜索补充演员信息（小红书/抖音等备用来源）
         search_context = ""
-        for ranking in state.enriched_rankings[:20]:
+        for ranking in rankings_data[:20]:
             if ranking.get("female_lead") == "未知" or ranking.get("male_lead") == "未知":
                 title = ranking.get("title", "")
                 search_query = f"短剧《{title}》演员主演 小红书抖音"
