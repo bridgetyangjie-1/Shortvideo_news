@@ -1,35 +1,33 @@
 """
-数据补充节点 - Gemini架构重构：先搜后问，0幻觉
+数据补充节点 - 双模型协同解耦架构
+Kimi负责搜索，DeepSeek负责推理
 """
 import os
 import json
 import re
 import logging
-from typing import Any
+import time
+from typing import Any, List, Dict
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient
 
-# Fallback for test_run environment
-try:
-    from tools.moonshot_api import is_api_budget_error
-except ImportError:
-    def is_api_budget_error(exc: Exception) -> bool:
-        return str(exc) == "API \u8c03\u7528\u6b21\u6570\u8fc7\u591a\uff0c\u5df2\u718f\u65ad"
+from tools.moonshot_api import MoonshotClient
+from tools.deepseek_api import DeepSeekClient
 
 from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking
 
 # 初始化日志
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> EnrichNodeOutput:
     """
-    title: 数据补充（先搜后问架构）
-    desc: Gemini重构 - 先在Python层真实搜索每部剧的资料，再喂给LLM做提取，彻底根除幻觉
-    integrations: Moonshot API（search + chat）
+    title: 数据补充（双模型协同）
+    desc: Kimi搜索每部剧资料 → DeepSeek推理生成完整JSON
+    integrations: Moonshot API + DeepSeek API
     """
     ctx = runtime.context
     
@@ -42,16 +40,17 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         sp = _cfg.get("sp", "")
         temperature = _cfg.get("config", {}).get("temperature", 0.3)
         
-        # 初始化 Kimi 客户端
-        client = MoonshotClient()
+        # 初始化双客户端
+        kimi_client = MoonshotClient()
+        ds_client = DeepSeekClient()
         
-        # 🚨 Gemini核心修复：先在Python层真实搜索每部剧的资料
+        # ========== 搜集阶段：Kimi搜索每部剧 ==========
         real_search_context = ""
-        search_errors = []
+        search_errors: List[str] = []
         basic_rankings_list = list(state.basic_rankings) if hasattr(state.basic_rankings, '__iter__') else []
-
+        
         if not basic_rankings_list:
-            error_message = "enrich_node: 输入 basic_rankings 为空，跳过补全。"
+            error_message = "enrich_node: 输入 basic_rankings 为空"
             logger.error(error_message)
             return EnrichNodeOutput(
                 enriched_rankings=[],
@@ -59,12 +58,11 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 error_message=error_message + "\n"
             )
         
-        # 每次 Kimi web_search 通常包含 tool_call + final 两次 API 请求；
-        # 限制到前2名，确保本节点在最终结构化提取前不会触发 5 次预算熔断。
-        for idx, drama in enumerate(basic_rankings_list[:2]):
-            # 获取剧名 - 防御性处理多种类型
+        # 搜索前3部剧（控制API调用次数）
+        for idx, drama in enumerate(basic_rankings_list[:3]):
+            # 获取剧名
             title = ""
-            drama_obj: Any = drama  # 明确类型为Any
+            drama_obj: Any = drama
             if hasattr(drama_obj, "title"):
                 title = getattr(drama_obj, "title", "")
             elif isinstance(drama_obj, dict):
@@ -73,72 +71,88 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             if not title:
                 continue
             
-            logger.info(f"正在搜索剧目《{title}》的真实资料...")
+            logger.info(f"Kimi搜索剧目《{title}》...")
             
             try:
-                # 🚨 使用 Kimi $web_search 进行真实联网检索
-                search_res: str = client.search(query=f"短剧 《{title}》 演员 主演 制作公司 厂牌", max_results=3)
+                search_res: str = kimi_client.search(
+                    query=f"短剧 《{title}》 演员 主演 制作公司 厂牌",
+                    max_results=3
+                )
                 search_text = search_res[:2000] if len(search_res) > 2000 else search_res
-                real_search_context += f"\n【剧目：《{title}》真实网页检索结果】:\n{search_text}\n"
+                real_search_context += f"\n【剧目：《{title}》真实检索】:\n{search_text}\n"
                 logger.info(f"搜索《{title}》成功")
+                time.sleep(2)  # 🚨 节流阀
             except Exception as e:
-                if is_api_budget_error(e):
-                    raise
-                search_error = f"enrich_node: 搜索剧目《{title}》失败: {e}"
+                search_error = f"enrich_node: 搜索《{title}》失败: {e}"
                 logger.warning(search_error)
                 search_errors.append(search_error)
-                real_search_context += f"\n【剧目：《{title}》搜索失败，请填'未知'】\n"
+                real_search_context += f"\n【剧目：《{title}》搜索失败，填'未知'】\n"
         
-        # 渲染用户提示词 - 防御性序列化
-        rankings_json_list: list = []
+        # ========== 推理阶段：DeepSeek生成JSON ==========
+        rankings_json_list: List[Dict] = []
         for r_item in basic_rankings_list:
             r_any: Any = r_item
             if hasattr(r_any, "model_dump"):
                 rankings_json_list.append(r_any.model_dump())
-            elif hasattr(r_any, "__dict__"):
-                rankings_json_list.append(dict(r_any.__dict__))
             elif isinstance(r_any, dict):
                 rankings_json_list.append(r_any)
-            else:
-                rankings_json_list.append(str(r_any))
         
         user_prompt = f"""【数据日期】：{state.data_date}
 【基础榜单数据】：
 {json.dumps(rankings_json_list, ensure_ascii=False, indent=2)}
 
-🚨以下是你必须依赖的真实互联网检索资料：
-如果资料里没有提到演员/厂牌，严格填入"未知"，禁止编造传统影视明星！
-
+🚨 真实互联网检索资料（从中提取，无提及则填'未知'）：
 {real_search_context}
 
-请严格按照反幻觉铁律，补全缺失字段并输出JSON数组："""
-
-        # 构建消息
-        messages = [
-            {"role": "system", "content": sp},
-            {"role": "user", "content": user_prompt}
-        ]
+请补全缺失字段并输出JSON数组，不要加```json包裹："""
         
-        # 调用 Kimi 做提取（现在有真实上下文了），解析失败会打印 raw_text
-        parsed_output = client.structured_output(
-            messages=messages,
+        response = ds_client.chat(
+            messages=[
+                {"role": "system", "content": sp or "你是数据提取专家。必须输出纯JSON数组，禁止编造传统影视明星。"},
+                {"role": "user", "content": user_prompt}
+            ],
             temperature=temperature,
             max_tokens=8000
         )
-
-        if isinstance(parsed_output, list):
-            rankings_data = parsed_output
-        elif isinstance(parsed_output, dict):
-            raw_rankings = parsed_output.get("rankings") or parsed_output.get("data") or []
-            if not isinstance(raw_rankings, list):
-                raise ValueError("enrich_node: Kimi 返回对象中 rankings/data 不是数组")
-            rankings_data = raw_rankings
-        else:
-            raise ValueError(f"enrich_node: Kimi 返回类型错误: {type(parsed_output)}")
         
-        # 转换为DramaRanking对象列表
-        enriched_rankings = []
+        logger.info(f"DeepSeek响应: {response[:500]}...")
+        
+        # ========== 健壮性解析 ==========
+        rankings_data: List[Dict] = []
+        try:
+            # 去除Markdown标记
+            clean_response = response.strip()
+            if clean_response.startswith("```json"):
+                clean_response = clean_response[7:]
+            if clean_response.startswith("```"):
+                clean_response = clean_response[3:]
+            if clean_response.endswith("```"):
+                clean_response = clean_response[:-3]
+            clean_response = clean_response.strip()
+            
+            # 正则提取JSON数组
+            json_match = re.search(r'\[[\s\S]*\]', clean_response)
+            if json_match:
+                json_str = json_match.group(0)
+                parsed = json.loads(json_str)
+                
+                if isinstance(parsed, list):
+                    rankings_data = parsed
+                elif isinstance(parsed, dict):
+                    rankings_data = parsed.get("rankings") or parsed.get("data") or []
+            else:
+                raise ValueError("未找到有效JSON数组")
+                
+        except Exception as parse_error:
+            logger.error(f"enrich_node: JSON解析失败: {parse_error}")
+            logger.error(f"原始响应: {response}")
+            search_errors.append(f"JSON解析失败: {parse_error}")
+        
+        # 转换为DramaRanking对象
+        enriched_rankings: List[DramaRanking] = []
         for item in rankings_data:
+            if not isinstance(item, dict):
+                continue
             ranking = DramaRanking(
                 rank=item.get("rank", 0),
                 title=item.get("title", ""),
@@ -169,9 +183,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         )
         
     except Exception as e:
-        if is_api_budget_error(e):
-            raise
-        error_message = f"enrich_node: 数据补充或 JSON 解析失败: {e}"
+        error_message = f"enrich_node: 数据补充失败: {e}"
         logger.error(error_message, exc_info=True)
         return EnrichNodeOutput(
             enriched_rankings=[],

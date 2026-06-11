@@ -1,23 +1,20 @@
 """
-洞察生成节点 - Gemini架构重构：真实搜索+强制拆解
+洞察生成节点 - 双模型协同解耦架构
+Kimi负责搜索，DeepSeek负责推理
 """
 import os
 import json
 import re
 import logging
+import time
 from typing import List, Dict, Any
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.moonshot_api import MoonshotClient
 
-# Fallback for test_run environment
-try:
-    from tools.moonshot_api import is_api_budget_error
-except ImportError:
-    def is_api_budget_error(exc: Exception) -> bool:
-        return str(exc) == "API \u8c03\u7528\u6b21\u6570\u8fc7\u591a\uff0c\u5df2\u718f\u65ad"
+from tools.moonshot_api import MoonshotClient
+from tools.deepseek_api import DeepSeekClient
 
 from graphs.state import (
     InsightsNodeInput,
@@ -32,14 +29,15 @@ logger = logging.getLogger(__name__)
 
 def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> InsightsNodeOutput:
     """
-    title: 行业大事件（先搜后问架构）
-    desc: Gemini重构 - 先真实搜索行业事件，再结合榜单数据生成爆款归因+买量建议
-    integrations: Moonshot API（search + chat）
+    title: 行业大事件（双模型协同）
+    desc: Kimi搜索行业事件 → DeepSeek推理生成洞察JSON
+    integrations: Moonshot API + DeepSeek API
     """
     ctx = runtime.context
     
+    input_error_message = ""
+    
     try:
-        input_error_message = ""
         # 读取配置文件
         cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), config["metadata"]["llm_cfg"])
         with open(cfg_file, "r", encoding="utf-8") as fd:
@@ -47,87 +45,121 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         
         sp = _cfg.get("sp", "")
         up = _cfg.get("up", "")
-        temperature = _cfg.get("config", {}).get("temperature", 0.5)
+        temperature = _cfg.get("config", {}).get("temperature", 0.3)
         
-        # 准备数据
+        # 准备榜单数据
         rankings_data: List[Dict[str, Any]] = []
         enriched_rankings_list = list(state.enriched_rankings) if hasattr(state.enriched_rankings, '__iter__') else []
+        
         if not enriched_rankings_list:
-            input_error_message = "insights_node: enriched_rankings 为空，洞察无法基于真实榜单生成；请检查 enrich_node。\n"
+            input_error_message = "insights_node: enriched_rankings 为空\n"
             logger.error(input_error_message.strip())
-
+        
         for r in enriched_rankings_list:
             if hasattr(r, 'model_dump'):
                 rankings_data.append(r.model_dump())
             elif isinstance(r, dict):
                 rankings_data.append(r)
         
+        # 准备行业数据
         industry_data: Dict[str, Any] = {}
         if hasattr(state.industry, 'model_dump'):
             industry_data = state.industry.model_dump()
         elif isinstance(state.industry, dict):
             industry_data = state.industry
         
-        # 初始化 Kimi 客户端
-        client = MoonshotClient()
+        # 初始化双客户端
+        kimi_client = MoonshotClient()
+        ds_client = DeepSeekClient()
         
-        # 🚨 第一步：使用 Kimi $web_search 真实检索最新大事件
+        # ========== 搜集阶段：Kimi搜索 ==========
         search_query = f"短剧行业 最新爆款 融资 政策 动态 {state.data_date}"
-        search_response = client.search(query=search_query, max_results=5)
+        search_response = kimi_client.search(query=search_query, max_results=5)
+        logger.info(f"Kimi搜索成功: {search_response[:300]}...")
+        time.sleep(3)  # 🚨 节流阀
         
-        logger.info(f"事件真实搜索结果: {search_response[:500]}...")
-        
-        # 第二步：结合榜单数据和搜索结果，生成洞察
+        # ========== 推理阶段：DeepSeek生成JSON ==========
         up_tpl = Template(up)
         user_prompt = up_tpl.render({
             "data_date": state.data_date,
             "rankings": json.dumps(rankings_data, ensure_ascii=False, indent=2),
             "industry": json.dumps(industry_data, ensure_ascii=False, indent=2),
-            "search_results": search_response  # 🚨 喂入真实搜索结果
+            "search_results": search_response
         })
         
-        # 构建消息
-        messages = [
-            {"role": "system", "content": sp},
-            {"role": "user", "content": user_prompt}
-        ]
+        full_prompt = f"""{user_prompt}
+
+🚨 必须输出合法JSON数组格式，不要加```json包裹：
+[
+  {{
+    "icon": "🔥|💰|📊",
+    "title": "洞察标题",
+    "content": "具体分析内容（爆款归因/买量建议）",
+    "source": "数据来源"
+  }}
+]
+"""
         
-        # 调用 Kimi 生成洞察（现在有真实搜索结果作为上下文）
-        insights_data = client.structured_output(
-            messages=messages,
+        response = ds_client.chat(
+            messages=[
+                {"role": "system", "content": sp or "你是短剧行业分析师。必须输出纯JSON数组，爆款归因+买量建议。"},
+                {"role": "user", "content": full_prompt}
+            ],
             temperature=temperature,
-            max_tokens=3000,
-            expected_type=list
+            max_tokens=3000
         )
         
-        # 转换为Insight对象列表
-        insights = []
-        for item in insights_data:
-            if not isinstance(item, dict):
-                continue
-            insight = Insight(
-                icon=item.get("icon", "📊"),
-                title=item.get("title", ""),
-                content=item.get("content", ""),
-                source=item.get("source", "")
-            )
-            insights.append(insight)
+        logger.info(f"DeepSeek响应: {response[:500]}...")
         
-        # 确保至少有2条洞察（强制拆解）
+        # ========== 健壮性解析 ==========
+        insights: List[Insight] = []
+        try:
+            # 去除Markdown标记
+            clean_response = response.strip()
+            if clean_response.startswith("```json"):
+                clean_response = clean_response[7:]
+            if clean_response.startswith("```"):
+                clean_response = clean_response[3:]
+            if clean_response.endswith("```"):
+                clean_response = clean_response[:-3]
+            clean_response = clean_response.strip()
+            
+            # 正则提取JSON数组
+            json_match = re.search(r'\[[\s\S]*\]', clean_response)
+            if json_match:
+                json_str = json_match.group(0)
+                insights_data = json.loads(json_str)
+                
+                for item in insights_data:
+                    if isinstance(item, dict):
+                        insight = Insight(
+                            icon=item.get("icon", "📊"),
+                            title=item.get("title", ""),
+                            content=item.get("content", ""),
+                            source=item.get("source", "")
+                        )
+                        insights.append(insight)
+            else:
+                raise ValueError("未找到有效JSON数组")
+                
+        except Exception as parse_error:
+            logger.error(f"insights_node: JSON解析失败: {parse_error}")
+            logger.error(f"原始响应: {response}")
+        
+        # 确保至少有2条洞察
         if len(insights) < 2:
-            # 补充默认洞察
             if rankings_data:
                 top_drama = rankings_data[0] if rankings_data else {}
                 insights.append(Insight(
                     icon="🔥",
-                    title=f"爆款归因：{top_drama.get('title', 'TOP1剧目')}",
-                    content=f"受众定位25-35岁女性，爽点公式：{', '.join(top_drama.get('core_trope', ['逆袭', '甜宠']))}，建议优先投流抖音平台。",
-                    source="榜单数据推演"
+                    title=f"爆款归因：{top_drama.get('title', 'TOP1')}",
+                    content=f"受众定位25-35岁女性，爽点公式：{', '.join(top_drama.get('core_trope', ['逆袭', '甜宠']))}",
+                    source="榜单推演"
                 ))
                 insights.append(Insight(
                     icon="💰",
                     title="买量建议",
-                    content=f"今日榜单头部题材CPA可能具有优势，建议关注{top_drama.get('genre', '甜宠')}题材的投流机会。",
+                    content=f"建议关注{top_drama.get('genre', '甜宠')}题材投流机会",
                     source="数据分析"
                 ))
         
@@ -140,11 +172,8 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         )
         
     except Exception as e:
-        if is_api_budget_error(e):
-            raise
-        error_message = f"insights_node: 洞察生成、搜索或 JSON 解析失败: {e}"
+        error_message = f"insights_node: 洞察生成失败: {e}"
         logger.error(error_message, exc_info=True)
-        # 返回默认洞察
         return InsightsNodeOutput(
             insights=[
                 Insight(icon="📊", title="数据待补充", content="请稍后再试", source="")
