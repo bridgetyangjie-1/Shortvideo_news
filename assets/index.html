@@ -157,20 +157,8 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     <div id="quality-warning-content" style="font-size:12px; color:#facc15; white-space:pre-wrap; line-height:1.6;"></div>
   </div>
 
-  <!-- KPI卡片 -->
+  <!-- KPI卡片 (v1.7.11: 删除大盘用户规模/市场规模/女频占比/首日ROI) -->
   <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-icon">👥</div>
-      <div class="kpi-value" id="kpi-users">--</div>
-      <div class="kpi-label">大盘用户规模</div>
-      <div class="kpi-source"><span class="source-tag tier1">📊 爬取</span></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon">💰</div>
-      <div class="kpi-value yellow" id="kpi-market">--</div>
-      <div class="kpi-label">市场规模</div>
-      <div class="kpi-source"><span class="source-tag tier1">📊 爬取</span></div>
-    </div>
     <div class="kpi-card">
       <div class="kpi-icon">📱</div>
       <div class="kpi-value" id="kpi-mau">--</div>
@@ -184,12 +172,6 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
       <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">👩</div>
-      <div class="kpi-value pink" id="kpi-female">--</div>
-      <div class="kpi-label">女频占比</div>
-      <div class="kpi-source"><span class="source-tag tier1">📊 爬取</span></div>
-    </div>
-    <div class="kpi-card">
       <div class="kpi-icon">🎬</div>
       <div class="kpi-value" id="kpi-drama">--</div>
       <div class="kpi-label">剧集总量</div>
@@ -200,12 +182,6 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
       <div class="kpi-value yellow" id="kpi-hit">--</div>
       <div class="kpi-label">破亿爆款剧</div>
       <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon">📈</div>
-      <div class="kpi-value gradient" id="kpi-roi">--</div>
-      <div class="kpi-label">首日ROI参考</div>
-      <div class="kpi-source"><span class="source-tag tier3">🤖 推理</span></div>
     </div>
   </div>
 
@@ -396,7 +372,7 @@ async function renderDashboard(dateParam = null) {
         if (res.ok) { data = await res.json(); console.log('JSON数据加载成功:', data); }
     } catch (e) { console.warn('JSON拉取失败，启用兜底数据', e); }
 
-    // 基础指标
+    // 基础指标 (v1.7.11: 删除user_scale/market_size/female_ratio/roi渲染)
     document.getElementById('update-time').innerText = `更新时间: ${data.data_date}`;
     const qualityWarning = document.getElementById('quality-warning');
     const qualityWarningContent = document.getElementById('quality-warning-content');
@@ -408,20 +384,11 @@ async function renderDashboard(dateParam = null) {
         qualityWarningContent.innerText = '';
     }
 
-    // user_scale可能是对象{value, unit}或字符串
-    const userScale = data.industry?.user_scale;
-    if (typeof userScale === 'object' && userScale?.value) {
-        document.getElementById('kpi-users').innerText = `${userScale.value}${userScale.unit || ''}`;
-    } else {
-        document.getElementById('kpi-users').innerText = userScale || '--';
-    }
-    document.getElementById('kpi-market').innerText = data.industry?.market_size || '--';
+    // KPI卡片渲染 (仅保留APP月活/AI短剧渗透率/剧集总量/破亿爆款剧)
     document.getElementById('kpi-mau').innerText = data.industry?.app_mau || '--';
     document.getElementById('kpi-ai').innerText = (data.industry?.ai_ratio || '--') + '%';
-    document.getElementById('kpi-female').innerText = (data.industry?.female_ratio || '--') + '%';
     document.getElementById('kpi-drama').innerText = data.industry?.drama_count || '--';
     document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas || '--';
-    document.getElementById('kpi-roi').innerText = data.industry?.roi || '--'; // 动态加载
 
     // 行业快讯（添加原文链接）
     document.getElementById('news-container').innerHTML = (data.daily_news || []).map(n => {

@@ -60,21 +60,46 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         up = _cfg.get("up", "")
         temperature = _cfg.get("config", {}).get("temperature", 0.2)
         
-        # 3. 使用 Kimi 联网搜索行业数据
+        # 3. 使用 Kimi 联网搜索行业数据（v1.7.11: 优化AI短剧渗透率搜索）
         client = MoonshotClient()
         
+        # 第一轮搜索：AI短剧渗透率专项搜索
+        ai_search_query = f"""请联网搜索2026年短剧行业AI短剧占比数据。
+参考日期：{state.data_date}
+
+搜索关键词建议：
+- "短剧行业 AI短剧占比 2026"
+- "短剧 AI生成 比例 趋势"
+- "AI短剧 市场份额 数据"
+
+请返回JSON格式：{"ai_ratio": 数值(百分比), "ai_drama_count": 数量, "ai_trend": "上升/持平/下降"}
+如果找不到确切数据，请根据行业趋势估算（建议15-25%）。
+"""
+        
+        ai_data = {}
+        try:
+            ai_data = client.search_json(
+                query=ai_search_query,
+                system_prompt="你是短剧行业数据分析师，擅长搜索行业报告和统计数据。",
+                temperature=0.2,
+                max_tokens=1000,
+                expected_type=dict
+            )
+            logger.info(f"AI短剧渗透率搜索结果: {ai_data}")
+        except Exception as e:
+            logger.warning(f"AI短剧渗透率搜索失败: {e}")
+            ai_data = {}
+        
+        # 第二轮搜索：其他行业宏观数据
         search_query = f"""请搜索互联网，获取最新的短剧行业宏观数据，包括：
-1. 用户规模（总用户数）
-2. 市场规模（总产值）
-3. 短剧数量（总剧目数）
-4. 亿元播放量短剧数量
-5. AI短剧占比趋势
-6. 女频/男频占比
-7. 主要平台（红果、抖音等）的月活用户数和同比增长
+1. APP月活用户数（红果、抖音等）
+2. 短剧数量（总剧目数）
+3. 亿元播放量短剧数量
+4. 主要平台的月活用户数和同比增长
 
 参考日期：{state.data_date}
 
-请返回JSON格式的数据，包含以上所有字段。
+请返回JSON格式的数据。
 """
         
         # 执行 Kimi 官方 $web_search 并解析 JSON
@@ -85,6 +110,10 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
             max_tokens=3000,
             expected_type=dict
         )
+        
+        # 合并AI短剧数据（优先使用专项搜索结果）
+        if ai_data.get("ai_ratio"):
+            data["ai_ratio"] = ai_data.get("ai_ratio")
         
         # 5. 构建行业数据（使用搜索结果或榜单统计）
         industry = IndustryData(
