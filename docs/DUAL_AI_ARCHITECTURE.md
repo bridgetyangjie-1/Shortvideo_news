@@ -2,7 +2,7 @@
 
 > 本文档记录双模型协同架构（Kimi搜索 + DeepSeek推理）的API调用规范。
 > 
-> **v1.7.14更新**: 观众画像改为基于当日 `enriched_rankings` 的 DeepSeek 动态反推。
+> **v1.7.14更新**: 观众画像改为基于当日 `enriched_rankings` 的 DeepSeek 动态反推；每天推送5条行业快讯的规则继续保留。
 
 ---
 
