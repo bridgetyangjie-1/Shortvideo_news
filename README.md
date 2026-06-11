@@ -1,77 +1,103 @@
 # 短剧行业数据看板
 
-> **作者**: Bridget Yang
-> **版本**: v1.7.13
-> **更新**: 每日北京时间9:00自动更新
+> 作者：Bridget Yang  
+> 当前版本：v1.7.13  
+> 更新频率：每日北京时间 9:00 自动更新
 
----
+## 功能概览
 
-## 📊 功能概览
+- 剧集榜单 TOP20：每日短剧播放热度排行。
+- 演员热力榜：女频 TOP10 + 男频 TOP10。
+- 行业快讯：固定 5 条，每条包含约 100 字洞察分析。
+- 行业大事件：具体事件 + 真实数据，避免泛泛趋势描述。
+- 题材分布：题材占比和热门标签。
+- 观众画像：性别、年龄、地域分布。
+- 行业宏观数据：APP 月活、AI 短剧渗透率、剧集总量、破亿爆款剧等。
 
-- **剧集榜单TOP20**: 每日更新的短剧播放量排行榜
-- **演员热力榜TOP10**: 女频/男频演员各10人
-- **行业快讯5条**: 每条100字深度洞察分析
-- **行业洞察**: 具体事件+真实数据
-- **题材分布**: 题材占比+热门标签
-- **观众画像**: 性别/年龄/地域分布
-- **APP月活/剧集总量**: 行业宏观数据
+## 在线访问
 
----
+GitHub Pages: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 
-## 🔗 访问地址
+## 技术栈
 
-**GitHub Pages**: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
+| 模块 | 技术 |
+|---|---|
+| 联网搜索 | Kimi / Moonshot API |
+| JSON 推理 | DeepSeek API |
+| 工作流编排 | Python |
+| 自动化 | GitHub Actions |
+| 前端 | 静态 HTML + Chart.js |
+| 托管 | GitHub Pages |
 
----
+## 目录结构
 
-## 🛠 技术栈
-
-- **数据源**: Kimi (Moonshot) API 联网搜索
-- **推理引擎**: DeepSeek API JSON推理
-- **自动化**: GitHub Actions
-- **前端**: 纯HTML + Chart.js
-- **部署**: GitHub Pages
-
----
-
-## 📁 项目结构
-
-```
+```text
 assets/
-├── index.html       # 网页看板
+├── index.html
 └── data/
-    ├── latest.json  # 最新数据
-    └── history/     # 历史数据
+    ├── latest.json
+    ├── all_history.json
+    └── history/
+
+config/
+└── *_llm_cfg.json
 
 src/
-├── graphs/          # LangGraph工作流
-│   ├── nodes/       # 节点实现
-│   ├── state.py     # 状态定义
-│   └── graph.py     # 图编排
-├── tools/           # API工具
-│   ├── moonshot_api.py  # Kimi搜索
-│   └── deepseek_api.py  # DeepSeek推理
-└── run_github.py    # GitHub Actions入口
+├── graphs/
+│   ├── graph.py
+│   ├── state.py
+│   └── nodes/
+├── tools/
+│   ├── moonshot_api.py
+│   └── deepseek_api.py
+└── run_github.py
 ```
 
----
+## 本地运行
 
-## 🚀 本地运行
+需要 Python 3.12、`uv`，以及两个 API key。
 
 ```bash
-# 安装依赖
 uv sync
 
-# 运行工作流（需要API Keys）
-export MOONSHOT_API_KEY=your_api_key
-export DEEPSEEK_API_KEY=your_api_key
-python src/run_github.py
+export MOONSHOT_API_KEY=your_moonshot_key
+export DEEPSEEK_API_KEY=your_deepseek_key
+export PYTHONPATH="$PWD/src"
+
+uv run python src/run_github.py
 ```
 
----
+运行后主要输出：
 
-## 📖 详细文档
+- `assets/data/latest.json`
+- `assets/data/all_history.json`
+- `assets/data/history/*.json`
 
-- [AGENTS.md](AGENTS.md) - **项目规范和节点清单（必读）**
-- [docs/DEPLOY.md](docs/DEPLOY.md) - 部署指南
-- [docs/DUAL_AI_ARCHITECTURE.md](docs/DUAL_AI_ARCHITECTURE.md) - 双AI架构说明
+## GitHub Actions
+
+自动化入口：`.github/workflows/daily_update.yml`
+
+- 触发时间：UTC 1:00，即北京时间 9:00。
+- 手动触发：支持 `workflow_dispatch`。
+- 必需 secrets：
+  - `MOONSHOT_API_KEY`
+  - `DEEPSEEK_API_KEY`
+- 可选 secret：
+  - `MOONSHOT_BASE_URL`
+
+## 前端数据约定
+
+`assets/index.html` 位于 `assets/` 目录下，因此数据必须使用相对路径读取：
+
+```javascript
+fetch('./data/latest.json')
+```
+
+不要在 HTML 中写死指标数据。Python 工作流只负责输出 JSON，前端负责动态渲染。
+
+## 文档入口
+
+- `AGENTS.md`：给编码 agent 的当前工作规则，保持精简。
+- `docs/ROADMAP.md`：已知风险、改进优先级和后续方向。
+
+为减少 token 消耗和误导，仓库不再保留大型历史总结、旧部署方案或重复架构说明类 Markdown。
