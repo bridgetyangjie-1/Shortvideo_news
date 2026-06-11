@@ -1,32 +1,370 @@
 {
   "success": true,
-  "generated_at": "2026-06-11T07:36:47+08:00",
+  "generated_at": "2026-06-11T08:31:41+08:00",
   "data_date": "2026-06-11",
   "genre_distribution": {
-    "genres": [],
-    "top_genre": "",
+    "genres": [
+      {
+        "name": "其他",
+        "count": 10,
+        "total_views": "46800",
+        "trend": "same"
+      }
+    ],
+    "top_genre": "其他",
     "rising_genre": "",
-    "background_tags": [],
-    "theme_tags": [],
-    "setting_tags": [],
-    "top_tag": "",
-    "rising_tag": ""
+    "background_tags": [
+      {
+        "name": "都市",
+        "category": "背景",
+        "count": 2,
+        "avg_views": 100,
+        "heat": 21
+      }
+    ],
+    "theme_tags": [
+      {
+        "name": "甜宠",
+        "category": "主题",
+        "count": 2,
+        "avg_views": 100,
+        "heat": 21
+      },
+      {
+        "name": "逆袭",
+        "category": "主题",
+        "count": 2,
+        "avg_views": 100,
+        "heat": 21
+      }
+    ],
+    "setting_tags": [
+      {
+        "name": "重生",
+        "category": "设定",
+        "count": 9,
+        "avg_views": 100,
+        "heat": 91
+      },
+      {
+        "name": "逆袭",
+        "category": "设定",
+        "count": 2,
+        "avg_views": 100,
+        "heat": 21
+      }
+    ],
+    "top_tag": "都市",
+    "rising_tag": "甜宠"
   },
   "industry": {
-    "user_scale": "7.18亿",
-    "market_size": "1000亿+",
+    "user_scale": 718000000,
+    "market_size": "未知",
     "drama_count": "25万+",
     "billion_dramas": 20,
-    "ai_ratio": 38,
-    "female_ratio": 95,
-    "male_ratio": 5,
+    "ai_ratio": 0,
+    "female_ratio": 100,
+    "male_ratio": 0,
     "app_mau": "3.04亿",
     "app_mau_yoy": "+1.4亿"
   },
-  "rankings": [],
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "我在八零年代当后妈",
+      "female_lead": "苏袀禾",
+      "male_lead": "滕泽文",
+      "views": "1000万",
+      "views_num": 10000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "听花岛",
+      "core_trope": [
+        "穿越时空",
+        "家庭纠葛",
+        "现代女性在传统社会"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 2,
+      "title": "重生之我在霸总身边当卧底",
+      "female_lead": "盖玥希",
+      "male_lead": "林更新",
+      "views": "800万",
+      "views_num": 8000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "强取豪夺",
+        "卧底行动",
+        "甜虐交织"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 3,
+      "title": "穿越之我是女皇",
+      "female_lead": "未知",
+      "male_lead": "未知",
+      "views": "700万",
+      "views_num": 7000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "权力斗争",
+        "穿越成为统治者",
+        "宫廷权谋"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 4,
+      "title": "我在古代当王妃",
+      "female_lead": "未知",
+      "male_lead": "未知",
+      "views": "600万",
+      "views_num": 6000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "穿越成为贵族",
+        "宫廷爱情",
+        "古代生活适应"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 5,
+      "title": "重生之我是女将军",
+      "female_lead": "未知",
+      "male_lead": "未知",
+      "views": "500万",
+      "views_num": 5000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "重生",
+        "女扮男装",
+        "军事指挥"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 6,
+      "title": "穿越之我是皇后",
+      "female_lead": "未知",
+      "male_lead": "未知",
+      "views": "400万",
+      "views_num": 4000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "穿越成为皇后",
+        "宫廷斗争",
+        "爱情与权力"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 7,
+      "title": "我在古代当皇帝",
+      "female_lead": "未知",
+      "male_lead": "未知",
+      "views": "300万",
+      "views_num": 3000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "穿越成为皇帝",
+        "治国理政",
+        "历史改写"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 8,
+      "title": "重生之我是女侠",
+      "female_lead": "未知",
+      "male_lead": "未知",
+      "views": "200万",
+      "views_num": 2000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "重生",
+        "江湖恩怨",
+        "武侠世界"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 9,
+      "title": "穿越之我是贵妃",
+      "female_lead": "未知",
+      "male_lead": "未知",
+      "views": "100万",
+      "views_num": 1000,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "穿越成为贵妃",
+        "宫廷斗争",
+        "爱情与权谋"
+      ],
+      "episodes_count": 80
+    },
+    {
+      "rank": 10,
+      "title": "我在古代当宰相",
+      "female_lead": "未知",
+      "male_lead": "未知",
+      "views": "80万",
+      "views_num": 800,
+      "platform": "DataEye",
+      "genre": "",
+      "tags": [],
+      "trend": "",
+      "trend_type": "same",
+      "category": "female",
+      "is_ai": false,
+      "desc": "",
+      "change": "",
+      "heat": 0,
+      "production_house": "独立厂牌",
+      "core_trope": [
+        "穿越成为宰相",
+        "政治斗争",
+        "治国策略"
+      ],
+      "episodes_count": 80
+    }
+  ],
   "actors": {
-    "female": [],
-    "male": []
+    "female": [
+      {
+        "rank": 1,
+        "name": "苏袀禾",
+        "popularity": 985,
+        "platform_fans": 0.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "我在八零年代当后妈",
+        "trend": ""
+      },
+      {
+        "rank": 2,
+        "name": "盖玥希",
+        "popularity": 975,
+        "platform_fans": 0.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "重生之我在霸总身边当卧底",
+        "trend": ""
+      }
+    ],
+    "male": [
+      {
+        "rank": 1,
+        "name": "滕泽文",
+        "popularity": 985,
+        "platform_fans": 0.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "我在八零年代当后妈",
+        "trend": ""
+      },
+      {
+        "rank": 2,
+        "name": "林更新",
+        "popularity": 975,
+        "platform_fans": 0.0,
+        "platform": "红果",
+        "badge": "",
+        "works": "重生之我在霸总身边当卧底",
+        "trend": ""
+      }
+    ]
   },
   "platform": {
     "apps": [
@@ -42,30 +380,58 @@
     "mini_programs": []
   },
   "audience_profile": {
-    "gender_female": 95,
-    "gender_male": 5,
+    "gender_female": 52,
+    "gender_male": 48,
     "age_distribution": {
-      "age_18_24": 35,
-      "age_25_34": 40,
-      "age_35_44": 18,
-      "age_45_plus": 7
+      "age_18_24": 32,
+      "age_25_34": 33,
+      "age_35_44": 24,
+      "age_45_plus": 23
     },
     "top_regions": [
       {
         "name": "广东",
-        "value": 12.0
+        "value": 0.0
       },
       {
         "name": "江苏",
-        "value": 9.0
+        "value": 0.0
       },
       {
         "name": "浙江",
-        "value": 8.0
+        "value": 0.0
+      },
+      {
+        "name": "山东",
+        "value": 0.0
+      },
+      {
+        "name": "河南",
+        "value": 0.0
+      },
+      {
+        "name": "四川",
+        "value": 0.0
+      },
+      {
+        "name": "湖北",
+        "value": 0.0
+      },
+      {
+        "name": "湖南",
+        "value": 0.0
+      },
+      {
+        "name": "河北",
+        "value": 0.0
+      },
+      {
+        "name": "北京",
+        "value": 0.0
       }
     ],
-    "peak_viewing_hours": "21:00-23:00",
-    "avg_watch_duration": "45分钟",
+    "peak_viewing_hours": "晚间时段",
+    "avg_watch_duration": "未知",
     "device": {
       "ios": 58,
       "android": 42
@@ -74,14 +440,15 @@
     "traits": [
       "女性主导",
       "年轻群体",
-      "下沉市场"
+      "下沉市场",
+      "碎片化观看"
     ]
   },
   "play_trend": {
     "daily": [
       {
         "date": "2026-06-11",
-        "total_views": 0
+        "total_views": 46800
       },
       {
         "date": "2026-06-10",
@@ -97,9 +464,9 @@
         "week": "2026-W23",
         "start_date": "2026-06-08",
         "end_date": "2026-06-14",
-        "top1_title": "",
-        "top1_views": "",
-        "total_views": 0
+        "top1_title": "我在八零年代当后妈",
+        "top1_views": "1000万",
+        "total_views": 46800
       }
     ],
     "trend_direction": "down"
@@ -115,18 +482,12 @@
   ],
   "insights": [
     {
-      "icon": "🔥",
-      "title": "爆款归因：由于榜单为空，无法提供具体爆款归因",
-      "content": "今日榜单为空，因此无法挑选TOP3中的任何一部短剧进行受众定位、爽点公式和投流预估的具体爆款归因分析。在实际的买量操作中，缺少榜单数据将导致无法准确判断市场趋势和用户偏好，建议调整监测工具或检查数据源，以确保能够获得实时的榜单数据并据此制定买量策略。",
-      "source": ""
-    },
-    {
-      "icon": "💰",
-      "title": "买量建议：根据行业大盘分析，女性题材短剧可能具有获客成本优势",
-      "content": "行业大盘数据显示女性用户占比高达95%，男性用户仅占5%，这表明市场上对女性题材短剧的需求极大。考虑到用户规模为7.18亿，市场规模达到1000亿+，结合AI占比38%，可以推测女性题材的短剧在当前市场上具有较高的用户粘性和消费潜力。因此，在买量时，建议重点投向女性用户群体，尤其是那些能够吸引女性用户的题材和内容，以期降低CPA并提高ROI。",
+      "icon": "📊",
+      "title": "数据待补充",
+      "content": "请稍后再试",
       "source": ""
     }
   ],
-  "quality_score": 60.0,
-  "error_message": "search_node: Kimi 联网搜索失败: Error code: 429 - {'error': {'message': 'The engine is currently overloaded, please try again later', 'type': 'engine_overloaded_error'}}\nnews_node: 搜索 '短剧行业 最新新闻 2024 2025' 失败: Error code: 429 - {'error': {'message': 'The engine is currently overloaded, please try again later', 'type': 'engine_overloaded_error'}}\nnews_node: 搜索 'DataEye 短剧热度榜 最新' 失败: Error code: 429 - {'error': {'message': 'The engine is currently overloaded, please try again later', 'type': 'engine_overloaded_error'}}\nnews_node: 未生成有效快讯，已使用默认快讯兜底。\nprocess_node: search_results 为空，无法抽取榜单；请先检查 search_node。\nenrich_node: 输入 basic_rankings 为空，跳过补全。\nactor_ranking_node: enriched_rankings 为空，无法生成演员榜；请检查 enrich_node。\naudience_profile_node: 观众画像搜索或 JSON 解析失败: Error code: 429 - {'error': {'message': 'The engine is currently overloaded, please try again later', 'type': 'engine_overloaded_error'}}\nindustry_node: 行业数据搜索或 JSON 解析失败: Error code: 429 - {'error': {'message': 'The engine is currently overloaded, please try again later', 'type': 'engine_overloaded_error'}}\ngenre_distribution_node: enriched_rankings 为空，题材分布无法统计；请检查 enrich_node。\ninsights_node: enriched_rankings 为空，洞察无法基于真实榜单生成；请检查 enrich_node。\nhistory_data_node: enriched_rankings 为空，当日播放趋势将记录为 0；请检查 enrich_node。\n"
+  "quality_score": 95.0,
+  "error_message": "news_node: 快讯 JSON 解析失败: 无法从 Kimi 返回中解析 JSON\nnews_node: 未生成有效快讯，已使用默认快讯兜底。\ninsights_node: 洞察生成、搜索或 JSON 解析失败: Kimi chat 请求连续 3 次 engine_overloaded 失败\n"
 }
