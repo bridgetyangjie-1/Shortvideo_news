@@ -275,7 +275,7 @@ chmod +x deploy.sh
 ```
 
 ### 8.2 功能说明
-- **自动执行**：每天北京时间早8:00自动运行工作流
+- **自动执行**：每天北京时间早9:00自动运行工作流
 - **手动触发**：支持在GitHub网页手动点击按钮运行
 - **自动推送**：运行完成后自动提交最新JSON数据
 
@@ -284,7 +284,7 @@ chmod +x deploy.sh
 
 | Secret名称 | 说明 | 获取方式 |
 |------------|------|----------|
-| `DEEPSEEK_API_KEY` | DeepSeek API密钥 | 从DeepSeek平台获取 |
+| `MOONSHOT_API_KEY` | Kimi (Moonshot) API密钥 | 从Moonshot/Kimi开放平台获取 |
 | `COZE_API_KEY` | Coze API密钥（如需要） | 从Coze平台获取 |
 
 **配置步骤**：
@@ -294,7 +294,7 @@ chmod +x deploy.sh
 
 ### 8.4 工作流程图
 ```
-GitHub服务器 (UTC 0:00 / 北京时间 8:00)
+GitHub服务器 (UTC 1:00 / 北京时间 9:00)
     ↓
 拉取代码 (actions/checkout@v4)
     ↓
@@ -302,7 +302,7 @@ GitHub服务器 (UTC 0:00 / 北京时间 8:00)
     ↓
 安装依赖 (uv pip install)
     ↓
-运行工作流 (python src/main.py)
+运行工作流 (python src/run_github.py)
     ↓
 生成 latest.json + history/*.json
     ↓

@@ -1,12 +1,12 @@
 # Dashboard UI 设计规范
 
-> Gemini 提供的短剧行业商业决策看板设计规范 - DeepSeek Powered
+> Gemini 提供的短剧行业商业决策看板设计规范 - Kimi Powered
 
 ## 一、整体风格
 
 ### 1.1 品牌标识
 - **标题**: "短剧行业数据看板 - Bridget Yang"
-- **AI Badge**: 🤖 DeepSeek Powered + Tier 1+2+3标识
+- **AI Badge**: 🤖 Kimi Powered + Tier 1+2+3标识
 - **渐变效果**: linear-gradient(135deg, #e0e7ff 0%, #818cf8 100%)
 
 ### 1.2 背景设计
@@ -141,14 +141,14 @@ Emoji分类：
 ```
 ┌────────────────────────────────────────────┐
 │ Tier 1: Coze爬取 → 100%真实（榜单、播放量） │
-│ Tier 2: DeepSeek搜补 → 80%可信（主演、题材） │
-│ Tier 3: DeepSeek推理 → 参考价值（洞察、风向）│
+│ Tier 2: Kimi搜补 → 80%可信（主演、题材） │
+│ Tier 3: Kimi推理 → 参考价值（洞察、风向）│
 └────────────────────────────────────────────┘
 ```
 
 ### 5.2 字段来源标记
 - 🟢 Tier 1 字段：不加标记
-- 🟡 Tier 2 字段：标记"待DeepSeek补全"
+- 🟡 Tier 2 字段：标记"待Kimi补全"
 - 🔴 Tier 3 字段：标记"AI推理生成"
 
 ---

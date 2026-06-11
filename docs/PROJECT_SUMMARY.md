@@ -1,7 +1,7 @@
 # 短剧行业数据自动抓取工作流 - 项目总结
 
 > **项目完成日期**: 2026-06-09  
-> **版本**: v1.2.0（当前版本）  
+> **版本**: v1.5.0（当前版本）  
 > **状态**: ✅ 已交付，架构重构进行中
 
 ---
@@ -32,12 +32,12 @@
 构建一个**分布式自动化**的短剧行业数据采集与分析系统：
 - **底层爬虫**：Coze Workflow 定时抓取客观数据（不经LLM篡改，保证Baseline真实性）
 - **中枢编排**：Python脚本托管在Git，通过GitHub Actions自动调度
-- **智能引擎**：DeepSeek API 进行数据清洗、缺失补全、深度洞察
+- **智能引擎**：Kimi (Moonshot) API 进行联网搜索、数据清洗、缺失补全、深度洞察
 - **静态看板**：自动更新HTML Dashboard，托管在GitHub Pages/Vercel
 
 ### 1.2 核心功能
 - ✅ 每日自动抓取短剧榜单TOP10（Coze Workflow）
-- ✅ DeepSeek联网搜索补全缺失字段（主演、厂牌、题材）
+- ✅ Kimi联网搜索补全缺失字段（主演、厂牌、题材）
 - ✅ 自动统计演员人气排行
 - ✅ 获取行业宏观数据 + 投流指标
 - ✅ AI分析生成行业洞察和创新机会点
@@ -51,8 +51,8 @@
 | 层级 | 技术组件 | 职责 |
 |------|----------|------|
 | **数据采集层** | Coze Workflow | 定时爬取底层客观数据（榜单、播放量） |
-| **中枢编排层** | Python + GitHub Actions | 调度DeepSeek API、数据清洗、文件更新 |
-| **智能引擎层** | DeepSeek API | 联网检索、缺失补全、商业洞察、推理分析 |
+| **中枢编排层** | Python + GitHub Actions | 调度Kimi API、数据清洗、文件更新 |
+| **智能引擎层** | Kimi (Moonshot) API | 联网检索、缺失补全、商业洞察、推理分析 |
 | **部署托管层** | Git / GitHub Pages / Vercel | 版本控制、静态托管、自动部署 |
 | **前端展示层** | HTML + Tailwind CSS + ECharts | 可视化Dashboard |
 
@@ -86,13 +86,13 @@
 │  └────────────────────────────────┼────────────────────────────────────┘       │
 │                                   ↓                                            │
 │  ┌─────────────────────────────────────────────────────────────────────┐       │
-│  │              Tier 2: AI搜补层 (DeepSeek API 联网检索)               │       │
+│  │              Tier 2: AI搜补层 (Kimi API 联网检索)                   │       │
 │  ├─────────────────────────────────────────────────────────────────────┤       │
 │  │                                                                     │       │
 │  │   输入: raw_data.json (剧名列表，可能缺失主演/厂牌/题材)            │       │
 │  │                                                                     │       │
 │  │   ┌───────────────────────────────────────────────────────────┐    │       │
-│  │   │              DeepSeek API (联网搜索补全)                   │    │       │
+│  │   │              Kimi API (联网搜索补全)                       │    │       │
 │  │   │  ├── 男女主演 (搜索演员表)                                 │    │       │
 │  │   │  ├── 制作厂牌 (九州、点众、麦芽、掌玩等)                   │    │       │
 │  │   │  ├── 核心爽点/标签 (真假千金、下山无敌、追妻火葬场)        │    │       │
@@ -107,13 +107,13 @@
 │  └────────────────────────────────┼────────────────────────────────────┘       │
 │                                   ↓                                            │
 │  ┌─────────────────────────────────────────────────────────────────────┐       │
-│  │              Tier 3: AI推理层 (DeepSeek 深度洞察)                   │       │
+│  │              Tier 3: AI推理层 (Kimi 深度洞察)                       │       │
 │  ├─────────────────────────────────────────────────────────────────────┤       │
 │  │                                                                     │       │
 │  │   输入: enriched_data.json + history_data                          │       │
 │  │                                                                     │       │
 │  │   ┌───────────────────────────────────────────────────────────┐    │       │
-│  │   │              DeepSeek API (推理分析)                       │    │       │
+│  │   │              Kimi API (推理分析)                           │    │       │
 │  │   │  ├── 行业洞察5条 (AI短剧破局、女频统治、头部演员效应)      │    │       │
 │  │   │  ├── 创新机会点5条 (轻量叙事、文化融合、价值升级)          │    │       │
 │  │   │  ├── 投流风向标 (流量洼地、红海预警)                       │    │       │
@@ -165,8 +165,8 @@
 | Tier | 数据类型 | 来源 | 真实度 | 说明 |
 |------|----------|------|--------|------|
 | **Tier 1** | 确切事实 | Coze爬取 | ✅ 100%真实 | 榜单排名、播放量、平台来源 |
-| **Tier 2** | AI搜补 | DeepSeek联网 | ⚠️ 80%可信 | 主演、厂牌、题材（有搜索依据） |
-| **Tier 3** | AI推理 | DeepSeek分析 | ⚠️ 参考价值 | 洞察、风向标（推理结论） |
+| **Tier 2** | AI搜补 | Kimi联网 | ⚠️ 80%可信 | 主演、厂牌、题材（有搜索依据） |
+| **Tier 3** | AI推理 | Kimi分析 | ⚠️ 参考价值 | 洞察、风向标（推理结论） |
 
 ---
 
@@ -180,8 +180,8 @@
 | title | str | Tier 1 | 剧名（Coze直接爬取） |
 | views | str | Tier 1 | 播放量（如"1.18亿"） |
 | platform | str | Tier 1 | 播放平台（红果/番茄/抖音） |
-| **female_lead** | str | Tier 2 | 女主演（DeepSeek搜索补全） |
-| **male_lead** | str | Tier 2 | 男主演（DeepSeek搜索补全） |
+| **female_lead** | str | Tier 2 | 女主演（Kimi搜索补全） |
+| **male_lead** | str | Tier 2 | 男主演（Kimi搜索补全） |
 | **production_house** | str | Tier 2 | 制作厂牌（九州/点众/麦芽/掌玩） |
 | **core_trope** | str | Tier 2 | 核心爽点（真假千金/下山无敌/追妻火葬场） |
 | **episodes_count** | int | Tier 2 | 总集数（判断长线付费 vs 轻量剧） |
@@ -260,7 +260,7 @@ Coze Workflow (每日08:00自动触发)
 ### 4.2 Tier 2: AI搜补层
 
 ```
-DeepSeek API (联网搜索补全)
+Kimi API (联网搜索补全)
     │
     ├── 输入: raw_data.json (剧名列表)
     │
@@ -279,29 +279,29 @@ DeepSeek API (联网搜索补全)
               "title": "少夫人来自东北2",
               "views": "1.18亿",
               "platform": "红果",
-              "female_lead": "梁雯晶",        ← DeepSeek搜索补全
-              "male_lead": "业文 Kevin",      ← DeepSeek搜索补全
-              "production_house": "九州",    ← DeepSeek搜索补全
-              "core_trope": "南北文化碰撞",  ← DeepSeek推理
-              "episodes_count": 92           ← DeepSeek搜索补全
+              "female_lead": "梁雯晶",        ← Kimi搜索补全
+              "male_lead": "业文 Kevin",      ← Kimi搜索补全
+              "production_house": "九州",    ← Kimi搜索补全
+              "core_trope": "南北文化碰撞",  ← Kimi推理
+              "episodes_count": 92           ← Kimi搜索补全
             },
             ...
           ],
           "industry": {
             ...
-            "daily_spend_est": "8000万",     ← DeepSeek搜索补全
+            "daily_spend_est": "8000万",     ← Kimi搜索补全
           }
         }
 ```
 
 **数据质量说明**：
 - ⚠️ 主演、厂牌、集数 **80%可信**（有搜索依据，但可能信息滞后）
-- ⚠️ 核心爽点 **参考价值**（DeepSeek推理分类）
+- ⚠️ 核心爽点 **参考价值**（Kimi推理分类）
 
 ### 4.3 Tier 3: AI推理层
 
 ```
-DeepSeek API (深度分析推理)
+Kimi API (深度分析推理)
     │
     ├── 输入: enriched_data.json + all_history.json
     │
@@ -333,7 +333,7 @@ DeepSeek API (深度分析推理)
 ```
 
 **数据质量说明**：
-- ⚠️ 洞察、风向标 **参考价值**（DeepSeek推理结论，需人工验证）
+- ⚠️ 洞察、风向标 **参考价值**（Kimi推理结论，需人工验证）
 - ✅ 可作为决策参考，但**不应作为唯一依据**
 
 ---
@@ -373,11 +373,11 @@ jobs:
         run: |
           python scripts/run_coze_workflow.py
       
-      - name: Run DeepSeek Enrichment
+      - name: Run Kimi Workflow
         env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
         run: |
-          python scripts/deepseek_enrich.py
+          python src/run_github.py
       
       - name: Generate Dashboard
         run: |
@@ -407,8 +407,8 @@ shortvideo-workflow/
 │       └── daily-update.yml     # GitHub Actions配置
 ├── scripts/
 │   ├── run_coze_workflow.py     # 调用Coze获取Tier 1数据
-│   ├── deepseek_enrich.py       # DeepSeek补全Tier 2数据
-│   ├── deepseek_insights.py     # DeepSeek推理Tier 3数据
+│   ├── graphs/nodes/enrich_node.py   # Kimi补全Tier 2数据
+│   ├── graphs/nodes/insights_node.py # Kimi推理Tier 3数据
 │   └── generate_html.py         # 生成Dashboard HTML
 ├── assets/
 │   ├── data/
@@ -420,7 +420,7 @@ shortvideo-workflow/
 │   └── index.html               # Dashboard
 ├── config/
 │   ├── coze_config.json         # Coze配置
-│   └── deepseek_config.json     # DeepSeek配置
+│   └── *_llm_cfg.json           # Kimi提示词配置
 ├── requirements.txt             # Python依赖
 └── README.md
 ```
@@ -465,12 +465,11 @@ pip install -r requirements.txt
 
 # 3. 配置API密钥
 export COZE_API_TOKEN="your_token"
-export DEEPSEEK_API_KEY="your_key"
+export MOONSHOT_API_KEY="your_key"
 
 # 4. 手动运行测试
 python scripts/run_coze_workflow.py
-python scripts/deepseek_enrich.py
-python scripts/generate_html.py
+python src/run_github.py
 ```
 
 ### 7.2 GitHub部署
@@ -481,7 +480,7 @@ git push origin main
 
 # 2. 配置Secrets
 # Settings → Secrets → New repository secret
-# COZE_API_TOKEN, DEEPSEEK_API_KEY
+# COZE_API_TOKEN, MOONSHOT_API_KEY
 
 # 3. 启用GitHub Pages
 # Settings → Pages → Source: gh-pages branch
@@ -498,7 +497,7 @@ vercel --prod
 
 # 2. 配置环境变量
 # Environment Variables → Add
-# COZE_API_TOKEN, DEEPSEEK_API_KEY
+# COZE_API_TOKEN, MOONSHOT_API_KEY
 
 # 3. 访问Dashboard
 # https://shortvideo.bridgetyangjie.cn/
@@ -514,7 +513,7 @@ vercel --prod
 |------|----------|----------|
 | 接入红果官方API | Tier 1数据100%真实 | ⚠️ 需合作 |
 | 对接DataEye付费接口 | 播放量精确到万 | ⚠️ 需付费 |
-| DeepSeek搜索结果验证 | Tier 2可信度提升 | ✅ 易实施 |
+| Kimi搜索结果验证 | Tier 2可信度提升 | ✅ 易实施 |
 
 ### 8.2 功能扩展
 
@@ -522,7 +521,7 @@ vercel --prod
 |------|------|------|
 | 厂牌排行榜 | 📋 规划中 | 统计各MCN爆款率 |
 | ROI实时监控 | 📋 规划中 | 需投流数据源 |
-| 受众画像可视化 | 📋 规划中 | DeepSeek推理补充 |
+| 受众画像可视化 | 📋 规划中 | Kimi推理补充 |
 | 演员-剧目关系图谱 | 📋 规划中 | 需新组件开发 |
 
 ### 8.3 自动化运维
@@ -556,7 +555,7 @@ vercel --prod
 | **解耦架构** | 爬虫与AI大脑分离，降低维护成本 |
 | **自动化运维** | GitHub Actions定时调度，无需人工干预 |
 | **版本控制** | Git管理所有数据变更，可追溯历史 |
-| **扩展性** | DeepSeek强大推理能力，可快速扩展新字段 |
+| **扩展性** | Kimi联网搜索和推理能力，可快速扩展新字段 |
 | **部署灵活** | GitHub Pages/Vercel双托管方案 |
 
 ---

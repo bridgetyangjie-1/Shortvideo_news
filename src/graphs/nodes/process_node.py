@@ -26,8 +26,8 @@ def process_node(
 ) -> ProcessNodeOutput:
     """
     title: 🧹 数据清洗与结构化
-    desc: 使用DeepSeek清洗和结构化搜索结果，提取榜单数据
-    integrations: DeepSeek API
+    desc: 使用 Kimi 清洗和结构化搜索结果，提取榜单数据
+    integrations: Moonshot API
     """
     ctx = runtime.context
     

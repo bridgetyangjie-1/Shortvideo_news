@@ -22,7 +22,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
     """
     title: 数据补充（先搜后问架构）
     desc: Gemini重构 - 先在Python层真实搜索每部剧的资料，再喂给LLM做提取，彻底根除幻觉
-    integrations: DeepSeek API（search + chat）
+    integrations: Moonshot API（search + chat）
     """
     ctx = runtime.context
     
@@ -67,7 +67,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             logger.info(f"正在搜索剧目《{title}》的真实资料...")
             
             try:
-                # 🚨 使用 DuckDuckGo 真正具有爬虫能力的 search 方法
+                # 🚨 使用 Kimi $web_search 进行真实联网检索
                 search_res = client.search(query=f"短剧 《{title}》 演员 主演 制作公司 厂牌", max_results=3)
                 real_search_context += f"\n【剧目：《{title}》真实网页检索结果】:\n{search_res}\n"
                 logger.info(f"搜索《{title}》成功")

@@ -239,6 +239,7 @@ class GlobalState(BaseModel):
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布")
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
+    weekly_rankings: List[WeeklyRankingItem] = Field(default=[], description="周榜历史")
     quality_score: float = Field(default=0.0, description="数据质量分数 (0-100)")
     error_message: Annotated[str, operator.add] = Field(default="", description="错误信息")
 
@@ -269,7 +270,7 @@ class GraphOutput(BaseModel):
     period: str = Field(default="", description="数据周期（如 2026-05-15_2026-05-21）")
     # 概览统计（Dashboard页面1）
     overview: OverviewStats = Field(default_factory=OverviewStats, description="概览统计数据")
-    genre_distribution: Dict[str, int] = Field(default_factory=dict, description="题材分布百分比")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="题材分布数据")
     platform_share: List[PlatformShare] = Field(default_factory=list, description="平台份额")
     # 详细数据
     industry: IndustryData = Field(default_factory=IndustryData, description="行业数据")
@@ -422,6 +423,7 @@ class PushNodeOutput(BaseModel):
     error_message: str = Field(default="", description="错误信息")
     storage_url: str = Field(default="", description="对象存储URL（用于GitHub同步）")
     storage_key: str = Field(default="", description="对象存储Key（持久化存储）")
+    output_path: str = Field(default="", description="本地输出文件路径")
 
 
 # ==================== 条件判断 ====================
@@ -508,4 +510,5 @@ class HistoryDataInput(BaseModel):
 class HistoryDataOutput(BaseModel):
     """历史数据节点输出"""
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
+    weekly_rankings: List[WeeklyRankingItem] = Field(default=[], description="周榜历史")
     error_message: str = Field(default="", description="错误信息")

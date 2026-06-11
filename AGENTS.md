@@ -33,7 +33,7 @@ git checkout v1.0.0
 - ✅ Kimi自带联网搜索能力（无需额外搜索引擎）
 - ✅ 国内数据源覆盖强（微信公众号、小红书、知乎等）
 - ✅ 32k上下文窗口，支持长文本处理
-- ✅ base_url: https://api.moonshot.cn/v1，模型: moonshot-v1-32k
+- ✅ base_url: https://api.moonshot.ai/v1，模型: moonshot-v1-32k
 
 ⚠️ GitHub Actions环境变量：
 - `MOONSHOT_API_KEY` - 已配置
@@ -84,7 +84,7 @@ rankings.title
 
 - **名称**: 短剧行业数据看板
 - **作者**: Bridget Yang
-- **功能**: 使用DeepSeek API自动抓取短剧行业数据，生成多维度分析报告
+- **功能**: 使用Kimi (Moonshot) API自动抓取短剧行业数据，生成多维度分析报告
 - **部署方式**: GitHub Actions自动运行，每日北京时间9:00执行
 - **访问地址**: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 
@@ -106,13 +106,13 @@ rankings.title
 
 ### 行业快讯规则（v1.1要求）
 - **数量**: 5条
-- **内容**: 100字内总结（DeepSeek提炼）
+- **内容**: 100字内总结（Kimi提炼）
 - **链接**: 具体原文链接（非门户网站首页）
 - **类型**: data/warn/biz（数据/预警/商业）
 
 ### 行业大事件规则（v1.1.1要求）
 - **内容**: 具体事件+真实数据（如"播放量暴涨45%"）
-- **来源**: DeepSeek联网搜索实时事件
+- **来源**: Kimi联网搜索实时事件
 - **禁止**: 泛泛分析（如"女频剧持续领跑"）
 
 ---
@@ -121,13 +121,13 @@ rankings.title
 
 | 节点名 | 文件位置 | 类型 | 功能描述 | 配置文件 |
 |-------|---------|------|---------|---------|
-| search_node | `nodes/search_node.py` | task | DeepSeek联网搜索榜单+标签数据 | - |
-| news_node | `nodes/news_node.py` | agent | DeepSeek搜索5条快讯+100字总结+原文链接 | `config/news_llm_cfg.json` |
-| process_node | `nodes/process_node.py` | agent | DeepSeek结构化处理榜单 | `config/process_llm_cfg.json` |
+| search_node | `nodes/search_node.py` | task | Kimi联网搜索榜单+标签数据 | - |
+| news_node | `nodes/news_node.py` | agent | Kimi搜索5条快讯+100字总结+原文链接 | `config/news_llm_cfg.json` |
+| process_node | `nodes/process_node.py` | agent | Kimi结构化处理榜单 | `config/process_llm_cfg.json` |
 | enrich_node | `nodes/enrich_node.py` | agent | **先搜后问架构** - Python层调用search获取真实资料，再喂给LLM提取演员/标签 | `config/enrich_llm_cfg.json` |
-| actor_ranking_node | `nodes/actor_ranking_node.py` | agent | DeepSeek生成演员人气榜 | `config/actor_ranking_llm_cfg.json` |
-| industry_node | `nodes/industry_node.py` | agent | DeepSeek联网获取行业宏观数据 | `config/industry_llm_cfg.json` |
-| audience_profile_node | `nodes/audience_profile_node.py` | agent | DeepSeek搜索观众画像 | `config/audience_profile_llm_cfg.json` |
+| actor_ranking_node | `nodes/actor_ranking_node.py` | agent | Kimi生成演员人气榜 | `config/actor_ranking_llm_cfg.json` |
+| industry_node | `nodes/industry_node.py` | agent | Kimi联网获取行业宏观数据 | `config/industry_llm_cfg.json` |
+| audience_profile_node | `nodes/audience_profile_node.py` | agent | Kimi搜索观众画像 | `config/audience_profile_llm_cfg.json` |
 | genre_distribution_node | `nodes/genre_distribution_node.py` | task | 统计题材分布+标签热度 | - |
 | insights_node | `nodes/insights_node.py` | agent | **先搜后问架构** - Python层调用search获取真实事件，再生成爆款归因+买量建议 | `config/insights_llm_cfg.json` |
 | history_data_node | `nodes/history_data_node.py` | task | 生成历史数据和播放趋势 | - |
@@ -168,8 +168,8 @@ rankings.title
 
 ### 环境变量配置
 在GitHub仓库设置中添加Secret：
-- **名称**: `DEEPSEEK_API_KEY`
-- **值**: 你的DeepSeek API密钥
+- **名称**: `MOONSHOT_API_KEY`
+- **值**: 你的Kimi (Moonshot) API密钥
 
 ### Workflow文件
 路径: `.github/workflows/daily_update.yml`
@@ -203,7 +203,7 @@ permissions:
 │   │   ├── state.py        # 数据结构定义
 │   │   └── nodes/          # 节点实现
 │   ├── tools/
-│   │   └── deepseek_api.py # DeepSeek API工具
+│   │   └── moonshot_api.py # Kimi (Moonshot) API工具
 │   ├── utils/
 │   │   └── runtime.py      # Context替代类
 │   └── run_github.py       # GitHub Actions入口

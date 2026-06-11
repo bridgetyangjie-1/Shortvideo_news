@@ -1,6 +1,6 @@
 {
   "config": {
-    "model": "deepseek-chat",
+    "model": "moonshot-v1-32k",
     "temperature": 0.3,
     "max_completion_tokens": 2000
   },
