@@ -58,7 +58,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 error_message=error_message + "\n"
             )
         
-        # 搜索全部剧集（Tier 7配额充足）
+        # 搜索全部剧集（Tier 2配额充足）
         for idx, drama in enumerate(basic_rankings_list):
             # 获取剧名
             title = ""
@@ -71,22 +71,37 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             if not title:
                 continue
             
-            logger.info(f"Kimi搜索剧目《{title}》...")
+            logger.info(f"Kimi多轮搜索剧目《{title}》...")
             
-            try:
-                search_res: str = kimi_client.search(
-                    query=f"短剧 《{title}》 演员 主演 制作公司 厂牌",
-                    max_results=3
-                )
-                search_text = search_res[:2000] if len(search_res) > 2000 else search_res
-                real_search_context += f"\n【剧目：《{title}》真实检索】:\n{search_text}\n"
-                logger.info(f"搜索《{title}》成功")
-                time.sleep(1)  # 🚨 节流阀（Tier 7配额充足，缩短间隔）
-            except Exception as e:
-                search_error = f"enrich_node: 搜索《{title}》失败: {e}"
-                logger.warning(search_error)
-                search_errors.append(search_error)
-                real_search_context += f"\n【剧目：《{title}》搜索失败，填'未知'】\n"
+            # 🚨 多轮搜索策略：尝试多种关键词组合
+            search_queries = [
+                f"短剧《{title}》主演演员女演员男主角女主角",
+                f"《{title}》短剧演员阵容DataEye红果短剧",
+                f"短剧 {title} 主演是谁 小红书抖音豆瓣"
+            ]
+            
+            search_found = False
+            for query in search_queries:
+                try:
+                    search_res: str = kimi_client.search(query, max_results=3)
+                    # 检查搜索结果是否包含演员信息（关键词：演员、主演、女主、男主）
+                    if search_res and any(keyword in search_res for keyword in ["演员", "主演", "女主", "男主", "女主角", "男主角"]):
+                        search_text = search_res[:2000] if len(search_res) > 2000 else search_res
+                        real_search_context += f"\n【剧目：《{title}》真实检索】:\n{search_text}\n"
+                        logger.info(f"搜索《{title}》成功，找到演员信息")
+                        search_found = True
+                        break  # 找到有效结果，停止后续搜索
+                    time.sleep(1)  # 每次搜索间隔
+                except Exception as e:
+                    logger.warning(f"搜索《{title}》关键词'{query}'失败: {e}")
+                    time.sleep(1)
+            
+            if not search_found:
+                # 🚨 搜索失败时添加推理补充提示
+                real_search_context += f"\n【剧目：《{title}》搜索无结果，请推理补充】\n"
+                logger.warning(f"《{title}》未找到演员信息，将推理补充")
+            
+            time.sleep(1)  # 每部剧搜索间隔
         
         # ========== 推理阶段：DeepSeek生成JSON ==========
         rankings_json_list: List[Dict] = []
@@ -103,6 +118,12 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
 
 🚨 真实互联网检索资料（从中提取，无提及则填'未知'）：
 {real_search_context}
+
+🚨【演员推理补充规则】：
+- 若搜索结果无演员信息，请根据剧目类型（女频/男频）推理可能的演员特征
+- 女频短剧主演通常是新生代女演员（如：徐艺真、马秋元、王艺瑾等）
+- 男频短剧主演通常是新生代男演员（如：曾辉、何健麒、孙晨越等）
+- 若实在无法确定，填'未知'但尽量给出推理依据
 
 请补全缺失字段并输出JSON数组，不要加```json包裹："""
         

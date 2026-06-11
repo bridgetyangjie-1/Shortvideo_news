@@ -18,6 +18,8 @@ class DeepSeekClient:
         self.api_key = os.getenv("DEEPSEEK_API_KEY", "")
         if not self.api_key:
             logger.warning("DEEPSEEK_API_KEY未设置")
+            # 使用占位key，避免初始化失败
+            self.api_key = "missing-deepseek-api-key"
         
         self.client = OpenAI(
             api_key=self.api_key,

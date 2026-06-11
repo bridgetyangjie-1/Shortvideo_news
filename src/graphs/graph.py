@@ -128,12 +128,8 @@ def create_graph():
         metadata={"type": "agent", "llm_cfg": "config/insights_llm_cfg.json"}
     )
     
-    # 9. 历史数据节点（大模型）
-    builder.add_node(
-        "history_data_node", 
-        history_data_node, 
-        metadata={"type": "agent", "llm_cfg": "config/history_data_llm_cfg.json"}
-    )
+    # 9. 历史数据节点（统计节点，不需要LLM）
+    builder.add_node("history_data_node", history_data_node)
     
     # 10. 数据推送节点
     builder.add_node("push_node", push_node)

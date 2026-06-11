@@ -6,31 +6,45 @@
 
 | 版本 | Tag | 日期 | 说明 |
 |------|-----|------|------|
-| **当前标准版本** | `v1.7.7` | 2026-06-11 | **时间铁律强制执行：搜索关键词+推理Prompt双重保障** |
+| **当前标准版本** | `v1.7.10` | 2026-06-11 | **演员搜索逻辑优化：多轮搜索+智能停止+推理补充** |
+| v1.7.7 | - | 2026-06-11 | 时间铁律强制执行（历史版本） |
 | v1.7.0 | - | 2026-06-11 | 双模型协同解耦架构（历史版本） |
 | v1.6.0 | - | 2026-06-11 | Cursor改进合并后的稳定版本（历史版本，不再维护） |
 
-⚠️ **重要：v1.7.2为当前标准版本，以前的版本代码和MD文件不要再碰！**
+⚠️ **重要：v1.7.10为当前标准版本，以前的版本代码和MD文件不要再碰！**
 
 ---
 
 ## ⚠️ 重要注意事项
 
-### v1.7.7标准版本（双模型协同+Tier 7+时间铁律）
+### v1.7.10标准版本（双模型协同+Tier 2+演员搜索优化）
 
 **核心架构原则**：
 - **数据采集（I/O层）**：`MoonshotClient.search()` - 国内联网搜索
 - **数据推理（计算层）**：`DeepSeekClient.chat()` - 稳定JSON输出
 
-**Tier 7配额优势**：
-- 并发：1,000
-- RPM：100,000
-- 节流时间：缩短到1秒（工作流几十秒完成）
+**Tier 2配额优势**：
+- 并发：100
+- RPM：500
+- 节流时间：缩短到1秒
 
 **数据扩充**：
 - 剧榜：TOP20（从TOP10扩充）
 - 演员榜：女频TOP10 + 男频TOP10
-- 备用搜索：DataEye失败 → 小红书搜索演员名称
+
+🚨 **【演员搜索优化】（v1.7.10核心改进）**：
+> **多轮搜索策略**：
+> - 第一轮：`短剧《{title}》主演女演员男主角`
+> - 第二轮：`《{title}》短剧演员阵容DataEye红果`
+> - 第三轮：`短剧 {title} 主演是谁 小红书抖音豆瓣`
+> 
+> **智能停止逻辑**：
+> - 搜索结果包含演员关键词（演员/主演/女主/男主）→ 立即停止
+> - 三轮都无结果 → 标记为"搜索无结果，请推理补充"
+> 
+> **推理补充规则**：
+> - 女频短剧常见演员：徐艺真、马秋元、王艺瑾、白妍、赵佳等
+> - 男频短剧常见演员：曾辉、何健麒、孙晨越、王道铁等
 
 🚨 **【时间铁律】（最高优先级）**：
 > 所有爬取内容必须是【当日】数据！
@@ -42,16 +56,23 @@
 > ⚠️ 禁止硬编码 "2024"、"2025" 等年份！
 > ⚠️ 往年数据一律丢弃，不作为今日数据输出！
 
+🚨 **【配置文件修正】**：
+> - news_llm_cfg.json: model改为 `deepseek-chat`
+> - insights_llm_cfg.json: model改为 `deepseek-chat`
+> - actor_ranking_llm_cfg.json: model改为 `deepseek-chat`
+> - enrich_llm_cfg.json: model改为 `deepseek-chat`
+> - industry_llm_cfg.json: model保持 `moonshot-v1-32k`（使用Kimi search_json）
+
 **工具类**：
 - `MoonshotClient` (`src/tools/moonshot_api.py`): base_url=https://api.moonshot.cn/v1
 - `DeepSeekClient` (`src/tools/deepseek_api.py`): base_url=https://api.deepseek.com
 
 **节流保护**：
-- 搜索间隔: `time.sleep(1)`（Tier 7配额充足）
+- 搜索间隔: `time.sleep(1)`（Tier 2配额充足）
 - 429重试: 最多5次backoff重试（10/20/30/40/50秒）
 
 ⚠️ GitHub Actions环境变量：
-- `MOONSHOT_API_KEY` - Kimi搜索（已配置，Tier 7付费用户）
+- `MOONSHOT_API_KEY` - Kimi搜索（已配置，Tier 2付费用户）
 - `DEEPSEEK_API_KEY` - DeepSeek推理（已配置）
 
 ### Coze依赖限制

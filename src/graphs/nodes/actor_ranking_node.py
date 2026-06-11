@@ -77,9 +77,12 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
                 error_message=error_message + "\n"
             )
         
-        # 渲染用户提示词
+        # 渲染用户提示词（使用当前日期）
+        from datetime import datetime
+        current_date = datetime.now().strftime("%Y-%m-%d")
         up_tpl = Template(up)
         user_prompt = up_tpl.render({
+            "date": current_date,
             "rankings": json.dumps(rankings_data, ensure_ascii=False, indent=2)
         })
         
@@ -87,29 +90,41 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         kimi_client = MoonshotClient()
         ds_client = DeepSeekClient()
         
-        # 先用Kimi搜索补充演员信息（多轮搜索+多来源）
+        # 先用Kimi搜索补充演员信息（多轮搜索+多来源+智能停止）
         search_context = ""
         for ranking in rankings_data[:20]:
             title = ranking.get("title", "")
             female_lead = ranking.get("female_lead", "未知")
             male_lead = ranking.get("male_lead", "未知")
             
-            # 如果任一演员未知，进行多轮搜索
+            # 🚨 如果任一演员未知，进行多轮精准搜索
             if female_lead == "未知" or male_lead == "未知":
-                # 第一轮：精确搜索（剧目+演员+主演）
+                # 精准搜索关键词组合（多来源）
                 search_queries = [
-                    f"短剧《{title}》演员 主演 女主 男主",
-                    f"《{title}》短剧 主演是谁 DataEye 红果",
-                    f"短剧 {title} 演员表 cast 小红书 抖音"
+                    f"短剧《{title}》主演女演员男主角",
+                    f"《{title}》短剧演员是谁DataEye红果",
+                    f"短剧 {title} 女主角男主角小红书抖音豆瓣"
                 ]
                 
+                found_valid = False
                 for query in search_queries:
-                    logger.info(f"搜索《{title}》演员: {query}")
-                    search_result = kimi_client.search(query)
-                    if search_result and len(search_result) > 50:
-                        search_context += f"\n【《{title}》演员搜索结果】:\n{search_result[:800]}\n"
-                        break  # 找到结果就停止
-                    time.sleep(1)  # 节流
+                    try:
+                        logger.info(f"搜索《{title}》演员: {query}")
+                        search_result = kimi_client.search(query)
+                        # 🚨 检查搜索结果是否包含有效演员信息
+                        if search_result and len(search_result) > 50:
+                            # 验证是否包含演员关键词
+                            if any(kw in search_result for kw in ["演员", "主演", "女主", "男主", "女主角", "男主角", "饰演", "扮演"]):
+                                search_context += f"\n【《{title}》演员搜索结果】:\n{search_result[:800]}\n"
+                                logger.info(f"《{title}》找到有效演员信息")
+                                found_valid = True
+                                break  # 🚨 智能停止：找到有效结果立即停止
+                    except Exception as e:
+                        logger.warning(f"搜索《{title}》失败: {e}")
+                    time.sleep(1)  # 每次搜索间隔
+                
+                if not found_valid:
+                    logger.warning(f"《{title}》未找到演员信息，将推理补充")
                 
                 time.sleep(1)  # 每部剧搜索间隔
         
@@ -130,7 +145,6 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         )
 
         # DeepSeek返回的是字符串，需要解析JSON
-        import re
         json_match = re.search(r'\{[\s\S]*\}', actors_data)
         if json_match:
             actors_dict = json.loads(json_match.group())
