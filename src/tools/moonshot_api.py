@@ -7,6 +7,7 @@ import json
 import logging
 import os
 import re
+import time
 from typing import Any, Dict, List, Optional, Type
 
 from openai import OpenAI
@@ -20,6 +21,11 @@ MAX_WEB_SEARCH_ROUNDS = 3
 
 def is_api_budget_error(exc: Exception) -> bool:
     return str(exc) == API_BUDGET_EXCEEDED_MESSAGE
+
+
+def is_engine_overloaded_error(exc: Exception) -> bool:
+    error_text = str(exc).lower()
+    return "429" in error_text or "engine_overloaded" in error_text
 
 
 class MoonshotClient:
@@ -59,6 +65,43 @@ class MoonshotClient:
         if self.api_call_count >= MAX_API_CALLS_PER_CLIENT:
             raise Exception(API_BUDGET_EXCEEDED_MESSAGE)
         self.api_call_count += 1
+
+    def _create_completion_with_backoff(self, operation_name: str, **kwargs: Any) -> Any:
+        """Moonshot 请求底座：仅对 429/engine_overloaded 做有限指数退避重试。"""
+        last_error: Optional[Exception] = None
+
+        for i in range(3):
+            try:
+                self._record_api_call()
+                return self.client.chat.completions.create(**kwargs)
+            except Exception as exc:
+                if not is_engine_overloaded_error(exc):
+                    raise
+
+                last_error = exc
+                wait_seconds = 2 ** i + 1
+                logger.warning(
+                    "Kimi %s 请求触发 429/engine_overloaded，第 %s/3 次失败，等待 %s 秒后重试: %s",
+                    operation_name,
+                    i + 1,
+                    wait_seconds,
+                    exc,
+                )
+                time.sleep(wait_seconds)
+
+        logger.error(
+            "Kimi %s 请求连续 3 次因 429/engine_overloaded 失败，已触发灾难降级: %s",
+            operation_name,
+            last_error,
+        )
+        raise RuntimeError(f"Kimi {operation_name} 请求连续 3 次过载失败") from last_error
+
+    def _fallback_value(self, expected_type: Optional[Type[Any]] = None) -> Any:
+        if expected_type is list:
+            return []
+        if expected_type is str:
+            return ""
+        return {}
     
     def chat(
         self,
@@ -79,8 +122,8 @@ class MoonshotClient:
         """
         try:
             self._ensure_api_key()
-            self._record_api_call()
-            response = self.client.chat.completions.create(
+            response = self._create_completion_with_backoff(
+                "chat",
                 model=self.model,
                 messages=messages,
                 temperature=temperature,
@@ -161,6 +204,9 @@ class MoonshotClient:
             return content
         except Exception as e:
             logger.error(f"Kimi 搜索失败: {e}")
+            if is_engine_overloaded_error(e):
+                logger.error("Kimi 搜索连续重试后仍过载，返回空搜索结果作为保底")
+                return ""
             raise
 
     def search_json(
@@ -181,14 +227,20 @@ class MoonshotClient:
 查询：{query}
 
 如果某字段找不到，请使用"未知"或合理的空数组，不要编造具体事实。"""
-        raw_text = self._chat_with_web_search(
-            messages=[
-                {"role": "system", "content": system_prompt or "你是严谨的数据检索和结构化抽取助手。"},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
+        try:
+            raw_text = self._chat_with_web_search(
+                messages=[
+                    {"role": "system", "content": system_prompt or "你是严谨的数据检索和结构化抽取助手。"},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens
+            )
+        except Exception as e:
+            if is_engine_overloaded_error(e):
+                logger.error("Kimi search_json 连续重试后仍过载，返回保底空值: %s", e)
+                return self._fallback_value(expected_type)
+            raise
         return self.extract_json(raw_text, expected_type=expected_type)
     
     def structured_search(
@@ -253,8 +305,8 @@ class MoonshotClient:
         last_content = ""
 
         for round_idx in range(1, max_rounds + 1):
-            self._record_api_call()
-            completion = self.client.chat.completions.create(
+            completion = self._create_completion_with_backoff(
+                "web_search",
                 model=self.search_model,
                 messages=working_messages,
                 temperature=temperature,
