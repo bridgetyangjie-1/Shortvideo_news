@@ -61,9 +61,9 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
     try:
         # ========== 搜集阶段：Kimi搜索 ==========
         search_queries = [
-            "短剧行业 最新新闻 2024 2025",
-            "DataEye 短剧热度榜 最新",
-            "广电总局 短剧新规 政策"
+            f"短剧行业 最新新闻 {date_str}",
+            f"DataEye 短剧热度榜 {date_str}",
+            f"短剧行业 融资 政策 {date_str}"
         ]
         
         search_results: List[str] = []
@@ -89,8 +89,13 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
 
 当前日期：{date_str}
 
+🚨【时间铁律 - 最高优先级】
+⚠️ 只返回【今日：{date_str}】发布的新闻！
+⚠️ 搜索结果中的旧新闻（2024年、2025年等往年数据）一律丢弃！
+⚠️ 如果搜索结果中没有今日新闻，返回空数组[]
+
 🚨【核心铁律】
-- 必须返回5条新闻，严格输出JSON数组格式
+- 必须返回5条今日新闻，严格输出JSON数组格式
 - 每条content不超过100字（精简总结）
 - 每条必须有source_url（从搜索结果中提取的真实原文链接）
 

@@ -89,6 +89,11 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         
         full_prompt = f"""{user_prompt}
 
+🚨【时间铁律 - 最高优先级】
+⚠️ 只分析【今日：{state.data_date}】的行业大事件！
+⚠️ 搜索结果中的往年数据一律丢弃，不作为今日洞察来源！
+⚠️ 如果没有今日大事件，基于今日榜单数据进行分析。
+
 🚨 必须输出合法JSON数组格式，不要加```json包裹：
 [
   {{
