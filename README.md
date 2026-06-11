@@ -12,6 +12,7 @@
 - 行业大事件：具体事件 + 真实数据，避免泛泛趋势描述。
 - 题材分布：题材占比和热门标签。
 - 观众画像：性别、年龄、地域分布。
+- 核心情绪与动机拆解：基于榜单题材和爽点推演 3 类主流情绪驱动与 3 类现实焦虑痛点，并用雷达图展示强度分布。
 - 行业宏观数据：APP 月活、AI 短剧渗透率、剧集总量、破亿爆款剧等。
 
 ## 在线访问
@@ -26,7 +27,7 @@ GitHub Pages: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.ht
 | JSON 推理 | DeepSeek API |
 | 工作流编排 | Python |
 | 自动化 | GitHub Actions |
-| 前端 | 静态 HTML + Chart.js |
+| 前端 | 静态 HTML + Chart.js + ECharts |
 | 托管 | GitHub Pages |
 
 ## 目录结构

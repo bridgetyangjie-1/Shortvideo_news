@@ -10,6 +10,7 @@
 - 演员榜为女频 TOP10 + 男频 TOP10。
 - 行业快讯固定 5 条，并要求每条包含约 100 字洞察。
 - 搜索关键词使用动态日期，避免把往年数据当作今日数据。
+- 已废弃“主流分发平台份额”板块，改为 DeepSeek 推演的“核心情绪与动机拆解”，输出 `emotional_analysis.primary_emotions` 与 `emotional_analysis.target_anxieties` 并在前端用 ECharts 雷达图展示。
 
 ## 主要风险
 
