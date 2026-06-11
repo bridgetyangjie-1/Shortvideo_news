@@ -313,33 +313,466 @@
     },
     "2026-06-11": {
       "success": true,
-      "generated_at": "2026-06-11T03:44:40+08:00",
+      "generated_at": "2026-06-11T05:55:11+08:00",
       "data_date": "2026-06-11",
       "genre_distribution": {
-        "genres": [],
-        "top_genre": "",
+        "genres": [
+          {
+            "name": "其他",
+            "count": 10,
+            "total_views": "53500",
+            "trend": "same"
+          }
+        ],
+        "top_genre": "其他",
         "rising_genre": "",
-        "background_tags": [],
-        "theme_tags": [],
-        "setting_tags": [],
-        "top_tag": "",
-        "rising_tag": ""
+        "background_tags": [
+          {
+            "name": "都市",
+            "category": "背景",
+            "count": 2,
+            "avg_views": 100,
+            "heat": 21
+          },
+          {
+            "name": "年代",
+            "category": "背景",
+            "count": 2,
+            "avg_views": 100,
+            "heat": 21
+          }
+        ],
+        "theme_tags": [
+          {
+            "name": "甜宠",
+            "category": "主题",
+            "count": 2,
+            "avg_views": 100,
+            "heat": 21
+          },
+          {
+            "name": "逆袭",
+            "category": "主题",
+            "count": 2,
+            "avg_views": 100,
+            "heat": 21
+          },
+          {
+            "name": "奇幻",
+            "category": "主题",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          },
+          {
+            "name": "权谋",
+            "category": "主题",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          }
+        ],
+        "setting_tags": [
+          {
+            "name": "逆袭",
+            "category": "设定",
+            "count": 2,
+            "avg_views": 100,
+            "heat": 21
+          },
+          {
+            "name": "马甲",
+            "category": "设定",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          },
+          {
+            "name": "重生",
+            "category": "设定",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          },
+          {
+            "name": "穿越",
+            "category": "设定",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          }
+        ],
+        "top_tag": "都市",
+        "rising_tag": "年代"
       },
       "industry": {
-        "user_scale": "7.18亿",
-        "market_size": "1000亿+",
+        "user_scale": 718000000,
+        "market_size": "未知",
         "drama_count": "25万+",
         "billion_dramas": 20,
-        "ai_ratio": 38,
-        "female_ratio": 95,
-        "male_ratio": 5,
+        "ai_ratio": 0,
+        "female_ratio": 100,
+        "male_ratio": 0,
         "app_mau": "3.04亿",
         "app_mau_yoy": "+1.4亿"
       },
-      "rankings": [],
+      "rankings": [
+        {
+          "rank": 1,
+          "title": "我在八零年代当后妈",
+          "female_lead": "苏袀禾",
+          "male_lead": "滕泽文",
+          "views": "1000万",
+          "views_num": 10000,
+          "platform": "抖音",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "听花岛",
+          "core_trope": [
+            "穿越",
+            "现代女大学生",
+            "八零年代生活"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 2,
+          "title": "重生之我在霸总身边当卧底",
+          "female_lead": "盖玥希",
+          "male_lead": "林更新",
+          "views": "800万",
+          "views_num": 8000,
+          "platform": "红果",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "卧底",
+            "甜虐",
+            "理智与情感"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 3,
+          "title": "穿越成废柴王妃",
+          "female_lead": "王格格",
+          "male_lead": "未知",
+          "views": "700万",
+          "views_num": 7000,
+          "platform": "抖音",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "钐川文和",
+          "core_trope": [
+            "穿越",
+            "废柴王妃",
+            "独立成长"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 4,
+          "title": "重生后我成了宠妃",
+          "female_lead": "刘凡菲",
+          "male_lead": "未知",
+          "views": "600万",
+          "views_num": 6000,
+          "platform": "红果",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "重生",
+            "宠妃",
+            "宫廷权力斗争"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 5,
+          "title": "嫡女重生记",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "500万",
+          "views_num": 5000,
+          "platform": "抖音",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "象山竹蜻蜓文化传媒有限公司、太上有风传媒（北京）有限公司、湖南艺人堂影视文化有限公司、华影联动（北京）文化传媒有限公司",
+          "core_trope": [
+            "重生",
+            "嫡女",
+            "复仇"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 6,
+          "title": "重生之嫡女祸妃",
+          "female_lead": "李一桐",
+          "male_lead": "刘宇宁",
+          "views": "450万",
+          "views_num": 4500,
+          "platform": "红果",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "重生",
+            "嫡女",
+            "宫廷爱情"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 7,
+          "title": "重生之将门毒后",
+          "female_lead": "夏茜",
+          "male_lead": "侯明炫",
+          "views": "400万",
+          "views_num": 4000,
+          "platform": "抖音",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "重生",
+            "将门嫡妃",
+            "毒后"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 8,
+          "title": "重生之嫡女归来",
+          "female_lead": "琬琬儿",
+          "male_lead": "萧衍",
+          "views": "350万",
+          "views_num": 3500,
+          "platform": "红果",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "象山竹蜻蜓文化传媒有限公司、太上有风传媒（北京）有限公司、湖南艺人堂影视文化有限公司、华影联动（北京）文化传媒有限公司",
+          "core_trope": [
+            "重生",
+            "嫡女",
+            "归来"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 9,
+          "title": "嫡女重生记之毒妃",
+          "female_lead": "黄日莹",
+          "male_lead": "官鸿",
+          "views": "300万",
+          "views_num": 3000,
+          "platform": "抖音",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "重生",
+            "毒妃",
+            "错嫁"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 10,
+          "title": "重生之嫡女风华",
+          "female_lead": "葛鑫怡",
+          "male_lead": "董子凡",
+          "views": "250万",
+          "views_num": 2500,
+          "platform": "红果",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "重生",
+            "嫡女",
+            "风华"
+          ],
+          "episodes_count": 80
+        }
+      ],
       "actors": {
-        "female": [],
-        "male": []
+        "female": [
+          {
+            "rank": 1,
+            "name": "苏袀禾",
+            "popularity": 985,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "我在八零年代当后妈",
+            "trend": ""
+          },
+          {
+            "rank": 2,
+            "name": "盖玥希",
+            "popularity": 975,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之我在霸总身边当卧底",
+            "trend": ""
+          },
+          {
+            "rank": 3,
+            "name": "王格格",
+            "popularity": 965,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "穿越成废柴王妃",
+            "trend": ""
+          },
+          {
+            "rank": 4,
+            "name": "刘凡菲",
+            "popularity": 955,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生后我成了宠妃",
+            "trend": ""
+          },
+          {
+            "rank": 5,
+            "name": "李一桐",
+            "popularity": 945,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女祸妃",
+            "trend": ""
+          }
+        ],
+        "male": [
+          {
+            "rank": 1,
+            "name": "滕泽文",
+            "popularity": 985,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "我在八零年代当后妈",
+            "trend": ""
+          },
+          {
+            "rank": 2,
+            "name": "林更新",
+            "popularity": 975,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之我在霸总身边当卧底",
+            "trend": ""
+          },
+          {
+            "rank": 3,
+            "name": "侯明炫",
+            "popularity": 965,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之将门毒后",
+            "trend": ""
+          },
+          {
+            "rank": 4,
+            "name": "萧衍",
+            "popularity": 955,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女归来",
+            "trend": ""
+          },
+          {
+            "rank": 5,
+            "name": "官鸿",
+            "popularity": 945,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "嫡女重生记之毒妃",
+            "trend": ""
+          }
+        ]
       },
       "platform": {
         "apps": [
@@ -394,7 +827,7 @@
         "daily": [
           {
             "date": "2026-06-11",
-            "total_views": 0
+            "total_views": 53500
           },
           {
             "date": "2026-06-10",
@@ -410,32 +843,66 @@
             "week": "2026-W23",
             "start_date": "2026-06-08",
             "end_date": "2026-06-14",
-            "top1_title": "",
-            "top1_views": "",
-            "total_views": 0
+            "top1_title": "我在八零年代当后妈",
+            "top1_views": "1000万",
+            "total_views": 53500
           }
         ],
-        "trend_direction": "down"
+        "trend_direction": "stable"
       },
       "daily_news": [
         {
           "type": "数据",
           "icon": "📊",
-          "title": "行业数据更新",
-          "content": "今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿。",
-          "source_url": "https://www.newwanr.com"
+          "title": "微短剧市场规模破千亿",
+          "content": "2025年国内微短剧市场规模破千亿元，用户近7亿，广电总局将制定《微短剧发展管理办法》。",
+          "source_url": "https://sdxw.iqilu.com/share/YS0yMS0xNzAzMDU1Mw==.html"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "微短剧市场规模预计达634亿",
+          "content": "2025年中国微短剧市场规模预计达634亿至686亿元，用户规模6.62亿，付费用户比例上升。",
+          "source_url": "https://www.douban.com/note/873791045/"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "短剧市场规模超电影票房",
+          "content": "2024年国内短剧市场规模504.4亿元，超国内电影市场全年票房，预计2025年达678亿元。",
+          "source_url": "https://www.dianyingjie.com.cn/2025/0918/396829.shtml"
+        },
+        {
+          "type": "预警",
+          "icon": "⚠️",
+          "title": "广电总局发布短剧内容审核新规",
+          "content": "广电总局发布新规，明确微短剧内容导向与制作标准，规范网络微短剧发展。",
+          "source_url": "https://www.sohu.com/a/736945898_120853270"
+        },
+        {
+          "type": "商业",
+          "icon": "💰",
+          "title": "DataEye海外微短剧热度榜",
+          "content": "DataEye海外短剧热度榜显示，《Fake It Till We Make It》连续4周登顶，热度超720万。",
+          "source_url": "https://www.36kr.com/p/2924035455179907"
         }
       ],
       "insights": [
         {
-          "icon": "📊",
-          "title": "数据待补充",
-          "content": "请稍后再试",
+          "icon": "🔥",
+          "title": "爆款归因：我在八零年代当后妈",
+          "content": "受众定位为女性用户，尤其是对穿越、复古题材感兴趣的群体。爽点公式包括'现代女大学生穿越回八零年代生活'的新奇体验和'后妈角色翻转'带来的情感冲击。预计投流集中在抖音平台，利用其短视频优势快速吸引流量，并通过核心情节剪辑和话题标签提高用户粘性。",
+          "source": ""
+        },
+        {
+          "icon": "💰",
+          "title": "买量建议：穿越题材CPA优势明显",
+          "content": "今日榜单TOP3均为穿越题材，显示出该题材在女性向短剧中的高热度和强吸引力。建议加大对穿越题材的买量投入，尤其是结合现代元素和历史背景的创新作品，以获取更低的CPA和更高的用户留存。",
           "source": ""
         }
       ],
-      "quality_score": 60.0,
-      "error_message": "search_node: Kimi 联网搜索失败: Invalid format specifier ' 1, \"title\": \"真实剧名\", \"views\": \"真实播放量\", \"platform\": \"真实平台\"' for object of type 'str'\nnews_node: 搜索 '短剧行业 最新新闻 2024 2025' 失败: Error code: 401 - {'error': {'message': 'Invalid Authentication', 'type': 'invalid_authentication_error'}}\nnews_node: 搜索 'DataEye 短剧热度榜 最新' 失败: Error code: 401 - {'error': {'message': 'Invalid Authentication', 'type': 'invalid_authentication_error'}}\nnews_node: 搜索 '广电总局 短剧新规 政策' 失败: Error code: 401 - {'error': {'message': 'Invalid Authentication', 'type': 'invalid_authentication_error'}}\nnews_node: 未生成有效快讯，已使用默认快讯兜底。\nprocess_node: search_results 为空，无法抽取榜单；请先检查 search_node。\nenrich_node: 输入 basic_rankings 为空，跳过补全。\nactor_ranking_node: enriched_rankings 为空，无法生成演员榜；请检查 enrich_node。\naudience_profile_node: 观众画像搜索或 JSON 解析失败: Error code: 401 - {'error': {'message': 'Invalid Authentication', 'type': 'invalid_authentication_error'}}\nindustry_node: 行业数据搜索或 JSON 解析失败: Error code: 401 - {'error': {'message': 'Invalid Authentication', 'type': 'invalid_authentication_error'}}\ngenre_distribution_node: enriched_rankings 为空，题材分布无法统计；请检查 enrich_node。\ninsights_node: 洞察生成、搜索或 JSON 解析失败: Error code: 401 - {'error': {'message': 'Invalid Authentication', 'type': 'invalid_authentication_error'}}\nhistory_data_node: enriched_rankings 为空，当日播放趋势将记录为 0；请检查 enrich_node。\n"
+      "quality_score": 95.0,
+      "error_message": "audience_profile_node: 观众画像搜索或 JSON 解析失败: list index out of range\n"
     }
   }
 }
