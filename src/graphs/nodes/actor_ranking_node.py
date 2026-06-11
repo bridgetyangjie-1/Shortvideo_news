@@ -87,15 +87,31 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         kimi_client = MoonshotClient()
         ds_client = DeepSeekClient()
         
-        # 先用Kimi搜索补充演员信息（小红书/抖音等备用来源）
+        # 先用Kimi搜索补充演员信息（多轮搜索+多来源）
         search_context = ""
         for ranking in rankings_data[:20]:
-            if ranking.get("female_lead") == "未知" or ranking.get("male_lead") == "未知":
-                title = ranking.get("title", "")
-                search_query = f"短剧《{title}》演员主演 小红书抖音"
-                search_result = kimi_client.search(search_query)
-                search_context += f"\n【《{title}》演员搜索结果】:\n{search_result[:500]}\n"
-                time.sleep(1)
+            title = ranking.get("title", "")
+            female_lead = ranking.get("female_lead", "未知")
+            male_lead = ranking.get("male_lead", "未知")
+            
+            # 如果任一演员未知，进行多轮搜索
+            if female_lead == "未知" or male_lead == "未知":
+                # 第一轮：精确搜索（剧目+演员+主演）
+                search_queries = [
+                    f"短剧《{title}》演员 主演 女主 男主",
+                    f"《{title}》短剧 主演是谁 DataEye 红果",
+                    f"短剧 {title} 演员表 cast 小红书 抖音"
+                ]
+                
+                for query in search_queries:
+                    logger.info(f"搜索《{title}》演员: {query}")
+                    search_result = kimi_client.search(query)
+                    if search_result and len(search_result) > 50:
+                        search_context += f"\n【《{title}》演员搜索结果】:\n{search_result[:800]}\n"
+                        break  # 找到结果就停止
+                    time.sleep(1)  # 节流
+                
+                time.sleep(1)  # 每部剧搜索间隔
         
         # 构建消息（包含搜索补充信息）
         enhanced_prompt = user_prompt
