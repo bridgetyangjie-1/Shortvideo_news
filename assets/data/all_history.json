@@ -313,30 +313,208 @@
     },
     "2026-06-11": {
       "success": true,
-      "generated_at": "2026-06-11T09:57:40+08:00",
+      "generated_at": "2026-06-11T10:22:36+08:00",
       "data_date": "2026-06-11",
       "genre_distribution": {
-        "genres": [],
-        "top_genre": "",
+        "genres": [
+          {
+            "name": "其他",
+            "count": 5,
+            "total_views": "36000",
+            "trend": "same"
+          }
+        ],
+        "top_genre": "其他",
         "rising_genre": "",
-        "background_tags": [],
-        "theme_tags": [],
-        "setting_tags": [],
-        "top_tag": "",
-        "rising_tag": ""
+        "background_tags": [
+          {
+            "name": "都市",
+            "category": "背景",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          },
+          {
+            "name": "校园",
+            "category": "背景",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          }
+        ],
+        "theme_tags": [
+          {
+            "name": "女性成长",
+            "category": "主题",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          },
+          {
+            "name": "甜宠",
+            "category": "主题",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          },
+          {
+            "name": "爽剧",
+            "category": "主题",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          }
+        ],
+        "setting_tags": [
+          {
+            "name": "重生",
+            "category": "设定",
+            "count": 1,
+            "avg_views": 100,
+            "heat": 11
+          }
+        ],
+        "top_tag": "都市",
+        "rising_tag": "校园"
       },
       "industry": {
-        "user_scale": 718000000.0,
+        "user_scale": 718000000,
         "market_size": "未知",
         "drama_count": "25万+",
         "billion_dramas": 20,
         "ai_ratio": 0,
-        "female_ratio": 0,
+        "female_ratio": 100,
         "male_ratio": 0,
         "app_mau": "3.04亿",
         "app_mau_yoy": "+1.4亿"
       },
-      "rankings": [],
+      "rankings": [
+        {
+          "rank": 1,
+          "title": "我在八零年代当后妈",
+          "female_lead": "滕泽文",
+          "male_lead": "苏袀禾",
+          "views": "1000万",
+          "views_num": 10000,
+          "platform": "红果平台",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "听花岛",
+          "core_trope": [
+            "打脸白月光",
+            "后妈逆袭",
+            "年代甜宠"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 2,
+          "title": "重生之我在霸总身边当卧底",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "800万",
+          "views_num": 8000,
+          "platform": "抖音平台",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "重生复仇",
+            "卧底虐恋",
+            "追妻火葬场"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 3,
+          "title": "穿越成皇",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "700万",
+          "views_num": 7000,
+          "platform": "红果平台",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "穿越称帝",
+            "权谋争霸",
+            "后宫争宠"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 4,
+          "title": "嫡女重生记",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "600万",
+          "views_num": 6000,
+          "platform": "新腕儿平台",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "嫡女重生",
+            "宅斗打脸",
+            "强取豪夺"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 5,
+          "title": "重生千金归来",
+          "female_lead": "未知",
+          "male_lead": "未知",
+          "views": "500万",
+          "views_num": 5000,
+          "platform": "抖音平台",
+          "genre": "",
+          "tags": [],
+          "trend": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "重生逆袭",
+            "千金复仇",
+            "甜宠虐渣"
+          ],
+          "episodes_count": 80
+        }
+      ],
       "actors": {
         "female": [],
         "male": []
@@ -358,14 +536,18 @@
         "gender_female": 67,
         "gender_male": 33,
         "age_distribution": {
-          "age_18_24": 33,
+          "age_18_24": 30,
           "age_25_34": 45,
-          "age_35_44": 22,
+          "age_35_44": 20,
           "age_45_plus": 5
         },
         "top_regions": [
           {
             "name": "东部沿海省份",
+            "value": 0.0
+          },
+          {
+            "name": "其他省份",
             "value": 0.0
           }
         ],
@@ -387,7 +569,7 @@
         "daily": [
           {
             "date": "2026-06-11",
-            "total_views": 0
+            "total_views": 36000
           },
           {
             "date": "2026-06-10",
@@ -403,66 +585,66 @@
             "week": "2026-W23",
             "start_date": "2026-06-08",
             "end_date": "2026-06-14",
-            "top1_title": "",
-            "top1_views": "",
-            "total_views": 0
+            "top1_title": "我在八零年代当后妈",
+            "top1_views": "1000万",
+            "total_views": 36000
           }
         ],
         "trend_direction": "down"
       },
       "daily_news": [
         {
-          "type": "预警",
-          "icon": "⚠️",
-          "title": "广电总局微短剧备案新规",
-          "content": "广电总局发布《网络微短剧创作备案管理规定》，2024年6月1日起，未经审核备案的微短剧不得上网传播，按投资额分三类审核。",
-          "source_url": "https://www.163.com/dy/article/IL716U060519QIKK.html"
-        },
-        {
-          "type": "预警",
-          "icon": "⚠️",
-          "title": "微短剧须持证上线",
-          "content": "广电总局最新提示，所有播出、引流、推送的微短剧须持有《网络剧片发行许可证》或完成备案，片头须标注许可证号或备案号。",
-          "source_url": "https://www.sohu.com/a/784019524_121901402"
+          "type": "数据",
+          "icon": "📊",
+          "title": "2025年短剧市场规模破634",
+          "content": "2025年中国微短剧市场规模预计达634-686亿元，用户规模6.62亿人，付费用户比例上升。免费模式与端原生爆发成为增长主引擎，市场体量首次超越电影票房。",
+          "source_url": "https://www.douban.com/note/873791045/"
         },
         {
           "type": "数据",
           "icon": "📊",
-          "title": "海外短剧英文榜热力数据",
-          "content": "DataEye海外短剧英文榜，《Fake It Till We Make It》连续4周登顶，热度超720万，主投APP为MiniShorts。TOP9热度均超200万。",
+          "title": "2024年短剧市场规模首破50",
+          "content": "2024年中国微短剧市场规模首次突破500亿元，达504.4亿元，用户规模6.62亿人，网民使用率59.7%。行业折射出互联网文化新业态与社会精神导向。",
+          "source_url": "https://database.caixin.com/2026-05-30/102449316.html?originReferrer=kimi"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "DataEye海外短剧热度榜揭",
+          "content": "8月19-25日，DataEye海外英文短剧榜《Fake It Till We Make It》连续4周登顶，热度超720万，主投APP为MiniShorts。TOP9短剧热度均超200万。",
           "source_url": "https://www.36kr.com/p/2924035455179907"
         },
         {
           "type": "数据",
           "icon": "📊",
-          "title": "国内短剧热力榜战报",
-          "content": "DataEye短剧热力榜，阅文《好孕甜妻被钻石老公宠上天》登顶，热力值超1200W断崖领先；番茄《最后一个修真者》第二；麦芽《小小武神不好惹》第三。",
+          "title": "DataEye国内短剧热力榜发",
+          "content": "1月15日DataEye短剧热力榜，阅文《好孕甜妻被钻石老公宠上天》登顶，热力值超1200W。番茄、天桥、点众、麦芽、掌阅等公司表现活跃。",
           "source_url": "https://www.thepaper.cn/newsDetail_forward_29970323"
         },
         {
-          "type": "数据",
-          "icon": "📊",
-          "title": "海外短剧韩文榜新剧登顶",
-          "content": "DataEye海外短剧韩文榜，男频逆袭新剧《최강 금수저》登顶，热度超80万；《여명 속에서 꽃피는 사랑》稳居第二，热度超70万。",
-          "source_url": "https://www.36kr.com/p/2924035455179907"
+          "type": "预警",
+          "icon": "⚠️",
+          "title": "广电总局发布短剧审核新规",
+          "content": "广电总局发布通知，落实微短剧“分类分层审核”制度，按三类分三个层级进行审核管理，以差异化、精准化管理优化审核流程、提高审核效率。",
+          "source_url": "https://www.163.com/dy/article/JNNDCSE30514Q7CG.html"
         }
       ],
       "insights": [
         {
           "icon": "🔥",
-          "title": "爆款归因：今日无榜单数据，但大盘DAU达7.18亿，用户活跃度极高",
-          "content": "尽管今日榜单为空，但大盘用户规模（7.18亿）和APP月活（3.04亿，同比+1.4亿）显示市场极度活跃。爆款归因可参考近期趋势：高转化短剧多采用“强冲突开篇+每集反转”的爽点公式，受众以25-45岁女性为主（占比超60%），投流素材需强调“3秒内制造悬念”。",
-          "source": "行业大盘数据"
+          "title": "爆款归因：《我在八零年代当后妈》",
+          "content": "受众定位：25-40岁女性，偏好年代甜宠与逆袭爽感。爽点公式：后妈身份低开高走+打脸白月光+甜宠日常。投流预估：单日消耗300万+，重点投放红果平台信息流。爆款核心：听花岛精准捕捉‘后妈’这一高争议人设，通过‘打脸白月光’强化情绪价值，低成本制作（80集）实现高倍ROI。建议跟进：复用‘年代+身份逆袭’公式，如‘我在九零年代当保姆’或‘八零后妈2’。",
+          "source": "2026-06-11 红果平台榜单TOP1"
         },
         {
           "icon": "💰",
-          "title": "买量建议：关注“家庭伦理”题材CPA优势，利用大盘高活跃度低成本获客",
-          "content": "对比大盘数据，当前用户规模高但无明确题材占比，推测“家庭伦理”类短剧因受众广泛（女性占比高）、情绪共鸣强，CPA通常低于行业均值20-30%。建议买量计划优先投放此类素材，并利用APP MAU同比增长（+1.4亿）的红利期，定向30-45岁女性用户，降低获客成本。",
-          "source": "行业大盘与历史CPA对比"
+          "title": "买量建议：聚焦‘重生+逆袭’题材，降低CPA",
+          "content": "趋势捕捉：今日TOP5中‘重生’题材占3席（《重生之我在霸总身边当卧底》《嫡女重生记》《重生千金归来》），且均为独立厂牌出品，无头部制作成本压力。大盘数据显示女性用户占比100%，用户粘性高。CPA优势：相比‘穿越称帝’等需要复杂场景的题材，‘重生+宅斗/复仇’场景单一（室内为主），制作成本低，买量素材易批量生产（如‘重生打脸’片段），预估CPA可控制在15-20元，低于行业均值25%。建议：优先投放抖音平台，利用其算法推荐‘虐恋/复仇’标签用户，以‘1分钟短剧+下载链接’形式提升转化率。",
+          "source": "2026-06-11 行业大盘+抖音平台榜单TOP2/4/5"
         }
       ],
-      "quality_score": 60.0,
-      "error_message": "process_node: 数据清洗或 JSON 解析失败: Kimi chat 请求连续 3 次 engine_overloaded 失败\nenrich_node: 输入 basic_rankings 为空\nactor_ranking_node: enriched_rankings 为空，无法生成演员榜；请检查 enrich_node。\nindustry_node: enriched_rankings 为空，AI/女频比例只能使用默认或搜索兜底；请检查 enrich_node。\ngenre_distribution_node: enriched_rankings 为空，题材分布无法统计；请检查 enrich_node。\ninsights_node: enriched_rankings 为空\nhistory_data_node: enriched_rankings 为空，当日播放趋势将记录为 0；请检查 enrich_node。\n"
+      "quality_score": 95.0,
+      "error_message": "actor_ranking_node: 演员榜单生成或 JSON 解析失败: 'DramaRanking' object has no attribute 'get'\n"
     }
   }
 }
