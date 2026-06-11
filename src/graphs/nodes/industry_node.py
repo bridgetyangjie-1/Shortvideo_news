@@ -6,6 +6,7 @@ import json
 import re
 import logging
 from datetime import datetime
+from typing import Any
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
@@ -31,6 +32,70 @@ from graphs.state import (
 logger = logging.getLogger(__name__)
 
 
+def _safe_int(value: Any, default: int, min_value: int = 0, max_value: int | None = None) -> int:
+    """Normalize numeric LLM output before Pydantic validation."""
+    try:
+        if isinstance(value, bool):
+            number = default
+        elif isinstance(value, (int, float)):
+            number = int(round(value))
+        elif isinstance(value, str):
+            cleaned = value.strip().replace(",", "")
+            if not cleaned or cleaned in {"未知", "无", "暂无", "N/A", "n/a", "null", "None", "-"}:
+                number = default
+            else:
+                range_match = re.search(r"(-?\d+(?:\.\d+)?)\s*(?:-|~|至|到)\s*(-?\d+(?:\.\d+)?)", cleaned)
+                if range_match:
+                    first, second = float(range_match.group(1)), float(range_match.group(2))
+                    number = int(round((first + second) / 2))
+                else:
+                    match = re.search(r"-?\d+(?:\.\d+)?", cleaned)
+                    number = int(round(float(match.group()))) if match else default
+        else:
+            number = default
+
+        number = max(min_value, number)
+        if max_value is not None:
+            number = min(max_value, number)
+        return number
+    except Exception:
+        return default
+
+
+def _safe_ratio(value: Any, default: int) -> int:
+    return _safe_int(value, default, min_value=0, max_value=100)
+
+
+def _safe_float(value: Any, default: float) -> float:
+    try:
+        if isinstance(value, bool):
+            return default
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            match = re.search(r"-?\d+(?:\.\d+)?", value.replace(",", ""))
+            return float(match.group()) if match else default
+        return default
+    except Exception:
+        return default
+
+
+def _safe_text(value: Any, default: str) -> str:
+    if value is None:
+        return default
+    if isinstance(value, str):
+        stripped = value.strip()
+        return stripped if stripped else default
+    return str(value)
+
+
+def _first_present(data: dict[str, Any], keys: tuple[str, ...], default: Any) -> Any:
+    for key in keys:
+        if key in data and data[key] not in (None, ""):
+            return data[key]
+    return default
+
+
 def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> IndustryNodeOutput:
     """
     title: 行业数据获取
@@ -49,7 +114,11 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         ai_count = sum(1 for r in state.enriched_rankings if r.is_ai)
         female_count = sum(1 for r in state.enriched_rankings if r.category == "female")
         male_count = sum(1 for r in state.enriched_rankings if r.category == "male")
-        total = len(state.enriched_rankings) if state.enriched_rankings else 1
+        ranking_total = len(state.enriched_rankings)
+        total = ranking_total if ranking_total else 1
+        default_ai_ratio = int(ai_count / total * 100) if ranking_total else 38
+        default_female_ratio = int(female_count / total * 100) if ranking_total else 95
+        default_male_ratio = int(male_count / total * 100) if ranking_total else 5
         
         # 2. 读取LLM配置
         cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), config["metadata"]["llm_cfg"])
@@ -64,11 +133,12 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         client = MoonshotClient()
         
         # 第一轮搜索：AI短剧渗透率专项搜索
-        ai_search_query = f"""请联网搜索2026年短剧行业AI短剧占比数据。
-参考日期：{state.data_date}
+        date_str = state.data_date or datetime.now().strftime("%Y-%m-%d")
+        ai_search_query = f"""请联网搜索短剧行业AI短剧占比最新数据。
+参考日期：{date_str}
 
 搜索关键词建议：
-- "短剧行业 AI短剧占比 2026"
+- "短剧行业 AI短剧占比 {date_str}"
 - "短剧 AI生成 比例 趋势"
 - "AI短剧 市场份额 数据"
 
@@ -90,6 +160,8 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
                 expected_type=dict
             )
             logger.info(f"AI短剧渗透率搜索结果: {ai_data}")
+            if not isinstance(ai_data, dict):
+                ai_data = {}
         except Exception as e:
             logger.warning(f"AI短剧渗透率搜索失败: {e}")
             ai_data = {}
@@ -101,7 +173,7 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
 3. 亿元播放量短剧数量
 4. 主要平台的月活用户数和同比增长
 
-参考日期：{state.data_date}
+参考日期：{date_str}
 
 请返回JSON格式的数据。
 """
@@ -114,38 +186,65 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
             max_tokens=3000,
             expected_type=dict
         )
+        if not isinstance(data, dict):
+            data = {}
         
         # 合并AI短剧数据（优先使用专项搜索结果）
         if ai_data.get("ai_ratio"):
             data["ai_ratio"] = ai_data.get("ai_ratio")
+
+        ai_ratio = _safe_ratio(data.get("ai_ratio"), default_ai_ratio)
+        female_ratio = _safe_ratio(data.get("female_ratio"), default_female_ratio)
+        male_ratio = _safe_ratio(data.get("male_ratio"), default_male_ratio)
+        if "male_ratio" not in data and female_ratio != default_female_ratio:
+            male_ratio = max(0, 100 - female_ratio)
+        elif "female_ratio" not in data and male_ratio != default_male_ratio:
+            female_ratio = max(0, 100 - male_ratio)
         
         # 5. 构建行业数据（使用搜索结果或榜单统计）
         industry = IndustryData(
-            user_scale=data.get("user_scale", "7.18亿"),
-            market_size=data.get("market_size", "1000亿+"),
-            drama_count=data.get("drama_count", "25万+"),
-            billion_dramas=data.get("billion_dramas", 20),
-            ai_ratio=data.get("ai_ratio", int(ai_count / total * 100)),
-            female_ratio=data.get("female_ratio", int(female_count / total * 100)),
-            male_ratio=data.get("male_ratio", int(male_count / total * 100)),
-            app_mau=data.get("app_mau", "3.04亿"),
-            app_mau_yoy=data.get("app_mau_yoy", "+1.4亿")
+            user_scale=_first_present(data, ("user_scale", "userScale"), "7.18亿"),
+            market_size=_first_present(data, ("market_size", "marketSize"), "1000亿+"),
+            drama_count=_safe_text(_first_present(data, ("drama_count", "total_dramas", "drama_total"), "25万+"), "25万+"),
+            billion_dramas=_safe_int(_first_present(data, ("billion_dramas", "billionDramaCount"), 20), 20),
+            ai_ratio=ai_ratio,
+            female_ratio=female_ratio,
+            male_ratio=male_ratio,
+            app_mau=_safe_text(_first_present(data, ("app_mau", "appMau"), "3.04亿"), "3.04亿"),
+            app_mau_yoy=_safe_text(_first_present(data, ("app_mau_yoy", "appMauYoy"), "+1.4亿"), "+1.4亿")
         )
         
         # 6. 构建平台数据
         apps = []
-        for app_data in data.get("platform_apps", [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}]):
+        platform_apps = _first_present(data, ("platform_apps", "top_mau", "apps"), [])
+        if not isinstance(platform_apps, list):
+            platform_apps = []
+        for app_data in platform_apps or [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}]:
+            if not isinstance(app_data, dict):
+                continue
             app = PlatformApp(
-                name=app_data.get("name", "红果免费短剧"),
-                mau=app_data.get("mau", 3.04),
-                mau_unit=app_data.get("mau_unit", "亿"),
-                yoy=app_data.get("yoy", "+1.4亿"),
-                share=app_data.get("share", 85),
-                trend=app_data.get("trend", "up")
+                name=_safe_text(_first_present(app_data, ("name", "app", "platform"), "红果免费短剧"), "红果免费短剧"),
+                mau=_safe_float(app_data.get("mau"), 3.04),
+                mau_unit=_safe_text(_first_present(app_data, ("mau_unit", "unit"), "亿"), "亿"),
+                yoy=_safe_text(app_data.get("yoy"), "+1.4亿"),
+                share=_safe_ratio(app_data.get("share"), 85),
+                trend=_safe_text(app_data.get("trend"), "up")
             )
             apps.append(app)
+        if not apps:
+            apps.append(PlatformApp(
+                name="红果免费短剧",
+                mau=3.04,
+                mau_unit="亿",
+                yoy="+1.4亿",
+                share=85,
+                trend="up"
+            ))
         
-        platform = PlatformData(apps=apps, mini_programs=data.get("mini_programs", []))
+        mini_programs = data.get("mini_programs", [])
+        if not isinstance(mini_programs, list):
+            mini_programs = []
+        platform = PlatformData(apps=apps, mini_programs=mini_programs)
         
         return IndustryNodeOutput(
             industry=industry,
