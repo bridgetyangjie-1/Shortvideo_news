@@ -108,7 +108,11 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
     
     try:
         date_str = state.data_date or datetime.now().strftime("%Y-%m-%d")
-        current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        try:
+            current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            date_str = datetime.now().strftime("%Y-%m-%d")
+            current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
 
         try:
             if os.path.exists(CACHE_FILE):
