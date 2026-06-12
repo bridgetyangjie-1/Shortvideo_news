@@ -70,6 +70,113 @@ def _load_all_history() -> Dict[str, Any]:
     return {"dates": [], "data": {}}
 
 
+def _generate_statistics(rankings: List[DramaRanking]) -> Dict[str, Any]:
+    """生成榜单统计信息"""
+    if not rankings:
+        return {"total": 0, "avg_confidence": 0, "source_distribution": {}}
+    
+    # 数据源分布
+    source_counts: Dict[str, int] = {}
+    confidence_scores = []
+    
+    for r in rankings:
+        source = getattr(r, 'data_source', 'unknown') or 'unknown'
+        source_counts[source] = source_counts.get(source, 0) + 1
+        confidence = getattr(r, 'confidence_score', 0.8) or 0.8
+        confidence_scores.append(confidence)
+    
+    return {
+        "total": len(rankings),
+        "avg_confidence": round(sum(confidence_scores) / len(confidence_scores), 2) if confidence_scores else 0,
+        "source_distribution": source_counts,
+        "with_actors": sum(1 for r in rankings if getattr(r, 'actors', None) and r.actors),
+        "with_studio": sum(1 for r in rankings if getattr(r, 'studio', None) and r.studio and r.studio != "未知"),
+    }
+
+
+def _generate_trends(rankings: List[DramaRanking]) -> Dict[str, Any]:
+    """生成趋势分析"""
+    # 统计排名变化
+    new_count = 0
+    up_count = 0
+    down_count = 0
+    stable_count = 0
+    
+    for r in rankings:
+        change = getattr(r, 'rank_change', None)
+        if not change:
+            new_count += 1
+        elif change == "new":
+            new_count += 1
+        elif change.startswith("up"):
+            up_count += 1
+        elif change.startswith("down"):
+            down_count += 1
+        else:
+            stable_count += 1
+    
+    # 统计标签趋势
+    tag_counts: Dict[str, int] = {}
+    for r in rankings:
+        tags = getattr(r, 'tags', []) or []
+        for tag in tags:
+            tag_counts[tag] = tag_counts.get(tag, 0) + 1
+    
+    # 取TOP10热门标签
+    top_tags = sorted(tag_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    
+    return {
+        "rank_changes": {
+            "new": new_count,
+            "up": up_count,
+            "down": down_count,
+            "stable": stable_count
+        },
+        "hot_tags": [{"tag": t, "count": c} for t, c in top_tags],
+        "trend_direction": "up" if up_count > down_count else ("down" if down_count > up_count else "stable")
+    }
+
+
+def _generate_anomalies(rankings: List[DramaRanking], industry: Optional[IndustryData]) -> List[Dict[str, Any]]:
+    """生成异常检测报告"""
+    anomalies = []
+    
+    # 检测置信度低的剧目
+    low_confidence = [r for r in rankings if getattr(r, 'confidence_score', 1.0) < 0.6]
+    if low_confidence:
+        anomalies.append({
+            "type": "low_confidence",
+            "severity": "warning",
+            "count": len(low_confidence),
+            "message": f"发现{len(low_confidence)}部剧置信度低于60%，建议人工核验",
+            "items": [{"title": r.title, "confidence": getattr(r, 'confidence_score', 0)} for r in low_confidence[:5]]
+        })
+    
+    # 检测演员缺失
+    missing_actors = [r for r in rankings if not getattr(r, 'actors', None) or not r.actors]
+    if len(missing_actors) > len(rankings) * 0.3:  # 超过30%缺失
+        anomalies.append({
+            "type": "missing_actors",
+            "severity": "warning",
+            "count": len(missing_actors),
+            "message": f"{len(missing_actors)}部剧缺少演员信息，占比{round(len(missing_actors)/len(rankings)*100)}%",
+            "items": [r.title for r in missing_actors[:5]]
+        })
+    
+    # 检测行业数据异常
+    if industry:
+        ai_ratio = getattr(industry, 'ai_ratio', 0) or 0
+        if ai_ratio > 50:
+            anomalies.append({
+                "type": "high_ai_ratio",
+                "severity": "info",
+                "message": f"AI短剧占比达{ai_ratio}%，显著高于行业均值",
+                "value": ai_ratio
+            })
+    
+    return anomalies
+
+
 def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> PushNodeOutput:
     """
     title: 数据输出
@@ -117,6 +224,11 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     # ========== 构建TOP20数据（前端展示用） ==========
     top20_rankings = output_rankings[:20]
     
+    # ========== 生成统计/趋势/异常报告 ==========
+    statistics = _generate_statistics(output_rankings)
+    trends = _generate_trends(output_rankings)
+    anomalies = _generate_anomalies(output_rankings, state.industry)
+    
     output_data = {
         "success": True,
         "generated_at": generated_at,
@@ -131,6 +243,9 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "daily_news": [n.model_dump() for n in state.daily_news] if state.daily_news else [],
         "insights": [i.model_dump() for i in state.insights] if state.insights else [],
         "quality_score": state.quality_score or 60.0,
+        "statistics": statistics,
+        "trends": trends,
+        "anomalies": anomalies,
         "error_message": state.error_message or ""
     }
     
@@ -152,6 +267,9 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "daily_news": [n.model_dump() for n in state.daily_news] if state.daily_news else [],
         "insights": [i.model_dump() for i in state.insights] if state.insights else [],
         "quality_score": state.quality_score or 60.0,
+        "statistics": statistics,
+        "trends": trends,
+        "anomalies": anomalies,
         "error_message": state.error_message or ""
     }
     

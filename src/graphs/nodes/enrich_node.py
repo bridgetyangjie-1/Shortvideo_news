@@ -1,5 +1,5 @@
 """
-数据补充节点 - 优化版：优先爬虫，减少Kimi调用
+数据补充节点 - 优化版：本地缓存 + 爬虫优先 + 多源融合
 Kimi调用：从N次（每部剧多次）降到最多1次（批量补充）
 """
 import os
@@ -16,6 +16,8 @@ from coze_coding_utils.runtime_ctx.context import Context
 
 from tools.moonshot_api import MoonshotClient
 from tools.deepseek_api import DeepSeekClient
+from tools.cache_db import get_drama, save_drama
+from tools.tag_normalizer import normalize_tags, classify_category
 
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking, default_emotional_analysis
@@ -123,7 +125,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         kimi_client = MoonshotClient()
         ds_client = DeepSeekClient()
         
-        # ========== 第一步：红果详情页爬虫 ==========
+        # ========== 第一步：本地缓存查询 + 红果详情页爬虫 ==========
         basic_rankings_list = list(state.basic_rankings) if hasattr(state.basic_rankings, '__iter__') else []
         
         if not basic_rankings_list:
@@ -137,27 +139,67 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         
         real_search_context = ""
         missing_dramas: List[Dict] = []  # 爬虫失败的剧目
+        cache_hits = 0  # 缓存命中计数
         
         for idx, drama in enumerate(basic_rankings_list[:20]):  # 只处理前20条
             # 获取剧名和series_id
             title = ""
             series_id = ""
+            tags: List[str] = []
             drama_obj: Any = drama
             if hasattr(drama_obj, "title"):
                 title = getattr(drama_obj, "title", "")
                 series_id = getattr(drama_obj, "series_id", "")
+                tags = getattr(drama_obj, "tags", []) or []
             elif isinstance(drama_obj, dict):
                 title = drama_obj.get("title", "")
                 series_id = drama_obj.get("series_id", "")
+                tags = drama_obj.get("tags", []) or []
             
             if not title:
                 continue
+            
+            # 🔑 优先查询本地缓存（7天内有效）
+            if series_id:
+                cached = get_drama(series_id)
+                if cached:
+                    cache_hits += 1
+                    actors_str = ", ".join(cached.get("actors", {}).values()) if cached.get("actors") else "未知"
+                    studio_str = cached.get("studio", "未知")
+                    release_str = cached.get("release_date", "")
+                    
+                    real_search_context += f"\n【剧目：《{title}》本地缓存数据】:\n"
+                    real_search_context += f"演员: {actors_str}\n"
+                    real_search_context += f"工作室: {studio_str}\n"
+                    if release_str:
+                        real_search_context += f"上线时间: {release_str}\n"
+                    
+                    logger.info(f"《{title}》缓存命中")
+                    continue
             
             # 尝试爬取红果详情页
             if series_id:
                 detail = fetch_hongguo_detail(series_id)
                 if detail:
-                    # 爬取成功，记录搜索上下文
+                    # 爬取成功，保存到缓存
+                    actors_dict: Dict[str, str] = {}
+                    if detail.get("actors"):
+                        actors_list = detail["actors"]
+                        if isinstance(actors_list, list) and len(actors_list) >= 1:
+                            actors_dict["female_lead"] = actors_list[0] if len(actors_list) > 0 else ""
+                            actors_dict["male_lead"] = actors_list[1] if len(actors_list) > 1 else ""
+                    
+                    save_drama(
+                        series_id=series_id,
+                        title=title,
+                        actors=actors_dict,
+                        studio=detail.get("studio", ""),
+                        release_date=detail.get("release_date", ""),
+                        tags=tags,
+                        data_source="hongguo"
+                    )
+                    
+                    # 记录搜索上下文
                     actors_str = ", ".join(detail.get("actors", [])) if detail.get("actors") else "未知"
                     studio_str = detail.get("studio", "未知")
                     release_str = detail.get("release_date", "")
@@ -168,13 +210,15 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                     if release_str:
                         real_search_context += f"上线时间: {release_str}\n"
                     
-                    logger.info(f"《{title}》爬取成功")
+                    logger.info(f"《{title}》爬取成功并缓存")
                     time.sleep(0.5)  # 爬虫间隔
                     continue
             
             # 爬取失败，加入待补充列表
             missing_dramas.append({"title": title, "rank": idx + 1})
             real_search_context += f"\n【剧目：《{title}》需要补充演员信息】\n"
+        
+        logger.info(f"缓存命中: {cache_hits}部，爬虫补充: {20-cache_hits-len(missing_dramas)}部，待Kimi补充: {len(missing_dramas)}部")
         
         # ========== 第二步：Kimi批量补充（最多1次调用）==========
         if missing_dramas:

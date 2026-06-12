@@ -1,7 +1,7 @@
 # 短剧行业数据看板
 
 > 作者：Bridget Yang  
-> 当前版本：v1.8.1  
+> 当前版本：v1.9.0  
 > 更新频率：每日北京时间 9:00 自动更新
 
 ## 功能概览
@@ -24,7 +24,8 @@ GitHub Pages: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.ht
 
 | 模块 | 技术 |
 |---|---|
-| 数据采集 | 红果官网直爬（HongguoCrawler） |
+| 数据采集 | 红果官网直爬（HongguoCrawler）+ DataEye榜单爬取 |
+| 本地缓存 | SQLite缓存（避免重复搜索） |
 | 联网搜索 | Kimi / Moonshot API |
 | JSON 推理 | DeepSeek API |
 | 工作流编排 | Python |

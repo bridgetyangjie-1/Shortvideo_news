@@ -32,6 +32,16 @@ class DramaRanking(BaseModel):
     production_house: str = Field(default="", description="制作厂牌（如九州、点众、麦芽）")
     core_trope: List[str] = Field(default=[], description="核心爽点标签（如真假千金、打脸绿茶）")
     episodes_count: int = Field(default=80, description="总集数（通常60-100）")
+    # 🚨 新增数据质量与趋势分析字段（v1.8.2）
+    confidence_score: float = Field(default=0.7, description="置信度评分 (0-1)，红果直爬0.7，交叉验证0.95")
+    data_source: str = Field(default="hongguo", description="数据来源：hongguo/dataeye/kimi/deepseek")
+    rank_change: int = Field(default=0, description="排名变化：正数上升，负数下降，0不变，-1新晋")
+    previous_rank: int = Field(default=0, description="昨日排名，0表示昨日不在榜")
+    cross_validated: bool = Field(default=False, description="是否经DataEye交叉验证")
+    dataeye_rank: int = Field(default=0, description="DataEye排名（0表示无）")
+    dataeye_heat: int = Field(default=0, description="DataEye热度值")
+    series_id: str = Field(default="", description="红果剧目ID")
+    cover: str = Field(default="", description="封面图URL")
 
 
 class ActorRanking(BaseModel):

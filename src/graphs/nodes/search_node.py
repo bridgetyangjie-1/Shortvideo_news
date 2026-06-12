@@ -1,6 +1,6 @@
 """
-数据抓取节点 - 直接爬取红果官网 + Kimi搜索补充行业数据
-优化版：删除冗余Kimi调用，只保留1次行业数据搜索
+数据抓取节点 - 直接爬取红果官网 + DataEye交叉验证 + Kimi搜索补充行业数据
+优化版v1.8.2：多源数据交叉验证，提升数据可信度
 """
 import os
 import json
@@ -12,6 +12,7 @@ from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 from tools.moonshot_api import MoonshotClient
 from tools.hongguo_crawler import fetch_hongguo_data
+from tools.dataeye_crawler import fetch_dataeye_rankings
 
 # Fallback for test_run environment
 try:
@@ -25,6 +26,67 @@ from graphs.state import SearchNodeInput, SearchNodeOutput
 
 # 初始化日志
 logger = logging.getLogger(__name__)
+
+
+def _merge_hongguo_dataeye(hongguo_data: List[Dict], dataeye_data: List[Dict]) -> List[Dict]:
+    """
+    融合红果和DataEye数据，交叉验证提升可信度
+    
+    融合策略：
+    1. 红果数据为主（覆盖更全）
+    2. DataEye数据用于验证和补充热度
+    3. 匹配规则：标题模糊匹配
+    """
+    if not dataeye_data:
+        # 无DataEye数据，红果数据置信度0.7
+        for drama in hongguo_data:
+            drama["confidence_score"] = 0.7
+            drama["data_source"] = "hongguo"
+            drama["cross_validated"] = False
+        return hongguo_data
+    
+    # 构建DataEye标题索引（用于快速查找）
+    dataeye_index = {}
+    for d in dataeye_data:
+        title = d.get("title", "").strip()
+        if title:
+            dataeye_index[title] = d
+    
+    merged = []
+    for hg_drama in hongguo_data:
+        hg_title = hg_drama.get("title", "").strip()
+        
+        # 尝试匹配DataEye数据
+        matched_de = None
+        for de_title, de_data in dataeye_index.items():
+            # 模糊匹配：标题包含或被包含
+            if hg_title in de_title or de_title in hg_title:
+                matched_de = de_data
+                break
+        
+        if matched_de:
+            # 交叉验证成功，提升置信度
+            merged_drama = hg_drama.copy()
+            merged_drama["confidence_score"] = 0.95
+            merged_drama["data_source"] = "hongguo+dataeye"
+            merged_drama["cross_validated"] = True
+            merged_drama["dataeye_rank"] = matched_de.get("rank", 0)
+            merged_drama["dataeye_heat"] = matched_de.get("heat", 0)
+            # 合并热度值（取平均或加权）
+            if matched_de.get("heat", 0) > 0:
+                merged_drama["heat"] = (hg_drama.get("heat", 0) + matched_de.get("heat", 0)) // 2
+            merged.append(merged_drama)
+        else:
+            # 未匹配到DataEye，保持红果数据
+            merged_drama = hg_drama.copy()
+            merged_drama["confidence_score"] = 0.7
+            merged_drama["data_source"] = "hongguo"
+            merged_drama["cross_validated"] = False
+            merged_drama["dataeye_rank"] = 0
+            merged_drama["dataeye_heat"] = 0
+            merged.append(merged_drama)
+    
+    return merged
 
 
 def search_node(
@@ -62,26 +124,71 @@ def search_node(
         
         if hongguo_data:
             logger.info(f"✅ 红果官网爬取成功，获取 {len(hongguo_data)} 条数据")
+        else:
+            logger.warning("⚠️ 红果官网爬取失败，将依赖其他数据源")
+        
+        # ========== 第二步：爬取DataEye榜单（交叉验证）==========
+        logger.info("=" * 50)
+        logger.info("第二步：爬取DataEye榜单进行交叉验证")
+        logger.info("=" * 50)
+        
+        dataeye_data = []
+        try:
+            dataeye_data = fetch_dataeye_rankings(top_n=30)
+            if dataeye_data:
+                logger.info(f"✅ DataEye爬取成功，获取 {len(dataeye_data)} 条数据")
+            else:
+                logger.warning("⚠️ DataEye爬取返回空数据")
+        except Exception as e:
+            logger.warning(f"⚠️ DataEye爬取失败: {e}")
+        
+        # ========== 第三步：数据融合与交叉验证 ==========
+        logger.info("=" * 50)
+        logger.info("第三步：数据融合与交叉验证")
+        logger.info("=" * 50)
+        
+        if hongguo_data:
+            merged_data = _merge_hongguo_dataeye(hongguo_data, dataeye_data)
+            validated_count = sum(1 for d in merged_data if d.get("cross_validated"))
+            logger.info(f"✅ 数据融合完成：{len(merged_data)} 条数据，{validated_count} 条交叉验证通过")
             
             # 添加到搜索结果
             search_results.append({
-                "keyword": "红果官网直接爬取",
-                "title": f"红果短剧榜单 {data_date}",
-                "url": "hongguo_direct_crawler",
-                "snippet": f"直接从红果官网爬取 {len(hongguo_data)} 条实时榜单数据",
-                "summary": json.dumps(hongguo_data, ensure_ascii=False),
-                "site_name": "红果官网爬虫",
+                "keyword": "红果+DataEye融合榜单",
+                "title": f"短剧融合榜单 {data_date}",
+                "url": "multi_source_merged",
+                "snippet": f"红果直爬{len(hongguo_data)}条 + DataEye验证{len(dataeye_data)}条，交叉验证{validated_count}条",
+                "summary": json.dumps(merged_data, ensure_ascii=False),
+                "site_name": "多源融合",
                 "publish_time": data_date,
-                "raw_content": json.dumps(hongguo_data, ensure_ascii=False),
-                "type": "hongguo_direct",
-                "data_count": len(hongguo_data)
+                "raw_content": json.dumps(merged_data, ensure_ascii=False),
+                "type": "merged_ranking",
+                "data_count": len(merged_data),
+                "validated_count": validated_count
             })
-        else:
-            logger.warning("⚠️ 红果官网爬取失败，将依赖Kimi搜索")
+        elif dataeye_data:
+            # 红果失败，使用DataEye数据
+            logger.warning("⚠️ 红果数据为空，使用DataEye数据作为备选")
+            for d in dataeye_data:
+                d["confidence_score"] = 0.6
+                d["data_source"] = "dataeye"
+                d["cross_validated"] = False
+            search_results.append({
+                "keyword": "DataEye榜单（红果失败备选）",
+                "title": f"DataEye短剧榜单 {data_date}",
+                "url": "dataeye_fallback",
+                "snippet": f"DataEye爬取 {len(dataeye_data)} 条数据",
+                "summary": json.dumps(dataeye_data, ensure_ascii=False),
+                "site_name": "DataEye",
+                "publish_time": data_date,
+                "raw_content": json.dumps(dataeye_data, ensure_ascii=False),
+                "type": "dataeye_fallback",
+                "data_count": len(dataeye_data)
+            })
         
-        # ========== 第二步：Kimi搜索行业宏观数据（仅1次调用）==========
+        # ========== 第四步：Kimi搜索行业宏观数据（仅1次调用）==========
         logger.info("=" * 50)
-        logger.info("第二步：Kimi搜索补充行业数据（仅1次调用）")
+        logger.info("第四步：Kimi搜索补充行业数据（仅1次调用）")
         logger.info("=" * 50)
         
         client = MoonshotClient()

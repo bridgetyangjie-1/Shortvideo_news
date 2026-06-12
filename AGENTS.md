@@ -4,7 +4,7 @@
 
 ## 当前基线
 
-- 当前标准版本：`v1.8.1`
+- 当前标准版本：`v1.9.0`
 - 访问地址：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - GitHub Actions 入口：`src/run_github.py`
 - 前端入口：`assets/index.html`
@@ -100,6 +100,9 @@ fetch('./data/latest.json')
 | 工具 | 文件 | 作用 |
 |---|---|---|
 | `HongguoCrawler` | `src/tools/hongguo_crawler.py` | 直接爬取红果官网榜单 |
+| `DataEyeCrawler` | `src/tools/dataeye_crawler.py` | 爬取DataEye热力榜，交叉验证 |
+| `CacheDB` | `src/tools/cache_db.py` | 本地SQLite缓存，避免重复搜索 |
+| `TagNormalizer` | `src/tools/tag_normalizer.py` | 标签标准化与题材分类 |
 | `MoonshotClient` | `src/tools/moonshot_api.py` | Kimi联网搜索 |
 | `DeepSeekClient` | `src/tools/deepseek_api.py` | DeepSeek JSON推理 |
 
@@ -126,6 +129,15 @@ fetch('./data/latest.json')
 
 | 日期 | 改动 |
 |------|------|
+| 2026-06-12 | **v1.9.0 第二阶段优化**：本地缓存 + 多源验证 + 排名趋势 |
+| 2026-06-12 | 新增 tools/cache_db.py：本地SQLite缓存，7天内有效，避免重复搜索 |
+| 2026-06-12 | 新增 tools/tag_normalizer.py：标签标准化与题材分类 |
+| 2026-06-12 | 新增 tools/dataeye_crawler.py：DataEye榜单爬取，交叉验证红果数据 |
+| 2026-06-12 | state.py新增字段：confidence_score, data_source, rank_change, is_new |
+| 2026-06-12 | search_node：红果+DataEye双源融合，置信度加权 |
+| 2026-06-12 | enrich_node：优先本地缓存，缓存miss时批量补充 |
+| 2026-06-12 | history_data_node：计算排名变化（new/up/down/same） |
+| 2026-06-12 | push_node：输出statistics/trends/anomalies统计信息 |
 | 2026-06-12 | **v1.8.1 API调用优化**：Kimi调用从20+次降到6次以内 |
 | 2026-06-12 | enrich_node：删除循环Kimi搜索，改为先爬红果详情页+批量DeepSeek补充 |
 | 2026-06-12 | search_node：删除标签搜索和剧目详情搜索，只保留1次行业数据搜索 |

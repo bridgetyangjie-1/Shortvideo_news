@@ -1,11 +1,12 @@
 """
 历史数据生成节点
-功能：生成周榜历史和播放量趋势数据
+功能：生成周榜历史、播放量趋势数据、排名变化分析
 """
 import os
 import json
+import logging
 from datetime import datetime, timedelta
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
@@ -16,8 +17,11 @@ from graphs.state import (
     HistoryDataOutput,
     PlayTrend,
     DailyPlayTrend,
-    WeeklyRankingItem
+    WeeklyRankingItem,
+    RankChange
 )
+
+logger = logging.getLogger(__name__)
 
 
 def history_data_node(
@@ -164,8 +168,65 @@ def history_data_node(
         trend_direction=trend_direction
     )
     
+    # ========== 5. 计算排名变化 ==========
+    rank_changes: List[RankChange] = []
+    
+    # 读取昨天的榜单数据
+    yesterday_date = (datetime.strptime(data_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+    yesterday_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", "."), "assets", "data", "history", f"{yesterday_date}.json")
+    
+    yesterday_rankings: Dict[str, int] = {}  # title -> rank
+    if os.path.exists(yesterday_file):
+        try:
+            with open(yesterday_file, "r", encoding="utf-8") as f:
+                yesterday_data = json.load(f)
+                for i, item in enumerate(yesterday_data.get("rankings", [])[:20]):
+                    title = item.get("title", "")
+                    if title:
+                        yesterday_rankings[title] = i + 1
+        except Exception as e:
+            error_messages.append(f"history_data_node: 读取昨日榜单失败: {e}")
+    
+    # 计算每部剧的排名变化
+    for i, r in enumerate(rankings[:20]):
+        title = r.title if hasattr(r, "title") else ""
+        current_rank = i + 1
+        
+        if title in yesterday_rankings:
+            prev_rank = yesterday_rankings[title]
+            if current_rank < prev_rank:
+                change_type = "up"
+                change_value = prev_rank - current_rank
+            elif current_rank > prev_rank:
+                change_type = "down"
+                change_value = current_rank - prev_rank
+            else:
+                change_type = "stable"
+                change_value = 0
+        else:
+            # 新上榜
+            change_type = "new"
+            change_value = 0
+        
+        rank_changes.append(RankChange(
+            title=title,
+            current_rank=current_rank,
+            previous_rank=yesterday_rankings.get(title),
+            change_type=change_type,
+            change_value=change_value
+        ))
+    
+    # 统计排名变化情况
+    new_count = sum(1 for rc in rank_changes if rc.change_type == "new")
+    up_count = sum(1 for rc in rank_changes if rc.change_type == "up")
+    down_count = sum(1 for rc in rank_changes if rc.change_type == "down")
+    stable_count = sum(1 for rc in rank_changes if rc.change_type == "stable")
+    
+    logger.info(f"排名变化统计: 新上榜{new_count}部, 上升{up_count}部, 下降{down_count}部, 持平{stable_count}部")
+    
     return HistoryDataOutput(
         play_trend=play_trend,
         weekly_rankings=weekly_trend,
+        rank_changes=rank_changes,
         error_message=("\n".join(error_messages) + "\n") if error_messages else ""
     )
