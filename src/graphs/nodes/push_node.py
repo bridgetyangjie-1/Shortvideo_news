@@ -1,5 +1,5 @@
 """
-数据输出节点 - 生成JSON数据文件（纯本地文件系统版本）
+数据输出节点 - 生成JSON数据文件（支持TOP20 + Full100双文件存储）
 适用于GitHub Actions环境，不依赖任何Coze内部SDK
 """
 import os
@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 WORKSPACE_PATH = os.getcwd()
 DATA_DIR = os.path.join(WORKSPACE_PATH, "assets", "data")
 DATA_FILE_PATH = os.path.join(DATA_DIR, "latest.json")
+DATA_FULL_PATH = os.path.join(DATA_DIR, "latest_full.json")  # 新增：完整100条数据
 HISTORY_DIR = os.path.join(DATA_DIR, "history")
 ALL_HISTORY_PATH = os.path.join(DATA_DIR, "all_history.json")
 
@@ -72,7 +73,7 @@ def _load_all_history() -> Dict[str, Any]:
 def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> PushNodeOutput:
     """
     title: 数据输出
-    desc: 将处理完成的数据保存为JSON文件，支持历史数据归档
+    desc: 将处理完成的数据保存为JSON文件（TOP20展示 + Full100归档）
     """
     ctx = runtime.context
     _ensure_dirs()
@@ -113,14 +114,16 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
             error_message=(state.error_message or "") + error_message + "\n"
         )
     
-    # 构建完整数据结构
+    # ========== 构建TOP20数据（前端展示用） ==========
+    top20_rankings = output_rankings[:20]
+    
     output_data = {
         "success": True,
         "generated_at": generated_at,
         "data_date": data_date,
         "genre_distribution": state.genre_distribution.model_dump() if state.genre_distribution else {},
         "industry": state.industry.model_dump() if state.industry else {},
-        "rankings": [r.model_dump() for r in output_rankings],
+        "rankings": [r.model_dump() for r in top20_rankings],
         "actors": state.actors.model_dump() if state.actors else {"female": [], "male": []},
         "platform": state.platform.model_dump() if state.platform else {},
         "audience_profile": state.audience_profile.model_dump() if state.audience_profile else {},
@@ -131,20 +134,45 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "error_message": state.error_message or ""
     }
     
-    # 保存最新数据
+    # ========== 构建Full100数据（历史归档用） ==========
+    full_rankings = output_rankings  # 全部榜单
+    
+    output_data_full = {
+        "success": True,
+        "generated_at": generated_at,
+        "data_date": data_date,
+        "genre_distribution": state.genre_distribution.model_dump() if state.genre_distribution else {},
+        "industry": state.industry.model_dump() if state.industry else {},
+        "rankings": [r.model_dump() for r in full_rankings],
+        "rankings_count": len(full_rankings),
+        "actors": state.actors.model_dump() if state.actors else {"female": [], "male": []},
+        "platform": state.platform.model_dump() if state.platform else {},
+        "audience_profile": state.audience_profile.model_dump() if state.audience_profile else {},
+        "play_trend": state.play_trend.model_dump() if state.play_trend else {},
+        "daily_news": [n.model_dump() for n in state.daily_news] if state.daily_news else [],
+        "insights": [i.model_dump() for i in state.insights] if state.insights else [],
+        "quality_score": state.quality_score or 60.0,
+        "error_message": state.error_message or ""
+    }
+    
+    # 保存最新数据（TOP20）
     if not _save_json_file(output_data, DATA_FILE_PATH):
         error_messages.append(f"push_node: 保存最新数据失败: {DATA_FILE_PATH}")
     
+    # 保存完整数据（Full100）- 新增
+    if not _save_json_file(output_data_full, DATA_FULL_PATH):
+        error_messages.append(f"push_node: 保存完整数据失败: {DATA_FULL_PATH}")
+    
     # 保存历史数据（按日期归档）
     history_file = os.path.join(HISTORY_DIR, f"{data_date}.json")
-    if not _save_json_file(output_data, history_file):
+    if not _save_json_file(output_data_full, history_file):  # 历史归档保存完整数据
         error_messages.append(f"push_node: 保存历史数据失败: {history_file}")
     
     # 更新历史索引
     all_history = _load_all_history()
     if data_date not in all_history.get("dates", []):
         all_history.setdefault("dates", []).append(data_date)
-    all_history.setdefault("data", {})[data_date] = output_data
+    all_history.setdefault("data", {})[data_date] = output_data_full
     
     # 保留最近30天的数据
     if len(all_history.get("dates", [])) > 30:
@@ -157,7 +185,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     if not _save_json_file(all_history, ALL_HISTORY_PATH):
         error_messages.append(f"push_node: 保存历史索引失败: {ALL_HISTORY_PATH}")
     
-    logger.info(f"✅ 数据输出完成 - 最新数据已保存，历史数据已归档")
+    logger.info(f"✅ 数据输出完成 - TOP20已保存({len(top20_rankings)}条)，Full100已归档({len(full_rankings)}条)")
     
     # 返回完整数据，确保GraphOutput包含所有数据
     return PushNodeOutput(

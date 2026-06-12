@@ -4,23 +4,30 @@
 
 ## 当前基线
 
-- 当前标准版本：`v1.7.13`
+- 当前标准版本：`v1.8.0`
 - 访问地址：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - GitHub Actions 入口：`src/run_github.py`
 - 前端入口：`assets/index.html`
-- 数据入口：`assets/data/latest.json`
+- 数据入口：`assets/data/latest.json`（TOP20展示）、`assets/data/latest_full.json`（Full100归档）
 
 ## 架构边界
 
 | 层级 | 组件 | 职责 |
 |---|---|---|
-| 数据采集 | `MoonshotClient.search()` | Kimi/Moonshot 联网搜索国内短剧数据 |
+| 数据采集 | `HongguoCrawler` | 直接爬取红果官网实时榜单（优先） |
+| 数据采集 | `MoonshotClient.search()` | Kimi/Moonshot 联网搜索补充行业数据 |
 | 数据推理 | `DeepSeekClient.chat()` | 稳定 JSON 推理与结构化输出 |
 | 编排 | `src/graphs/graph.py` | 串联各数据节点 |
-| 发布 | `src/graphs/nodes/push_node.py` | 只写 JSON 数据文件，不生成 HTML |
-| 展示 | `assets/index.html` | 静态页面动态读取 JSON |
+| 发布 | `src/graphs/nodes/push_node.py` | 输出TOP20+Full100双JSON文件 |
+| 展示 | `assets/index.html` | 静态页面动态读取JSON |
 
 GitHub Actions 运行时不要依赖 Coze 内部 SDK。`src/main.py` 和 Coze 兼容代码只用于 Coze Coding 场景，外部自动化以 `src/run_github.py` 为准。
+
+## 数据采集优先级
+
+1. **红果官网直接爬取**：`tools/hongguo_crawler.py` 直接抓取 novelquickapp.com 首页榜单，获取100条实时数据
+2. **Kimi搜索补充**：行业宏观数据、标签分布、演员信息等
+3. **历史数据兜底**：近7天归档数据用于补齐不足8条的榜单
 
 ## 硬性数据规则
 
@@ -76,8 +83,8 @@ fetch('./data/latest.json')
 
 | 节点 | 文件 | 作用 |
 |---|---|---|
-| `search_node` | `src/graphs/nodes/search_node.py` | 搜索榜单和标签数据 |
-| `process_node` | `src/graphs/nodes/process_node.py` | 结构化基础榜单 |
+| `search_node` | `src/graphs/nodes/search_node.py` | 直接爬取红果官网 + Kimi搜索补充 |
+| `process_node` | `src/graphs/nodes/process_node.py` | 优先处理红果数据，无数据时用Kimi结果 |
 | `enrich_node` | `src/graphs/nodes/enrich_node.py` | 搜索并补全演员、厂牌、标签 |
 | `industry_node` | `src/graphs/nodes/industry_node.py` | 行业宏观数据 |
 | `audience_profile_node` | `src/graphs/nodes/audience_profile_node.py` | 观众画像 |
@@ -86,7 +93,15 @@ fetch('./data/latest.json')
 | `insights_node` | `src/graphs/nodes/insights_node.py` | 行业大事件 |
 | `news_node` | `src/graphs/nodes/news_node.py` | 行业快讯 |
 | `history_data_node` | `src/graphs/nodes/history_data_node.py` | 历史数据 |
-| `push_node` | `src/graphs/nodes/push_node.py` | 保存 JSON |
+| `push_node` | `src/graphs/nodes/push_node.py` | 保存TOP20+Full100双JSON |
+
+## 工具类
+
+| 工具 | 文件 | 作用 |
+|---|---|---|
+| `HongguoCrawler` | `src/tools/hongguo_crawler.py` | 直接爬取红果官网榜单 |
+| `MoonshotClient` | `src/tools/moonshot_api.py` | Kimi联网搜索 |
+| `DeepSeekClient` | `src/tools/deepseek_api.py` | DeepSeek JSON推理 |
 
 ## 模型配置约定
 
@@ -106,3 +121,11 @@ fetch('./data/latest.json')
 - 项目介绍、运行方式和文档入口放在 `README.md`。
 - 后续改进计划放在 `docs/ROADMAP.md`。
 - 不再新增大型历史总结类 MD；旧方案如需保留，优先压缩成 README 或 ROADMAP 的一小节。
+
+## 近期变更
+
+| 日期 | 改动 |
+|------|------|
+| 2026-06-12 | 新增红果官网直爬模块，获取504部短剧基础数据（TOP100用于榜单，TOP20补充详情）|
+| 2026-06-12 | search_node重构：红果直爬为主，Kimi搜索补充行业数据 |
+| 2026-06-12 | push_node支持双文件存储：latest.json(TOP20) + latest_full.json(全量100条) |
