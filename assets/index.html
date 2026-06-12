@@ -2,20 +2,21 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>短剧行业数据看板 - Bridget Yang</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', 'Microsoft YaHei', sans-serif; background: #0b0d14; color: #e2e8f0; min-height: 100vh; line-height: 1.6; }
+html { font-size: 16px; }
+body { font-family: 'Inter', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif; background: #0b0d14; color: #e2e8f0; min-height: 100vh; line-height: 1.6; }
 body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 60%; background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12), transparent 55%); pointer-events: none; z-index: -1; }
 
-.container { max-width: 1440px; margin: 0 auto; padding: 24px; }
-::-webkit-scrollbar { width: 6px; height: 6px; }
+.container { max-width: 1440px; margin: 0 auto; padding: 16px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
 /* 数据来源标签 */
@@ -29,107 +30,164 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .source-label.tier3 { background: rgba(139, 92, 246, 0.1); color: #a78bfa; }
 
 /* 来源说明区 */
-.source-legend { display: flex; gap: 12px; margin-bottom: 16px; padding: 10px 16px; background: rgba(30, 34, 48, 0.3); border-radius: 8px; }
-.source-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #94a3b8; }
+.source-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; padding: 10px 12px; background: rgba(30, 34, 48, 0.3); border-radius: 8px; }
+.source-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; }
 
 /* 头部 */
-.header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 24px; }
-.header-left h1 { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #e0e7ff 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.header-meta { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-.ai-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 16px; font-size: 11px; color: #818cf8; font-weight: 600; }
-.tier-badge { padding: 5px 10px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 16px; font-size: 11px; color: #4ade80; }
-.time-badge { font-size: 12px; color: #64748b; }
-.live-tag { padding: 6px 14px; background: rgba(34, 197, 94, 0.2); border-radius: 20px; font-size: 12px; color: #4ade80; font-weight: 600; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+.header-left h1 { font-size: 1.25rem; font-weight: 800; background: linear-gradient(135deg, #e0e7ff 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.ai-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 16px; font-size: 10px; color: #818cf8; font-weight: 600; }
+.tier-badge { padding: 4px 8px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 16px; font-size: 10px; color: #4ade80; }
+.time-badge { font-size: 11px; color: #64748b; }
+.live-tag { padding: 4px 10px; background: rgba(34, 197, 94, 0.2); border-radius: 16px; font-size: 11px; color: #4ade80; font-weight: 600; }
 
 /* 基础卡片样式 */
-.glass-card { background: rgba(22, 25, 37, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; margin-bottom: 24px; transition: all 0.3s; }
+.glass-card { background: rgba(22, 25, 37, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 16px; margin-bottom: 16px; transition: all 0.3s; }
 .glass-card:hover { border-color: rgba(129, 140, 248, 0.4); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
-.section-title { font-size: 16px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.section-title { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
 /* KPI网格 */
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-.kpi-card { background: rgba(30, 34, 48, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; position: relative; }
-.kpi-source { position: absolute; bottom: 8px; right: 12px; font-size: 10px; }
-.kpi-icon { font-size: 24px; margin-bottom: 8px; }
-.kpi-value { font-size: 26px; font-weight: 800; color: #f8fafc; margin-bottom: 4px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+.kpi-card { background: rgba(30, 34, 48, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 10px; padding: 14px; position: relative; }
+.kpi-source { position: absolute; bottom: 6px; right: 10px; font-size: 9px; }
+.kpi-icon { font-size: 20px; margin-bottom: 6px; }
+.kpi-value { font-size: 1.25rem; font-weight: 800; color: #f8fafc; margin-bottom: 2px; }
 .kpi-value.gradient { background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .kpi-value.pink { color: #f472b6; }
 .kpi-value.yellow { color: #fbbf24; }
-.kpi-label { font-size: 12px; color: #64748b; font-weight: 500; }
+.kpi-label { font-size: 11px; color: #64748b; font-weight: 500; }
 
 /* 行业快讯 */
-.news-grid { display: flex; flex-direction: column; gap: 24px; }
-.news-item { background: transparent; padding: 0 0 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.news-grid { display: flex; flex-direction: column; gap: 16px; }
+.news-item { background: transparent; padding: 0 0 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
 .news-item:last-child { border-bottom: 0; padding-bottom: 0; }
-.news-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.news-type { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.news-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.news-type { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
 .news-type.data { background: rgba(34, 197, 94, 0.2); color: #4ade80; border-left: 2px solid #4ade80; }
 .news-type.warn { background: rgba(244, 63, 94, 0.2); color: #fb7185; border-left: 2px solid #fb7185; }
 .news-type.biz { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-left: 2px solid #fb7185; }
-.news-title { font-size: 14px; font-weight: 700; color: #f8fafc; }
-.news-content { font-size: 13px; color: #a0aec0; line-height: 1.6; white-space: pre-line; }
-.news-link { display: inline-flex; margin-top: 12px; font-size: 12px; color: #818cf8; text-decoration: none; font-weight: 600; transition: opacity 0.2s ease, text-decoration-color 0.2s ease; }
+.news-title { font-size: 13px; font-weight: 700; color: #f8fafc; }
+.news-content { font-size: 12px; color: #a0aec0; line-height: 1.6; white-space: pre-line; }
+.news-link { display: inline-flex; margin-top: 10px; font-size: 11px; color: #818cf8; text-decoration: none; font-weight: 600; transition: opacity 0.2s ease, text-decoration-color 0.2s ease; }
 .news-link:hover { opacity: 0.82; text-decoration: underline; text-decoration-color: rgba(129, 140, 248, 0.7); }
 
 /* 两列布局 */
-.main-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; margin-bottom: 24px; }
+.main-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-bottom: 16px; }
 
-/* 榜单表格 */
-.rank-table { width: 100%; border-collapse: collapse; }
-.rank-table th { padding: 14px 12px; background: rgba(30, 34, 48, 0.8); color: #94a3b8; font-weight: 600; text-align: left; font-size: 12px; }
-.rank-table td { padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
-.rank-table tr:hover td { background: rgba(255,255,255,0.02); }
-.text-center { text-align: center; }
-
-/* 排名徽章 */
-.rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; font-size: 13px; }
+/* 榜单表格 - 改为卡片列表式 */
+.rank-list { display: flex; flex-direction: column; gap: 10px; }
+.rank-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: rgba(30, 34, 48, 0.3); border-radius: 10px; border: 1px solid rgba(255,255,255,0.04); transition: all 0.2s; }
+.rank-item:hover { background: rgba(30, 34, 48, 0.5); border-color: rgba(129, 140, 248, 0.3); }
+.rank-item.hidden { display: none; }
+.rank-badge { display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; border-radius: 8px; font-weight: bold; font-size: 13px; flex-shrink: 0; }
 .rank-gold { background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff; box-shadow: 0 2px 6px rgba(217,119,6,0.3); }
 .rank-silver { background: linear-gradient(135deg, #94a3b8, #475569); color: #fff; }
 .rank-bronze { background: linear-gradient(135deg, #b45309, #78350f); color: #fff; }
 .rank-normal { background: rgba(51, 65, 85, 0.5); color: #94a3b8; }
+.rank-cover { width: 60px; height: 80px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: rgba(255,255,255,0.05); }
+.rank-info { flex: 1; min-width: 0; }
+.rank-title { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.rank-meta { font-size: 11px; color: #64748b; margin-bottom: 6px; }
+.rank-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.rank-stats { display: flex; align-items: center; gap: 12px; font-size: 12px; }
+.rank-views { font-weight: 700; }
+.rank-views.top3 { color: #fbbf24; }
+.rank-views.normal { color: #4ade80; }
+.rank-platform { color: #94a3b8; }
+
+/* 加载更多按钮 */
+.load-more-btn { display: block; width: 100%; padding: 12px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; color: #818cf8; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 12px; }
+.load-more-btn:hover { background: rgba(99, 102, 241, 0.2); }
+.load-more-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* 制作厂牌标签 */
-.producer-tag { font-size: 12px; color: #cbd5e1; font-weight: 500; background: rgba(59, 130, 246, 0.1); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); }
-
-/* AI题材标签 */
-.ai-tag { display: inline-block; padding: 4px 8px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 6px; font-size: 12px; color: #818cf8; font-weight: 600; }
-.genre-tags { margin-top: 4px; display: flex; gap: 4px; flex-wrap: wrap; }
-.core-tag { display: inline-block; padding: 2px 6px; background: rgba(255,255,255,0.05); border-radius: 4px; font-size: 11px; color: #cbd5e1; }
+.producer-tag { font-size: 11px; color: #cbd5e1; font-weight: 500; background: rgba(59, 130, 246, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); }
+.ai-tag { display: inline-block; padding: 3px 6px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 4px; font-size: 11px; color: #818cf8; font-weight: 600; }
+.core-tag { display: inline-block; padding: 2px 6px; background: rgba(255,255,255,0.05); border-radius: 4px; font-size: 10px; color: #cbd5e1; }
+.trend-badge { background: rgba(255, 71, 87, 0.2); color: #ff4757; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
 /* 异动点评 */
-.insight-item { background: rgba(30, 34, 48, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 3px solid #a78bfa; }
-.insight-item-title { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
-.insight-item-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+.insight-item { background: rgba(30, 34, 48, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 3px solid #a78bfa; }
+.insight-item-title { font-size: 13px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+.insight-item-desc { font-size: 12px; color: #94a3b8; line-height: 1.5; }
 
 /* 演员榜 */
-.actor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.actor-col-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; padding: 6px 12px; border-radius: 6px; }
+.actor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.actor-col-title { font-size: 12px; font-weight: 700; margin-bottom: 8px; padding: 5px 10px; border-radius: 6px; }
 .actor-col-title.female { background: rgba(244, 114, 182, 0.1); color: #f472b6; }
 .actor-col-title.male { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
-.actor-item { display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(30,34,48,0.3); border-radius: 6px; margin-bottom: 6px; }
-.actor-rank { width: 20px; height: 20px; border-radius: 4px; background: rgba(51,65,85,0.5); color: #94a3b8; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-.actor-name { font-size: 13px; color: #f8fafc; font-weight: 600; }
-.actor-pop { font-size: 12px; font-weight: 700; margin-left: auto; }
+.actor-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: rgba(30,34,48,0.3); border-radius: 6px; margin-bottom: 4px; }
+.actor-rank { width: 18px; height: 18px; border-radius: 4px; background: rgba(51,65,85,0.5); color: #94a3b8; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.actor-name { font-size: 12px; color: #f8fafc; font-weight: 600; }
+.actor-pop { font-size: 11px; font-weight: 700; margin-left: auto; }
 .actor-pop.female { color: #f472b6; }
 .actor-pop.male { color: #60a5fa; }
 
 /* 近一周热门标签 */
-.sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
-.hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+.hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.tag-pill { background: #2d3436; color: #dfe6e9; padding: 4px 10px; border-radius: 16px; font-size: 12px; border: 1px solid #636e72; display: inline-flex; align-items: center; gap: 4px; }
+.tag-value { color: #74b9ff; font-weight: bold; }
 
 /* 核心观众画像 */
-.audience-layout { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
-.audience-charts { display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap; }
-.audience-chart { width: 180px; height: 180px; background: rgba(15, 23, 42, 0.36); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; }
-.audience-traits { display: flex; flex-wrap: wrap; gap: 8px; }
-.audience-trait { padding: 5px 10px; background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.22); border-radius: 6px; font-size: 11px; color: #f472b6; line-height: 1.4; }
+.audience-layout { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.audience-charts { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; }
+.audience-chart { width: 140px; height: 140px; background: rgba(15, 23, 42, 0.36); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; flex: 1; min-width: 120px; }
+.audience-traits { display: flex; flex-wrap: wrap; gap: 6px; }
+.audience-trait { padding: 4px 8px; background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.22); border-radius: 6px; font-size: 10px; color: #f472b6; line-height: 1.4; }
 
 /* 核心情绪与动机拆解 */
-.emotion-chart { width: 100%; height: 320px; background: radial-gradient(circle at 50% 35%, rgba(129, 140, 248, 0.12), rgba(15, 23, 42, 0.18) 58%, rgba(15, 23, 42, 0.05)); border: 1px solid rgba(129, 140, 248, 0.12); border-radius: 14px; }
+.emotion-chart { width: 100%; height: 280px; background: radial-gradient(circle at 50% 35%, rgba(129, 140, 248, 0.12), rgba(15, 23, 42, 0.18) 58%, rgba(15, 23, 42, 0.05)); border: 1px solid rgba(129, 140, 248, 0.12); border-radius: 12px; }
 
-/* 响应式 */
-@media (max-width: 1200px) { .main-grid { grid-template-columns: 1fr; } .sub-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 768px) { .kpi-grid { grid-template-columns: 1fr; } .actor-grid { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 16px; } }
+/* H5响应式适配 */
+@media (max-width: 1200px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .sub-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  html { font-size: 14px; }
+  .container { padding: 12px; }
+  .header { flex-direction: column; gap: 10px; }
+  .header-left h1 { font-size: 1.1rem; }
+  .header-meta { gap: 6px; }
+  .ai-badge, .tier-badge { font-size: 9px; padding: 3px 8px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .kpi-card { padding: 10px; }
+  .kpi-value { font-size: 1rem; }
+  .kpi-label { font-size: 10px; }
+  .glass-card { padding: 12px; margin-bottom: 12px; }
+  .section-title { font-size: 13px; margin-bottom: 10px; }
+  .rank-item { padding: 10px; gap: 10px; }
+  .rank-cover { width: 50px; height: 66px; }
+  .rank-title { font-size: 13px; }
+  .actor-grid { grid-template-columns: 1fr; }
+  .source-legend { flex-direction: column; gap: 6px; }
+  .source-legend-item { font-size: 10px; }
+  .audience-chart { width: 100%; height: 160px; }
+  .emotion-chart { height: 240px; }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .kpi-icon { font-size: 18px; }
+  .kpi-value { font-size: 0.9rem; }
+  .rank-item { flex-direction: column; align-items: stretch; }
+  .rank-cover { width: 100%; height: 120px; object-fit: cover; }
+  .rank-badge { position: absolute; top: 8px; left: 8px; }
+  .rank-item { position: relative; }
+  .actor-item { padding: 5px 6px; }
+  .actor-name { font-size: 11px; }
+}
+
+/* 隐藏PC端日期选择器，移动端显示简化版 */
+@media (max-width: 600px) {
+  .date-selector label { display: none; }
+  #date-select { padding: 6px 10px; font-size: 12px; }
+  .live-tag { display: none; }
+}
 </style>
 </head>
 <body>
@@ -141,41 +199,41 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
       <h1>📊 短剧行业数据看板</h1>
       <div class="header-meta">
         <span class="ai-badge"><i class="fas fa-robot"></i> Kimi Powered</span>
-        <span class="tier-badge">📊 Tier1 爬取 + 🔍 Tier2 搜补 + 🤖 Tier3 推理</span>
+        <span class="tier-badge">📊 Tier1 爬取 + 🔍 Tier2 搜补</span>
         <span class="time-badge" id="update-time">更新时间: --</span>
-        <span style="font-size: 12px; color: #a78bfa; margin-left: 8px;">by Bridget Yang</span>
+        <span style="font-size: 11px; color: #a78bfa; margin-left: 4px;">by Bridget Yang</span>
       </div>
     </div>
-    <div class="header-right" style="display: flex; align-items: center; gap: 16px;">
-      <div class="date-selector" style="display: flex; align-items: center; gap: 8px;">
-        <label for="date-select" style="font-size: 12px; color: #94a3b8;">查看历史：</label>
-        <select id="date-select" style="padding: 8px 12px; background: rgba(30, 34, 48, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #e0e7ff; font-size: 13px; cursor: pointer;">
+    <div class="header-right" style="display: flex; align-items: center; gap: 12px;">
+      <div class="date-selector" style="display: flex; align-items: center; gap: 6px;">
+        <label for="date-select" style="font-size: 11px; color: #94a3b8;">查看历史：</label>
+        <select id="date-select" style="padding: 6px 10px; background: rgba(30, 34, 48, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #e0e7ff; font-size: 12px; cursor: pointer;">
           <option value="latest">今日最新</option>
         </select>
       </div>
-      <div class="live-tag"><i class="fas fa-circle" style="font-size: 8px; margin-right: 6px;"></i>实时监控中</div>
+      <div class="live-tag"><i class="fas fa-circle" style="font-size: 6px; margin-right: 4px;"></i>实时监控中</div>
     </div>
   </div>
 
   <!-- 数据来源说明 -->
   <div class="source-legend">
-    <div class="source-legend-item"><span class="source-tag tier1">📊 Tier1</span> 工作流直接爬取（排名、播放量、平台）</div>
-    <div class="source-legend-item"><span class="source-tag tier2">🔍 Tier2</span> Kimi联网搜补（厂牌、爽点、集数）</div>
-    <div class="source-legend-item"><span class="source-tag tier3">🤖 Tier3</span> Kimi推理分析（洞察、画像、趋势）</div>
+    <div class="source-legend-item"><span class="source-tag tier1">📊 Tier1</span> 红果直爬（排名、剧集、标签）</div>
+    <div class="source-legend-item"><span class="source-tag tier2">🔍 Tier2</span> Kimi搜补（厂牌、演员、行业数据）</div>
+    <div class="source-legend-item"><span class="source-tag tier3">🤖 Tier3</span> DeepSeek推理（洞察、画像）</div>
   </div>
 
   <div id="quality-warning" class="glass-card" style="display:none; border-color: rgba(251, 191, 36, 0.35); background: rgba(251, 191, 36, 0.06);">
-    <div class="section-title" style="color:#fbbf24; margin-bottom:8px;"><i class="fas fa-triangle-exclamation"></i> 数据质量提示</div>
-    <div id="quality-warning-content" style="font-size:12px; color:#facc15; white-space:pre-wrap; line-height:1.6;"></div>
+    <div class="section-title" style="color:#fbbf24; margin-bottom:6px;"><i class="fas fa-triangle-exclamation"></i> 数据质量提示</div>
+    <div id="quality-warning-content" style="font-size:11px; color:#facc15; white-space:pre-wrap; line-height:1.6;"></div>
   </div>
 
-  <!-- KPI卡片 (v1.7.11: 删除大盘用户规模/市场规模/女频占比/首日ROI) -->
+  <!-- KPI卡片 -->
   <div class="kpi-grid">
     <div class="kpi-card">
       <div class="kpi-icon">📱</div>
       <div class="kpi-value" id="kpi-mau">--</div>
       <div class="kpi-label">APP月活</div>
-      <div class="kpi-source"><span class="source-tag tier1">📊 爬取</span></div>
+      <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-icon">🤖</div>
@@ -206,26 +264,15 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
   <!-- 两列布局 -->
   <div class="main-grid">
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> 榜单 TOP8 <span class="source-tag tier1">📊 爬取</span> + <span class="source-tag tier2">🔍 搜补厂牌/爽点</span></div>
-      <table class="rank-table">
-        <thead>
-          <tr>
-            <th style="width: 50px;">排名</th>
-            <th>剧目 <span class="source-tag tier1">📊</span></th>
-            <th>制作厂牌 <span class="source-tag tier2">🔍</span></th>
-            <th>题材 & 核心爽点 <span class="source-tag tier2">🔍</span></th>
-            <th>播放量 <span class="source-tag tier1">📊</span></th>
-            <th>平台 <span class="source-tag tier1">📊</span></th>
-          </tr>
-        </thead>
-        <tbody id="rankings-container"></tbody>
-      </table>
+      <div class="section-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> 榜单 TOP20 <span class="source-tag tier1">📊 红果直爬</span> + <span class="source-tag tier2">🔍 搜补</span></div>
+      <div class="rank-list" id="rankings-container"></div>
+      <button class="load-more-btn" id="load-more-btn" style="display: none;">加载更多...</button>
     </div>
     
-    <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
       
       <div class="glass-card" style="flex: 1;">
-        <div class="section-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 行业大事件 <span class="source-tag tier3">🤖 Kimi分析</span></div>
+        <div class="section-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 行业大事件 <span class="source-tag tier3">🤖 DeepSeek分析</span></div>
         <div id="insights-container"></div>
       </div>
       
@@ -264,14 +311,14 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     </div>
     
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-brain" style="color:#a78bfa;"></i> 🎬 核心情绪与动机拆解 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div class="section-title"><i class="fas fa-brain" style="color:#a78bfa;"></i> 核心情绪与动机拆解 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
       <div id="emotionChart" class="emotion-chart"></div>
     </div>
   </div>
   
   <div class="glass-card">
     <div class="section-title"><i class="fas fa-chart-area" style="color:#a78bfa;"></i> 播放量趋势 (近7日) <span class="source-tag tier1">📊 爬取</span></div>
-    <div style="height: 250px;">
+    <div style="height: 200px;">
       <canvas id="trendChart"></canvas>
     </div>
   </div>
@@ -280,10 +327,10 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
 <script>
 // ==========================================
-// 1. 结构化兜底数据 (防止白屏) - Kimi 2026-06-09
+// 1. 结构化兜底数据 (防止白屏)
 // ==========================================
 const fallbackData = {
-    "data_date": "2026-06-09",
+    "data_date": "2026-06-12",
     "industry": { "user_scale": "7.18亿", "market_size": "1000亿+", "app_mau": "3.04亿", "ai_ratio": 38, "female_ratio": 95, "drama_count": "25万+", "billion_dramas": 20 },
     "daily_news": [
         { "type": "数据", "icon": "📊", "title": "热度榜更新", "content": "DataEye发布6月首周短剧热度榜，都市逆袭题材占据TOP10中6席，单部最高消耗破千万。", "source_url": "https://www.dataeye.cn" },
@@ -300,10 +347,7 @@ const fallbackData = {
         { "rank": 2, "title": "裴总每天都想父凭子贵", "episodes_count": 95, "female_lead": "未知", "male_lead": "陈哲远", "production_house": "九州", "core_trope": ["带球跑","总裁追妻","萌宝助攻"], "views": "9800万+", "views_num": 9800, "platform": "红果", "trend": "new", "heat": 9800 },
         { "rank": 3, "title": "厉总，你找错夫人了", "episodes_count": 90, "female_lead": "未知", "male_lead": "张集骏", "production_house": "点众", "core_trope": ["替身新娘","追妻火葬场","真假千金"], "views": "8500万+", "views_num": 8500, "platform": "红果", "trend": "new", "heat": 8500 },
         { "rank": 4, "title": "哎呀！皇后娘娘来打工", "episodes_count": 85, "female_lead": "未知", "male_lead": "曾辉", "production_house": "九州", "core_trope": ["古穿今","职场逆袭","皇后反差"], "views": "7200万+", "views_num": 7200, "platform": "红果", "trend": "new", "heat": 7200 },
-        { "rank": 5, "title": "离婚后，她带六宝惊艳全球", "episodes_count": 92, "female_lead": "张晋宜", "male_lead": "未知", "production_house": "九州", "core_trope": ["带球跑","天才萌宝","全球惊艳"], "views": "5800万+", "views_num": 5800, "platform": "红果", "trend": "new", "heat": 5800 },
-        { "rank": 6, "title": "我在精神病院学斩神", "episodes_count": 100, "female_lead": "未知", "male_lead": "曾辉", "production_house": "未知厂牌", "core_trope": ["异能觉醒","精神病院","都市玄幻"], "views": "6500万+", "views_num": 6500, "platform": "红果", "trend": "same", "heat": 6500 },
-        { "rank": 7, "title": "闪婚后，傅先生马甲藏不住了", "episodes_count": 88, "female_lead": "未知", "male_lead": "李菲", "production_house": "麦芽", "core_trope": ["闪婚","隐藏身份","马甲大佬"], "views": "4500万+", "views_num": 4500, "platform": "红果", "trend": "new", "heat": 4500 },
-        { "rank": 8, "title": "前夫，请滚远点", "episodes_count": 78, "female_lead": "李柯以", "male_lead": "张集骏", "production_house": "麦芽", "core_trope": ["离婚逆袭","渣男后悔","女主独美"], "views": "3100万+", "views_num": 3100, "platform": "红果", "trend": "new", "heat": 3100 }
+        { "rank": 5, "title": "离婚后，她带六宝惊艳全球", "episodes_count": 92, "female_lead": "张晋宜", "male_lead": "未知", "production_house": "九州", "core_trope": ["带球跑","天才萌宝","全球惊艳"], "views": "5800万+", "views_num": 5800, "platform": "红果", "trend": "new", "heat": 5800 }
     ],
     "actors": {
         "female": [
@@ -325,25 +369,12 @@ const fallbackData = {
         "hot_tags": [
             { "name": "穿越年代", "value": 1 },
             { "name": "带球跑", "value": 2 },
-            { "name": "总裁追妻", "value": 1 },
-            { "name": "萌宝助攻", "value": 1 },
-            { "name": "替身新娘", "value": 1 },
-            { "name": "追妻火葬场", "value": 1 },
-            { "name": "真假千金", "value": 1 },
-            { "name": "古穿今", "value": 1 },
-            { "name": "职场逆袭", "value": 1 },
-            { "name": "离婚逆袭", "value": 1 }
+            { "name": "总裁追妻", "value": 1 }
         ]
     },
     "audience_profile": {
         "gender": { "female": 78, "male": 22 },
         "age": { "18-24": 22, "25-34": 43, "35-44": 25, "45+": 10 },
-        "regions": [
-            { "name": "广东", "value": 15.5 },
-            { "name": "江苏", "value": 11.8 },
-            { "name": "浙江", "value": 9.6 },
-            { "name": "山东", "value": 8.4 }
-        ],
         "traits": ["偏好强反转高密度剧情", "关注女性逆袭与情绪补偿", "习惯通勤睡前碎片化追更", "对复仇打脸和身份揭晓爽点敏感"]
     },
     "emotional_analysis": {
@@ -361,18 +392,20 @@ const fallbackData = {
     "platform": { "apps": [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}] },
     "play_trend": {
         "daily": [
-            { "date": "2026-06-09", "total_views": 64000 }
-        ],
-        "weekly": [
-            { "week": "2026-W23", "start_date": "2026-06-08", "end_date": "2026-06-14", "top1_title": "我在八零年代当后妈", "top1_views": "1.2亿+", "total_views": 64000 }
+            { "date": "2026-06-12", "total_views": 64000 }
         ]
     }
 };
 
+// 榜单状态
+let allRankings = [];
+let displayedCount = 0;
+const INITIAL_DISPLAY = 20; // 初始显示20条
+const LOAD_MORE_COUNT = 10; // 每次加载10条
+
 // ==========================================
 // 2. 动态渲染逻辑
 // ==========================================
-// 加载历史日期列表
 async function loadHistoryDates() {
     try {
         const res = await fetch('./data/all_history.json');
@@ -390,7 +423,6 @@ async function loadHistoryDates() {
         }
     } catch (e) { console.warn('历史数据加载失败', e); }
     
-    // 绑定日期选择事件
     const select = document.getElementById('date-select');
     if (!select.dataset.bound) {
         select.addEventListener('change', async (e) => {
@@ -404,12 +436,6 @@ async function loadHistoryDates() {
 const mockAudienceProfile = {
     gender: { female: 78, male: 22 },
     age: { "18-24": 22, "25-34": 43, "35-44": 25, "45+": 10 },
-    regions: [
-        { name: "广东", value: 15.5 },
-        { name: "江苏", value: 11.8 },
-        { name: "浙江", value: 9.6 },
-        { name: "山东", value: 8.4 }
-    ],
     traits: ["偏好强反转高密度剧情", "关注女性逆袭与情绪补偿", "习惯通勤睡前碎片化追更", "对复仇打脸和身份揭晓爽点敏感"]
 };
 
@@ -426,10 +452,6 @@ const mockEmotionalAnalysis = {
     ]
 };
 
-function cloneAudienceProfile(profile) {
-    return JSON.parse(JSON.stringify(profile));
-}
-
 function safePercent(value, fallback = 0) {
     if (typeof value === 'number' && Number.isFinite(value)) return value;
     if (typeof value === 'string') {
@@ -445,7 +467,7 @@ function normalizeAudienceProfile(profile) {
     const hasNewAge = source.age && typeof source.age === 'object';
 
     if (!hasNewGender || !hasNewAge || !Array.isArray(source.traits)) {
-        return cloneAudienceProfile(mockAudienceProfile);
+        return JSON.parse(JSON.stringify(mockAudienceProfile));
     }
 
     const traits = source.traits
@@ -466,7 +488,6 @@ function normalizeAudienceProfile(profile) {
             "35-44": safePercent(source.age["35-44"], mockAudienceProfile.age["35-44"]),
             "45+": safePercent(source.age["45+"], mockAudienceProfile.age["45+"])
         },
-        regions: Array.isArray(source.regions) ? source.regions : cloneAudienceProfile(mockAudienceProfile.regions),
         traits: traits.slice(0, 4)
     };
 }
@@ -498,8 +519,8 @@ function renderAudienceProfile(rawProfile) {
             subtext: '女性占比',
             left: 'center',
             top: '36%',
-            textStyle: { color: '#f472b6', fontSize: 22, fontWeight: 800 },
-            subtextStyle: { color: '#94a3b8', fontSize: 11 }
+            textStyle: { color: '#f472b6', fontSize: 18, fontWeight: 800 },
+            subtextStyle: { color: '#94a3b8', fontSize: 10 }
         },
         tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
         series: [{
@@ -521,27 +542,27 @@ function renderAudienceProfile(rawProfile) {
     window.ageChartInstance = echarts.init(ageEl, 'dark');
     window.ageChartInstance.setOption({
         backgroundColor: 'transparent',
-        grid: { left: 32, right: 12, top: 28, bottom: 28 },
+        grid: { left: 28, right: 10, top: 24, bottom: 24 },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}%' },
         xAxis: {
             type: 'category',
             data: ageKeys,
             axisLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.35)' } },
             axisTick: { show: false },
-            axisLabel: { color: '#94a3b8', fontSize: 10 }
+            axisLabel: { color: '#94a3b8', fontSize: 9 }
         },
         yAxis: {
             type: 'value',
             splitLine: { show: false },
-            axisLabel: { color: '#64748b', fontSize: 10, formatter: '{value}%' }
+            axisLabel: { color: '#64748b', fontSize: 9, formatter: '{value}%' }
         },
         series: [{
             name: '年龄分布',
             type: 'bar',
-            barWidth: 18,
+            barWidth: 14,
             data: ageKeys.map(key => profile.age[key]),
             itemStyle: {
-                borderRadius: [6, 6, 0, 0],
+                borderRadius: [4, 4, 0, 0],
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                     { offset: 0, color: '#a78bfa' },
                     { offset: 1, color: '#60a5fa' }
@@ -591,7 +612,7 @@ function renderEmotionChart(rawAnalysis) {
 
     const analysis = normalizeEmotionalAnalysis(rawAnalysis);
     if (!window.echarts) {
-        chartEl.innerHTML = '<div style="color:#64748b; font-size:12px; padding:24px;">ECharts未加载，情绪动机图表暂不可用</div>';
+        chartEl.innerHTML = '<div style="color:#64748b; font-size:12px; padding:24px;">ECharts未加载</div>';
         return;
     }
 
@@ -623,7 +644,7 @@ function renderEmotionChart(rawAnalysis) {
             bottom: 4,
             itemWidth: 10,
             itemHeight: 10,
-            textStyle: { color: '#94a3b8', fontSize: 11 },
+            textStyle: { color: '#94a3b8', fontSize: 10 },
             data: ['情绪驱动', '现实焦虑']
         },
         radar: {
@@ -632,7 +653,7 @@ function renderEmotionChart(rawAnalysis) {
             startAngle: 90,
             splitNumber: 4,
             indicator: indicators,
-            axisName: { color: '#cbd5e1', fontSize: 11, lineHeight: 16 },
+            axisName: { color: '#cbd5e1', fontSize: 10, lineHeight: 14 },
             axisLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.22)' } },
             splitLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.15)' } },
             splitArea: {
@@ -671,6 +692,76 @@ function renderEmotionChart(rawAnalysis) {
     });
 }
 
+// 渲染单个榜单项
+function renderRankItem(r) {
+    let rankClass = r.rank === 1 ? 'rank-gold' : r.rank === 2 ? 'rank-silver' : r.rank === 3 ? 'rank-bronze' : 'rank-normal';
+    let tags = (r.core_trope || r.tags || []).slice(0, 3).map((t) => `<span class="core-tag">${t}</span>`).join('');
+    let trendTag = typeof r.trend_tag === 'string' ? r.trend_tag.trim() : '';
+    let trendBadge = trendTag ? `<span class="trend-badge">${trendTag}</span>` : '';
+    let viewsClass = r.rank <= 3 ? 'rank-views top3' : 'rank-views normal';
+    let coverHtml = r.cover ? `<img class="rank-cover" src="${escapeAttribute(r.cover)}" alt="${escapeAttribute(r.title)}" onerror="this.style.display='none'">` : '';
+    
+    return `
+        <div class="rank-item" data-rank="${r.rank}">
+            <span class="rank-badge ${rankClass}">${r.rank}</span>
+            ${coverHtml}
+            <div class="rank-info">
+                <div class="rank-title">${escapeHtml(r.title)}${trendBadge}</div>
+                <div class="rank-meta">${r.female_lead || '--'} / ${r.male_lead || '--'} · ${r.episodes_count || '?'}集 · <span class="producer-tag">${r.production_house || '待补充'}</span></div>
+                <div class="rank-tags">${tags}</div>
+                <div class="rank-stats">
+                    <span class="${viewsClass}">${r.views}</span>
+                    <span class="rank-platform">${r.platform}</span>
+                </div>
+            </div>
+        </div>`;
+}
+
+// 渲染榜单（支持滚动加载）
+function renderRankings(rankings) {
+    allRankings = rankings || [];
+    displayedCount = 0;
+    
+    const container = document.getElementById('rankings-container');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    
+    // 清空容器
+    container.innerHTML = '';
+    
+    // 显示初始条目
+    loadMoreRankings();
+    
+    // 绑定加载更多按钮
+    if (allRankings.length > INITIAL_DISPLAY) {
+        loadMoreBtn.style.display = 'block';
+        loadMoreBtn.textContent = `加载更多 (还有 ${allRankings.length - INITIAL_DISPLAY} 条)`;
+        loadMoreBtn.onclick = loadMoreRankings;
+    } else {
+        loadMoreBtn.style.display = 'none';
+    }
+}
+
+// 加载更多榜单
+function loadMoreRankings() {
+    const container = document.getElementById('rankings-container');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    
+    const end = Math.min(displayedCount + LOAD_MORE_COUNT, allRankings.length);
+    
+    for (let i = displayedCount; i < end; i++) {
+        container.insertAdjacentHTML('beforeend', renderRankItem(allRankings[i]));
+    }
+    
+    displayedCount = end;
+    
+    // 更新按钮状态
+    if (displayedCount >= allRankings.length) {
+        loadMoreBtn.style.display = 'none';
+    } else {
+        loadMoreBtn.textContent = `加载更多 (还有 ${allRankings.length - displayedCount} 条)`;
+    }
+}
+
 async function renderDashboard(dateParam = null) {
     let data = fallbackData;
     try {
@@ -682,7 +773,7 @@ async function renderDashboard(dateParam = null) {
         if (res.ok) { data = await res.json(); console.log('JSON数据加载成功:', data); }
     } catch (e) { console.warn('JSON拉取失败，启用兜底数据', e); }
 
-    // 基础指标 (v1.7.11: 删除user_scale/market_size/female_ratio/roi渲染)
+    // 基础指标
     document.getElementById('update-time').innerText = `更新时间: ${data.data_date}`;
     const qualityWarning = document.getElementById('quality-warning');
     const qualityWarningContent = document.getElementById('quality-warning-content');
@@ -694,13 +785,13 @@ async function renderDashboard(dateParam = null) {
         qualityWarningContent.innerText = '';
     }
 
-    // KPI卡片渲染 (仅保留APP月活/AI短剧渗透率/剧集总量/破亿爆款剧)
+    // KPI卡片渲染
     document.getElementById('kpi-mau').innerText = data.industry?.app_mau || '--';
     document.getElementById('kpi-ai').innerText = (data.industry?.ai_ratio || '--') + '%';
     document.getElementById('kpi-drama').innerText = data.industry?.drama_count || '--';
     document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas || '--';
 
-    // 行业快讯（垂直极简列表，保留真实原文链接）
+    // 行业快讯
     document.getElementById('news-container').innerHTML = (data.daily_news || []).map(n => {
         let typeClass = n.type === '预警' ? 'warn' : n.type === '商业' ? 'biz' : 'data';
         let linkHtml = n.source_url ? `<a class="news-link" href="${escapeAttribute(n.source_url)}" target="_blank" rel="noopener noreferrer">原文链接 -&gt;</a>` : '';
@@ -715,25 +806,8 @@ async function renderDashboard(dateParam = null) {
             </div>`;
     }).join('');
 
-    // 榜单 (恢复制作厂牌)
-    document.getElementById('rankings-container').innerHTML = (data.rankings || []).slice(0, 8).map(r => {
-        let rankClass = r.rank === 1 ? 'rank-gold' : r.rank === 2 ? 'rank-silver' : r.rank === 3 ? 'rank-bronze' : 'rank-normal';
-        let tags = (r.core_trope || r.tags || []).slice(0, 2).map((t) => `<span class="core-tag">${t}</span>`).join('');
-        let trendTag = typeof r.trend_tag === 'string' ? r.trend_tag.trim() : '';
-        let trendBadge = trendTag ? `<span style="background: rgba(255, 71, 87, 0.2); color: #ff4757; padding: 2px 6px; border-radius: 4px; font-size: 12px; margin-left: 8px;">${trendTag}</span>` : '';
-        return `
-            <tr>
-                <td class="text-center"><span class="rank-badge ${rankClass}">${r.rank}</span></td>
-                <td>
-                    <div style="font-weight: 600; color: #f8fafc; font-size: 14px;">${r.title}${trendBadge}</div>
-                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">${r.female_lead || '--'} / ${r.male_lead || '--'} · ${r.episodes_count || '?'}集</div>
-                </td>
-                <td><span class="producer-tag">${r.production_house || '待Kimi补全'}</span></td>
-                <td><span class="ai-tag">${r.genre || '综合'}</span><br><div class="genre-tags">${tags}</div></td>
-                <td style="font-weight: 700; color: ${r.rank <= 3 ? '#fbbf24' : '#4ade80'};">${r.views}</td>
-                <td style="font-size: 12px; color: #94a3b8;">${r.platform}</td>
-            </tr>`;
-    }).join('');
+    // 榜单（支持滚动加载）
+    renderRankings(data.rankings);
 
     // 异动点评
     document.getElementById('insights-container').innerHTML = (data.insights || []).slice(0, 2).map(i => `
@@ -765,26 +839,8 @@ async function renderDashboard(dateParam = null) {
                 if (!tagName || !Number.isFinite(tagValue)) return;
 
                 const pill = document.createElement('span');
-                pill.style.background = '#2d3436';
-                pill.style.color = '#dfe6e9';
-                pill.style.padding = '4px 10px';
-                pill.style.borderRadius = '16px';
-                pill.style.fontSize = '13px';
-                pill.style.border = '1px solid #636e72';
-                pill.style.display = 'inline-flex';
-                pill.style.alignItems = 'center';
-
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = tagName;
-
-                const valueSpan = document.createElement('span');
-                valueSpan.style.color = '#74b9ff';
-                valueSpan.style.marginLeft = '4px';
-                valueSpan.style.fontWeight = 'bold';
-                valueSpan.textContent = String(tagValue);
-
-                pill.appendChild(nameSpan);
-                pill.appendChild(valueSpan);
+                pill.className = 'tag-pill';
+                pill.innerHTML = `<span>${tagName}</span><span class="tag-value">${tagValue}</span>`;
                 hotTagsContainer.appendChild(pill);
             });
         }
@@ -828,8 +884,8 @@ async function renderDashboard(dateParam = null) {
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', fontSize: 10 } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', fontSize: 10 } }
                 }
             }
         });
@@ -844,19 +900,5 @@ window.addEventListener('resize', () => {
     if (window.emotionChartInstance) window.emotionChartInstance.resize();
 });
 </script>
-
-<!-- 作者声明 -->
-<footer style="text-align: center; padding: 32px 24px; margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(22, 25, 37, 0.4);">
-  <div style="font-size: 14px; color: #94a3b8; margin-bottom: 8px;">
-    <strong style="color: #a78bfa;">短剧行业数据看板</strong> © 2026
-  </div>
-  <div style="font-size: 12px; color: #64748b;">
-    作者：<span style="color: #818cf8; font-weight: 600;">Bridget Yang</span> · 数据来源：Kimi联网搜索 · 自动更新：GitHub Actions
-  </div>
-  <div style="font-size: 11px; color: #475569; margin-top: 8px;">
-    本看板仅供行业研究参考，数据可能存在偏差，不构成投资建议。
-  </div>
-</footer>
-
 </body>
 </html>
