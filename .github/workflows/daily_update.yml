@@ -5,6 +5,10 @@ on:
     - cron: '0 1 * * *'
   workflow_dispatch:
 
+concurrency:
+  group: daily-update-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -44,5 +48,10 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git diff --quiet && git diff --staged --quiet || git commit -m "auto: 每日数据更新"
-          git push origin main
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "auto: 每日数据更新"
+          git pull --rebase origin main
+          git push origin HEAD:main
