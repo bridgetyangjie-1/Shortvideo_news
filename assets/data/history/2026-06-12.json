@@ -80,69 +80,49 @@
   "rankings": [
     {
       "rank": 1,
-      "title": "我在八零年代当后妈",
-      "female_lead": "滕泽文",
-      "male_lead": "苏袀禾",
-      "views": "1.2亿",
-      "views_num": 12000,
-      "platform": "红果",
-      "genre": "穿越/年代/甜宠",
-      "tags": [
-        "穿越",
-        "八零年代",
-        "后妈",
-        "甜宠",
-        "逆袭"
-      ],
-      "trend": "持平",
-      "trend_tag": "",
+      "title": "今日暂无数据 (API受限)",
+      "female_lead": "",
+      "male_lead": "",
+      "views": "0",
+      "views_num": 0,
+      "play_count": 0,
+      "platform": "未知",
+      "genre": "暂无数据",
+      "tags": [],
+      "trend": "API受限",
+      "trend_tag": "API受限",
       "trend_type": "same",
-      "category": "female",
+      "category": "unknown",
       "is_ai": false,
-      "desc": "现代女大学生穿越到八零年代，被迫给两个娃当后妈，却意外收获忠犬老公和幸福家庭的故事。",
+      "desc": "今日榜单数据暂不可用，请等待下一次自动更新。",
       "change": "",
-      "heat": 12000,
-      "production_house": "点众",
-      "core_trope": [
-        "穿越逆袭",
-        "后妈翻身",
-        "年代甜宠",
-        "打脸极品亲戚"
-      ],
-      "episodes_count": 80
+      "heat": 0,
+      "production_house": "未知",
+      "core_trope": [],
+      "episodes_count": 0
     },
     {
       "rank": 2,
-      "title": "重生之我在霸总身边当卧底",
-      "female_lead": "王小亿",
-      "male_lead": "刘萧旭",
-      "views": "9500万",
-      "views_num": 9500,
-      "platform": "红果",
-      "genre": "重生/都市/霸总",
-      "tags": [
-        "重生",
-        "霸总",
-        "卧底",
-        "虐恋",
-        "复仇"
-      ],
-      "trend": "持平",
-      "trend_tag": "",
+      "title": "今日暂无数据 (API受限)",
+      "female_lead": "",
+      "male_lead": "",
+      "views": "0",
+      "views_num": 0,
+      "play_count": 0,
+      "platform": "未知",
+      "genre": "暂无数据",
+      "tags": [],
+      "trend": "API受限",
+      "trend_tag": "API受限",
       "trend_type": "same",
-      "category": "female",
+      "category": "unknown",
       "is_ai": false,
-      "desc": "女主重生回到过去，成为霸总身边的卧底，在复仇与爱情之间挣扎，最终揭开真相收获真爱。",
+      "desc": "今日榜单数据暂不可用，请等待下一次自动更新。",
       "change": "",
-      "heat": 9500,
-      "production_house": "九州",
-      "core_trope": [
-        "重生复仇",
-        "卧底身份",
-        "霸总追妻",
-        "虐恋情深"
-      ],
-      "episodes_count": 80
+      "heat": 0,
+      "production_house": "未知",
+      "core_trope": [],
+      "episodes_count": 0
     },
     {
       "rank": 3,
@@ -352,7 +332,7 @@
         "platform_fans": 85.5,
         "platform": "红果",
         "badge": "",
-        "works": "我在八零年代当后妈",
+        "works": "今日暂无数据 (API受限)",
         "trend": "上升"
       },
       {
@@ -362,7 +342,7 @@
         "platform_fans": 78.0,
         "platform": "红果",
         "badge": "",
-        "works": "重生之我在霸总身边当卧底",
+        "works": "今日暂无数据 (API受限)",
         "trend": "上升"
       },
       {
@@ -454,7 +434,7 @@
         "platform_fans": 75.0,
         "platform": "红果",
         "badge": "",
-        "works": "我在八零年代当后妈",
+        "works": "今日暂无数据 (API受限)",
         "trend": "上升"
       },
       {
@@ -464,7 +444,7 @@
         "platform_fans": 70.0,
         "platform": "红果",
         "badge": "",
-        "works": "重生之我在霸总身边当卧底",
+        "works": "今日暂无数据 (API受限)",
         "trend": "上升"
       },
       {
@@ -634,8 +614,8 @@
         "week": "2026-W23",
         "start_date": "2026-06-08",
         "end_date": "2026-06-14",
-        "top1_title": "我在八零年代当后妈",
-        "top1_views": "1.2亿",
+        "top1_title": "今日暂无数据 (API受限)",
+        "top1_views": "0",
         "total_views": 64400
       }
     ],
