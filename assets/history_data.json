@@ -1,6 +1,10 @@
 {
   "daily_play_trend": [
     {
+      "date": "2026-06-12",
+      "total_views": 64400
+    },
+    {
       "date": "2026-06-11",
       "total_views": 45000
     },
@@ -19,9 +23,9 @@
       "start_date": "2026-06-08",
       "end_date": "2026-06-14",
       "top1_title": "我在八零年代当后妈",
-      "top1_views": "1000万",
-      "total_views": 45000
+      "top1_views": "1.2亿",
+      "total_views": 64400
     }
   ],
-  "last_updated": "2026-06-11 15:52:37"
+  "last_updated": "2026-06-12 05:57:47"
 }

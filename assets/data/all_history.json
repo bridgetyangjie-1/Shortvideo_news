@@ -87,7 +87,8 @@
     "2026-06-08",
     "2026-06-09",
     "2026-06-10",
-    "2026-06-11"
+    "2026-06-11",
+    "2026-06-12"
   ],
   "last_updated": "2026-06-09 11:40:31",
   "data": {
@@ -1004,6 +1005,708 @@
           "title": "AI短剧监管趋严：合规成本飙升，纯AI内容遭禁，重生嫡女题材成安全区",
           "content": "2026年4月起，AI短剧被纳入备案管理，超万部作品被清理，合规成本大幅提升。今日榜单显示，前8名均为非AI真人剧，其中“重生嫡女”题材占据6席，如《嫡女归来》以600万播放量稳居第四。爆款归因：受众定位为25-40岁女性，爽点公式为“重生复仇+宅斗打脸+权谋智斗”，投流预估CPA低于AI剧30%。买量建议：聚焦真人拍摄的“重生+宅斗”题材，投放平台选择抖音和微信，规避AI内容备案风险，利用政策红利抢占合规市场。",
           "source": "中研网"
+        }
+      ],
+      "quality_score": 95.0,
+      "error_message": ""
+    },
+    "2026-06-12": {
+      "success": true,
+      "generated_at": "2026-06-12T05:57:47+08:00",
+      "data_date": "2026-06-12",
+      "genre_distribution": {
+        "hot_tags": [
+          {
+            "name": "重生",
+            "value": 12
+          },
+          {
+            "name": "古装",
+            "value": 7
+          },
+          {
+            "name": "复仇",
+            "value": 6
+          },
+          {
+            "name": "嫡女",
+            "value": 6
+          },
+          {
+            "name": "逆袭",
+            "value": 6
+          },
+          {
+            "name": "嫡女逆袭",
+            "value": 4
+          },
+          {
+            "name": "宅斗",
+            "value": 4
+          },
+          {
+            "name": "宫斗",
+            "value": 4
+          },
+          {
+            "name": "穿越",
+            "value": 4
+          },
+          {
+            "name": "重生复仇",
+            "value": 4
+          },
+          {
+            "name": "宅斗打脸",
+            "value": 2
+          },
+          {
+            "name": "权谋",
+            "value": 2
+          },
+          {
+            "name": "爱情",
+            "value": 2
+          },
+          {
+            "name": "甜宠",
+            "value": 2
+          },
+          {
+            "name": "霸总",
+            "value": 2
+          }
+        ]
+      },
+      "industry": {
+        "user_scale": "7.18亿",
+        "market_size": "504.4亿元",
+        "drama_count": "3574部",
+        "billion_dramas": 20,
+        "ai_ratio": 50,
+        "female_ratio": 80,
+        "male_ratio": 20,
+        "app_mau": "3.04亿",
+        "app_mau_yoy": "+1.4亿"
+      },
+      "rankings": [
+        {
+          "rank": 1,
+          "title": "我在八零年代当后妈",
+          "female_lead": "滕泽文",
+          "male_lead": "苏袀禾",
+          "views": "1.2亿",
+          "views_num": 12000,
+          "platform": "红果",
+          "genre": "穿越/年代/甜宠",
+          "tags": [
+            "穿越",
+            "八零年代",
+            "后妈",
+            "甜宠",
+            "逆袭"
+          ],
+          "trend": "持平",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "现代女大学生穿越到八零年代，被迫给两个娃当后妈，却意外收获忠犬老公和幸福家庭的故事。",
+          "change": "",
+          "heat": 12000,
+          "production_house": "点众",
+          "core_trope": [
+            "穿越逆袭",
+            "后妈翻身",
+            "年代甜宠",
+            "打脸极品亲戚"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 2,
+          "title": "重生之我在霸总身边当卧底",
+          "female_lead": "王小亿",
+          "male_lead": "刘萧旭",
+          "views": "9500万",
+          "views_num": 9500,
+          "platform": "红果",
+          "genre": "重生/都市/霸总",
+          "tags": [
+            "重生",
+            "霸总",
+            "卧底",
+            "虐恋",
+            "复仇"
+          ],
+          "trend": "持平",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "女主重生回到过去，成为霸总身边的卧底，在复仇与爱情之间挣扎，最终揭开真相收获真爱。",
+          "change": "",
+          "heat": 9500,
+          "production_house": "九州",
+          "core_trope": [
+            "重生复仇",
+            "卧底身份",
+            "霸总追妻",
+            "虐恋情深"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 3,
+          "title": "穿越成妃之嫡女祸妃",
+          "female_lead": "张雨绮",
+          "male_lead": "未知",
+          "views": "8300万",
+          "views_num": 8300,
+          "platform": "红果",
+          "genre": "穿越/古装/宫斗",
+          "tags": [
+            "穿越",
+            "宫斗",
+            "嫡女",
+            "逆袭",
+            "权谋"
+          ],
+          "trend": "持平",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "现代女子穿越成古代嫡女，在深宫之中凭借智慧和手段步步为营，从任人欺凌的妃子成长为权倾后宫的祸妃。",
+          "change": "",
+          "heat": 8300,
+          "production_house": "麦芽",
+          "core_trope": [
+            "穿越宫斗",
+            "嫡女逆袭",
+            "打脸反派",
+            "权谋上位"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 4,
+          "title": "嫡女重生记",
+          "female_lead": "马秋元",
+          "male_lead": "未知",
+          "views": "7800万",
+          "views_num": 7800,
+          "platform": "红果",
+          "genre": "重生/古装/宅斗",
+          "tags": [
+            "重生",
+            "宅斗",
+            "嫡女",
+            "复仇",
+            "逆袭"
+          ],
+          "trend": "持平",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "嫡女重生回到过去，凭借前世记忆预知未来，在宅斗中步步为营，向曾经害死自己的仇人展开复仇。",
+          "change": "",
+          "heat": 7800,
+          "production_house": "蜜糖",
+          "core_trope": [
+            "重生复仇",
+            "嫡女逆袭",
+            "宅斗打脸",
+            "预知未来"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 5,
+          "title": "重生之嫡女祸妃",
+          "female_lead": "张婉儿",
+          "male_lead": "未知",
+          "views": "7200万",
+          "views_num": 7200,
+          "platform": "红果",
+          "genre": "重生/古装/宫斗",
+          "tags": [
+            "重生",
+            "宫斗",
+            "嫡女",
+            "复仇",
+            "权谋"
+          ],
+          "trend": "持平",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "嫡女重生后，带着前世记忆入宫为妃，在波诡云谲的后宫中与各方势力周旋，最终成为祸国殃民的宠妃。",
+          "change": "",
+          "heat": 7200,
+          "production_house": "点众",
+          "core_trope": [
+            "重生宫斗",
+            "嫡女上位",
+            "权谋博弈",
+            "祸国宠妃"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 6,
+          "title": "重生之嫡女归来",
+          "female_lead": "徐艺真",
+          "male_lead": "未知",
+          "views": "6800万",
+          "views_num": 6800,
+          "platform": "红果",
+          "genre": "重生/古装/复仇",
+          "tags": [
+            "重生",
+            "复仇",
+            "嫡女",
+            "逆袭",
+            "虐渣"
+          ],
+          "trend": "持平",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "嫡女含恨而终，重生归来后化身复仇女神，手撕渣男贱女，夺回属于自己的一切，最终收获幸福。",
+          "change": "",
+          "heat": 6800,
+          "production_house": "麦芽",
+          "core_trope": [
+            "重生复仇",
+            "手撕渣男",
+            "嫡女逆袭",
+            "虐渣打脸"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 7,
+          "title": "嫡女重生之风华绝代",
+          "female_lead": "黄云云",
+          "male_lead": "王培延",
+          "views": "6500万",
+          "views_num": 6500,
+          "platform": "红果",
+          "genre": "重生/古装/爱情",
+          "tags": [
+            "重生",
+            "古装",
+            "爱情",
+            "嫡女",
+            "逆袭"
+          ],
+          "trend": "持平",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "嫡女重生后，凭借前世记忆和超凡智慧，在乱世中步步为营，不仅复仇成功，更与心爱之人携手共创盛世风华。",
+          "change": "",
+          "heat": 6500,
+          "production_house": "蜜糖",
+          "core_trope": [
+            "重生逆袭",
+            "嫡女风华",
+            "乱世爱情",
+            "复仇虐渣"
+          ],
+          "episodes_count": 80
+        },
+        {
+          "rank": 8,
+          "title": "重生之嫡女风华",
+          "female_lead": "白妍",
+          "male_lead": "未知",
+          "views": "6300万",
+          "views_num": 6300,
+          "platform": "红果",
+          "genre": "重生/古装/宅斗",
+          "tags": [
+            "重生",
+            "宅斗",
+            "嫡女",
+            "复仇",
+            "逆袭"
+          ],
+          "trend": "持平",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "嫡女重生归来，凭借前世记忆在宅斗中步步为营，揭露阴谋，惩治恶人，最终守护家族荣耀，收获美满人生。",
+          "change": "",
+          "heat": 6300,
+          "production_house": "九州",
+          "core_trope": [
+            "重生复仇",
+            "嫡女逆袭",
+            "宅斗打脸",
+            "守护家族"
+          ],
+          "episodes_count": 80
+        }
+      ],
+      "actors": {
+        "female": [
+          {
+            "rank": 1,
+            "name": "滕泽文",
+            "popularity": 985,
+            "platform_fans": 85.5,
+            "platform": "红果",
+            "badge": "",
+            "works": "我在八零年代当后妈",
+            "trend": "上升"
+          },
+          {
+            "rank": 2,
+            "name": "王小亿",
+            "popularity": 960,
+            "platform_fans": 78.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之我在霸总身边当卧底",
+            "trend": "上升"
+          },
+          {
+            "rank": 3,
+            "name": "朱丽岚",
+            "popularity": 940,
+            "platform_fans": 72.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "穿越成妃之嫡女祸妃",
+            "trend": "上升"
+          },
+          {
+            "rank": 4,
+            "name": "马秋元",
+            "popularity": 920,
+            "platform_fans": 68.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "嫡女重生记",
+            "trend": "上升"
+          },
+          {
+            "rank": 5,
+            "name": "夏艺奕",
+            "popularity": 900,
+            "platform_fans": 65.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女祸妃",
+            "trend": "上升"
+          },
+          {
+            "rank": 6,
+            "name": "徐艺真",
+            "popularity": 880,
+            "platform_fans": 62.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女归来",
+            "trend": "上升"
+          },
+          {
+            "rank": 7,
+            "name": "黄云云",
+            "popularity": 860,
+            "platform_fans": 58.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "嫡女重生之风华绝代",
+            "trend": "上升"
+          },
+          {
+            "rank": 8,
+            "name": "白妍",
+            "popularity": 840,
+            "platform_fans": 55.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女风华",
+            "trend": "上升"
+          },
+          {
+            "rank": 9,
+            "name": "张婉儿",
+            "popularity": 820,
+            "platform_fans": 52.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女祸妃",
+            "trend": "上升"
+          },
+          {
+            "rank": 10,
+            "name": "张雨绮",
+            "popularity": 800,
+            "platform_fans": 50.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "穿越成妃之嫡女祸妃",
+            "trend": "上升"
+          }
+        ],
+        "male": [
+          {
+            "rank": 1,
+            "name": "苏袀禾",
+            "popularity": 950,
+            "platform_fans": 75.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "我在八零年代当后妈",
+            "trend": "上升"
+          },
+          {
+            "rank": 2,
+            "name": "刘萧旭",
+            "popularity": 930,
+            "platform_fans": 70.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之我在霸总身边当卧底",
+            "trend": "上升"
+          },
+          {
+            "rank": 3,
+            "name": "李菲",
+            "popularity": 910,
+            "platform_fans": 66.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "穿越成妃之嫡女祸妃",
+            "trend": "上升"
+          },
+          {
+            "rank": 4,
+            "name": "王培延",
+            "popularity": 890,
+            "platform_fans": 62.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "嫡女重生之风华绝代",
+            "trend": "上升"
+          },
+          {
+            "rank": 5,
+            "name": "江柏萱",
+            "popularity": 870,
+            "platform_fans": 58.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女祸妃",
+            "trend": "上升"
+          },
+          {
+            "rank": 6,
+            "name": "林",
+            "popularity": 850,
+            "platform_fans": 55.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女归来",
+            "trend": "上升"
+          },
+          {
+            "rank": 7,
+            "name": "云擎",
+            "popularity": 830,
+            "platform_fans": 52.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "嫡女重生记",
+            "trend": "上升"
+          },
+          {
+            "rank": 8,
+            "name": "曾辉",
+            "popularity": 810,
+            "platform_fans": 48.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女风华",
+            "trend": "上升"
+          },
+          {
+            "rank": 9,
+            "name": "何健麒",
+            "popularity": 790,
+            "platform_fans": 45.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女风华",
+            "trend": "上升"
+          },
+          {
+            "rank": 10,
+            "name": "孙晨越",
+            "popularity": 770,
+            "platform_fans": 42.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之嫡女风华",
+            "trend": "上升"
+          }
+        ]
+      },
+      "platform": {
+        "apps": [
+          {
+            "name": "红果免费短剧",
+            "mau": 3.15,
+            "mau_unit": "亿",
+            "yoy": "+1.99亿",
+            "share": 85,
+            "trend": "up"
+          },
+          {
+            "name": "抖音短剧",
+            "mau": 2.0,
+            "mau_unit": "亿",
+            "yoy": "+91.0%",
+            "share": 15,
+            "trend": "up"
+          }
+        ],
+        "mini_programs": []
+      },
+      "audience_profile": {
+        "gender": {
+          "female": 85.0,
+          "male": 15.0
+        },
+        "age": {
+          "18-24": 30.0,
+          "25-34": 45.0,
+          "35-44": 20.0,
+          "45+": 5.0
+        },
+        "regions": [
+          {
+            "name": "广东",
+            "value": 15.5
+          },
+          {
+            "name": "江苏",
+            "value": 11.8
+          },
+          {
+            "name": "浙江",
+            "value": 9.6
+          },
+          {
+            "name": "四川",
+            "value": 8.2
+          },
+          {
+            "name": "山东",
+            "value": 7.5
+          }
+        ],
+        "traits": [
+          "偏爱重生逆袭与打脸极品亲戚的爽感剧情",
+          "高频追更穿越年代甜宠和宫斗宅斗题材",
+          "对嫡女身份和预知未来设定有强烈代入感",
+          "习惯在通勤或睡前碎片时间观看短剧"
+        ]
+      },
+      "play_trend": {
+        "daily": [
+          {
+            "date": "2026-06-12",
+            "total_views": 64400
+          },
+          {
+            "date": "2026-06-11",
+            "total_views": 45000
+          },
+          {
+            "date": "2026-06-10",
+            "total_views": 37000
+          },
+          {
+            "date": "2026-06-09",
+            "total_views": 79700
+          }
+        ],
+        "weekly": [
+          {
+            "week": "2026-W23",
+            "start_date": "2026-06-08",
+            "end_date": "2026-06-14",
+            "top1_title": "我在八零年代当后妈",
+            "top1_views": "1.2亿",
+            "total_views": 64400
+          }
+        ],
+        "trend_direction": "stable"
+      },
+      "daily_news": [
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "5月大盘消耗超22亿",
+          "content": "5月微短剧大盘消耗22.62亿，环比上涨8%，41部新剧闯入TOP50，河马《那年阳光正好》登顶热力榜。",
+          "insight": "",
+          "source_url": "https://m.36kr.com/p/3321581409920514"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "周榜新剧强势霸榜",
+          "content": "6月2-8日周榜，河马《我在回忆里万劫不复》登顶，TOP5均为新剧，单周热力值均超1000W。",
+          "insight": "",
+          "source_url": "http://mp.weixin.qq.com/s?__biz=MzkxMTIxODE5Nw==&mid=2247515279&idx=1&sn=9ea40d3d530e74192ce09f809b1fbc7f"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "端原生热播榜13部破亿",
+          "content": "5月8日端原生热播榜，《但行好事》登顶，累计播放2.2亿，连续3期蝉联榜首。",
+          "insight": "",
+          "source_url": "http://mp.weixin.qq.com/s?__biz=MzkxMTIxODE5Nw==&mid=2247515124&idx=1&sn=5fe0a2f706224734a44ab65d01078ad3"
+        },
+        {
+          "type": "商业",
+          "icon": "💰",
+          "title": "红果短剧撒钱保底投资",
+          "content": "红果短剧向承制公司提供20-35万元/部保底投资，覆盖成本且有盈余，播出后参与分账。",
+          "insight": "",
+          "source_url": "https://database.caixin.com/2026-05-30/102449316.html?originReferrer=kimi"
+        },
+        {
+          "type": "预警",
+          "icon": "⚠️",
+          "title": "政策精准监管转型",
+          "content": "2026年国家完善短剧分类标准，从粗放治理转向精准监管，划定合规底线，营造公平有序发展环境。",
+          "insight": "",
+          "source_url": "https://m.sohu.com/a/997469402_122094386?scm=10001.325_13-325_13.0.0-0-0-0-0.5_1334"
+        }
+      ],
+      "insights": [
+        {
+          "icon": "🔥",
+          "title": "监管升级下，合规化成为短剧生存门槛",
+          "content": "2026年6月，短剧行业监管趋严，重点微短剧投资门槛升至300万元，普通微短剧升至100万元，且AI短剧需“先备案、后上线”。爆款归因：受众定位为追求内容深度的用户，爽点公式为“高投入+合规内容+平台背书”，投流预估将更侧重品牌化投放。买量建议：CPA优势题材为古装宅斗和重生复仇，投放平台建议红果等头部平台，以规避政策风险。",
+          "source": "2026年短剧行业政策监管趋严，市场规模破千亿"
+        },
+        {
+          "icon": "💰",
+          "title": "AI短剧出海获资本青睐，本土化成关键",
+          "content": "2026年3月，AI短剧平台StoReel完成3400万美元融资，显示海外市场对AI仿真人视频的认可。爆款归因：受众定位为海外年轻用户，爽点公式为“AI技术+本土化剧情+低成本制作”，投流预估将聚焦TikTok等海外平台。买量建议：CPA优势题材为穿越和甜宠，投放平台建议TikTok和YouTube，利用AI技术降低制作成本，快速抢占海外市场。",
+          "source": "AI短剧出海投资价值凸显，StoReel完成3400万美元融资"
         }
       ],
       "quality_score": 95.0,
