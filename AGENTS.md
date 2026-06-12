@@ -4,7 +4,7 @@
 
 ## 当前基线
 
-- 当前标准版本：`v1.8.0`
+- 当前标准版本：`v1.8.1`
 - 访问地址：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - GitHub Actions 入口：`src/run_github.py`
 - 前端入口：`assets/index.html`
@@ -126,6 +126,10 @@ fetch('./data/latest.json')
 
 | 日期 | 改动 |
 |------|------|
+| 2026-06-12 | **v1.8.1 API调用优化**：Kimi调用从20+次降到6次以内 |
+| 2026-06-12 | enrich_node：删除循环Kimi搜索，改为先爬红果详情页+批量DeepSeek补充 |
+| 2026-06-12 | search_node：删除标签搜索和剧目详情搜索，只保留1次行业数据搜索 |
+| 2026-06-12 | actor_ranking_node：从榜单数据提取演员统计，无需Kimi搜索 |
 | 2026-06-12 | 新增红果官网直爬模块，获取504部短剧基础数据（TOP100用于榜单，TOP20补充详情）|
 | 2026-06-12 | search_node重构：红果直爬为主，Kimi搜索补充行业数据 |
 | 2026-06-12 | push_node支持双文件存储：latest.json(TOP20) + latest_full.json(全量100条) |

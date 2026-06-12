@@ -1,13 +1,14 @@
 """
-数据补充节点 - 双模型协同解耦架构
-Kimi负责搜索，DeepSeek负责推理
+数据补充节点 - 优化版：优先爬虫，减少Kimi调用
+Kimi调用：从N次（每部剧多次）降到最多1次（批量补充）
 """
 import os
 import json
 import re
 import logging
 import time
-from typing import Any, List, Dict
+import urllib.request
+from typing import Any, List, Dict, Optional
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
@@ -24,11 +25,88 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def fetch_hongguo_detail(series_id: str) -> Optional[Dict]:
+    """
+    尝试从红果详情页获取演员/工作室信息
+    返回: {"actors": [...], "studio": "...", "release_date": "..."} 或 None
+    """
+    if not series_id:
+        return None
+    
+    try:
+        url = f"https://novelquickapp.com/series/{series_id}"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as response:
+            html = response.read().decode("utf-8", errors="ignore")
+        
+        # 提取 window._ROUTER_DATA
+        start = html.find('window._ROUTER_DATA = ')
+        end = html.find('</script>', start)
+        if start < 0 or end < 0:
+            return None
+        
+        json_str = html[start+len('window._ROUTER_DATA = '):end].strip().rstrip(';')
+        data = json.loads(json_str)
+        
+        # 尝试查找详情数据
+        page_data = data.get('loaderData', {}).get('page', {})
+        
+        # 查找可能的详情字段
+        detail_data = None
+        for key in ['detail', 'seriesDetail', 'dramaDetail']:
+            if key in page_data:
+                detail_data = page_data[key]
+                break
+        
+        if not detail_data:
+            return None
+        
+        result: Dict[str, Any] = {
+            "actors": [],
+            "studio": "",
+            "release_date": ""
+        }
+        
+        # 提取演员信息
+        if 'actors' in detail_data:
+            result["actors"] = detail_data['actors']
+        elif 'performer' in detail_data:
+            result["actors"] = detail_data['performer']
+        elif 'cast' in detail_data:
+            result["actors"] = detail_data['cast']
+        
+        # 提取工作室信息
+        for studio_key in ['studio', 'production', 'company', 'production_company']:
+            if studio_key in detail_data and detail_data[studio_key]:
+                result["studio"] = detail_data[studio_key]
+                break
+        
+        # 提取上线时间
+        for date_key in ['release_date', 'online_time', 'publish_date', 'create_time']:
+            if date_key in detail_data and detail_data[date_key]:
+                result["release_date"] = str(detail_data[date_key])
+                break
+        
+        # 如果至少有一个有效字段，返回结果
+        if result["actors"] or result["studio"]:
+            logger.info(f"红果详情页爬取成功: series_id={series_id}")
+            return result
+        
+        return None
+        
+    except Exception as e:
+        logger.warning(f"爬取红果详情页失败: {e}")
+        return None
+
+
 def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> EnrichNodeOutput:
     """
-    title: 数据补充（双模型协同）
-    desc: Kimi搜索每部剧资料 → DeepSeek推理生成完整JSON
-    integrations: Moonshot API + DeepSeek API
+    title: 数据补充（爬虫优先）
+    desc: 红果详情页爬虫 → Kimi批量补充（最多1次） → DeepSeek推理生成JSON
+    integrations: 红果爬虫 + Moonshot API + DeepSeek API
     """
     ctx = runtime.context
     
@@ -45,9 +123,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         kimi_client = MoonshotClient()
         ds_client = DeepSeekClient()
         
-        # ========== 搜集阶段：Kimi搜索每部剧 ==========
-        real_search_context = ""
-        search_errors: List[str] = []
+        # ========== 第一步：红果详情页爬虫 ==========
         basic_rankings_list = list(state.basic_rankings) if hasattr(state.basic_rankings, '__iter__') else []
         
         if not basic_rankings_list:
@@ -59,52 +135,64 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                 error_message=error_message + "\n"
             )
         
-        # 搜索全部剧集（Tier 2配额充足）
-        for idx, drama in enumerate(basic_rankings_list):
-            # 获取剧名
+        real_search_context = ""
+        missing_dramas: List[Dict] = []  # 爬虫失败的剧目
+        
+        for idx, drama in enumerate(basic_rankings_list[:20]):  # 只处理前20条
+            # 获取剧名和series_id
             title = ""
+            series_id = ""
             drama_obj: Any = drama
             if hasattr(drama_obj, "title"):
                 title = getattr(drama_obj, "title", "")
+                series_id = getattr(drama_obj, "series_id", "")
             elif isinstance(drama_obj, dict):
                 title = drama_obj.get("title", "")
+                series_id = drama_obj.get("series_id", "")
             
             if not title:
                 continue
             
-            logger.info(f"Kimi多轮搜索剧目《{title}》...")
+            # 尝试爬取红果详情页
+            if series_id:
+                detail = fetch_hongguo_detail(series_id)
+                if detail:
+                    # 爬取成功，记录搜索上下文
+                    actors_str = ", ".join(detail.get("actors", [])) if detail.get("actors") else "未知"
+                    studio_str = detail.get("studio", "未知")
+                    release_str = detail.get("release_date", "")
+                    
+                    real_search_context += f"\n【剧目：《{title}》红果详情页数据】:\n"
+                    real_search_context += f"演员: {actors_str}\n"
+                    real_search_context += f"工作室: {studio_str}\n"
+                    if release_str:
+                        real_search_context += f"上线时间: {release_str}\n"
+                    
+                    logger.info(f"《{title}》爬取成功")
+                    time.sleep(0.5)  # 爬虫间隔
+                    continue
             
-            # 🚨 多轮搜索策略：尝试多种关键词组合
-            search_queries = [
-                f"短剧《{title}》主演演员女演员男主角女主角",
-                f"《{title}》短剧演员阵容DataEye红果短剧",
-                f"短剧 {title} 主演是谁 小红书抖音豆瓣"
-            ]
-            
-            search_found = False
-            for query in search_queries:
-                try:
-                    search_res: str = kimi_client.search(query, max_results=3)
-                    # 检查搜索结果是否包含演员信息（关键词：演员、主演、女主、男主）
-                    if search_res and any(keyword in search_res for keyword in ["演员", "主演", "女主", "男主", "女主角", "男主角"]):
-                        search_text = search_res[:2000] if len(search_res) > 2000 else search_res
-                        real_search_context += f"\n【剧目：《{title}》真实检索】:\n{search_text}\n"
-                        logger.info(f"搜索《{title}》成功，找到演员信息")
-                        search_found = True
-                        break  # 找到有效结果，停止后续搜索
-                    time.sleep(1)  # 每次搜索间隔
-                except Exception as e:
-                    logger.warning(f"搜索《{title}》关键词'{query}'失败: {e}")
-                    time.sleep(1)
-            
-            if not search_found:
-                # 🚨 搜索失败时添加推理补充提示
-                real_search_context += f"\n【剧目：《{title}》搜索无结果，请推理补充】\n"
-                logger.warning(f"《{title}》未找到演员信息，将推理补充")
-            
-            time.sleep(1)  # 每部剧搜索间隔
+            # 爬取失败，加入待补充列表
+            missing_dramas.append({"title": title, "rank": idx + 1})
+            real_search_context += f"\n【剧目：《{title}》需要补充演员信息】\n"
         
-        # ========== 推理阶段：DeepSeek生成JSON ==========
+        # ========== 第二步：Kimi批量补充（最多1次调用）==========
+        if missing_dramas:
+            logger.info(f"开始Kimi批量补充 {len(missing_dramas)} 部剧...")
+            
+            # 构建批量查询
+            batch_titles = [f"《{d['title']}》" for d in missing_dramas[:10]]  # 最多补充10部
+            batch_query = f"短剧演员信息查询，请告诉我以下短剧的主演（女主男主）和制作公司：{', '.join(batch_titles)}"
+            
+            try:
+                batch_result = kimi_client.search(batch_query, max_results=5)
+                if batch_result:
+                    real_search_context += f"\n【Kimi批量搜索结果】:\n{batch_result[:3000]}\n"
+                    logger.info("Kimi批量搜索成功")
+            except Exception as e:
+                logger.warning(f"Kimi批量搜索失败: {e}")
+        
+        # ========== 第三步：DeepSeek推理生成JSON ==========
         rankings_json_list: List[Dict] = []
         for r_item in basic_rankings_list:
             r_any: Any = r_item
@@ -226,7 +314,6 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
         except Exception as parse_error:
             logger.error(f"enrich_node: JSON解析失败: {parse_error}")
             logger.error(f"原始响应: {response}")
-            search_errors.append(f"JSON解析失败: {parse_error}")
         
         try:
             rankings_data, count_warning = ensure_top_rankings(
@@ -237,7 +324,6 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             )
             if count_warning:
                 logger.warning("enrich_node: %s", count_warning)
-                search_errors.append(f"enrich_node: {count_warning}")
         except RankingCountError as count_error:
             error_message = f"enrich_node: {count_error}"
             logger.error(error_message)
@@ -281,7 +367,7 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
             enriched_rankings=enriched_rankings,
             emotional_analysis=emotional_analysis,
             success=True,
-            error_message=("\n".join(search_errors) + "\n") if search_errors else ""
+            error_message=""
         )
         
     except Exception as e:
