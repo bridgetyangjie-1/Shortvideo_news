@@ -2,6 +2,15 @@
 
 当前基线：v1.7.13，Kimi/Moonshot 负责联网搜索，DeepSeek 负责 JSON 推理，GitHub Actions 定时生成静态看板数据。
 
+## 近期更新记录
+
+### 2026-06-12 enrich_node 增量缓存
+
+- 在 `src/graphs/nodes/enrich_node.py` 引入本地缓存 `assets/dramas_cache.json`。
+- 旧剧按剧名命中缓存后直接复用演员、厂牌、题材、标签、核心爽点等稳定字段。
+- 新上榜剧目才执行 Kimi 多轮搜索和 DeepSeek 结构化推理，避免把全量榜单重复发送给大模型。
+- DeepSeek 返回的新剧结果会与当日基础榜单数据合并，并回写缓存供后续运行复用。
+
 ## 当前稳定能力
 
 - GitHub Actions 每日北京时间 9:00 自动执行 `src/run_github.py`。
