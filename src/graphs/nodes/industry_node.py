@@ -28,6 +28,8 @@ from graphs.state import (
     PlatformApp
 )
 
+CACHE_FILE = os.path.join(os.getenv("COZE_WORKSPACE_PATH", "."), "assets", "industry_cache.json")
+
 # 初始化日志
 logger = logging.getLogger(__name__)
 
@@ -105,6 +107,34 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
     ctx = runtime.context
     
     try:
+        date_str = state.data_date or datetime.now().strftime("%Y-%m-%d")
+        try:
+            current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            date_str = datetime.now().strftime("%Y-%m-%d")
+            current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+        try:
+            if os.path.exists(CACHE_FILE):
+                with open(CACHE_FILE, "r", encoding="utf-8") as fd:
+                    cache_data = json.load(fd)
+
+                last_updated = cache_data.get("last_updated")
+                industry_data = cache_data.get("industry")
+                platform_data = cache_data.get("platform")
+                if last_updated and isinstance(industry_data, dict) and isinstance(platform_data, dict):
+                    cached_date = datetime.strptime(last_updated, "%Y-%m-%d").date()
+                    if abs((current_date - cached_date).days) < 7:
+                        logger.info("命中7天长效缓存，跳过大模型调用")
+                        return IndustryNodeOutput(
+                            industry=IndustryData(**industry_data),
+                            platform=PlatformData(**platform_data),
+                            success=True,
+                            error_message=""
+                        )
+        except Exception as cache_exc:
+            logger.warning(f"industry_node: 读取7天长效缓存失败，将重新调用大模型: {cache_exc}")
+
         input_error_message = ""
         if not state.enriched_rankings:
             input_error_message = "industry_node: enriched_rankings 为空，AI/女频比例只能使用默认或搜索兜底；请检查 enrich_node。\n"
@@ -133,7 +163,6 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         client = MoonshotClient()
         
         # 第一轮搜索：AI短剧渗透率专项搜索
-        date_str = state.data_date or datetime.now().strftime("%Y-%m-%d")
         ai_search_query = f"""请联网搜索短剧行业AI短剧占比最新数据。
 参考日期：{date_str}
 
@@ -245,6 +274,22 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         if not isinstance(mini_programs, list):
             mini_programs = []
         platform = PlatformData(apps=apps, mini_programs=mini_programs)
+
+        try:
+            os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
+            with open(CACHE_FILE, "w", encoding="utf-8") as fd:
+                json.dump(
+                    {
+                        "last_updated": date_str,
+                        "industry": industry.model_dump(),
+                        "platform": platform.model_dump()
+                    },
+                    fd,
+                    ensure_ascii=False,
+                    indent=2
+                )
+        except Exception as cache_exc:
+            logger.warning(f"industry_node: 写入7天长效缓存失败: {cache_exc}")
         
         return IndustryNodeOutput(
             industry=industry,

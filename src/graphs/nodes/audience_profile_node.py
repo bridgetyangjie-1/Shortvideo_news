@@ -3,7 +3,9 @@
 """
 import json
 import logging
+import os
 import re
+from datetime import datetime
 from typing import Any, Dict, List
 
 from langchain_core.runnables import RunnableConfig
@@ -18,6 +20,8 @@ from graphs.state import (
 )
 
 logger = logging.getLogger(__name__)
+
+CACHE_FILE = os.path.join(os.getenv("COZE_WORKSPACE_PATH", "."), "assets", "audience_cache.json")
 
 
 DEFAULT_TRAITS = [
@@ -353,6 +357,30 @@ def audience_profile_node(
     response = ""
 
     try:
+        date_str = getattr(state, "data_date", None) or datetime.now().strftime("%Y-%m-%d")
+        try:
+            current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            date_str = datetime.now().strftime("%Y-%m-%d")
+            current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+        try:
+            if os.path.exists(CACHE_FILE):
+                with open(CACHE_FILE, "r", encoding="utf-8") as fd:
+                    cache_data = json.load(fd)
+
+                last_updated = cache_data.get("last_updated")
+                profile_data = cache_data.get("audience_profile")
+                if last_updated and isinstance(profile_data, dict):
+                    cached_date = datetime.strptime(last_updated, "%Y-%m-%d").date()
+                    if abs((current_date - cached_date).days) < 7:
+                        logger.info("命中7天长效缓存，跳过大模型调用")
+                        return AudienceProfileOutput(
+                            audience_profile=_build_audience_profile(profile_data)
+                        )
+        except Exception as cache_exc:
+            logger.warning(f"audience_profile_node: 读取7天长效缓存失败，将重新调用大模型: {cache_exc}")
+
         rankings_context = _build_rankings_context(state)
         prompt = _build_prompt(rankings_context)
 
@@ -371,6 +399,21 @@ def audience_profile_node(
 
         profile_data = _extract_json_from_response(response)
         audience_profile = _build_audience_profile(profile_data)
+
+        try:
+            os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
+            with open(CACHE_FILE, "w", encoding="utf-8") as fd:
+                json.dump(
+                    {
+                        "last_updated": date_str,
+                        "audience_profile": audience_profile.model_dump()
+                    },
+                    fd,
+                    ensure_ascii=False,
+                    indent=2
+                )
+        except Exception as cache_exc:
+            logger.warning(f"audience_profile_node: 写入7天长效缓存失败: {cache_exc}")
 
         return AudienceProfileOutput(audience_profile=audience_profile)
 

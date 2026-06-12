@@ -14,6 +14,7 @@
 - 题材分布：题材占比和热门标签。
 - 观众画像：性别、年龄、地域分布。
 - 行业宏观数据：APP 月活、AI 短剧渗透率、剧集总量、破亿爆款剧等。
+- 7 天长效缓存：行业宏观数据与观众画像命中本地缓存时跳过大模型调用。
 
 ## 在线访问
 
@@ -73,6 +74,8 @@ uv run python src/run_github.py
 - `assets/data/latest.json`
 - `assets/data/all_history.json`
 - `assets/data/history/*.json`
+- `assets/industry_cache.json`：行业宏观数据 7 天缓存。
+- `assets/audience_cache.json`：观众画像 7 天缓存。
 
 ## GitHub Actions
 
