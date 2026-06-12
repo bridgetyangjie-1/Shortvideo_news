@@ -65,7 +65,7 @@ fetch('./data/latest.json')
 | 字段 | 类型 | 要求 |
 |---|---|---|
 | `rankings` | `List[DramaRanking]` | TOP20 短剧榜单 |
-| `daily_news` | `List[DailyNews]` | 5 条快讯，含 `insight` |
+| `daily_news` | `List[DailyNews]` | 5 条快讯，每条250-350字四段式摘要 |
 | `insights` | `List[Insight]` | 具体行业事件，必须含真实数据 |
 | `genre_distribution` | `GenreDistribution` | 题材分布和标签热度 |
 | `actors` | `ActorRanking` | 女频/男频演员榜 |
