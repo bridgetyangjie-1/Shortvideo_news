@@ -100,12 +100,16 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
 - 如果某条新闻没有可确认的真实 source_url，必须丢弃该条新闻。
 - 如果搜索不到足够的高质量新闻，返回实际搜到的数量即可，宁缺毋滥；可以少于5条，甚至返回空数组[]。
 
-🚨【内容结构铁律】
+🚨【内容结构铁律 - 必须逐条执行】
 - 严格输出合法JSON数组格式，最多5条。
-- 每条content必须为150-250字的详细摘要，必须使用换行符\\n进行结构化排版。
-- content必须严格使用以下两段结构，不要增删段落标题：
-  【事件核心】：具体描述事件细节、发布时间、相关平台/公司/机构、核心数据或政策要点。
-  【商业影响】：深度分析该事件对短剧行业趋势、买量投放、制作方、平台分发或商业化机会/风险的具体影响。
+- 每条content必须是250-350字的高信息密度深度摘要，必须基于搜索结果和短剧行业认知进行推理与扩写。
+- content字段必须严格按以下“四段式”输出，禁止合并段落，禁止删改段落标题，四段之间必须使用JSON字符串中的换行转义符\\n连接。
+- 生成JSON时必须把换行写成\\n，不要输出未转义的真实换行，避免JSON解析失败。
+- content必须严格使用以下四段结构：
+  【事件核心】：详细陈述事件的来龙去脉、核心动作、发布时间、相关平台/公司/机构和关键细节。
+  【数据支撑】：挖掘搜索结果中的金额、播放量、热度、份额、增速、榜单名次等核心数据；若无具体数字，必须明确说明可验证的定性趋势，不得编造数字。
+  【商业洞察】：深度剖析该事件对短剧大盘走向、买量成本、内容供给、平台分发或行业竞争格局的长期影响。
+  【决策价值】：明确指出该新闻对短剧制作方、投流团队、平台方或投资方的具体指导意义，例如“建议优先布局XX题材”或“需警惕XX合规风险”。
 - title控制在15字以内，type只能为“预警”“商业”“数据”之一，icon需与type匹配。
 
 输出格式（合法JSON数组，不要加```json包裹）：
@@ -114,7 +118,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
     "type": "预警|商业|数据",
     "icon": "⚠️|💰|📊",
     "title": "标题（15字以内）",
-    "content": "【事件核心】：...\\n【商业影响】：...",
+    "content": "【事件核心】：...\\n【数据支撑】：...\\n【商业洞察】：...\\n【决策价值】：...",
     "source_url": "原文链接URL"
   }}
 ]
@@ -122,7 +126,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         
         response = ds_client.chat(
             messages=[
-                {"role": "system", "content": sp or "你是专业的短剧行业分析师，擅长从新闻中提炼关键快讯。必须输出纯JSON数组，不要加任何Markdown标记。"},
+                {"role": "system", "content": sp or "你是专业的短剧行业商业分析师，擅长从真实新闻中提炼高信息密度快讯，并输出具备产业判断、投放参考和投资决策价值的结构化内容。必须输出纯JSON数组，不要加任何Markdown标记；JSON字符串内的换行必须转义为\\n。"},
                 {"role": "user", "content": analysis_prompt}
             ],
             temperature=temperature,
@@ -164,7 +168,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                         type=str(item.get("type", "数据")),
                         icon=str(item.get("icon", "📊")),
                         title=str(item.get("title", ""))[:15],
-                        content=str(item.get("content", ""))[:300],
+                        content=str(item.get("content", ""))[:600],
                         insight=str(item.get("insight", ""))[:150],
                         source_url=source_url
                     )
