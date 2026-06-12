@@ -82,7 +82,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         combined_results = "\n\n".join(search_results)
         
         # ========== 推理阶段：DeepSeek生成JSON ==========
-        analysis_prompt = f"""基于以下搜索结果，提炼短剧行业最重要的5条新闻。
+        analysis_prompt = f"""基于以下搜索结果，提炼短剧行业最重要的行业快讯。
 
 搜索结果：
 {combined_results}
@@ -94,10 +94,19 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
 ⚠️ 搜索结果中的旧新闻（2024年、2025年等往年数据）一律丢弃！
 ⚠️ 如果搜索结果中没有今日新闻，返回空数组[]
 
-🚨【核心铁律】
-- 必须返回5条今日新闻，严格输出JSON数组格式
-- 每条content不超过100字（精简总结）
-- 每条必须有source_url（从搜索结果中提取的真实原文链接）
+🚨【真实性铁律 - 最高优先级】
+- 绝对忠实于上方真实搜索结果，严禁捏造新闻、数据、机构名称、发布时间和虚假链接。
+- source_url 必须是搜索结果中明确出现过的真实原文URL；禁止填写门户首页、搜索页、空链接或臆造链接。
+- 如果某条新闻没有可确认的真实 source_url，必须丢弃该条新闻。
+- 如果搜索不到足够的高质量新闻，返回实际搜到的数量即可，宁缺毋滥；可以少于5条，甚至返回空数组[]。
+
+🚨【内容结构铁律】
+- 严格输出合法JSON数组格式，最多5条。
+- 每条content必须为150-250字的详细摘要，必须使用换行符\\n进行结构化排版。
+- content必须严格使用以下两段结构，不要增删段落标题：
+  【事件核心】：具体描述事件细节、发布时间、相关平台/公司/机构、核心数据或政策要点。
+  【商业影响】：深度分析该事件对短剧行业趋势、买量投放、制作方、平台分发或商业化机会/风险的具体影响。
+- title控制在15字以内，type只能为“预警”“商业”“数据”之一，icon需与type匹配。
 
 输出格式（合法JSON数组，不要加```json包裹）：
 [
@@ -105,7 +114,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
     "type": "预警|商业|数据",
     "icon": "⚠️|💰|📊",
     "title": "标题（15字以内）",
-    "content": "内容缩写（不超过100字）",
+    "content": "【事件核心】：...\\n【商业影响】：...",
     "source_url": "原文链接URL"
   }}
 ]
@@ -117,7 +126,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                 {"role": "user", "content": analysis_prompt}
             ],
             temperature=temperature,
-            max_tokens=2000
+            max_tokens=4000
         )
         
         logger.info(f"DeepSeek响应: {response[:500]}...")
@@ -144,13 +153,20 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
             
             for item in news_list[:5]:
                 if isinstance(item, dict):
+                    source_url = str(item.get("source_url") or item.get("source", "")).strip()
+                    if not source_url.startswith(("http://", "https://")):
+                        logger.warning(f"news_node: 丢弃缺少真实URL的快讯: {item.get('title', '')}")
+                        continue
+                    if source_url not in combined_results:
+                        logger.warning(f"news_node: 丢弃搜索结果中未出现URL的快讯: {item.get('title', '')}")
+                        continue
                     news_item = DailyNews(
                         type=str(item.get("type", "数据")),
                         icon=str(item.get("icon", "📊")),
                         title=str(item.get("title", ""))[:15],
-                        content=str(item.get("content", ""))[:100],
+                        content=str(item.get("content", ""))[:300],
                         insight=str(item.get("insight", ""))[:150],
-                        source_url=str(item.get("source_url") or item.get("source", "") or "https://www.newwanr.com")
+                        source_url=source_url
                     )
                     daily_news.append(news_item)
                     
@@ -166,16 +182,9 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         logger.warning(error_msg, exc_info=True)
         search_errors.append(error_msg)
     
-    # 兜底：如果没有数据，返回默认快讯
+    # 宁缺毋滥：没有真实搜索结果时返回空列表，避免发布兜底假新闻。
     if not daily_news:
-        logger.error("未生成有效快讯，使用默认兜底")
-        daily_news.append(DailyNews(
-            type="数据",
-            icon="📊",
-            title="行业数据更新",
-            content="今日榜单数据已更新，短剧行业用户规模达7.18亿，市场规模突破1000亿。",
-            source_url="https://www.newwanr.com"
-        ))
+        logger.warning("未生成带真实原文链接的有效快讯，返回空列表")
     
     return NewsNodeOutput(
         daily_news=daily_news[:5],
