@@ -58,13 +58,18 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .kpi-label { font-size: 12px; color: #64748b; font-weight: 500; }
 
 /* 行业快讯 */
-.news-grid { display: flex; flex-wrap: wrap; gap: 12px; }
-.news-item { background: rgba(30, 34, 48, 0.4); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 280px; border: 1px solid rgba(255,255,255,0.03); }
+.news-grid { display: flex; flex-direction: column; gap: 24px; }
+.news-item { background: transparent; padding: 0 0 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.news-item:last-child { border-bottom: 0; padding-bottom: 0; }
+.news-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .news-type { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
 .news-type.data { background: rgba(34, 197, 94, 0.2); color: #4ade80; border-left: 2px solid #4ade80; }
 .news-type.warn { background: rgba(244, 63, 94, 0.2); color: #fb7185; border-left: 2px solid #fb7185; }
 .news-type.biz { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-left: 2px solid #fb7185; }
-.news-content { font-size: 13px; color: #cbd5e1; }
+.news-title { font-size: 14px; font-weight: 700; color: #f8fafc; }
+.news-content { font-size: 13px; color: #a0aec0; line-height: 1.6; white-space: pre-line; }
+.news-link { display: inline-flex; margin-top: 12px; font-size: 12px; color: #818cf8; text-decoration: none; font-weight: 600; transition: opacity 0.2s ease, text-decoration-color 0.2s ease; }
+.news-link:hover { opacity: 0.82; text-decoration: underline; text-decoration-color: rgba(129, 140, 248, 0.7); }
 
 /* 两列布局 */
 .main-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; margin-bottom: 24px; }
@@ -566,6 +571,20 @@ function normalizeEmotionalAnalysis(rawAnalysis) {
     };
 }
 
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+}
+
+function escapeAttribute(value) {
+    return escapeHtml(value).replace(/`/g, '&#96;');
+}
+
 function renderEmotionChart(rawAnalysis) {
     const chartEl = document.getElementById('emotionChart');
     if (!chartEl) return;
@@ -681,12 +700,19 @@ async function renderDashboard(dateParam = null) {
     document.getElementById('kpi-drama').innerText = data.industry?.drama_count || '--';
     document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas || '--';
 
-    // 行业快讯（添加原文链接和洞察分析）
+    // 行业快讯（垂直极简列表，保留真实原文链接）
     document.getElementById('news-container').innerHTML = (data.daily_news || []).map(n => {
         let typeClass = n.type === '预警' ? 'warn' : n.type === '商业' ? 'biz' : 'data';
-        let linkHtml = n.source_url ? `<a href="${n.source_url}" target="_blank" style="font-size: 11px; color: #818cf8; margin-left: 8px; text-decoration: none;">原文链接</a>` : '';
-        let insightHtml = n.insight ? `<div style="font-size: 12px; color: #94a3b8; margin-top: 6px; padding-left: 8px; border-left: 2px solid #4f46e5; line-height: 1.5;">💡 ${n.insight}</div>` : '';
-        return `<div class="news-item" style="flex-direction: column; align-items: flex-start;"><span class="news-type ${typeClass}">${n.type}</span><span class="news-content" style="font-size: 13px; color: #cbd5e1;">${n.content}${linkHtml}</span>${insightHtml}</div>`;
+        let linkHtml = n.source_url ? `<a class="news-link" href="${escapeAttribute(n.source_url)}" target="_blank" rel="noopener noreferrer">原文链接 -&gt;</a>` : '';
+        return `
+            <div class="news-item">
+                <div class="news-header">
+                    <span class="news-type ${typeClass}">${escapeHtml(n.type || '数据')}</span>
+                    <span class="news-title">${escapeHtml(n.title || '行业快讯')}</span>
+                </div>
+                <div class="news-content">${escapeHtml(n.content || '')}</div>
+                ${linkHtml}
+            </div>`;
     }).join('');
 
     // 榜单 (恢复制作厂牌)
