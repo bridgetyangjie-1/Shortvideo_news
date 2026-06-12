@@ -5,16 +5,12 @@
 """
 from __future__ import annotations
 
-import json
-import os
 import re
-from datetime import datetime
-from pathlib import Path
 from typing import Any, Iterable, List, Tuple
 
 
 REQUIRED_TOP_RANKING_COUNT = 8
-RECENT_HISTORY_DAYS = 7
+PLACEHOLDER_TITLE = "今日暂无数据 (API受限)"
 
 
 class RankingCountError(ValueError):
@@ -35,22 +31,25 @@ def ensure_top_rankings(
     补齐优先级：
     1. 当前节点输出的 rankings；
     2. 上游传入的 supplemental_rankings；
-    3. 近 7 天历史归档榜单。
+    3. 通用占位条目。
 
-    如果所有来源合并后仍不足 target_count，则抛出 RankingCountError，避免覆盖页面。
+    不再读取历史归档补位，避免 API 受限或数据不足时把陈旧剧名重新带回今日榜单。
     """
+    if target_count < 1:
+        raise RankingCountError("target_count 必须大于 0。")
+
+    _ = workspace_path
     primary_items = _normalize_rankings(rankings)
-    items = _merge_rankings(primary_items, _normalize_rankings(supplemental_rankings or []))
-    history_used = False
+    supplemental_items = _normalize_rankings(supplemental_rankings or [])
+    items = _merge_rankings(primary_items, supplemental_items)
+    merged_source_count = len(items)
 
     if len(items) < target_count:
-        history_items = _load_recent_history_rankings(
+        items.extend(_build_placeholder_rankings(
+            start_rank=len(items) + 1,
+            count=target_count - len(items),
             data_date=data_date,
-            workspace_path=workspace_path,
-        )
-        before_history = len(items)
-        items = _merge_rankings(items, history_items)
-        history_used = len(items) > before_history
+        ))
 
     if len(items) < target_count:
         raise RankingCountError(
@@ -65,8 +64,8 @@ def ensure_top_rankings(
             f"rankings 不足 {target_count} 条，已由 {len(primary_items)} 条补齐到 "
             f"{target_count} 条"
         )
-        if history_used:
-            warning += "（使用近 7 天历史榜单补位）"
+        if len(items) > merged_source_count:
+            warning += "（使用通用占位条目，未复用历史剧名）"
         warning += "。"
 
     return items, warning
@@ -135,6 +134,38 @@ def _merge_rankings(primary: Iterable[dict], supplemental: Iterable[dict]) -> Li
     return _renumber(merged)
 
 
+def _build_placeholder_rankings(*, start_rank: int, count: int, data_date: str) -> List[dict]:
+    placeholders: List[dict] = []
+    for offset in range(count):
+        rank = start_rank + offset
+        placeholders.append(
+            {
+                "rank": rank,
+                "title": PLACEHOLDER_TITLE,
+                "female_lead": "",
+                "male_lead": "",
+                "views": "0",
+                "views_num": 0,
+                "play_count": 0,
+                "platform": "未知",
+                "genre": "暂无数据",
+                "tags": [],
+                "trend": "API受限",
+                "trend_tag": "API受限",
+                "trend_type": "same",
+                "category": "unknown",
+                "is_ai": False,
+                "desc": f"{data_date or '今日'} 榜单数据暂不可用，请等待下一次自动更新。",
+                "change": "same",
+                "heat": 0,
+                "production_house": "未知",
+                "core_trope": [],
+                "episodes_count": 0,
+            }
+        )
+    return placeholders
+
+
 def _renumber(items: Iterable[dict]) -> List[dict]:
     numbered_items = [dict(item) for item in items]
     for index, item in enumerate(numbered_items, start=1):
@@ -142,54 +173,6 @@ def _renumber(items: Iterable[dict]) -> List[dict]:
         if not item.get("heat"):
             item["heat"] = _safe_int(item.get("views_num"), 0)
     return numbered_items
-
-
-def _load_recent_history_rankings(*, data_date: str, workspace_path: str | None) -> List[dict]:
-    workspace = Path(
-        workspace_path
-        or os.getenv("COZE_WORKSPACE_PATH")
-        or Path(__file__).resolve().parents[2]
-    )
-    history_dir = workspace / "assets" / "data" / "history"
-    if not history_dir.exists():
-        return []
-
-    target_date = _parse_date(data_date)
-    candidates: List[tuple[datetime, dict]] = []
-
-    for history_file in history_dir.glob("*.json"):
-        file_date = _parse_date(history_file.stem)
-        if target_date and file_date:
-            day_gap = (target_date.date() - file_date.date()).days
-            if day_gap < 0 or day_gap > RECENT_HISTORY_DAYS:
-                continue
-
-        try:
-            with history_file.open("r", encoding="utf-8") as file_obj:
-                payload = json.load(file_obj)
-        except (OSError, json.JSONDecodeError):
-            continue
-
-        for item in _normalize_rankings(payload.get("rankings") or []):
-            if not item.get("trend_tag"):
-                item["trend_tag"] = "📌 近7日补位"
-            candidates.append((file_date or datetime.min, item))
-
-    candidates.sort(
-        key=lambda pair: (
-            pair[0],
-            _safe_int(pair[1].get("views_num"), 0),
-        ),
-        reverse=True,
-    )
-    return [item for _, item in candidates]
-
-
-def _parse_date(value: str) -> datetime | None:
-    try:
-        return datetime.strptime(value, "%Y-%m-%d")
-    except (TypeError, ValueError):
-        return None
 
 
 def _safe_text(value: Any, default: str) -> str:

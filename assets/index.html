@@ -280,60 +280,33 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
 <script>
 // ==========================================
-// 1. 结构化兜底数据 (防止白屏) - Kimi 2026-06-09
+// 1. 结构化兜底数据 (防止白屏)
 // ==========================================
 const fallbackData = {
-    "data_date": "2026-06-09",
-    "industry": { "user_scale": "7.18亿", "market_size": "1000亿+", "app_mau": "3.04亿", "ai_ratio": 38, "female_ratio": 95, "drama_count": "25万+", "billion_dramas": 20 },
+    "data_date": new Date().toISOString().slice(0, 10),
+    "industry": { "user_scale": "", "market_size": "", "app_mau": "--", "ai_ratio": 0, "female_ratio": 0, "drama_count": "--", "billion_dramas": 0 },
     "daily_news": [
-        { "type": "数据", "icon": "📊", "title": "热度榜更新", "content": "DataEye发布6月首周短剧热度榜，都市逆袭题材占据TOP10中6席，单部最高消耗破千万。", "source_url": "https://www.dataeye.cn" },
-        { "type": "预警", "icon": "⚠️", "title": "备案新规", "content": "广电总局拟要求短剧投流需备案，未过审内容不得投放，6月底前完成整改。", "source_url": "https://www.nrtta.gov.cn" },
-        { "type": "数据", "icon": "💰", "title": "分成提升", "content": "抖音内测短剧按有效观看时长分账，创作者分成比例提升至70%，6月10日上线。", "source_url": "https://www.douyin.com" },
-        { "type": "商业", "icon": "🏢", "title": "腾讯扶持", "content": "腾讯视频推出繁星计划，投资10亿扶持精品短剧，单部最高补贴500万。", "source_url": "https://v.qq.com" },
-        { "type": "商业", "icon": "🤝", "title": "MCN合作", "content": "快手短剧宣布与头部MCN机构合作，共建10个短剧孵化基地，年产量目标500部。", "source_url": "https://www.kuaishou.com" }
+        { "type": "数据", "icon": "📊", "title": "今日暂无数据", "content": "数据接口暂不可用，暂无可展示的行业快讯。", "insight": "API 受限时不展示历史样例，避免旧数据误导今日判断。", "source_url": "" }
     ],
     "insights": [
-        { "icon": "📊", "title": "大盘平稳", "content": "今日各平台消耗与榜单题材无显著异动特征，维持常规投流策略。" }
+        { "icon": "📊", "title": "暂无数据", "content": "今日数据暂不可用，等待下一次自动更新后恢复展示。" }
     ],
     "rankings": [
-        { "rank": 1, "title": "我在八零年代当后妈", "episodes_count": 82, "female_lead": "徐梦洁", "male_lead": "未知", "production_house": "点众", "core_trope": ["穿越年代","后妈逆袭","打脸极品亲戚"], "views": "1.2亿+", "views_num": 12000, "platform": "红果", "trend": "new", "heat": 12000 },
-        { "rank": 2, "title": "裴总每天都想父凭子贵", "episodes_count": 95, "female_lead": "未知", "male_lead": "陈哲远", "production_house": "九州", "core_trope": ["带球跑","总裁追妻","萌宝助攻"], "views": "9800万+", "views_num": 9800, "platform": "红果", "trend": "new", "heat": 9800 },
-        { "rank": 3, "title": "厉总，你找错夫人了", "episodes_count": 90, "female_lead": "未知", "male_lead": "张集骏", "production_house": "点众", "core_trope": ["替身新娘","追妻火葬场","真假千金"], "views": "8500万+", "views_num": 8500, "platform": "红果", "trend": "new", "heat": 8500 },
-        { "rank": 4, "title": "哎呀！皇后娘娘来打工", "episodes_count": 85, "female_lead": "未知", "male_lead": "曾辉", "production_house": "九州", "core_trope": ["古穿今","职场逆袭","皇后反差"], "views": "7200万+", "views_num": 7200, "platform": "红果", "trend": "new", "heat": 7200 },
-        { "rank": 5, "title": "离婚后，她带六宝惊艳全球", "episodes_count": 92, "female_lead": "张晋宜", "male_lead": "未知", "production_house": "九州", "core_trope": ["带球跑","天才萌宝","全球惊艳"], "views": "5800万+", "views_num": 5800, "platform": "红果", "trend": "new", "heat": 5800 },
-        { "rank": 6, "title": "我在精神病院学斩神", "episodes_count": 100, "female_lead": "未知", "male_lead": "曾辉", "production_house": "未知厂牌", "core_trope": ["异能觉醒","精神病院","都市玄幻"], "views": "6500万+", "views_num": 6500, "platform": "红果", "trend": "same", "heat": 6500 },
-        { "rank": 7, "title": "闪婚后，傅先生马甲藏不住了", "episodes_count": 88, "female_lead": "未知", "male_lead": "李菲", "production_house": "麦芽", "core_trope": ["闪婚","隐藏身份","马甲大佬"], "views": "4500万+", "views_num": 4500, "platform": "红果", "trend": "new", "heat": 4500 },
-        { "rank": 8, "title": "前夫，请滚远点", "episodes_count": 78, "female_lead": "李柯以", "male_lead": "张集骏", "production_house": "麦芽", "core_trope": ["离婚逆袭","渣男后悔","女主独美"], "views": "3100万+", "views_num": 3100, "platform": "红果", "trend": "new", "heat": 3100 }
+        { "rank": 1, "title": "今日暂无数据 (API受限)", "episodes_count": 0, "female_lead": "", "male_lead": "", "production_house": "未知", "core_trope": [], "views": "0", "views_num": 0, "play_count": 0, "platform": "未知", "trend": "API受限", "trend_tag": "API受限", "heat": 0 },
+        { "rank": 2, "title": "今日暂无数据 (API受限)", "episodes_count": 0, "female_lead": "", "male_lead": "", "production_house": "未知", "core_trope": [], "views": "0", "views_num": 0, "play_count": 0, "platform": "未知", "trend": "API受限", "trend_tag": "API受限", "heat": 0 },
+        { "rank": 3, "title": "今日暂无数据 (API受限)", "episodes_count": 0, "female_lead": "", "male_lead": "", "production_house": "未知", "core_trope": [], "views": "0", "views_num": 0, "play_count": 0, "platform": "未知", "trend": "API受限", "trend_tag": "API受限", "heat": 0 },
+        { "rank": 4, "title": "今日暂无数据 (API受限)", "episodes_count": 0, "female_lead": "", "male_lead": "", "production_house": "未知", "core_trope": [], "views": "0", "views_num": 0, "play_count": 0, "platform": "未知", "trend": "API受限", "trend_tag": "API受限", "heat": 0 },
+        { "rank": 5, "title": "今日暂无数据 (API受限)", "episodes_count": 0, "female_lead": "", "male_lead": "", "production_house": "未知", "core_trope": [], "views": "0", "views_num": 0, "play_count": 0, "platform": "未知", "trend": "API受限", "trend_tag": "API受限", "heat": 0 },
+        { "rank": 6, "title": "今日暂无数据 (API受限)", "episodes_count": 0, "female_lead": "", "male_lead": "", "production_house": "未知", "core_trope": [], "views": "0", "views_num": 0, "play_count": 0, "platform": "未知", "trend": "API受限", "trend_tag": "API受限", "heat": 0 },
+        { "rank": 7, "title": "今日暂无数据 (API受限)", "episodes_count": 0, "female_lead": "", "male_lead": "", "production_house": "未知", "core_trope": [], "views": "0", "views_num": 0, "play_count": 0, "platform": "未知", "trend": "API受限", "trend_tag": "API受限", "heat": 0 },
+        { "rank": 8, "title": "今日暂无数据 (API受限)", "episodes_count": 0, "female_lead": "", "male_lead": "", "production_house": "未知", "core_trope": [], "views": "0", "views_num": 0, "play_count": 0, "platform": "未知", "trend": "API受限", "trend_tag": "API受限", "heat": 0 }
     ],
     "actors": {
-        "female": [
-            { "rank": 1, "name": "徐梦洁", "popularity": 982, "works": "我在八零年代当后妈" },
-            { "rank": 2, "name": "王格格", "popularity": 921, "works": "重生之我在霸总短剧里当保姆" },
-            { "rank": 3, "name": "赵佳", "popularity": 873, "works": "我的26岁女房客" },
-            { "rank": 4, "name": "李柯以", "popularity": 850, "works": "前夫请滚远点" },
-            { "rank": 5, "name": "张晋宜", "popularity": 820, "works": "离婚后前夫跪求复合" }
-        ],
-        "male": [
-            { "rank": 1, "name": "李菲", "popularity": 956, "works": "闪婚后傅先生马甲藏不住了" },
-            { "rank": 2, "name": "张集骏", "popularity": 898, "works": "前夫请滚远点" },
-            { "rank": 3, "name": "曾辉", "popularity": 880, "works": "我在精神病院学斩神" },
-            { "rank": 4, "name": "王皓祯", "popularity": 850, "works": "重生后她成了霸总的白月光" },
-            { "rank": 5, "name": "陈哲远", "popularity": 820, "works": "裴总每天都想父凭子贵" }
-        ]
+        "female": [],
+        "male": []
     },
     "genre_distribution": {
-        "hot_tags": [
-            { "name": "穿越年代", "value": 1 },
-            { "name": "带球跑", "value": 2 },
-            { "name": "总裁追妻", "value": 1 },
-            { "name": "萌宝助攻", "value": 1 },
-            { "name": "替身新娘", "value": 1 },
-            { "name": "追妻火葬场", "value": 1 },
-            { "name": "真假千金", "value": 1 },
-            { "name": "古穿今", "value": 1 },
-            { "name": "职场逆袭", "value": 1 },
-            { "name": "离婚逆袭", "value": 1 }
-        ]
+        "hot_tags": []
     },
     "audience_profile": {
         "gender": { "female": 78, "male": 22 },
@@ -361,10 +334,10 @@ const fallbackData = {
     "platform": { "apps": [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}] },
     "play_trend": {
         "daily": [
-            { "date": "2026-06-09", "total_views": 64000 }
+            { "date": new Date().toISOString().slice(0, 10), "total_views": 0 }
         ],
         "weekly": [
-            { "week": "2026-W23", "start_date": "2026-06-08", "end_date": "2026-06-14", "top1_title": "我在八零年代当后妈", "top1_views": "1.2亿+", "total_views": 64000 }
+            { "week": "", "start_date": "", "end_date": "", "top1_title": "今日暂无数据 (API受限)", "top1_views": "0", "total_views": 0 }
         ]
     }
 };
