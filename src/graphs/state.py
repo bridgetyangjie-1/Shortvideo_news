@@ -3,7 +3,7 @@
 """
 import operator
 from typing import Optional, List, Dict, Any, Annotated
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
 
 
@@ -43,6 +43,41 @@ class DramaRanking(BaseModel):
     series_id: str = Field(default="", description="红果剧目ID")
     cover: str = Field(default="", description="封面图URL")
 
+    @field_validator("title", mode="before")
+    @classmethod
+    def _validate_title(cls, v):
+        if v is None:
+            return ""
+        return str(v).strip()
+
+    @field_validator("rank", "views_num", "heat", "episodes_count", "dataeye_rank", "dataeye_heat", "previous_rank", mode="before")
+    @classmethod
+    def _validate_non_negative_int(cls, v):
+        try:
+            return max(0, int(v or 0))
+        except (TypeError, ValueError):
+            return 0
+
+    @field_validator("confidence_score", mode="before")
+    @classmethod
+    def _validate_confidence_score(cls, v):
+        try:
+            return max(0.0, min(1.0, float(v if v is not None else 0.7)))
+        except (TypeError, ValueError):
+            return 0.7
+
+    @field_validator("category", mode="before")
+    @classmethod
+    def _validate_category(cls, v):
+        v = str(v or "female").strip().lower()
+        return v if v in {"female", "male", "ai", "neutral"} else "female"
+
+    @field_validator("trend_type", mode="before")
+    @classmethod
+    def _validate_trend_type(cls, v):
+        v = str(v or "same").strip().lower()
+        return v if v in {"new", "up", "down", "same"} else "same"
+
 
 class ActorRanking(BaseModel):
     """演员榜单条目"""
@@ -54,6 +89,23 @@ class ActorRanking(BaseModel):
     badge: str = Field(default="", description="徽章")
     works: str = Field(default="", description="代表作")
     trend: str = Field(default="", description="趋势描述")
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def _validate_name(cls, v):
+        if v is None:
+            return ""
+        return str(v).strip()
+
+    @field_validator("rank", "popularity", "platform_fans", mode="before")
+    @classmethod
+    def _validate_actor_numbers(cls, v):
+        try:
+            if isinstance(v, (int, float)):
+                return max(0, v)
+            return max(0, float(v or 0))
+        except (TypeError, ValueError):
+            return 0
 
 
 class ActorsData(BaseModel):
@@ -89,6 +141,46 @@ class IndustryData(BaseModel):
     male_ratio: int = Field(default=0, description="男频占比(%)")
     app_mau: str = Field(default="", description="APP月活")
     app_mau_yoy: str = Field(default="", description="APP月活同比增长")
+
+    @field_validator("ai_ratio", "female_ratio", "male_ratio", mode="before")
+    @classmethod
+    def _validate_ratio(cls, v):
+        if v is None or v == "":
+            return 0
+        try:
+            return max(0, min(100, int(float(v))))
+        except (TypeError, ValueError):
+            return 0
+
+    @field_validator("billion_dramas", mode="before")
+    @classmethod
+    def _validate_billion_dramas(cls, v):
+        if v is None or v == "":
+            return 0
+        try:
+            return max(0, int(float(v)))
+        except (TypeError, ValueError):
+            return 0
+
+    @field_validator("user_scale", "market_size", "app_mau", mode="before")
+    @classmethod
+    def _normalize_metric(cls, v):
+        if v is None:
+            return ""
+        if isinstance(v, dict):
+            value = v.get("value", "")
+            unit = v.get("unit", "")
+            yoy = v.get("yoy", "")
+            s = f"{value}{unit}".strip()
+            if yoy:
+                s = f"{s}（{yoy}）"
+            return s
+        return str(v).strip()
+
+    @field_validator("app_mau_yoy", "drama_count", mode="before")
+    @classmethod
+    def _normalize_text(cls, v):
+        return "" if v is None else str(v).strip()
 
 
 class Insight(BaseModel):
@@ -363,6 +455,7 @@ def default_emotional_analysis() -> EmotionalAnalysis:
 
 class GlobalState(BaseModel):
     """全局状态定义"""
+    success: bool = Field(default=True, description="整体工作流是否成功")
     data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
     search_results: List[Dict[str, Any]] = Field(default=[], description="搜索结果原始数据")
     basic_rankings: List[Dict[str, Any]] = Field(default=[], description="基础榜单数据（初步提取）")
@@ -534,6 +627,7 @@ class NewsNodeOutput(BaseModel):
 
 class PushNodeInput(BaseModel):
     """数据推送节点输入"""
+    success: bool = Field(default=True, description="是否通过质量门禁")
     generated_at: str = Field(default="", description="生成时间")
     data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
     industry: IndustryData = Field(default_factory=IndustryData, description="行业数据")
@@ -579,6 +673,27 @@ class PushNodeOutput(BaseModel):
 
 
 # ==================== 条件判断 ====================
+
+class QualityGateInput(BaseModel):
+    """数据质量门禁节点输入"""
+    data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
+    enriched_rankings: List[DramaRanking] = Field(default_factory=list, description="补充后的完整榜单")
+    actors: ActorsData = Field(default_factory=ActorsData, description="演员榜单")
+    daily_news: List[DailyNews] = Field(default_factory=list, description="每日行业快讯")
+    industry: IndustryData = Field(default_factory=IndustryData, description="行业数据")
+    platform: PlatformData = Field(default_factory=PlatformData, description="平台数据")
+    insights: List[Insight] = Field(default_factory=list, description="异动点评列表")
+    quality_score: float = Field(default=0.0, description="当前数据质量分数")
+    error_message: str = Field(default="", description="上游错误信息")
+
+
+class QualityGateOutput(BaseModel):
+    """数据质量门禁节点输出"""
+    success: bool = Field(default=True, description="是否通过质量门禁")
+    quality_score: float = Field(default=0.0, description="重新计算后的数据质量分数 (0-100)")
+    quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
+    error_message: str = Field(default="", description="错误/告警信息")
+
 
 class ShouldPushInput(BaseModel):
     """是否推送数据判断输入"""

@@ -1,0 +1,229 @@
+"""
+数据质量门禁节点。
+
+在 push_node 之前执行统一校验，防止低质量数据覆盖线上页面。
+"""
+import logging
+import re
+from typing import Dict, Any, List
+
+from langchain_core.runnables import RunnableConfig
+from langgraph.runtime import Runtime
+
+from coze_coding_utils.runtime_ctx.context import Context
+from graphs.state import QualityGateInput, QualityGateOutput
+
+logger = logging.getLogger(__name__)
+
+REQUIRED_TOP_RANKING_COUNT = 20
+REQUIRED_FEMALE_ACTORS = 10
+REQUIRED_MALE_ACTORS = 10
+REQUIRED_DAILY_NEWS_COUNT = 6
+MIN_QUALITY_SCORE = 60
+
+API_ERROR_PATTERNS = [
+    re.compile(r"api\s*key", re.I),
+    re.compile(r"unauthorized", re.I),
+    re.compile(r"rate\s*limit", re.I),
+    re.compile(r"429", re.I),
+    re.compile(r"解析失败", re.I),
+    re.compile(r"鉴权", re.I),
+    re.compile(r"余额不足", re.I),
+    re.compile(r"budget", re.I),
+]
+
+BLACKLISTED_ACTOR_NAMES = {"未知", "待定", "未识别", "unknown", "none", "n/a"}
+
+
+def quality_gate_node(
+    state: QualityGateInput,
+    config: RunnableConfig,
+    runtime: Runtime[Context],
+) -> QualityGateOutput:
+    """
+    title: 数据质量门禁
+    desc: 在推送前统一校验榜单、演员、快讯、行业数据质量
+    """
+    report: Dict[str, Any] = {
+        "checks": [],
+        "score": 0,
+        "passed": False,
+    }
+    errors: List[str] = []
+    warnings: List[str] = []
+
+    rankings = state.enriched_rankings or []
+    actors = state.actors or {}
+    daily_news = state.daily_news or []
+    industry = state.industry or {}
+    platform = state.platform or {}
+
+    # 1. 榜单数量
+    ranking_count = len(rankings)
+    ranking_count_ok = ranking_count >= REQUIRED_TOP_RANKING_COUNT
+    report["checks"].append({
+        "name": "rankings_count",
+        "passed": ranking_count_ok,
+        "value": ranking_count,
+        "required": REQUIRED_TOP_RANKING_COUNT,
+    })
+    if not ranking_count_ok:
+        errors.append(f"榜单数量不足：当前 {ranking_count} 条，要求至少 {REQUIRED_TOP_RANKING_COUNT} 条")
+
+    # 2. 榜单字段完整性
+    valid_rankings = 0
+    invalid_rankings: List[str] = []
+    for r in rankings:
+        title = getattr(r, "title", "") or ""
+        views_num = getattr(r, "views_num", 0) or 0
+        platform_name = getattr(r, "platform", "") or ""
+        if title and views_num >= 0 and platform_name:
+            valid_rankings += 1
+        else:
+            invalid_rankings.append(title or "<空剧名>")
+
+    field_integrity_ok = valid_rankings >= REQUIRED_TOP_RANKING_COUNT
+    report["checks"].append({
+        "name": "ranking_field_integrity",
+        "passed": field_integrity_ok,
+        "valid": valid_rankings,
+        "invalid_samples": invalid_rankings[:5],
+    })
+    if not field_integrity_ok:
+        errors.append(f"有效榜单字段不完整：仅 {valid_rankings}/{ranking_count} 条通过校验")
+
+    # 3. 演员榜单
+    female_actors = getattr(actors, "female", []) or []
+    male_actors = getattr(actors, "male", []) or []
+
+    def _valid_actor(actor) -> bool:
+        name = getattr(actor, "name", "") or ""
+        return bool(name) and name.lower() not in BLACKLISTED_ACTOR_NAMES
+
+    female_valid = sum(1 for a in female_actors if _valid_actor(a))
+    male_valid = sum(1 for a in male_actors if _valid_actor(a))
+
+    female_ok = female_valid >= REQUIRED_FEMALE_ACTORS
+    male_ok = male_valid >= REQUIRED_MALE_ACTORS
+
+    report["checks"].append({
+        "name": "female_actors",
+        "passed": female_ok,
+        "valid": female_valid,
+        "required": REQUIRED_FEMALE_ACTORS,
+    })
+    report["checks"].append({
+        "name": "male_actors",
+        "passed": male_ok,
+        "valid": male_valid,
+        "required": REQUIRED_MALE_ACTORS,
+    })
+    if not female_ok:
+        errors.append(f"女频演员有效数量不足：{female_valid}/{REQUIRED_FEMALE_ACTORS}")
+    if not male_ok:
+        errors.append(f"男频演员有效数量不足：{male_valid}/{REQUIRED_MALE_ACTORS}")
+
+    # 4. 每日快讯
+    news_count_ok = len(daily_news) == REQUIRED_DAILY_NEWS_COUNT
+    news_with_url = sum(
+        1 for n in daily_news
+        if (getattr(n, "source_url", "") or "").startswith(("http://", "https://"))
+    )
+    news_url_ok = news_with_url == REQUIRED_DAILY_NEWS_COUNT
+
+    report["checks"].append({
+        "name": "daily_news_count",
+        "passed": news_count_ok,
+        "value": len(daily_news),
+        "required": REQUIRED_DAILY_NEWS_COUNT,
+    })
+    report["checks"].append({
+        "name": "daily_news_url",
+        "passed": news_url_ok,
+        "value": news_with_url,
+        "required": REQUIRED_DAILY_NEWS_COUNT,
+    })
+    if not news_count_ok:
+        errors.append(f"快讯数量不符：当前 {len(daily_news)} 条，要求 {REQUIRED_DAILY_NEWS_COUNT} 条")
+    if not news_url_ok:
+        errors.append(f"快讯 source_url 不完整：{news_with_url}/{REQUIRED_DAILY_NEWS_COUNT}")
+
+    # 5. 行业数据
+    app_mau = getattr(industry, "app_mau", "") or ""
+    drama_count = getattr(industry, "drama_count", "") or ""
+    ai_ratio = getattr(industry, "ai_ratio", 0) or 0
+
+    industry_ok = bool(app_mau) and bool(drama_count)
+    ratio_ok = 0 <= ai_ratio <= 100
+
+    report["checks"].append({
+        "name": "industry_data",
+        "passed": industry_ok,
+        "app_mau": app_mau,
+        "drama_count": drama_count,
+    })
+    report["checks"].append({
+        "name": "ai_ratio",
+        "passed": ratio_ok,
+        "value": ai_ratio,
+    })
+    if not industry_ok:
+        errors.append("行业宏观数据缺失 app_mau 或 drama_count")
+    if not ratio_ok:
+        errors.append(f"AI短剧占比异常：{ai_ratio}%")
+
+    # 6. 平台数据（可选，仅告警）
+    platform_apps = getattr(platform, "apps", []) or []
+    if not platform_apps:
+        warnings.append("平台 APP 数据为空")
+
+    # 7. API 错误检测
+    upstream_error = state.error_message or ""
+    api_errors = [p for p in API_ERROR_PATTERNS if p.search(upstream_error)]
+    api_error_ok = len(api_errors) == 0
+
+    report["checks"].append({
+        "name": "api_errors",
+        "passed": api_error_ok,
+        "matched_patterns": len(api_errors),
+    })
+    if not api_error_ok:
+        errors.append("上游节点存在 API 鉴权、限流或解析失败错误，禁止推送")
+
+    # 8. 计算质量分
+    check_results = [c["passed"] for c in report["checks"]]
+    passed_checks = sum(check_results)
+    total_checks = len(check_results)
+    base_score = int((passed_checks / total_checks) * 100) if total_checks else 0
+
+    # 硬性失败项直接封顶
+    if errors:
+        final_score = min(base_score, 59)
+    else:
+        final_score = max(base_score, state.quality_score or 0)
+
+    report["score"] = final_score
+    report["passed"] = len(errors) == 0 and final_score >= MIN_QUALITY_SCORE
+
+    error_message = ""
+    if errors:
+        error_message += "【质量门禁未通过】\n" + "\n".join(f"- {e}" for e in errors) + "\n"
+    if warnings:
+        error_message += "【质量门禁告警】\n" + "\n".join(f"- {w}" for w in warnings) + "\n"
+
+    success = report["passed"]
+
+    logger.info(
+        "quality_gate_node: score=%s success=%s errors=%s warnings=%s",
+        final_score,
+        success,
+        len(errors),
+        len(warnings),
+    )
+
+    return QualityGateOutput(
+        success=success,
+        quality_score=final_score,
+        quality_report=report,
+        error_message=error_message,
+    )

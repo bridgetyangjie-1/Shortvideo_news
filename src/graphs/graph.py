@@ -25,6 +25,7 @@ from graphs.nodes.emotion_analysis_node import emotion_analysis_node
 from graphs.nodes.insights_node import insights_node
 from graphs.nodes.news_node import news_node
 from graphs.nodes.history_data_node import history_data_node
+from graphs.nodes.quality_gate_node import quality_gate_node
 from graphs.nodes.push_node import push_node
 
 
@@ -139,7 +140,10 @@ def create_graph():
     # 9. 历史数据节点（统计节点，不需要LLM）
     builder.add_node("history_data_node", history_data_node)
     
-    # 10. 数据推送节点
+    # 10. 数据质量门禁节点（新增）
+    builder.add_node("quality_gate_node", quality_gate_node)
+    
+    # 11. 数据推送节点
     builder.add_node("push_node", push_node)
     
     # ==================== 设置边 ====================
@@ -171,8 +175,18 @@ def create_graph():
     # 汇聚：历史数据
     builder.add_edge(["emotion_analysis_node", "insights_node"], "history_data_node")
     
-    # 推送
-    builder.add_edge("history_data_node", "push_node")
+    # 质量门禁
+    builder.add_edge("history_data_node", "quality_gate_node")
+    
+    # 根据质量门禁结果决定是否推送
+    builder.add_conditional_edges(
+        "quality_gate_node",
+        should_push_data,
+        {
+            "推送数据": "push_node",
+            "跳过推送": END,
+        },
+    )
     
     # 结束
     builder.add_edge("push_node", END)

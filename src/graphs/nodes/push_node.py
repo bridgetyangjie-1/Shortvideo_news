@@ -191,6 +191,28 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
     generated_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S+08:00")
 
+    # 质量门禁未通过时拒绝覆盖线上数据
+    if not getattr(state, "success", True):
+        error_message = "push_node: 质量门禁未通过，已拒绝覆盖 latest.json 等线上数据"
+        logger.error(error_message)
+        return PushNodeOutput(
+            success=False,
+            output_path=DATA_FILE_PATH,
+            data_date=data_date,
+            generated_at=generated_at,
+            industry=state.industry,
+            rankings=[],
+            actors=state.actors,
+            platform=state.platform,
+            daily_news=state.daily_news,
+            insights=state.insights,
+            audience_profile=state.audience_profile,
+            genre_distribution=state.genre_distribution,
+            play_trend=state.play_trend,
+            quality_score=state.quality_score or 0.0,
+            error_message=(state.error_message or "") + error_message + "\n",
+        )
+
     error_messages: List[str] = []
     try:
         ranking_dicts, count_warning = ensure_top_rankings(

@@ -156,12 +156,17 @@ search_node
               ↓
         history_data_node
               ↓
-            push_node → END
+        quality_gate_node
+              ↓
+      should_push_data
+        /          \
+   push_node        END
 ```
 
 - `news_node` 与 `process_node` 在 `search_node` 后并行。
 - `industry_node` 与 `audience_profile_node` 在 `actor_ranking_node` 后并行。
-- `push_node` 前由 `should_push_data` 判断：失败或质量分低于 60 分则跳过推送。
+- `emotion_analysis_node` 与 `insights_node` 在 `genre_distribution_node` 后并行。
+- `push_node` 前新增 `quality_gate_node`：校验榜单数量、字段完整性、演员榜、快讯来源、行业数据、API 错误，失败或质量分低于 60 分时直接结束工作流，不覆盖 `latest.json`。
 
 ## 6. 代码组织
 
@@ -180,6 +185,7 @@ search_node
 | `insights_node` | `insights_node.py` | Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察 | 是（Kimi+DeepSeek） |
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
 | `history_data_node` | `history_data_node.py` | 生成播放趋势、周榜历史、排名变化 | 否 |
+| `quality_gate_node` | `quality_gate_node.py` | 统一质量门禁：校验榜单/演员/快讯/行业数据/API 错误 | 否 |
 | `push_node` | `push_node.py` | 保存 latest.json、latest_full.json、历史归档、all_history.json | 否 |
 
 ### 6.2 `src/tools/` 工具层
@@ -271,19 +277,33 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 
 ## 9. 测试说明
 
-- **测试文件**：`tests/test_ranking_quality.py`
+- **测试文件**：
+  - `tests/test_ranking_quality.py`：榜单数量质量门禁
+  - `tests/test_quality_gate.py`：统一数据质量门禁（P0）
+  - `tests/test_config_validation.py`：LLM 配置文件校验（P1）
+  - `tests/test_node_functions.py`：核心节点纯函数单元测试（P1）
 - **框架**：`unittest`
 - **测试内容**：
   1. `test_uses_recent_history_to_reach_top20`：用历史数据补齐到 20 条。
   2. `test_raises_when_sources_cannot_reach_top20`：来源不足时抛出 `RankingCountError`。
+  3. `test_passes_with_complete_data` / `test_fails_when_*`：质量门禁通过/失败路径。
+  4. `test_valid_config_passes` / `test_invalid_*_fails`：配置文件与 Jinja2 模板校验。
+  5. `test_merge_*`、`test_fill_unknown_*`、`test_infer_profile_*`、`test_classify_tag` 等：节点内部纯函数。
 
 运行：
 
 ```bash
-python -m unittest tests.test_ranking_quality
+python -m unittest tests.test_ranking_quality tests.test_quality_gate tests.test_config_validation tests.test_node_functions
 ```
 
 新增节点或修改状态模型时，应补充对应单元测试。测试数据使用临时目录，不要依赖真实 API key。
+
+配置文件校验命令：
+
+```bash
+export COZE_WORKSPACE_PATH="$PWD"
+python src/utils/config_validator.py
+```
 
 ## 10. 数据规则与质量门禁
 
@@ -415,6 +435,8 @@ python -m unittest tests.test_ranking_quality
 | 2026-06-13 | `emotion_analysis_node` 词云分值改为 log1p + max-normalization，避免多个维度同时顶到 100 失去区分度 |
 | 2026-06-13 | **`audience_profile_node` 重构为纯本地规则推理**：基于榜单标签（tags/core_trope/genre）匹配受众画像规则，加权合并性别/年龄/地域/特征，不再调用 DeepSeek API，降低运行成本并保证 H5 前端数据格式兼容 |
 | 2026-06-13 | `audience_profile_node` 精简输出：仅保留 `gender` / `age` / `regions` / `traits` 四个前端必需字段，按排名加权平均并归一化为 100 |
+| 2026-06-13 | **v1.10.1 P0 质量门禁**：新增 `quality_gate_node`，统一校验榜单数量、演员、快讯来源、行业数据与 API 错误；`IndustryData` / `DramaRanking` / `ActorRanking` 增加 Pydantic 字段校验；质量未通过时不覆盖 `latest.json` |
+| 2026-06-13 | **v1.10.2 P1 工程化**：新增 `utils/config_validator.py` 对 `config/*_llm_cfg.json` 做 Pydantic + Jinja2 校验；新增 `tests/test_config_validation.py` 和 `tests/test_node_functions.py`，覆盖 search/enrich/audience/genre 节点核心纯函数 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |
