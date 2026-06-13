@@ -79,6 +79,7 @@
 │   │   │   └── node_io.py               # 各节点 Input/Output
 │   │   ├── ranking_quality.py           # TOP20 榜单数量质量门禁
 │   │   └── nodes/                       # 11 个处理节点
+│   │       └── enrich/                  # enrich_node 子模块（缓存/爬虫/搜索/JSON推理解耦）
 │   ├── tools/                           # 爬虫与 API 客户端
 │   ├── storage/                         # 数据库/S3/内存存储抽象
 │   ├── coze_coding_utils/               # Coze Coding 平台兼容层
@@ -448,6 +449,7 @@ python src/utils/config_validator.py
 | 2026-06-13 | **v1.10.1 P0 质量门禁**：新增 `quality_gate_node`，统一校验榜单数量、演员、快讯来源、行业数据与 API 错误；`IndustryData` / `DramaRanking` / `ActorRanking` 增加 Pydantic 字段校验；质量未通过时不覆盖 `latest.json` |
 | 2026-06-13 | **v1.10.2 P1 工程化**：新增 `utils/config_validator.py` 对 `config/*_llm_cfg.json` 做 Pydantic + Jinja2 校验；新增 `tests/test_config_validation.py` 和 `tests/test_node_functions.py`，覆盖 search/enrich/audience/genre 节点核心纯函数 |
 | 2026-06-13 | **v1.10.3 拆分 state.py**：将 808 行的 `src/graphs/state.py` 按领域拆分为 `src/graphs/models/` 下 8 个文件；`state.py` 保留为 re-export 入口，现有 `from graphs.state import X` 路径完全兼容 |
+| 2026-06-13 | **v1.10.4 解耦 enrich_node**：将原 429 行的 `enrich_node.py` 拆分为 `src/graphs/nodes/enrich/` 下 5 个子模块（cache_adapter / metadata_fetcher / actor_resolver / json_refiner / fallback），主节点仅负责编排；新增 `tests/test_enrich_submodules.py` |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |

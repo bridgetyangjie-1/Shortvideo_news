@@ -51,7 +51,7 @@
 - ✅ 新增 `tests/test_config_validation.py` 与 `tests/test_node_functions.py`，覆盖 search/enrich/audience/genre 节点核心纯函数。
 - ⏳ 后续继续补充 process/insights/news/industry/history 节点的单元测试。
 - ⏳ 增加节点执行耗时、API 调用次数、费用统计等可观测性指标。
-- ⏳ 解耦 `enrich_node`：将缓存查询、爬虫、搜索、JSON 推理、兜底填充拆分为独立模块。
+- ✅ 解耦 `enrich_node`：将原 429 行的 `enrich_node.py` 拆分为 `src/graphs/nodes/enrich/` 下 5 个独立模块（cache_adapter / metadata_fetcher / actor_resolver / json_refiner / fallback），主节点仅负责编排。
 
 ### 3. 来源与置信度 ⏳
 

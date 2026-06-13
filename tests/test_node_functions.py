@@ -6,7 +6,7 @@ from tempfile import TemporaryDirectory
 from pathlib import Path
 
 from graphs.nodes.search_node import _merge_hongguo_dataeye
-from graphs.nodes.enrich_node import _fill_unknown_actors
+from graphs.nodes.enrich.fallback import fill_unknown_actors
 from graphs.nodes.audience_profile_node import (
     _collect_tags,
     _infer_profile,
@@ -57,7 +57,7 @@ class EnrichNodeFallbackTest(unittest.TestCase):
             {"title": "女频剧1", "category": "female", "female_lead": "未知", "male_lead": ""},
             {"title": "女频剧2", "category": "female", "female_lead": "已知", "male_lead": "unknown"},
         ]
-        filled = _fill_unknown_actors(rankings)
+        filled = fill_unknown_actors(rankings)
         self.assertNotIn("未知", filled[0]["female_lead"])
         self.assertNotIn("unknown", filled[0]["male_lead"].lower())
         self.assertEqual(filled[1]["female_lead"], "已知")
@@ -67,7 +67,7 @@ class EnrichNodeFallbackTest(unittest.TestCase):
         rankings = [
             {"title": "男频剧1", "category": "male", "female_lead": "待定", "male_lead": "未知"},
         ]
-        filled = _fill_unknown_actors(rankings)
+        filled = fill_unknown_actors(rankings)
         self.assertNotIn("待定", filled[0]["female_lead"])
         self.assertNotIn("未知", filled[0]["male_lead"])
 
