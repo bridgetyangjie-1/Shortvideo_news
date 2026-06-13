@@ -170,7 +170,11 @@ search_node
               ↓
       should_push_data
         /          \
-   push_node        END
+ alert_node        END
+      ↓
+   push_node
+      ↓
+     END
 ```
 
 - `news_node` 与 `process_node` 在 `search_node` 后并行。
@@ -196,6 +200,7 @@ search_node
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
 | `history_data_node` | `history_data_node.py` | 生成播放趋势、周榜历史、排名变化 | 否 |
 | `quality_gate_node` | `quality_gate_node.py` | 统一质量门禁：校验榜单/演员/快讯/行业数据/API 错误 | 否 |
+| `alert_node` | `alert_node.py` | 异常监测：基于质量报告与业务规则自动生成 Alerts | 否 |
 | `push_node` | `push_node.py` | 保存 latest.json、latest_full.json、历史归档、all_history.json | 否 |
 
 ### 6.2 `src/tools/` 工具层
@@ -238,7 +243,9 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 9. **emotion_analysis_node**：基于 `enriched_rankings` 规则化映射题材/标签到情绪、焦虑、触发点等维度，加权统计后调用 DeepSeek 生成总览摘要、TOP3 情绪剧目、行动建议与环比趋势。
 10. **insights_node**：Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察。
 11. **history_data_node**：更新 `assets/history_data.json`，生成播放趋势、周榜、排名变化。
-11. **push_node**：输出 `latest.json`（TOP20）、`latest_full.json`（全量）、`assets/data/history/YYYY-MM-DD.json`、`assets/data/all_history.json`。
+12. **quality_gate_node**：统一校验榜单、演员、快讯、行业数据与 API 错误，输出 `quality_report`。
+13. **alert_node**：基于质量报告与业务规则自动生成 `alerts`，供前端异常面板展示。
+14. **push_node**：输出 `latest.json`（TOP20）、`latest_full.json`（全量）、`assets/data/history/YYYY-MM-DD.json`、`assets/data/all_history.json`。
 
 ## 8. 编码规范
 
@@ -290,6 +297,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 - **测试文件**：
   - `tests/test_ranking_quality.py`：榜单数量质量门禁
   - `tests/test_quality_gate.py`：统一数据质量门禁（P0）
+  - `tests/test_alert_node.py`：异常监测节点规则测试（P1）
   - `tests/test_config_validation.py`：LLM 配置文件校验（P1）
   - `tests/test_node_functions.py`：核心节点纯函数单元测试（P1）
 - **框架**：`unittest`
@@ -303,7 +311,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 运行：
 
 ```bash
-python -m unittest tests.test_ranking_quality tests.test_quality_gate tests.test_config_validation tests.test_node_functions
+python -m unittest tests.test_ranking_quality tests.test_quality_gate tests.test_alert_node tests.test_config_validation tests.test_node_functions
 ```
 
 新增节点或修改状态模型时，应补充对应单元测试。测试数据使用临时目录，不要依赖真实 API key。
@@ -361,6 +369,9 @@ python src/utils/config_validator.py
 | `actors` | `ActorRanking` | 女频/男频演员榜 |
 | `industry` | `IndustryData` | APP 月活、AI 短剧渗透率、剧集总量等 |
 | `audience_profile` | `AudienceProfile` | 性别、年龄、地域、题材偏好、观看时段、付费能力、用户分层 |
+| `alerts` | `List[AlertItem]` | 自动异常监测告警列表 |
+| `alert_count` | `int` | 告警数量 |
+| `quality_report` | `Dict[str, Any]` | 质量门禁 8 项检查详情 |
 
 ## 11. 部署流程
 
@@ -442,7 +453,7 @@ python src/utils/config_validator.py
 | 2026-06-12 | `enrich_node`：优先本地缓存，缓存 miss 时批量补充 |
 | 2026-06-12 | `history_data_node`：计算排名变化（new/up/down/same） |
 | 2026-06-12 | `push_node`：输出 statistics/trends/anomalies 统计信息 |
-| 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端改为词云+TOP3剧目+行动建议+关联图+环比趋势 |
+| 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端情绪面板按洞察/热力/建议三 Tab 组织，含词云、TOP3 剧目、行动建议、环比趋势 |
 | 2026-06-13 | `emotion_analysis_node` 词云分值改为 log1p + max-normalization，避免多个维度同时顶到 100 失去区分度 |
 | 2026-06-13 | **`audience_profile_node` 重构为纯本地规则推理**：基于榜单标签（tags/core_trope/genre）匹配受众画像规则，加权合并性别/年龄/地域/特征，不再调用 DeepSeek API，降低运行成本并保证 H5 前端数据格式兼容 |
 | 2026-06-13 | `audience_profile_node` 精简输出：仅保留 `gender` / `age` / `regions` / `traits` 四个前端必需字段，按排名加权平均并归一化为 100 |
@@ -450,6 +461,7 @@ python src/utils/config_validator.py
 | 2026-06-13 | **v1.10.2 P1 工程化**：新增 `utils/config_validator.py` 对 `config/*_llm_cfg.json` 做 Pydantic + Jinja2 校验；新增 `tests/test_config_validation.py` 和 `tests/test_node_functions.py`，覆盖 search/enrich/audience/genre 节点核心纯函数 |
 | 2026-06-13 | **v1.10.3 拆分 state.py**：将 808 行的 `src/graphs/state.py` 按领域拆分为 `src/graphs/models/` 下 8 个文件；`state.py` 保留为 re-export 入口，现有 `from graphs.state import X` 路径完全兼容 |
 | 2026-06-13 | **v1.10.4 解耦 enrich_node**：将原 429 行的 `enrich_node.py` 拆分为 `src/graphs/nodes/enrich/` 下 5 个子模块（cache_adapter / metadata_fetcher / actor_resolver / json_refiner / fallback），主节点仅负责编排；新增 `tests/test_enrich_submodules.py` |
+| 2026-06-14 | **v1.10.5 前端信息降噪**：`assets/index.html` 右侧情绪面板改为 Tab 切换 + 移动端底部滑出面板；左侧热门标签紧凑化；今日洞察摘要化（50 字内）；创作者行动建议默认折叠；隐藏情绪-焦虑-触发关联图 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |
