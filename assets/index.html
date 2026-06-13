@@ -279,13 +279,13 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 /* 近一周热门标签 */
 .sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
 .sub-grid.two-cols { grid-template-columns: repeat(2, 1fr); }
-.hot-tags-layout { display: flex; flex-direction: column; gap: 14px; }
-.hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag-pill { background: rgba(30, 34, 48, 0.6); color: #e2e8f0; padding: 4px 10px; border-radius: 16px; font-size: 12px; border: 1px solid rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; }
-.tag-pill:hover { background: rgba(99, 102, 241, 0.18); border-color: rgba(129, 140, 248, 0.45); transform: translateY(-1px); }
-.tag-value { color: #818cf8; font-weight: 700; }
+.hot-tags-layout { display: flex; flex-direction: column; gap: 8px; }
+.hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag-pill { background: rgba(30, 34, 48, 0.6); color: #e2e8f0; padding: 2px 6px; border-radius: 10px; font-size: 11px; border: 1px solid rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 3px; transition: all 0.2s; }
+.tag-pill:hover { background: rgba(99, 102, 241, 0.18); border-color: rgba(129, 140, 248, 0.45); }
+.tag-value { color: #818cf8; font-weight: 700; font-size: 10px; }
 
-.tag-category-title { font-size: 12px; font-weight: 700; margin-bottom: 7px; display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 6px; width: fit-content; }
+.tag-category-title { font-size: 11px; font-weight: 700; margin-bottom: 4px; display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; width: fit-content; }
 .tag-category-title.theme { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
 .tag-category-title.role { background: rgba(244, 114, 182, 0.12); color: #f472b6; }
 .tag-category-title.hook { background: rgba(251, 191, 36, 0.12); color: #fbbf24; }
@@ -293,16 +293,17 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .tag-category-title.era { background: rgba(34, 197, 94, 0.12); color: #4ade80; }
 .tag-category-title.other { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
 
-.tag-trending-list { display: flex; flex-direction: column; gap: 8px; }
-.tag-trend-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; background: rgba(30, 34, 48, 0.35); border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); }
-.tag-trend-left { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #e2e8f0; }
-.tag-trend-rank { width: 18px; height: 18px; border-radius: 4px; background: rgba(51,65,85,0.5); color: #94a3b8; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-.tag-trend-change { font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; }
+.tag-trending-list { display: flex; flex-direction: column; gap: 4px; }
+.tag-trend-item { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px; background: rgba(30, 34, 48, 0.25); border-radius: 4px; font-size: 11px; }
+.tag-trend-left { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #e2e8f0; }
+.tag-trend-rank { width: 16px; height: 16px; border-radius: 3px; background: rgba(51,65,85,0.5); color: #94a3b8; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.tag-trend-change { font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 2px; }
 .trend-up { color: #fbbf24; }
 .trend-down { color: #fb7185; }
 .trend-new { color: #4ade80; }
 .trend-same { color: #64748b; }
 
+.tag-divider { height: 1px; background: rgba(255,255,255,0.05); margin: 2px 0; }
 .tag-summary { font-size: 11px; color: #64748b; margin-top: 2px; }
 
 /* 核心观众画像 */
@@ -331,32 +332,26 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .spending-value { color: #fbbf24; font-weight: 700; }
 
 /* 核心情绪与动机拆解 - 情绪驾驶舱 */
-.emotion-cockpit { padding: 16px; }
-.emotion-summary {
-    font-size: 12px;
-    color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 14px;
-    padding: 10px 12px;
-    background: rgba(99, 102, 241, 0.06);
-    border: 1px solid rgba(99, 102, 241, 0.12);
-    border-radius: 8px;
-}
-.emotion-summary strong {
-    color: #e2e8f0;
-    font-weight: 600;
-}
-.emotion-top-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1.4fr 1fr;
-    gap: 14px;
-    margin-bottom: 14px;
-}
-.emotion-bottom-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 14px;
-}
+.emotion-cockpit { padding: 16px; position: relative; }
+.emotion-mobile-close { display: none; position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; border: none; background: rgba(255,255,255,0.08); color: #94a3b8; font-size: 14px; cursor: pointer; align-items: center; justify-content: center; z-index: 2; }
+.emotion-tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.06); margin: -12px -16px 12px -16px; padding: 0 16px; }
+.emotion-tab { padding: 10px 14px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
+.emotion-tab.active { color: #a78bfa; border-bottom-color: #a78bfa; }
+.emotion-tab:hover { color: #94a3b8; }
+.emotion-tab-content { display: none; height: 320px; overflow-y: auto; padding-right: 4px; }
+.emotion-tab-content.active { display: block; }
+
+.emotion-summary-compact { padding: 10px 12px; background: rgba(99, 102, 241, 0.06); border: 1px solid rgba(99, 102, 241, 0.12); border-radius: 8px; }
+.emotion-summary-title { font-size: 13px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
+.emotion-summary-text { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+.emotion-summary-text.collapsed { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 3em; }
+.emotion-keywords { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.emotion-keyword { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.emotion-keyword.emotion { background: rgba(244, 114, 182, 0.12); color: #f472b6; }
+.emotion-keyword.anxiety { background: rgba(96, 165, 250, 0.12); color: #60a5fa; }
+.emotion-keyword.trigger { background: rgba(251, 191, 36, 0.12); color: #fbbf24; }
+.emotion-expand-btn { font-size: 11px; color: #818cf8; cursor: pointer; margin-top: 6px; display: inline-flex; align-items: center; gap: 3px; }
+
 .emotion-panel {
     background: rgba(15, 23, 42, 0.3);
     border: 1px solid rgba(255,255,255,0.05);
@@ -376,7 +371,6 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     gap: 5px;
 }
 .emotion-wordcloud-chart { width: 100%; height: 230px; flex: 1; }
-.emotion-relation-chart { width: 100%; height: 220px; flex: 1; }
 
 .emotion-ranking-item {
     background: rgba(30, 34, 48, 0.35);
@@ -430,16 +424,22 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     margin-bottom: 8px;
 }
 .emotion-insight-item:last-child { margin-bottom: 0; }
+.emotion-insight-collapsible { cursor: pointer; }
 .emotion-insight-title {
     font-size: 12px; font-weight: 700; color: #f8fafc;
-    margin-bottom: 4px;
     display: flex; align-items: center; gap: 5px;
 }
+.emotion-insight-arrow { margin-left: auto; font-size: 10px; color: #64748b; transition: transform 0.2s; }
 .emotion-insight-content {
     font-size: 11px;
     color: #94a3b8;
     line-height: 1.5;
+    margin-top: 6px;
+    padding-left: 4px;
+    display: none;
 }
+.emotion-insight-item.expanded .emotion-insight-content { display: block; }
+.emotion-insight-item.expanded .emotion-insight-arrow { transform: rotate(180deg); }
 
 .emotion-trend-item {
     display: flex;
@@ -457,15 +457,40 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     display: inline-flex; align-items: center; gap: 3px;
 }
 
+/* 移动端情绪面板 */
+.emotion-mobile-toggle { display: none; position: fixed; bottom: 16px; right: 16px; z-index: 100; padding: 10px 14px; background: rgba(99, 102, 241, 0.9); border: 1px solid rgba(129, 140, 248, 0.4); border-radius: 24px; color: #fff; font-size: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.3); cursor: pointer; backdrop-filter: blur(8px); align-items: center; gap: 6px; }
+.emotion-mobile-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 98; }
+.emotion-mobile-backdrop.open { display: block; }
+body.emotion-mobile-locked { overflow: hidden; }
+
 @media (max-width: 1200px) {
-  .emotion-top-grid { grid-template-columns: 1fr; }
-  .emotion-bottom-grid { grid-template-columns: 1fr; }
+  .emotion-panel { min-height: 180px; }
   .emotion-wordcloud-chart { height: 180px; }
-  .emotion-relation-chart { height: 200px; }
 }
 
-@media (max-width: 640px) {
-  .emotion-panel { min-height: auto; }
+@media (max-width: 768px) {
+  .emotion-cockpit { position: fixed; left: 0; right: 0; bottom: 0; z-index: 99; border-radius: 16px 16px 0 0; margin-bottom: 0; padding: 12px; max-height: 75vh; transform: translateY(calc(100% + 20px)); transition: transform 0.3s ease; display: block; }
+  .emotion-cockpit.open { transform: translateY(0); }
+  .emotion-mobile-close { display: flex; }
+  .emotion-mobile-toggle { display: flex; }
+  .emotion-tabs { margin: -8px -12px 10px -12px; padding: 0 12px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  .emotion-tabs::-webkit-scrollbar { display: none; }
+  .emotion-tab { font-size: 12px; padding: 8px 12px; flex-shrink: 0; }
+  .emotion-tab-content { height: 50vh; }
+  .emotion-summary-compact { padding: 8px 10px; }
+  .emotion-summary-text { font-size: 11px; }
+  .emotion-keyword { font-size: 10px; padding: 2px 6px; }
+  .emotion-panel { padding: 10px; min-height: auto; }
+  .emotion-panel-title { font-size: 11px; margin-bottom: 8px; }
+  .emotion-wordcloud-chart { height: 160px; }
+  .emotion-ranking-item { padding: 8px; margin-bottom: 6px; }
+  .emotion-ranking-title { font-size: 11px; }
+  .emotion-ranking-oneliner { font-size: 10px; }
+  .emotion-insight-item { padding: 8px; margin-bottom: 6px; }
+  .emotion-insight-title { font-size: 11px; }
+  .emotion-insight-content { font-size: 10px; }
+  .emotion-trend-item { padding: 6px 8px; margin-bottom: 5px; }
+  .emotion-trend-name { font-size: 11px; }
 }
 
 /* H5响应式适配 */
@@ -502,11 +527,13 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
   .tag-pill { font-size: 11px; padding: 3px 8px; }
   .tag-category-title { font-size: 11px; }
 
-  .emotion-summary { font-size: 11px; padding: 8px 10px; margin-bottom: 10px; }
+  .emotion-tab-content { height: 50vh; }
+  .emotion-summary-compact { padding: 8px 10px; }
+  .emotion-summary-text { font-size: 11px; }
+  .emotion-keyword { font-size: 10px; padding: 2px 6px; }
   .emotion-panel { padding: 10px; min-height: auto; }
   .emotion-panel-title { font-size: 11px; margin-bottom: 8px; }
   .emotion-wordcloud-chart { height: 160px; }
-  .emotion-relation-chart { height: 220px; }
   .emotion-ranking-item { padding: 8px; margin-bottom: 6px; }
   .emotion-ranking-title { font-size: 11px; }
   .emotion-ranking-oneliner { font-size: 10px; }
@@ -641,35 +668,51 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
       <div id="hot-tags-container"></div>
     </div>
     
-    <div class="glass-card emotion-cockpit">
+    <div class="glass-card emotion-cockpit" id="emotion-cockpit">
+      <button class="emotion-mobile-close" aria-label="关闭" onclick="toggleEmotionMobile()">✕</button>
       <div class="section-title"><i class="fas fa-brain" style="color:#a78bfa;"></i> 核心情绪与动机拆解 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
-      <div class="emotion-summary" id="emotion-summary"></div>
-      <div class="emotion-top-grid">
-        <div class="emotion-panel">
+      
+      <div class="emotion-tabs">
+        <button class="emotion-tab active" data-tab="insight" onclick="switchEmotionTab('insight')">洞察</button>
+        <button class="emotion-tab" data-tab="heat" onclick="switchEmotionTab('heat')">热力</button>
+        <button class="emotion-tab" data-tab="action" onclick="switchEmotionTab('action')">建议</button>
+      </div>
+      
+      <div class="emotion-tab-content active" data-tab-content="insight">
+        <div class="emotion-summary-compact">
+          <div class="emotion-summary-title">今日洞察</div>
+          <div class="emotion-summary-text collapsed" id="emotion-summary"></div>
+          <div class="emotion-expand-btn" id="emotion-expand-btn" onclick="toggleEmotionSummary(this)">展开 <i class="fas fa-chevron-down"></i></div>
+          <div class="emotion-keywords" id="emotion-keywords"></div>
+        </div>
+      </div>
+      
+      <div class="emotion-tab-content" data-tab-content="heat">
+        <div class="emotion-panel" style="min-height: 180px;">
           <div class="emotion-panel-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 情绪热力 TOP8</div>
           <div id="emotion-wordcloud-chart" class="emotion-wordcloud-chart"></div>
         </div>
-        <div class="emotion-panel">
-          <div class="emotion-panel-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> TOP3 情绪典型剧目</div>
-          <div id="emotion-rankings-container"></div>
-        </div>
-        <div class="emotion-panel">
-          <div class="emotion-panel-title"><i class="fas fa-lightbulb" style="color:#34d399;"></i> 创作者行动建议</div>
-          <div id="emotion-insights-container"></div>
-        </div>
-      </div>
-      <div class="emotion-bottom-grid">
-        <div class="emotion-panel">
-          <div class="emotion-panel-title"><i class="fas fa-project-diagram" style="color:#60a5fa;"></i> 情绪-焦虑-触发关联</div>
-          <div id="emotion-relation-chart" class="emotion-relation-chart"></div>
-        </div>
-        <div class="emotion-panel">
+        <div class="emotion-panel" style="min-height: auto; margin-top: 10px;">
           <div class="emotion-panel-title"><i class="fas fa-chart-line" style="color:#fb7185;"></i> 环比趋势</div>
           <div id="emotion-trends-container"></div>
         </div>
       </div>
+      
+      <div class="emotion-tab-content" data-tab-content="action">
+        <div class="emotion-panel" style="min-height: auto;">
+          <div class="emotion-panel-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> TOP3 情绪典型剧目</div>
+          <div id="emotion-rankings-container"></div>
+        </div>
+        <div class="emotion-panel" style="min-height: auto; margin-top: 10px;">
+          <div class="emotion-panel-title"><i class="fas fa-lightbulb" style="color:#34d399;"></i> 创作者行动建议</div>
+          <div id="emotion-insights-container"></div>
+        </div>
+      </div>
     </div>
   </div>
+  
+  <button id="emotion-mobile-toggle" class="emotion-mobile-toggle" onclick="toggleEmotionMobile()"><i class="fas fa-brain"></i> 情绪洞察</button>
+  <div id="emotion-mobile-backdrop" class="emotion-mobile-backdrop" onclick="toggleEmotionMobile()"></div>
 
   <!-- 核心观众画像 -->
   <div class="glass-card audience-section">
@@ -1335,17 +1378,81 @@ function escapeAttribute(value) {
     return escapeHtml(value).replace(/`/g, '&#96;');
 }
 
+function switchEmotionTab(tabName) {
+    const cockpit = document.getElementById('emotion-cockpit');
+    if (!cockpit) return;
+    cockpit.querySelectorAll('.emotion-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+    cockpit.querySelectorAll('.emotion-tab-content').forEach(content => {
+        content.classList.toggle('active', content.dataset.tabContent === tabName);
+    });
+    if (tabName === 'heat' && window.emotionWordcloudChartInstance) {
+        setTimeout(() => window.emotionWordcloudChartInstance.resize(), 50);
+    }
+}
+
+function toggleEmotionSummary(btn) {
+    const textEl = document.getElementById('emotion-summary');
+    if (!textEl || !btn) return;
+    const isCollapsed = textEl.classList.toggle('collapsed');
+    textEl.textContent = isCollapsed ? (textEl.dataset.short || '') : (textEl.dataset.full || '');
+    btn.innerHTML = isCollapsed ? '展开 <i class="fas fa-chevron-down"></i>' : '收起 <i class="fas fa-chevron-up"></i>';
+}
+
+function toggleEmotionInsight(item) {
+    if (!item) return;
+    item.classList.toggle('expanded');
+}
+
+function toggleEmotionMobile() {
+    const cockpit = document.getElementById('emotion-cockpit');
+    const backdrop = document.getElementById('emotion-mobile-backdrop');
+    const toggle = document.getElementById('emotion-mobile-toggle');
+    if (!cockpit) return;
+    const isOpen = cockpit.classList.toggle('open');
+    if (backdrop) backdrop.classList.toggle('open', isOpen);
+    if (toggle) toggle.style.display = isOpen ? 'none' : 'flex';
+    document.body.classList.toggle('emotion-mobile-locked', isOpen);
+    if (isOpen) {
+        const activeTab = cockpit.querySelector('.emotion-tab.active');
+        if (activeTab && activeTab.dataset.tab === 'heat' && window.emotionWordcloudChartInstance) {
+            setTimeout(() => window.emotionWordcloudChartInstance.resize(), 300);
+        }
+    }
+}
+
 function renderEmotionChart(rawAnalysis) {
     const summaryEl = document.getElementById('emotion-summary');
+    const keywordsEl = document.getElementById('emotion-keywords');
+    const expandBtn = document.getElementById('emotion-expand-btn');
     const rankingsContainer = document.getElementById('emotion-rankings-container');
     const insightsContainer = document.getElementById('emotion-insights-container');
     const trendsContainer = document.getElementById('emotion-trends-container');
 
     const analysis = normalizeEmotionalAnalysis(rawAnalysis);
 
-    // 总览摘要
+    // 总览摘要：默认折叠到 50 字
     if (summaryEl) {
-        summaryEl.innerHTML = `<strong>今日洞察：</strong>${escapeHtml(analysis.summary)} <span style="color:#a78bfa;margin-left:8px;">主导情绪：${escapeHtml(analysis.dominant_emotion)}</span> · <span style="color:#60a5fa;">主导焦虑：${escapeHtml(analysis.dominant_anxiety)}</span> · <span style="color:#fbbf24;">TOP触发：${escapeHtml(analysis.top_trigger)}</span>`;
+        const fullText = analysis.summary;
+        const shortText = fullText.length > 50 ? fullText.slice(0, 50) + '...' : fullText;
+        summaryEl.dataset.full = fullText;
+        summaryEl.dataset.short = shortText;
+        summaryEl.textContent = shortText;
+        summaryEl.classList.add('collapsed');
+        if (expandBtn) {
+            expandBtn.style.display = fullText.length > 50 ? 'inline-flex' : 'none';
+            expandBtn.innerHTML = '展开 <i class="fas fa-chevron-down"></i>';
+        }
+    }
+
+    // 主导情绪 / 焦虑 / 触发
+    if (keywordsEl) {
+        keywordsEl.innerHTML = `
+            <span class="emotion-keyword emotion">${escapeHtml(analysis.dominant_emotion)}</span>
+            <span class="emotion-keyword anxiety">${escapeHtml(analysis.dominant_anxiety)}</span>
+            <span class="emotion-keyword trigger">${escapeHtml(analysis.top_trigger)}</span>
+        `;
     }
 
     // TOP3 情绪典型剧目
@@ -1366,11 +1473,14 @@ function renderEmotionChart(rawAnalysis) {
         `).join('');
     }
 
-    // 行动建议
+    // 行动建议：默认折叠标题，点击展开
     if (insightsContainer) {
         insightsContainer.innerHTML = analysis.actionable_insights.map(item => `
-            <div class="emotion-insight-item">
-                <div class="emotion-insight-title">${item.icon} ${escapeHtml(item.title)}</div>
+            <div class="emotion-insight-item emotion-insight-collapsible" onclick="toggleEmotionInsight(this)">
+                <div class="emotion-insight-title">
+                    <span>${item.icon} ${escapeHtml(item.title)}</span>
+                    <span class="emotion-insight-arrow"><i class="fas fa-chevron-down"></i></span>
+                </div>
                 <div class="emotion-insight-content">${escapeHtml(item.content)}</div>
             </div>
         `).join('');
@@ -1400,9 +1510,10 @@ function renderEmotionChart(rawAnalysis) {
     }
 
     // 清理旧实例
-    ['emotionWordcloudChartInstance', 'emotionRelationChartInstance'].forEach(key => {
-        if (window[key]) { window[key].dispose(); window[key] = null; }
-    });
+    if (window.emotionWordcloudChartInstance) {
+        window.emotionWordcloudChartInstance.dispose();
+        window.emotionWordcloudChartInstance = null;
+    }
 
     // 颜色映射
     const categoryColors = {
@@ -1414,7 +1525,7 @@ function renderEmotionChart(rawAnalysis) {
         motivation: '#a78bfa'
     };
 
-    // 1. 情绪热力 TOP8 横向条形图
+    // 情绪热力 TOP8 横向条形图
     const wordcloudEl = document.getElementById('emotion-wordcloud-chart');
     if (wordcloudEl) {
         const wordData = analysis.wordcloud.slice(0, 8);
@@ -1442,58 +1553,6 @@ function renderEmotionChart(rawAnalysis) {
                     }
                 })),
                 label: { show: true, position: 'right', color: '#94a3b8', fontSize: 9, formatter: '{c}' }
-            }]
-        });
-    }
-
-    // 2. 情绪-焦虑-触发关联图
-    const relationEl = document.getElementById('emotion-relation-chart');
-    if (relationEl) {
-        const isRelationMobile = window.innerWidth <= 768;
-        const nodes = [];
-        const links = [];
-        const addedNodes = new Set();
-        const addNode = (name, category) => {
-            if (!name || addedNodes.has(name)) return;
-            addedNodes.add(name);
-            nodes.push({
-                name, category,
-                symbolSize: isRelationMobile ? 18 : 28,
-                itemStyle: { color: categoryColors[category] || '#94a3b8' },
-                label: { color: '#e2e8f0', fontSize: isRelationMobile ? 8 : 10 }
-            });
-        };
-
-        // 核心节点
-        addNode(analysis.dominant_emotion, 'emotion');
-        addNode(analysis.dominant_anxiety, 'anxiety');
-        addNode(analysis.top_trigger, 'trigger');
-
-        // 从 TOP3 剧目建立关联
-        analysis.emotion_rankings.forEach(item => {
-            addNode(item.primary_emotion, 'emotion');
-            addNode(item.anxiety, 'anxiety');
-            addNode(item.trigger, 'trigger');
-            links.push({ source: item.anxiety, target: item.primary_emotion, value: 2 });
-            links.push({ source: item.primary_emotion, target: item.trigger, value: 2 });
-        });
-
-        window.emotionRelationChartInstance = echarts.init(relationEl, 'dark');
-        window.emotionRelationChartInstance.setOption({
-            backgroundColor: 'transparent',
-            animation: false,
-            tooltip: { formatter: '{b}' },
-            series: [{
-                type: 'graph',
-                layout: 'force',
-                roam: false,
-                label: { show: true },
-                edgeSymbol: ['none', 'arrow'],
-                edgeSymbolSize: [0, 6],
-                data: nodes,
-                links: links,
-                force: { repulsion: isRelationMobile ? 80 : 180, edgeLength: isRelationMobile ? [25, 55] : [40, 90] },
-                lineStyle: { color: 'rgba(148, 163, 184, 0.35)', curveness: 0.2, width: 1 }
             }]
         });
     }
@@ -1533,12 +1592,21 @@ function renderHotTags(genreDistribution) {
         '时代背景': 'era',
         '其他': 'other'
     };
+    const categoryIconMap = {
+        '题材': '🔹',
+        '人设': '👤',
+        '爽点': '⚡',
+        '情感关系': '💞',
+        '时代背景': '📅',
+        '其他': '•'
+    };
 
     let html = '<div class="hot-tags-layout">';
 
     // 分类标签云
-    categories.forEach(cat => {
+    categories.forEach((cat, idx) => {
         const cls = categoryClassMap[cat.category] || 'other';
+        const icon = categoryIconMap[cat.category] || '🔹';
         const tags = (cat.tags || []).slice(0, 8);
         if (!tags.length) return;
         const pills = tags.map(t => {
@@ -1548,10 +1616,13 @@ function renderHotTags(genreDistribution) {
         }).join('');
         html += `
             <div>
-                <div class="tag-category-title ${cls}">${escapeHtml(cat.category)}</div>
+                <div class="tag-category-title ${cls}">${icon} ${escapeHtml(cat.category)}</div>
                 <div class="hot-tags-cloud">${pills}</div>
             </div>
         `;
+        if (idx < categories.length - 1) {
+            html += '<div class="tag-divider"></div>';
+        }
     });
 
     // 趋势榜
@@ -1806,7 +1877,6 @@ window.addEventListener('resize', () => {
     if (window.contentChartInstance) window.contentChartInstance.resize();
     if (window.viewingTimeChartInstance) window.viewingTimeChartInstance.resize();
     if (window.emotionWordcloudChartInstance) window.emotionWordcloudChartInstance.resize();
-    if (window.emotionRelationChartInstance) window.emotionRelationChartInstance.resize();
 });
 </script>
 </body>
