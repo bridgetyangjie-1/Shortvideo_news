@@ -67,7 +67,16 @@
 │   ├── run_github.py                    # GitHub Actions 专用入口
 │   ├── graphs/
 │   │   ├── graph.py                     # LangGraph 工作流编排
-│   │   ├── state.py                     # 全部 Pydantic 状态模型
+│   │   ├── state.py                     # Pydantic 状态模型入口（re-export，保持兼容）
+│   │   ├── models/                      # 按领域拆分的状态模型
+│   │   │   ├── ranking.py               # 榜单与演员
+│   │   │   ├── industry.py              # 行业与平台
+│   │   │   ├── audience.py              # 观众画像
+│   │   │   ├── genre.py                 # 题材与标签
+│   │   │   ├── emotion.py               # 情绪分析
+│   │   │   ├── history.py               # 历史与趋势
+│   │   │   ├── news.py                  # 洞察与快讯
+│   │   │   └── node_io.py               # 各节点 Input/Output
 │   │   ├── ranking_quality.py           # TOP20 榜单数量质量门禁
 │   │   └── nodes/                       # 11 个处理节点
 │   ├── tools/                           # 爬虫与 API 客户端
@@ -413,7 +422,8 @@ python src/utils/config_validator.py
 
 - **入口选择**：本地完整运行使用 `src/run_github.py`；Coze 平台调试使用 `src/main.py`。
 - **路径约定**：所有基于项目根目录的路径通过 `COZE_WORKSPACE_PATH` 解析，不要写死绝对路径。
-- **新增节点**：必须在 `src/graphs/graph.py` 中注册，并在 `src/graphs/state.py` 中定义输入输出模型。
+- **新增节点**：必须在 `src/graphs/graph.py` 中注册，输入输出模型定义在 `src/graphs/models/node_io.py` 中。
+- **新增数据模型**：按领域放入 `src/graphs/models/` 下对应文件（如榜单模型放 `ranking.py`、观众画像放 `audience.py`），然后在 `src/graphs/state.py` 中 re-export 以保持兼容。
 - **新增 LLM 调用**：优先复用 `MoonshotClient`/`DeepSeekClient`，注意 API 预算熔断逻辑。
 - **修改 AGENTS.md 中提到的文件/流程后，必须同步更新本文件**。
 - 不再新增大型历史总结类 Markdown；旧方案如需保留，优先压缩成 README 或 ROADMAP 的一小节。
@@ -437,6 +447,7 @@ python src/utils/config_validator.py
 | 2026-06-13 | `audience_profile_node` 精简输出：仅保留 `gender` / `age` / `regions` / `traits` 四个前端必需字段，按排名加权平均并归一化为 100 |
 | 2026-06-13 | **v1.10.1 P0 质量门禁**：新增 `quality_gate_node`，统一校验榜单数量、演员、快讯来源、行业数据与 API 错误；`IndustryData` / `DramaRanking` / `ActorRanking` 增加 Pydantic 字段校验；质量未通过时不覆盖 `latest.json` |
 | 2026-06-13 | **v1.10.2 P1 工程化**：新增 `utils/config_validator.py` 对 `config/*_llm_cfg.json` 做 Pydantic + Jinja2 校验；新增 `tests/test_config_validation.py` 和 `tests/test_node_functions.py`，覆盖 search/enrich/audience/genre 节点核心纯函数 |
+| 2026-06-13 | **v1.10.3 拆分 state.py**：将 808 行的 `src/graphs/state.py` 按领域拆分为 `src/graphs/models/` 下 8 个文件；`state.py` 保留为 re-export 入口，现有 `from graphs.state import X` 路径完全兼容 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |

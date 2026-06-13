@@ -44,12 +44,14 @@
 - 检查 `error_message` 是否包含 API 鉴权、限流或解析失败。
 - 质量过低时避免覆盖正常页面，或在页面明显提示数据异常。
 
-### 2. 工程化与可维护性 ✅/⏳（v1.10.2 部分完成）
+### 2. 工程化与可维护性 ✅/⏳（v1.10.2/1.10.3 部分完成）
 
+- ✅ 拆分 `src/graphs/state.py`：将 808 行的单文件按领域拆分为 `src/graphs/models/` 下 8 个文件（ranking/industry/audience/genre/emotion/history/news/node_io），`state.py` 保留为 re-export 入口。
 - ✅ 新增 `utils/config_validator.py`，使用 Pydantic 校验 `config/*_llm_cfg.json` 的模型参数与 Jinja2 模板语法。
 - ✅ 新增 `tests/test_config_validation.py` 与 `tests/test_node_functions.py`，覆盖 search/enrich/audience/genre 节点核心纯函数。
 - ⏳ 后续继续补充 process/insights/news/industry/history 节点的单元测试。
 - ⏳ 增加节点执行耗时、API 调用次数、费用统计等可观测性指标。
+- ⏳ 解耦 `enrich_node`：将缓存查询、爬虫、搜索、JSON 推理、兜底填充拆分为独立模块。
 
 ### 3. 来源与置信度 ⏳
 
