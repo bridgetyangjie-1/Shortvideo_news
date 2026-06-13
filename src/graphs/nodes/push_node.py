@@ -12,6 +12,7 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
+from tools.ip_supply_chain import build_supply_chain
 from graphs.state import (
     PushNodeInput, 
     PushNodeOutput,
@@ -224,12 +225,35 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     
     # ========== 构建TOP20数据（前端展示用） ==========
     top20_rankings = output_rankings[:20]
-    
+
+    # 为 TOP20 榜单附加供应链信息（当前不触发实时网络请求，使用占位结构）
+    top20_ranking_dicts = []
+    for r in top20_rankings:
+        item = r.model_dump()
+        series_id = getattr(r, 'series_id', '') or ''
+        # 供应链占位：后续可调用 build_supply_chain(r.title, series_id, crawler.fetch_series_html) 批量补充
+        item["supply_chain"] = {
+            "has_ip_source": False,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": series_id
+        }
+        top20_ranking_dicts.append(item)
+
+    # 顶层供应链汇总（当前为占位，后续随数据补充自动聚合）
+    supply_chain_summary = {
+        "total_adapted": 0,
+        "top_sources": [],
+        "sample_matches": []
+    }
+
     # ========== 生成统计/趋势/异常报告 ==========
     statistics = _generate_statistics(output_rankings)
     trends = _generate_trends(output_rankings)
     anomalies = _generate_anomalies(output_rankings, state.industry)
-    
+
     output_data = {
         "success": True,
         "generated_at": generated_at,
@@ -237,7 +261,8 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "genre_distribution": state.genre_distribution.model_dump() if state.genre_distribution else {},
         "emotional_analysis": state.emotional_analysis.model_dump() if state.emotional_analysis else {},
         "industry": state.industry.model_dump() if state.industry else {},
-        "rankings": [r.model_dump() for r in top20_rankings],
+        "rankings": top20_ranking_dicts,
+        "supply_chain": supply_chain_summary,
         "actors": state.actors.model_dump() if state.actors else {"female": [], "male": []},
         "platform": state.platform.model_dump() if state.platform else {},
         "audience_profile": state.audience_profile.model_dump() if state.audience_profile else {},

@@ -238,6 +238,27 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .trend-down { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
 .trend-same { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
 
+.ip-cell {
+    text-align: center;
+    width: 70px;
+}
+.ip-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    font-size: 12px;
+    cursor: pointer;
+}
+.ip-badge.empty {
+    background: transparent;
+    color: #475569;
+}
+
 /* 异动点评 */
 .insight-item { background: rgba(30, 34, 48, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 3px solid #a78bfa; }
 .insight-item-title { font-size: 13px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
@@ -475,6 +496,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
   .audience-charts { flex-direction: column; }
   .audience-chart { width: 100%; height: 150px; min-width: auto; }
   .audience-bar-chart { height: 160px; }
+  .ip-cell { display: none; }
 
   .sub-grid.two-cols { grid-template-columns: 1fr; }
   .tag-pill { font-size: 11px; padding: 3px 8px; }
@@ -1588,6 +1610,7 @@ function renderRankings(rankings) {
             <th>标签</th>
             <th>厂牌</th>
             <th>趋势</th>
+            <th style="width:70px">IP来源</th>
         </tr>
     </thead>
     <tbody>
@@ -1620,6 +1643,16 @@ function renderRankings(rankings) {
             trendBadge = `<span class="trend-badge trend-same">-</span>`;
         }
 
+        const supplyChain = drama.supply_chain || {};
+        let ipBadge = '';
+        if (supplyChain.has_ip_source) {
+            const source = supplyChain.source_title || '';
+            const platform = supplyChain.source_platform || '网络小说';
+            ipBadge = `<span class="ip-badge" title="改编自${platform}《${source}》">📚</span>`;
+        } else {
+            ipBadge = `<span class="ip-badge empty">-</span>`;
+        }
+
         html += `
         <tr>
             <td class="rank-cell"><span class="rank-badge-table ${rankClass}">${rank}</span></td>
@@ -1634,6 +1667,7 @@ function renderRankings(rankings) {
             <td class="tags-cell">${tags}</td>
             <td class="studio-cell">${escapeHtml(drama.studio || drama.production_house || '独立厂牌')}</td>
             <td class="trend-cell">${trendBadge}</td>
+            <td class="ip-cell">${ipBadge}</td>
         </tr>
         `;
     });

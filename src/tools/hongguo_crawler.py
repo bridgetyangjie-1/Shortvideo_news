@@ -157,13 +157,23 @@ class HongguoCrawler:
             logger.error(f"解析榜单数据失败: {e}", exc_info=True)
             return []
     
+    def fetch_series_html(self, series_id: str) -> str:
+        """获取详情页 HTML（供供应链提取使用）"""
+        try:
+            url = f"https://novelquickapp.com/series/{series_id}"
+            req = urllib.request.Request(url, headers=self.headers)
+            with urllib.request.urlopen(req, timeout=10) as r:
+                return r.read().decode("utf-8", errors="ignore")
+        except Exception:
+            return ""
+
     def try_fetch_detail_api(self, series_id: str) -> Optional[Dict[str, Any]]:
         """
         尝试通过API获取详情（如果存在）
-        
+
         Args:
             series_id: 剧集ID
-            
+
         Returns:
             详情数据，如果不存在API则返回None
         """

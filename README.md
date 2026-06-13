@@ -16,6 +16,22 @@
 - 行业宏观数据：APP 月活、AI 短剧渗透率、剧集总量、破亿爆款剧等。
 - H5响应式适配：支持PC端和移动端浏览，榜单滚动加载（初始20条，点击加载更多）。
 
+## 内容供应链（IP Source Tracking）
+
+本看板追踪短剧的上游 IP 来源，包括：
+- 番茄小说网文改编
+- 原著书名/作者关联
+- 改编匹配度评分
+
+数据展示：
+- 榜单中 📚 标记表示该剧改编自网络小说
+- 鼠标悬停显示原著书名
+
+技术实现：
+- `tools/ip_supply_chain.py`：IP 提取与匹配
+- `tools/hongguo_crawler.py`：红果详情页改编信息提取
+- `push_node.py`：供应链数据归档
+
 ## 在线访问
 
 GitHub Pages: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
