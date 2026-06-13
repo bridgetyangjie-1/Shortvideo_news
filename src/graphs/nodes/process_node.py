@@ -32,21 +32,21 @@ logger = logging.getLogger(__name__)
 def _parse_hongguo_direct_data(search_results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     从搜索结果中提取红果直接爬取的数据
-    
-    Returns:
-        榜单数据列表，如果不存在则返回空列表
+    兼容：hongguo_direct（旧版）和 merged_ranking（新版融合数据）
     """
     for item in search_results:
-        if item.get("type") == "hongguo_direct":
+        item_type = item.get("type", "")
+        # 兼容新版 merged_ranking 和旧版 hongguo_direct
+        if item_type in ("hongguo_direct", "merged_ranking"):
             raw_content = item.get("raw_content", "")
             if raw_content:
                 try:
                     data = json.loads(raw_content)
                     if isinstance(data, list):
-                        logger.info(f"✅ 从红果直接爬取数据中提取 {len(data)} 条榜单")
+                        logger.info(f"✅ 从融合数据中提取 {len(data)} 条榜单")
                         return data
                 except json.JSONDecodeError as e:
-                    logger.warning(f"解析红果数据失败: {e}")
+                    logger.warning(f"解析融合数据失败: {e}")
     return []
 
 
