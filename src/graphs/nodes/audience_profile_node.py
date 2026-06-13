@@ -35,10 +35,50 @@ DEFAULT_REGIONS = [
     {"name": "浙江", "value": 9.6},
     {"name": "山东", "value": 8.4},
 ]
+DEFAULT_CONTENT_PREFERENCES = [
+    {"name": "都市爱情", "value": 32},
+    {"name": "穿越重生", "value": 24},
+    {"name": "复仇逆袭", "value": 18},
+    {"name": "古装宫斗", "value": 14},
+    {"name": "甜宠萌宝", "value": 12},
+]
+DEFAULT_VIEWING_TIME = [
+    {"name": "睡前 22-24点", "value": 35},
+    {"name": "通勤/午休", "value": 22},
+    {"name": "晚间 20-22点", "value": 28},
+    {"name": "周末白天", "value": 15},
+]
+DEFAULT_SPENDING_POWER = {
+    "paid_ratio": 35,
+    "arpu": "¥18",
+    "willingness": "中高",
+}
+DEFAULT_USER_SEGMENTS = [
+    {"name": "核心追更党", "share": 28, "desc": "日更必追、愿意为爆款付费解锁"},
+    {"name": "碎片路人", "share": 45, "desc": "通勤/睡前刷剧，免费内容为主"},
+    {"name": "高消费用户", "share": 18, "desc": "对优质内容付费意愿强，关注主演"},
+    {"name": "尝鲜猎奇党", "share": 9, "desc": "热衷新题材和黑马剧，易流失"},
+]
 
 
 def _default_regions() -> List[Dict[str, Any]]:
     return [region.copy() for region in DEFAULT_REGIONS]
+
+
+def _default_content_preferences() -> List[Dict[str, Any]]:
+    return [item.copy() for item in DEFAULT_CONTENT_PREFERENCES]
+
+
+def _default_viewing_time() -> List[Dict[str, Any]]:
+    return [item.copy() for item in DEFAULT_VIEWING_TIME]
+
+
+def _default_spending_power() -> Dict[str, Any]:
+    return DEFAULT_SPENDING_POWER.copy()
+
+
+def _default_user_segments() -> List[Dict[str, Any]]:
+    return [item.copy() for item in DEFAULT_USER_SEGMENTS]
 
 
 def _default_audience_profile() -> AudienceProfile:
@@ -47,6 +87,10 @@ def _default_audience_profile() -> AudienceProfile:
         age=DEFAULT_AGE.copy(),
         regions=_default_regions(),
         traits=DEFAULT_TRAITS.copy(),
+        content_preferences=_default_content_preferences(),
+        viewing_time=_default_viewing_time(),
+        spending_power=_default_spending_power(),
+        user_segments=_default_user_segments(),
     )
 
 
@@ -267,31 +311,41 @@ def _build_prompt(rankings_context: str) -> str:
 只输出严格 JSON，不要 Markdown，不要解释，不要额外文本。
 字段必须完整：
 {{
-  "gender": {{
-    "male": 数字,
-    "female": 数字
-  }},
-  "age": {{
-    "18-24": 数字,
-    "25-34": 数字,
-    "35-44": 数字,
-    "45+": 数字
-  }},
+  "gender": {{"male": 数字, "female": 数字}},
+  "age": {{"18-24": 数字, "25-34": 数字, "35-44": 数字, "45+": 数字}},
   "regions": [
     {{"name": "广东", "value": 15.5}},
     {{"name": "江苏", "value": 11.8}},
     {{"name": "浙江", "value": 9.6}}
   ],
-  "traits": [
-    "4个非常具体且符合今日剧目的受众行为标签"
+  "traits": ["4个非常具体且符合今日剧目的受众行为标签"],
+  "content_preferences": [
+    {{"name": "都市爱情", "value": 32}},
+    {{"name": "穿越重生", "value": 24}}
+  ],
+  "viewing_time": [
+    {{"name": "睡前 22-24点", "value": 35}},
+    {{"name": "通勤/午休", "value": 22}}
+  ],
+  "spending_power": {{
+    "paid_ratio": 35,
+    "arpu": "¥18",
+    "willingness": "中高"
+  }},
+  "user_segments": [
+    {{"name": "核心追更党", "share": 28, "desc": "日更必追、愿意为爆款付费解锁"}},
+    {{"name": "碎片路人", "share": 45, "desc": "通勤/睡前刷剧，免费内容为主"}}
   ]
 }}
 
 【硬性规则】
-1. gender 中 male + female 约等于 100。
-2. age 四项总和约等于 100。
-3. regions 返回 3-5 个排名前列的省份或城市，value 为数字百分比。
-4. traits 必须正好 4 个，必须具体到今日榜单的题材爽点和观看行为，禁止使用“下沉市场”“年轻群体”“女性主导”等泛泛标签。
+1. gender 中 male + female 约等于 100；age 四项总和约等于 100。
+2. regions 返回 3-5 个排名前列的省份或城市，value 为数字百分比。
+3. traits 必须正好 4 个，必须具体到今日榜单的题材爽点和观看行为，禁止使用“下沉市场”“年轻群体”“女性主导”等泛泛标签。
+4. content_preferences 必须基于今日榜单题材/爽点分布给出 4-6 项，value 为百分比且总和约 100。
+5. viewing_time 给出 4 个典型时段及占比，value 总和约 100。
+6. spending_power 中 paid_ratio 为数字百分比；arpu 为字符串如 "¥15-25"；willingness 为 "高/中高/中/低" 之一。
+7. user_segments 给出 3-4 个分层，share 为百分比且总和约 100，desc 为 10-15 字描述。
 """
 
 
@@ -323,6 +377,63 @@ def _build_age(raw_age: Any) -> Dict[str, float]:
         return DEFAULT_AGE.copy()
 
 
+def _build_named_value_list(value: Any, default_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    try:
+        if not isinstance(value, list):
+            return default_list
+        result = []
+        for item in value:
+            if not isinstance(item, dict):
+                continue
+            name = ""
+            for key in ("name", "label", "类别", "类型", "题材"):
+                name = _safe_text(item.get(key), "")
+                if name:
+                    break
+            val = _safe_number(item.get("value") or item.get("占比") or item.get("percent") or item.get("count"), 0)
+            if name:
+                result.append({"name": name, "value": val})
+        return result or default_list
+    except Exception:
+        return default_list
+
+
+def _build_spending_power(value: Any) -> Dict[str, Any]:
+    try:
+        sp = _as_dict(value)
+        if not sp:
+            return _default_spending_power()
+        return {
+            "paid_ratio": int(_safe_number(sp.get("paid_ratio") or sp.get("付费率") or sp.get("付费比例"), DEFAULT_SPENDING_POWER["paid_ratio"])),
+            "arpu": _safe_text(sp.get("arpu") or sp.get("ARPU") or sp.get("客单价"), DEFAULT_SPENDING_POWER["arpu"]),
+            "willingness": _safe_text(sp.get("willingness") or sp.get("付费意愿"), DEFAULT_SPENDING_POWER["willingness"]),
+        }
+    except Exception:
+        return _default_spending_power()
+
+
+def _build_user_segments(value: Any) -> List[Dict[str, Any]]:
+    try:
+        if not isinstance(value, list):
+            return _default_user_segments()
+        result = []
+        for item in value:
+            if not isinstance(item, dict):
+                continue
+            name = ""
+            for key in ("name", "label", "分层", "群体"):
+                name = _safe_text(item.get(key), "")
+                if name:
+                    break
+            share = int(_safe_number(item.get("share") or item.get("占比") or item.get("percent"), 0))
+            desc = _safe_text(item.get("desc") or item.get("描述") or item.get("description"), "")
+            if name:
+                result.append({"name": name, "share": share, "desc": desc})
+        return result or _default_user_segments()
+    except Exception:
+        return _default_user_segments()
+
+
 def _build_audience_profile(profile_data: Any) -> AudienceProfile:
     try:
         safe_profile = _as_dict(profile_data)
@@ -334,6 +445,10 @@ def _build_audience_profile(profile_data: Any) -> AudienceProfile:
             age=_build_age(safe_profile.get("age")),
             regions=_build_top_regions(safe_profile.get("regions")),
             traits=_safe_traits(safe_profile.get("traits")),
+            content_preferences=_build_named_value_list(safe_profile.get("content_preferences"), _default_content_preferences()),
+            viewing_time=_build_named_value_list(safe_profile.get("viewing_time"), _default_viewing_time()),
+            spending_power=_build_spending_power(safe_profile.get("spending_power")),
+            user_segments=_build_user_segments(safe_profile.get("user_segments")),
         )
     except Exception as exc:
         logger.error("audience_profile_node: 构建观众画像对象失败: %s", exc, exc_info=True)

@@ -155,6 +155,22 @@ class AudienceProfile(BaseModel):
         ],
         description="4个具体受众特征标签",
     )
+    content_preferences: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="题材/内容偏好分布，元素包含name题材和value占比",
+    )
+    viewing_time: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="观看时段分布，元素包含name时段和value占比",
+    )
+    spending_power: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="付费能力与意愿，如{paid_ratio, arpu, willingness}",
+    )
+    user_segments: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="用户分层，元素包含name、share占比、desc描述",
+    )
 
 
 class GenreStats(BaseModel):
