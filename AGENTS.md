@@ -298,7 +298,7 @@ python -m unittest tests.test_ranking_quality
 
 - 剧集榜单目标为 TOP20。
 - 前端“榜单 TOP20”必须严格显示 20 条；`rankings` 少于 20 条时必须补齐或拒绝发布，禁止直接覆盖 `latest.json`。
-- 质量门禁文件：`src/graphs/ranking_quality.py`，常量 `REQUIRED_TOP_RANKING_COUNT = 8`。
+- 质量门禁文件：`src/graphs/ranking_quality.py`，常量 `REQUIRED_TOP_RANKING_COUNT = 20`。
 - 补齐顺序：当前输出 → supplemental_rankings → 近 7 天历史归档。仍不足 20 条则抛 `RankingCountError`。
 - 演员榜为女频 TOP10 + 男频 TOP10。
 - 演员搜索优先多轮检索：
