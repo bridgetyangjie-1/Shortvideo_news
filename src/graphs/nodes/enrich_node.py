@@ -295,8 +295,15 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
 - 如果只是老剧平稳表现，该字段请保留为空字符串 ""。
 
 🚨【核心情绪与动机拆解】：
-作为资深用户心理研究员，请深度分析今日上榜短剧的题材与爽点。除了常规字段，你必须推演出 `emotional_analysis` 对象。
-请洞察这些剧情本质上是在为观众提供哪种【心理补偿】，以及它们精准踩中了当代社会的哪些【现实焦虑】。
+作为资深用户心理研究员，请深度分析今日上榜短剧的题材与爽点。可结合上方真实互联网检索资料中的行业热点与用户讨论。
+你必须推演出 `emotional_analysis` 对象，包含六个维度，每个维度给出 3-5 个最关键指标及 0-100 的数值（数值代表相对强度，总和不要求等于100）：
+1. primary_emotions：情绪驱动（如心理补偿、强力宣泄、身份逆袭、浪漫幻想、陪伴感）。
+2. target_anxieties：现实焦虑（如职场阶层固化、经济匮乏、亲密关系失衡、家庭矛盾、容貌年龄焦虑）。
+3. motivations：观看动机（如解压放空、情感代偿、追更陪伴、猎奇尝鲜、社交谈资）。
+4. triggers：剧情触发点（如甜宠撒糖、复仇打脸、身份揭晓、虐心反转、高能悬念）。
+5. expectations：内容期待（如快节奏、强女主、智商在线、反套路、高颜值）。
+6. payoff_scenarios：情感代偿场景（如职场受挫、亲密关系、经济压力、家庭矛盾、孤独无聊）。
+要求每个维度的指标必须具体到今日榜单题材，禁止泛泛而谈；value 必须是整数。
 
 请补全缺失字段并输出纯JSON对象，不要加```json包裹。结构必须为：
 {{
@@ -332,6 +339,30 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
       {{"name": "职场阶层固化", "value": 34}},
       {{"name": "经济匮乏", "value": 31}},
       {{"name": "亲密关系失衡", "value": 27}}
+    ],
+    "motivations": [
+      {{"name": "解压放空", "value": 33}},
+      {{"name": "情感代偿", "value": 28}},
+      {{"name": "追更陪伴", "value": 22}},
+      {{"name": "猎奇尝鲜", "value": 17}}
+    ],
+    "triggers": [
+      {{"name": "甜宠撒糖", "value": 30}},
+      {{"name": "复仇打脸", "value": 27}},
+      {{"name": "身份揭晓", "value": 23}},
+      {{"name": "高能悬念", "value": 20}}
+    ],
+    "expectations": [
+      {{"name": "快节奏", "value": 32}},
+      {{"name": "强女主", "value": 26}},
+      {{"name": "智商在线", "value": 24}},
+      {{"name": "反套路", "value": 18}}
+    ],
+    "payoff_scenarios": [
+      {{"name": "职场受挫", "value": 31}},
+      {{"name": "亲密关系", "value": 29}},
+      {{"name": "经济压力", "value": 23}},
+      {{"name": "家庭矛盾", "value": 17}}
     ]
   }}
 }}"""
@@ -375,13 +406,29 @@ def enrich_node(state: EnrichNodeInput, config: RunnableConfig, runtime: Runtime
                     rankings_data = parsed.get("rankings") or parsed.get("data") or []
                     candidate_analysis = parsed.get("emotional_analysis")
                     if isinstance(candidate_analysis, dict):
-                        primary_emotions = candidate_analysis.get("primary_emotions")
-                        target_anxieties = candidate_analysis.get("target_anxieties")
-                        if isinstance(primary_emotions, list) and isinstance(target_anxieties, list):
-                            emotional_analysis = {
-                                "primary_emotions": primary_emotions[:3],
-                                "target_anxieties": target_anxieties[:3],
-                            }
+                        defaults = default_emotional_analysis()
+
+                        def _pick_int_list(raw_list, fallback_list, max_items=5):
+                            if not isinstance(raw_list, list):
+                                return fallback_list
+                            cleaned = []
+                            for item in raw_list:
+                                if not isinstance(item, dict):
+                                    continue
+                                name = str(item.get("name") or item.get("label") or "").strip()
+                                value = int(float(item.get("value") or item.get("score") or 0))
+                                if name:
+                                    cleaned.append({"name": name, "value": value})
+                            return (cleaned or fallback_list)[:max_items]
+
+                        emotional_analysis = {
+                            "primary_emotions": _pick_int_list(candidate_analysis.get("primary_emotions"), defaults["primary_emotions"]),
+                            "target_anxieties": _pick_int_list(candidate_analysis.get("target_anxieties"), defaults["target_anxieties"]),
+                            "motivations": _pick_int_list(candidate_analysis.get("motivations"), defaults["motivations"]),
+                            "triggers": _pick_int_list(candidate_analysis.get("triggers"), defaults["triggers"]),
+                            "expectations": _pick_int_list(candidate_analysis.get("expectations"), defaults["expectations"]),
+                            "payoff_scenarios": _pick_int_list(candidate_analysis.get("payoff_scenarios"), defaults["payoff_scenarios"]),
+                        }
             else:
                 raise ValueError("未找到有效JSON对象或数组")
                 

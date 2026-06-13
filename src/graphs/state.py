@@ -253,7 +253,7 @@ class PlayTrend(BaseModel):
 
 
 def default_emotional_analysis() -> Dict[str, List[Dict[str, Any]]]:
-    """核心情绪与现实焦虑拆解默认结构"""
+    """核心情绪与动机拆解默认结构"""
     return {
         "primary_emotions": [
             {"name": "心理补偿", "value": 35},
@@ -264,6 +264,30 @@ def default_emotional_analysis() -> Dict[str, List[Dict[str, Any]]]:
             {"name": "职场阶层固化", "value": 34},
             {"name": "经济匮乏", "value": 31},
             {"name": "亲密关系失衡", "value": 27},
+        ],
+        "motivations": [
+            {"name": "解压放空", "value": 33},
+            {"name": "情感代偿", "value": 28},
+            {"name": "追更陪伴", "value": 22},
+            {"name": "猎奇尝鲜", "value": 17},
+        ],
+        "triggers": [
+            {"name": "甜宠撒糖", "value": 30},
+            {"name": "复仇打脸", "value": 27},
+            {"name": "身份揭晓", "value": 23},
+            {"name": "高能悬念", "value": 20},
+        ],
+        "expectations": [
+            {"name": "快节奏", "value": 32},
+            {"name": "强女主", "value": 26},
+            {"name": "智商在线", "value": 24},
+            {"name": "反套路", "value": 18},
+        ],
+        "payoff_scenarios": [
+            {"name": "职场受挫", "value": 31},
+            {"name": "亲密关系", "value": 29},
+            {"name": "经济压力", "value": 23},
+            {"name": "家庭矛盾", "value": 17},
         ],
     }
 

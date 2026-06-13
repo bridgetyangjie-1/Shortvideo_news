@@ -210,7 +210,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 1. **search_node**：抓取红果官网 100 条 + DataEye 30 条交叉验证，生成融合榜单；再用 Kimi 搜索 1 次行业宏观数据。
 2. **news_node**：并行运行，Kimi 搜索 3 组新闻 → DeepSeek 生成 ≤6 条快讯。
 3. **process_node**：优先解析红果直接爬取数据，转换为标准榜单；无数据时用 Kimi 从搜索结果提取。
-4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整 JSON（含 emotional_analysis）。
+4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整 JSON（含 emotional_analysis：情绪驱动/现实焦虑/观看动机/剧情触发点/内容期待/代偿场景六维拆解）。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；不足时用 DeepSeek 兜底。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
 7. **audience_profile_node**：用 DeepSeek 基于当日榜单反推受众画像，输出性别、年龄、地域、题材偏好、观看时段、付费能力、用户分层。
