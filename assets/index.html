@@ -257,6 +257,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
 /* 近一周热门标签 */
 .sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+.sub-grid.two-cols { grid-template-columns: repeat(2, 1fr); }
 .hot-tags-layout { display: flex; flex-direction: column; gap: 14px; }
 .hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag-pill { background: rgba(30, 34, 48, 0.6); color: #e2e8f0; padding: 4px 10px; border-radius: 16px; font-size: 12px; border: 1px solid rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; }
@@ -450,6 +451,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 @media (max-width: 1200px) {
   .main-grid { grid-template-columns: 1fr; }
   .sub-grid { grid-template-columns: 1fr; }
+  .sub-grid.two-cols { grid-template-columns: 1fr; }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -470,8 +472,27 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
   .source-legend { flex-direction: column; gap: 6px; }
   .source-legend-item { font-size: 10px; }
   .audience-dashboard { grid-template-columns: 1fr; }
-  .audience-chart { width: 100%; height: 160px; }
-  .audience-bar-chart { height: 180px; }
+  .audience-charts { flex-direction: column; }
+  .audience-chart { width: 100%; height: 150px; min-width: auto; }
+  .audience-bar-chart { height: 160px; }
+
+  .sub-grid.two-cols { grid-template-columns: 1fr; }
+  .tag-pill { font-size: 11px; padding: 3px 8px; }
+  .tag-category-title { font-size: 11px; }
+
+  .emotion-summary { font-size: 11px; padding: 8px 10px; margin-bottom: 10px; }
+  .emotion-panel { padding: 10px; min-height: auto; }
+  .emotion-panel-title { font-size: 11px; margin-bottom: 8px; }
+  .emotion-wordcloud-chart { height: 160px; }
+  .emotion-relation-chart { height: 220px; }
+  .emotion-ranking-item { padding: 8px; margin-bottom: 6px; }
+  .emotion-ranking-title { font-size: 11px; }
+  .emotion-ranking-oneliner { font-size: 10px; }
+  .emotion-insight-item { padding: 8px; margin-bottom: 6px; }
+  .emotion-insight-title { font-size: 11px; }
+  .emotion-insight-content { font-size: 10px; }
+  .emotion-trend-item { padding: 6px 8px; margin-bottom: 5px; }
+  .emotion-trend-name { font-size: 11px; }
 }
 
 @media (max-width: 480px) {
@@ -592,7 +613,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     <div class="news-grid" id="news-container"></div>
   </div>
   
-  <div class="sub-grid" style="grid-template-columns: repeat(2, 1fr);">
+  <div class="sub-grid two-cols">
     <div class="glass-card">
       <div class="section-title">🏷️ 近一周热门标签 <span class="source-tag tier1">📊 本地统计</span></div>
       <div id="hot-tags-container"></div>
@@ -1406,13 +1427,19 @@ function renderEmotionChart(rawAnalysis) {
     // 2. 情绪-焦虑-触发关联图
     const relationEl = document.getElementById('emotion-relation-chart');
     if (relationEl) {
+        const isRelationMobile = window.innerWidth <= 768;
         const nodes = [];
         const links = [];
         const addedNodes = new Set();
         const addNode = (name, category) => {
             if (!name || addedNodes.has(name)) return;
             addedNodes.add(name);
-            nodes.push({ name, category, itemStyle: { color: categoryColors[category] || '#94a3b8' } });
+            nodes.push({
+                name, category,
+                symbolSize: isRelationMobile ? 18 : 28,
+                itemStyle: { color: categoryColors[category] || '#94a3b8' },
+                label: { color: '#e2e8f0', fontSize: isRelationMobile ? 8 : 10 }
+            });
         };
 
         // 核心节点
@@ -1432,18 +1459,19 @@ function renderEmotionChart(rawAnalysis) {
         window.emotionRelationChartInstance = echarts.init(relationEl, 'dark');
         window.emotionRelationChartInstance.setOption({
             backgroundColor: 'transparent',
+            animation: false,
             tooltip: { formatter: '{b}' },
             series: [{
                 type: 'graph',
                 layout: 'force',
                 roam: false,
-                label: { show: true, color: '#e2e8f0', fontSize: 10 },
+                label: { show: true },
                 edgeSymbol: ['none', 'arrow'],
                 edgeSymbolSize: [0, 6],
                 data: nodes,
                 links: links,
-                force: { repulsion: 180, edgeLength: [40, 90] },
-                lineStyle: { color: 'rgba(148, 163, 184, 0.35)', curveness: 0.2 }
+                force: { repulsion: isRelationMobile ? 80 : 180, edgeLength: isRelationMobile ? [25, 55] : [40, 90] },
+                lineStyle: { color: 'rgba(148, 163, 184, 0.35)', curveness: 0.2, width: 1 }
             }]
         });
     }
