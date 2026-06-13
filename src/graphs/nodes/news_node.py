@@ -98,18 +98,18 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
 - 绝对忠实于上方真实搜索结果，严禁捏造新闻、数据、机构名称、发布时间和虚假链接。
 - source_url 必须是搜索结果中明确出现过的真实原文URL；禁止填写门户首页、搜索页、空链接或臆造链接。
 - 如果某条新闻没有可确认的真实 source_url，必须丢弃该条新闻。
-- 如果搜索不到足够的高质量新闻，返回实际搜到的数量即可，宁缺毋滥；可以少于5条，甚至返回空数组[]。
+- 如果搜索不到足够的高质量新闻，返回实际搜到的数量即可，宁缺毋滥；可以少于6条，甚至返回空数组[]。
 
 🚨【内容结构铁律 - 必须逐条执行】
-- 严格输出合法JSON数组格式，最多5条。
-- 每条content必须是250-350字的高信息密度深度摘要，必须基于搜索结果和短剧行业认知进行推理与扩写。
+- 严格输出合法JSON数组格式，最多6条。
+- 每条content必须是150-200字的高信息密度深度摘要，必须基于搜索结果和短剧行业认知进行推理与扩写。
 - content字段必须严格按以下“四段式”输出，禁止合并段落，禁止删改段落标题，四段之间必须使用JSON字符串中的换行转义符\\n连接。
 - 生成JSON时必须把换行写成\\n，不要输出未转义的真实换行，避免JSON解析失败。
 - content必须严格使用以下四段结构：
-  【事件核心】：详细陈述事件的来龙去脉、核心动作、发布时间、相关平台/公司/机构和关键细节。
+  【事件核心】：陈述事件的来龙去脉、核心动作、发布时间、相关平台/公司/机构和关键细节。
   【数据支撑】：挖掘搜索结果中的金额、播放量、热度、份额、增速、榜单名次等核心数据；若无具体数字，必须明确说明可验证的定性趋势，不得编造数字。
-  【商业洞察】：深度剖析该事件对短剧大盘走向、买量成本、内容供给、平台分发或行业竞争格局的长期影响。
-  【决策价值】：明确指出该新闻对短剧制作方、投流团队、平台方或投资方的具体指导意义，例如“建议优先布局XX题材”或“需警惕XX合规风险”。
+  【商业洞察】：剖析该事件对短剧大盘走向、买量成本、内容供给、平台分发或行业竞争格局的影响。
+  【决策价值】：指出该新闻对短剧制作方、投流团队、平台方或投资方的具体指导意义，例如“建议优先布局XX题材”或“需警惕XX合规风险”。
 - title控制在15字以内，type只能为“预警”“商业”“数据”之一，icon需与type匹配。
 
 输出格式（合法JSON数组，不要加```json包裹）：
@@ -155,7 +155,7 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
             else:
                 raise ValueError("未找到有效JSON数组")
             
-            for item in news_list[:5]:
+            for item in news_list[:6]:
                 if isinstance(item, dict):
                     source_url = str(item.get("source_url") or item.get("source", "")).strip()
                     if not source_url.startswith(("http://", "https://")):
@@ -191,6 +191,6 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
         logger.warning("未生成带真实原文链接的有效快讯，返回空列表")
     
     return NewsNodeOutput(
-        daily_news=daily_news[:5],
+        daily_news=daily_news[:6],
         error_message=("\n".join(search_errors) + "\n") if search_errors else ""
     )

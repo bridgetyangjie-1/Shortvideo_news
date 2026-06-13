@@ -18,7 +18,7 @@
 
 - 剧集榜单 TOP20（前端 TOP20 必须严格 20 条）
 - 演员热力榜（女频 TOP10 + 男频 TOP10）
-- 每日行业快讯 5 条
+- 每日行业快讯 6 条
 - 行业大事件洞察
 - 题材分布与热门标签
 - 观众画像
@@ -174,7 +174,7 @@ search_node
 | `audience_profile_node` | `audience_profile_node.py` | 基于当日榜单反推受众画像 | 是（DeepSeek） |
 | `genre_distribution_node` | `genre_distribution_node.py` | 本地统计 genre/tags/core_trope 标签频次 | 否 |
 | `insights_node` | `insights_node.py` | Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察 | 是（Kimi+DeepSeek） |
-| `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 5 条快讯 | 是（Kimi+DeepSeek） |
+| `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
 | `history_data_node` | `history_data_node.py` | 生成播放趋势、周榜历史、排名变化 | 否 |
 | `push_node` | `push_node.py` | 保存 latest.json、latest_full.json、历史归档、all_history.json | 否 |
 
@@ -208,7 +208,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 ## 7. 数据流说明
 
 1. **search_node**：抓取红果官网 100 条 + DataEye 30 条交叉验证，生成融合榜单；再用 Kimi 搜索 1 次行业宏观数据。
-2. **news_node**：并行运行，Kimi 搜索 3 组新闻 → DeepSeek 生成 ≤5 条快讯。
+2. **news_node**：并行运行，Kimi 搜索 3 组新闻 → DeepSeek 生成 ≤6 条快讯。
 3. **process_node**：优先解析红果直接爬取数据，转换为标准榜单；无数据时用 Kimi 从搜索结果提取。
 4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整 JSON（含 emotional_analysis）。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；不足时用 DeepSeek 兜底。
@@ -309,18 +309,18 @@ python -m unittest tests.test_ranking_quality
 
 ### 10.4 行业快讯规则
 
-- `daily_news` 必须返回 5 条。
+- `daily_news` 必须返回 6 条。
 - 每条必须包含 `insight` 字段，约 100 字，覆盖行业影响、趋势判断、商业机会或风险。
 - 每条必须包含具体 `source_url`，避免只给门户首页。
 - 类型限定为数据、预警、商业等清晰分类。
-- `content` 输出 250-350 字四段式内容，依次覆盖 `【事件核心】`、`【数据支撑】`、`【商业洞察】`、`【决策价值】`，JSON 字符串内使用 `\n` 转义换行。
+- `content` 输出 150-200 字四段式内容，依次覆盖 `【事件核心】`、`【数据支撑】`、`【商业洞察】`、`【决策价值】`，JSON 字符串内使用 `\n` 转义换行。
 
 ### 10.5 核心数据结构
 
 | 字段 | 类型 | 要求 |
 |---|---|---|
 | `rankings` | `List[DramaRanking]` | TOP20 短剧榜单 |
-| `daily_news` | `List[DailyNews]` | 5 条快讯 |
+| `daily_news` | `List[DailyNews]` | 6 条快讯 |
 | `insights` | `List[Insight]` | 具体行业事件，必须含真实数据 |
 | `genre_distribution` | `GenreDistribution` | 题材分布和标签热度 |
 | `actors` | `ActorRanking` | 女频/男频演员榜 |
