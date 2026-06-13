@@ -174,7 +174,7 @@ search_node
 | `enrich_node` | `enrich_node.py` | 本地缓存 → 红果详情页爬虫 → Kimi 批量补充 → DeepSeek 生成完整 JSON | 是（DeepSeek/Kimi） |
 | `actor_ranking_node` | `actor_ranking_node.py` | 从 enriched_rankings 统计演员频次，生成女频/男频 TOP10 | 否 / DeepSeek 兜底 |
 | `industry_node` | `industry_node.py` | 搜索行业宏观数据，输出 IndustryData + PlatformData | 是（Kimi） |
-| `audience_profile_node` | `audience_profile_node.py` | 基于榜单标签本地规则推理受众画像：性别/年龄/地域/题材偏好/观看时段/付费能力/用户分层 | 否 |
+| `audience_profile_node` | `audience_profile_node.py` | 基于榜单标签本地规则推理受众画像：性别/年龄/地域/特征 | 否 |
 | `genre_distribution_node` | `genre_distribution_node.py` | 近7天榜单加权聚合标签频次，按题材/人设/爽点/情感/时代分类，并计算标签环比趋势 | 否 |
 | `emotion_analysis_node` | `emotion_analysis_node.py` | 基于当日榜单规则化统计情绪维度，DeepSeek 提炼总览、TOP3 情绪剧目与行动建议 | 是（DeepSeek） |
 | `insights_node` | `insights_node.py` | Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察 | 是（Kimi+DeepSeek） |
@@ -217,7 +217,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整榜单 JSON。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；不足时用 DeepSeek 兜底。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
-7. **audience_profile_node**：基于 `enriched_rankings` 的 `tags`/`core_trope`/`genre` 标签，匹配本地规则映射表，加权合并推理受众画像，输出性别、年龄、地域、题材偏好、观看时段、付费能力、用户分层，不再调用 DeepSeek API。
+7. **audience_profile_node**：基于 `enriched_rankings` 的 `tags`/`core_trope`/`genre` 标签，匹配本地规则映射表，加权合并推理受众画像，输出性别、年龄、地域、特征四个字段，不再调用 DeepSeek API。
 8. **genre_distribution_node**：读取近7天历史榜单加权聚合标签（今日权重最高），按本地 taxonomy 分为题材/人设/爽点/情感关系/时代背景等类别，并计算较昨日的 `trending` 趋势。
 9. **emotion_analysis_node**：基于 `enriched_rankings` 规则化映射题材/标签到情绪、焦虑、触发点等维度，加权统计后调用 DeepSeek 生成总览摘要、TOP3 情绪剧目、行动建议与环比趋势。
 10. **insights_node**：Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察。
@@ -413,7 +413,8 @@ python -m unittest tests.test_ranking_quality
 | 2026-06-12 | `push_node`：输出 statistics/trends/anomalies 统计信息 |
 | 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端改为词云+TOP3剧目+行动建议+关联图+环比趋势 |
 | 2026-06-13 | `emotion_analysis_node` 词云分值改为 log1p + max-normalization，避免多个维度同时顶到 100 失去区分度 |
-| 2026-06-13 | **`audience_profile_node` 重构为纯本地规则推理**：基于榜单标签（tags/core_trope/genre）匹配受众画像规则，加权合并性别/年龄/地域/特征/偏好/时段/付费/分层，不再调用 DeepSeek API，降低运行成本并保证 H5 前端数据格式兼容 |
+| 2026-06-13 | **`audience_profile_node` 重构为纯本地规则推理**：基于榜单标签（tags/core_trope/genre）匹配受众画像规则，加权合并性别/年龄/地域/特征，不再调用 DeepSeek API，降低运行成本并保证 H5 前端数据格式兼容 |
+| 2026-06-13 | `audience_profile_node` 精简输出：仅保留 `gender` / `age` / `regions` / `traits` 四个前端必需字段，按排名加权平均并归一化为 100 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |
