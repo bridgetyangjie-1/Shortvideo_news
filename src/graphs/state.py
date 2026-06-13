@@ -217,6 +217,64 @@ class GenreDistribution(BaseModel):
     )
 
 
+class EmotionWordCloudItem(BaseModel):
+    """情绪词云条目"""
+    name: str = Field(default="", description="情绪/焦虑/触发点/代偿场景关键词")
+    value: int = Field(default=0, description="强度 0-100")
+    category: str = Field(default="emotion", description="分类：emotion/anxiety/trigger/payoff/expectation/motivation")
+
+
+class EmotionRankingItem(BaseModel):
+    """带情绪标签的榜单剧目"""
+    rank: int = Field(default=0, description="排名")
+    title: str = Field(default="", description="剧名")
+    primary_emotion: str = Field(default="", description="主导情绪")
+    anxiety: str = Field(default="", description="对应现实焦虑")
+    trigger: str = Field(default="", description="爽点触发点")
+    one_line: str = Field(default="", description="一句话心理拆解")
+
+
+class EmotionTrendItem(BaseModel):
+    """情绪维度环比变化"""
+    name: str = Field(default="", description="维度名称")
+    change: int = Field(default=0, description="较昨日变化量")
+    trend: str = Field(default="same", description="趋势：up/down/new/same")
+
+
+class ActionableInsight(BaseModel):
+    """可执行洞察"""
+    icon: str = Field(default="💡", description="emoji图标")
+    title: str = Field(default="", description="短标题 15字以内")
+    content: str = Field(default="", description="具体建议 80-120字")
+
+
+class EmotionalAnalysis(BaseModel):
+    """核心情绪与动机拆解"""
+    summary: str = Field(
+        default="今日榜单以都市复仇与甜宠逆袭为主，观众通过剧情实现情绪代偿。",
+        description="一句话总览"
+    )
+    dominant_emotion: str = Field(default="心理补偿", description="主导情绪")
+    dominant_anxiety: str = Field(default="亲密关系失衡", description="主导现实焦虑")
+    top_trigger: str = Field(default="复仇打脸", description="TOP1 剧情触发点")
+    wordcloud: List[EmotionWordCloudItem] = Field(
+        default_factory=list,
+        description="情绪关键词云"
+    )
+    emotion_rankings: List[EmotionRankingItem] = Field(
+        default_factory=list,
+        description="TOP3 情绪典型剧目"
+    )
+    trends: List[EmotionTrendItem] = Field(
+        default_factory=list,
+        description="情绪维度环比趋势"
+    )
+    actionable_insights: List[ActionableInsight] = Field(
+        default_factory=list,
+        description="3条创作者/投流行动建议"
+    )
+
+
 class OverviewStats(BaseModel):
     """概览统计数据（Dashboard页面1所需）"""
     dramas: int = Field(default=0, description="周期内开播剧集数")
@@ -252,44 +310,53 @@ class PlayTrend(BaseModel):
     trend_direction: str = Field(default="stable", description="整体趋势：up/down/stable")
 
 
-def default_emotional_analysis() -> Dict[str, List[Dict[str, Any]]]:
+def default_emotional_analysis() -> EmotionalAnalysis:
     """核心情绪与动机拆解默认结构"""
-    return {
-        "primary_emotions": [
-            {"name": "心理补偿", "value": 35},
-            {"name": "强力宣泄", "value": 32},
-            {"name": "身份逆袭", "value": 28},
+    return EmotionalAnalysis(
+        summary="今日榜单以都市复仇与甜宠逆袭为主，观众通过剧情实现情绪代偿。",
+        dominant_emotion="心理补偿",
+        dominant_anxiety="亲密关系失衡",
+        top_trigger="复仇打脸",
+        wordcloud=[
+            EmotionWordCloudItem(name="复仇打脸", value=28, category="trigger"),
+            EmotionWordCloudItem(name="甜宠撒糖", value=22, category="trigger"),
+            EmotionWordCloudItem(name="身份逆袭", value=20, category="emotion"),
+            EmotionWordCloudItem(name="亲密关系失衡", value=19, category="anxiety"),
+            EmotionWordCloudItem(name="职场受挫", value=16, category="payoff"),
+            EmotionWordCloudItem(name="解压放空", value=15, category="motivation"),
         ],
-        "target_anxieties": [
-            {"name": "职场阶层固化", "value": 34},
-            {"name": "经济匮乏", "value": 31},
-            {"name": "亲密关系失衡", "value": 27},
+        emotion_rankings=[
+            EmotionRankingItem(
+                rank=1,
+                title="示例剧目",
+                primary_emotion="身份逆袭",
+                anxiety="亲密关系失衡",
+                trigger="复仇打脸",
+                one_line="用逆袭打脸补偿亲密关系中的价值否定"
+            )
         ],
-        "motivations": [
-            {"name": "解压放空", "value": 33},
-            {"name": "情感代偿", "value": 28},
-            {"name": "追更陪伴", "value": 22},
-            {"name": "猎奇尝鲜", "value": 17},
+        trends=[
+            EmotionTrendItem(name="复仇打脸", change=0, trend="same"),
+            EmotionTrendItem(name="甜宠撒糖", change=0, trend="same"),
         ],
-        "triggers": [
-            {"name": "甜宠撒糖", "value": 30},
-            {"name": "复仇打脸", "value": 27},
-            {"name": "身份揭晓", "value": 23},
-            {"name": "高能悬念", "value": 20},
+        actionable_insights=[
+            ActionableInsight(
+                icon="💡",
+                title="聚焦复仇逆袭情绪",
+                content="今日'复仇打脸'情绪显著，新剧本前3秒建议直接展示冲突反转，提升素材CTR。"
+            ),
+            ActionableInsight(
+                icon="📈",
+                title="瞄准亲密关系焦虑",
+                content="观众对'亲密关系失衡'代偿需求强，投流文案可直接点出情感痛点并展示反转爽点。"
+            ),
+            ActionableInsight(
+                icon="🎯",
+                title="复用高触发题材框架",
+                content="TOP3剧目均命中'复仇打脸'触发点，后续创作可延续该爽点框架并做微创新。"
+            ),
         ],
-        "expectations": [
-            {"name": "快节奏", "value": 32},
-            {"name": "强女主", "value": 26},
-            {"name": "智商在线", "value": 24},
-            {"name": "反套路", "value": 18},
-        ],
-        "payoff_scenarios": [
-            {"name": "职场受挫", "value": 31},
-            {"name": "亲密关系", "value": 29},
-            {"name": "经济压力", "value": 23},
-            {"name": "家庭矛盾", "value": 17},
-        ],
-    }
+    )
 
 
 # ==================== 全局状态 ====================
@@ -308,9 +375,9 @@ class GlobalState(BaseModel):
     # 新增字段
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
-    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+    emotional_analysis: EmotionalAnalysis = Field(
         default_factory=default_emotional_analysis,
-        description="核心情绪与现实焦虑拆解，包含primary_emotions与target_anxieties",
+        description="核心情绪与动机拆解",
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     weekly_rankings: List[WeeklyRankingItem] = Field(default=[], description="周榜历史")
@@ -345,9 +412,9 @@ class GraphOutput(BaseModel):
     # 概览统计（Dashboard页面1）
     overview: OverviewStats = Field(default_factory=OverviewStats, description="概览统计数据")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签数据")
-    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+    emotional_analysis: EmotionalAnalysis = Field(
         default_factory=default_emotional_analysis,
-        description="核心情绪与现实焦虑拆解，包含primary_emotions与target_anxieties",
+        description="核心情绪与动机拆解",
     )
     # 详细数据
     industry: IndustryData = Field(default_factory=IndustryData, description="行业数据")
@@ -403,10 +470,6 @@ class EnrichNodeInput(BaseModel):
 class EnrichNodeOutput(BaseModel):
     """数据补充节点输出"""
     enriched_rankings: List[DramaRanking] = Field(default=[], description="补充后的完整榜单")
-    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
-        default_factory=default_emotional_analysis,
-        description="核心情绪与现实焦虑拆解",
-    )
     error_message: str = Field(default="", description="错误信息")
 
 
@@ -481,9 +544,9 @@ class PushNodeInput(BaseModel):
     insights: List[Insight] = Field(default=[], description="异动点评列表")
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
-    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+    emotional_analysis: EmotionalAnalysis = Field(
         default_factory=default_emotional_analysis,
-        description="核心情绪与现实焦虑拆解",
+        description="核心情绪与动机拆解",
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     quality_score: float = Field(default=0.0, description="数据质量分数")
@@ -503,9 +566,9 @@ class PushNodeOutput(BaseModel):
     insights: List[Insight] = Field(default=[], description="异动点评列表")
     audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
-    emotional_analysis: Dict[str, List[Dict[str, Any]]] = Field(
+    emotional_analysis: EmotionalAnalysis = Field(
         default_factory=default_emotional_analysis,
-        description="核心情绪与现实焦虑拆解",
+        description="核心情绪与动机拆解",
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     quality_score: float = Field(default=0.0, description="数据质量分数")
@@ -568,6 +631,22 @@ class GenreDistributionOutput(BaseModel):
     genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签数据")
     total_count: int = Field(default=0, description="总短剧数")
     total_views: int = Field(default=0, description="总播放量(万)")
+    error_message: str = Field(default="", description="错误信息")
+
+
+# ==================== 情绪分析节点 ====================
+
+class EmotionAnalysisNodeInput(BaseModel):
+    """情绪分析节点输入"""
+    data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
+    enriched_rankings: List[DramaRanking] = Field(default_factory=list, description="补充后的完整榜单")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
+
+
+class EmotionAnalysisNodeOutput(BaseModel):
+    """情绪分析节点输出"""
+    emotional_analysis: EmotionalAnalysis = Field(default_factory=default_emotional_analysis, description="核心情绪与动机拆解")
+    success: bool = Field(default=True, description="是否成功")
     error_message: str = Field(default="", description="错误信息")
 
 

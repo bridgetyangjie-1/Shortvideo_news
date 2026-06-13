@@ -21,6 +21,7 @@ from graphs.nodes.actor_ranking_node import actor_ranking_node
 from graphs.nodes.industry_node import industry_node
 from graphs.nodes.audience_profile_node import audience_profile_node
 from graphs.nodes.genre_distribution_node import genre_distribution_node
+from graphs.nodes.emotion_analysis_node import emotion_analysis_node
 from graphs.nodes.insights_node import insights_node
 from graphs.nodes.news_node import news_node
 from graphs.nodes.history_data_node import history_data_node
@@ -121,7 +122,14 @@ def create_graph():
     # 7. 题材分布节点（统计节点，不需要LLM）
     builder.add_node("genre_distribution_node", genre_distribution_node)
     
-    # 8. 异动点评节点（大模型）- 异动触发式
+    # 8. 情绪分析节点（DeepSeek 推理）
+    builder.add_node(
+        "emotion_analysis_node",
+        emotion_analysis_node,
+        metadata={"type": "agent", "llm_cfg": "config/emotion_analysis_llm_cfg.json"}
+    )
+    
+    # 9. 异动点评节点（大模型）- 异动触发式
     builder.add_node(
         "insights_node", 
         insights_node, 
@@ -156,11 +164,12 @@ def create_graph():
     # 汇聚：题材分布
     builder.add_edge(["industry_node", "audience_profile_node"], "genre_distribution_node")
     
-    # 异动点评（单节点，不再并行创新点）
+    # 情绪分析与异动点评并行
+    builder.add_edge("genre_distribution_node", "emotion_analysis_node")
     builder.add_edge("genre_distribution_node", "insights_node")
     
-    # 历史数据
-    builder.add_edge("insights_node", "history_data_node")
+    # 汇聚：历史数据
+    builder.add_edge(["emotion_analysis_node", "insights_node"], "history_data_node")
     
     # 推送
     builder.add_edge("history_data_node", "push_node")

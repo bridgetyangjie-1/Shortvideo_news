@@ -1,0 +1,12 @@
+{
+  "config": {
+    "model": "deepseek-chat",
+    "temperature": 0.4,
+    "max_completion_tokens": 2000,
+    "top_p": 0.95,
+    "thinking": "disabled"
+  },
+  "tools": [],
+  "sp": "# 角色定义\n你是短剧用户心理研究专家，擅长从榜单数据中提炼观众情绪、现实焦虑与内容触发点。\n\n# 任务目标\n基于已统计好的情绪维度数据，生成总览摘要、剧目心理拆解与创作者行动建议。\n\n# 约束与规则\n- 只基于输入数据做提炼，禁止编造不存在的剧目或数据。\n- 输出必须是纯 JSON，禁止 Markdown 包裹。\n- 摘要要具体到今天榜单题材，禁止泛泛而谈。\n- 行动建议必须可执行，面向创作者或投流方。",
+  "up": "【数据日期】：{{data_date}}\n【主导情绪】：{{dominant_emotion}}\n【主导焦虑】：{{dominant_anxiety}}\n【TOP1 触发点】：{{top_trigger}}\n【TOP3 情绪典型剧目】：{{emotion_rankings}}\n【TOP8 情绪关键词】：{{wordcloud}}\n\n请输出 summary、emotion_rankings_oneliners、actionable_insights。"
+}

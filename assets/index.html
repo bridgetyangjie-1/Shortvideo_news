@@ -308,20 +308,142 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .spending-label { color: #94a3b8; }
 .spending-value { color: #fbbf24; font-weight: 700; }
 
-/* 核心情绪与动机拆解 */
-.emotion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.emotion-card-mini { background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; }
-.emotion-card-title { font-size: 12px; font-weight: 700; color: #f8fafc; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
-.emotion-card-title i { font-size: 10px; color: #a78bfa; }
-.emotion-chart-mini { width: 100%; height: 140px; flex: 1; }
+/* 核心情绪与动机拆解 - 情绪驾驶舱 */
+.emotion-cockpit { padding: 16px; }
+.emotion-summary {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    border-radius: 8px;
+}
+.emotion-summary strong {
+    color: #e2e8f0;
+    font-weight: 600;
+}
+.emotion-top-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1.4fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+.emotion-bottom-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 14px;
+}
+.emotion-panel {
+    background: rgba(15, 23, 42, 0.3);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
+}
+.emotion-panel-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.emotion-wordcloud-chart { width: 100%; height: 230px; flex: 1; }
+.emotion-relation-chart { width: 100%; height: 220px; flex: 1; }
+
+.emotion-ranking-item {
+    background: rgba(30, 34, 48, 0.35);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+.emotion-ranking-item:last-child { margin-bottom: 0; }
+.emotion-ranking-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.emotion-ranking-rank {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    background: rgba(99, 102, 241, 0.2);
+    color: #a78bfa;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+}
+.emotion-ranking-title {
+    font-size: 12px; font-weight: 600; color: #f8fafc;
+}
+.emotion-ranking-tags {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    margin-bottom: 6px;
+}
+.emotion-ranking-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+.emotion-ranking-tag.emotion { background: rgba(244, 114, 182, 0.12); color: #f472b6; }
+.emotion-ranking-tag.anxiety { background: rgba(96, 165, 250, 0.12); color: #60a5fa; }
+.emotion-ranking-tag.trigger { background: rgba(251, 191, 36, 0.12); color: #fbbf24; }
+.emotion-ranking-oneliner {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 1.45;
+}
+
+.emotion-insight-item {
+    background: rgba(30, 34, 48, 0.35);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+.emotion-insight-item:last-child { margin-bottom: 0; }
+.emotion-insight-title {
+    font-size: 12px; font-weight: 700; color: #f8fafc;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 5px;
+}
+.emotion-insight-content {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+
+.emotion-trend-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: rgba(30, 34, 48, 0.35);
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+.emotion-trend-item:last-child { margin-bottom: 0; }
+.emotion-trend-name { font-size: 12px; color: #e2e8f0; }
+.emotion-trend-change {
+    font-size: 11px; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 3px;
+}
 
 @media (max-width: 1200px) {
-  .emotion-grid { grid-template-columns: repeat(2, 1fr); }
-  .emotion-chart-mini { height: 150px; }
+  .emotion-top-grid { grid-template-columns: 1fr; }
+  .emotion-bottom-grid { grid-template-columns: 1fr; }
+  .emotion-wordcloud-chart { height: 180px; }
+  .emotion-relation-chart { height: 200px; }
 }
 
 @media (max-width: 640px) {
-  .emotion-grid { grid-template-columns: 1fr; }
+  .emotion-panel { min-height: auto; }
 }
 
 /* H5响应式适配 */
@@ -476,9 +598,33 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
       <div id="hot-tags-container"></div>
     </div>
     
-    <div class="glass-card">
+    <div class="glass-card emotion-cockpit">
       <div class="section-title"><i class="fas fa-brain" style="color:#a78bfa;"></i> 核心情绪与动机拆解 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
-      <div id="emotionChart" class="emotion-grid"></div>
+      <div class="emotion-summary" id="emotion-summary"></div>
+      <div class="emotion-top-grid">
+        <div class="emotion-panel">
+          <div class="emotion-panel-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 情绪热力 TOP8</div>
+          <div id="emotion-wordcloud-chart" class="emotion-wordcloud-chart"></div>
+        </div>
+        <div class="emotion-panel">
+          <div class="emotion-panel-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> TOP3 情绪典型剧目</div>
+          <div id="emotion-rankings-container"></div>
+        </div>
+        <div class="emotion-panel">
+          <div class="emotion-panel-title"><i class="fas fa-lightbulb" style="color:#34d399;"></i> 创作者行动建议</div>
+          <div id="emotion-insights-container"></div>
+        </div>
+      </div>
+      <div class="emotion-bottom-grid">
+        <div class="emotion-panel">
+          <div class="emotion-panel-title"><i class="fas fa-project-diagram" style="color:#60a5fa;"></i> 情绪-焦虑-触发关联</div>
+          <div id="emotion-relation-chart" class="emotion-relation-chart"></div>
+        </div>
+        <div class="emotion-panel">
+          <div class="emotion-panel-title"><i class="fas fa-chart-line" style="color:#fb7185;"></i> 环比趋势</div>
+          <div id="emotion-trends-container"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -615,39 +761,68 @@ const fallbackData = {
         ]
     },
     "emotional_analysis": {
-        "primary_emotions": [
-            { "name": "心理补偿", "value": 36 },
-            { "name": "强力宣泄", "value": 32 },
-            { "name": "身份逆袭", "value": 29 }
+        "summary": "今日榜单以都市复仇与甜宠逆袭为主，观众通过剧情实现情绪代偿。",
+        "dominant_emotion": "心理补偿",
+        "dominant_anxiety": "亲密关系失衡",
+        "top_trigger": "复仇打脸",
+        "wordcloud": [
+            { "name": "复仇打脸", "value": 28, "category": "trigger" },
+            { "name": "甜宠撒糖", "value": 22, "category": "trigger" },
+            { "name": "身份逆袭", "value": 20, "category": "emotion" },
+            { "name": "亲密关系失衡", "value": 19, "category": "anxiety" },
+            { "name": "职场受挫", "value": 16, "category": "payoff" },
+            { "name": "解压放空", "value": 15, "category": "motivation" },
+            { "name": "强女主", "value": 14, "category": "expectation" },
+            { "name": "萌宝助攻", "value": 12, "category": "trigger" }
         ],
-        "target_anxieties": [
-            { "name": "职场阶层固化", "value": 34 },
-            { "name": "经济匮乏", "value": 31 },
-            { "name": "亲密关系失衡", "value": 27 }
+        "emotion_rankings": [
+            {
+                "rank": 1,
+                "title": "我在八零年代当后妈",
+                "primary_emotion": "身份逆袭",
+                "anxiety": "家庭矛盾",
+                "trigger": "打脸极品亲戚",
+                "one_line": "用年代后妈身份逆袭，补偿家庭关系中的价值否定"
+            },
+            {
+                "rank": 2,
+                "title": "裴总每天都想父凭子贵",
+                "primary_emotion": "浪漫幻想",
+                "anxiety": "亲密关系失衡",
+                "trigger": "萌宝助攻",
+                "one_line": "通过萌宝与总裁追妻，补偿亲密关系中的安全感缺失"
+            },
+            {
+                "rank": 3,
+                "title": "离婚后，她带六宝惊艳全球",
+                "primary_emotion": "心理补偿",
+                "anxiety": "亲密关系失衡",
+                "trigger": "复仇打脸",
+                "one_line": "用带娃逆袭打脸前夫，补偿离婚后的价值否定"
+            }
         ],
-        "motivations": [
-            { "name": "解压放空", "value": 33 },
-            { "name": "情感代偿", "value": 28 },
-            { "name": "追更陪伴", "value": 22 },
-            { "name": "猎奇尝鲜", "value": 17 }
+        "trends": [
+            { "name": "复仇打脸", "change": 5, "trend": "up" },
+            { "name": "甜宠撒糖", "change": -3, "trend": "down" },
+            { "name": "萌宝助攻", "change": 4, "trend": "up" },
+            { "name": "身份逆袭", "change": 0, "trend": "same" }
         ],
-        "triggers": [
-            { "name": "甜宠撒糖", "value": 30 },
-            { "name": "复仇打脸", "value": 27 },
-            { "name": "身份揭晓", "value": 23 },
-            { "name": "高能悬念", "value": 20 }
-        ],
-        "expectations": [
-            { "name": "快节奏", "value": 32 },
-            { "name": "强女主", "value": 26 },
-            { "name": "智商在线", "value": 24 },
-            { "name": "反套路", "value": 18 }
-        ],
-        "payoff_scenarios": [
-            { "name": "职场受挫", "value": 31 },
-            { "name": "亲密关系", "value": 29 },
-            { "name": "经济压力", "value": 23 },
-            { "name": "家庭矛盾", "value": 17 }
+        "actionable_insights": [
+            {
+                "icon": "💡",
+                "title": "聚焦复仇逆袭情绪",
+                "content": "今日'复仇打脸'情绪显著上涨，新剧本前3秒建议直接展示冲突反转，提升素材CTR。"
+            },
+            {
+                "icon": "📈",
+                "title": "瞄准亲密关系焦虑",
+                "content": "观众对'亲密关系失衡'代偿需求强，投流文案可直接点出婚姻/情感痛点并展示反转爽点。"
+            },
+            {
+                "icon": "🎯",
+                "title": "复用萌宝助攻框架",
+                "content": "萌宝助攻题材热度上升，后续创作可延续'萌宝+总裁追妻'框架并做微创新。"
+            }
         ]
     },
     "platform": { "apps": [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}] },
@@ -724,39 +899,68 @@ const mockAudienceProfile = {
 };
 
 const mockEmotionalAnalysis = {
-    primary_emotions: [
-        { name: "心理补偿", value: 36 },
-        { name: "强力宣泄", value: 32 },
-        { name: "身份逆袭", value: 29 }
+    summary: "今日榜单以都市复仇与甜宠逆袭为主，观众通过剧情实现情绪代偿。",
+    dominant_emotion: "心理补偿",
+    dominant_anxiety: "亲密关系失衡",
+    top_trigger: "复仇打脸",
+    wordcloud: [
+        { name: "复仇打脸", value: 28, category: "trigger" },
+        { name: "甜宠撒糖", value: 22, category: "trigger" },
+        { name: "身份逆袭", value: 20, category: "emotion" },
+        { name: "亲密关系失衡", value: 19, category: "anxiety" },
+        { name: "职场受挫", value: 16, category: "payoff" },
+        { name: "解压放空", value: 15, category: "motivation" },
+        { name: "强女主", value: 14, category: "expectation" },
+        { name: "萌宝助攻", value: 12, category: "trigger" }
     ],
-    target_anxieties: [
-        { name: "职场阶层固化", value: 34 },
-        { name: "经济匮乏", value: 31 },
-        { name: "亲密关系失衡", value: 27 }
+    emotion_rankings: [
+        {
+            rank: 1,
+            title: "我在八零年代当后妈",
+            primary_emotion: "身份逆袭",
+            anxiety: "家庭矛盾",
+            trigger: "打脸极品亲戚",
+            one_line: "用年代后妈身份逆袭，补偿家庭关系中的价值否定"
+        },
+        {
+            rank: 2,
+            title: "裴总每天都想父凭子贵",
+            primary_emotion: "浪漫幻想",
+            anxiety: "亲密关系失衡",
+            trigger: "萌宝助攻",
+            one_line: "通过萌宝与总裁追妻，补偿亲密关系中的安全感缺失"
+        },
+        {
+            rank: 3,
+            title: "离婚后，她带六宝惊艳全球",
+            primary_emotion: "心理补偿",
+            anxiety: "亲密关系失衡",
+            trigger: "复仇打脸",
+            one_line: "用带娃逆袭打脸前夫，补偿离婚后的价值否定"
+        }
     ],
-    motivations: [
-        { name: "解压放空", value: 33 },
-        { name: "情感代偿", value: 28 },
-        { name: "追更陪伴", value: 22 },
-        { name: "猎奇尝鲜", value: 17 }
+    trends: [
+        { name: "复仇打脸", change: 5, trend: "up" },
+        { name: "甜宠撒糖", change: -3, trend: "down" },
+        { name: "萌宝助攻", change: 4, trend: "up" },
+        { name: "身份逆袭", change: 0, trend: "same" }
     ],
-    triggers: [
-        { name: "甜宠撒糖", value: 30 },
-        { name: "复仇打脸", value: 27 },
-        { name: "身份揭晓", value: 23 },
-        { name: "高能悬念", value: 20 }
-    ],
-    expectations: [
-        { name: "快节奏", value: 32 },
-        { name: "强女主", value: 26 },
-        { name: "智商在线", value: 24 },
-        { name: "反套路", value: 18 }
-    ],
-    payoff_scenarios: [
-        { name: "职场受挫", value: 31 },
-        { name: "亲密关系", value: 29 },
-        { name: "经济压力", value: 23 },
-        { name: "家庭矛盾", value: 17 }
+    actionable_insights: [
+        {
+            icon: "💡",
+            title: "聚焦复仇逆袭情绪",
+            content: "今日'复仇打脸'情绪显著上涨，新剧本前3秒建议直接展示冲突反转，提升素材CTR。"
+        },
+        {
+            icon: "📈",
+            title: "瞄准亲密关系焦虑",
+            content: "观众对'亲密关系失衡'代偿需求强，投流文案可直接点出婚姻/情感痛点并展示反转爽点。"
+        },
+        {
+            icon: "🎯",
+            title: "复用萌宝助攻框架",
+            content: "萌宝助攻题材热度上升，后续创作可延续'萌宝+总裁追妻'框架并做微创新。"
+        }
     ]
 };
 
@@ -994,25 +1198,83 @@ function normalizeEmotionMetric(item, fallback) {
 
 function normalizeEmotionalAnalysis(rawAnalysis) {
     const source = rawAnalysis && typeof rawAnalysis === 'object' ? rawAnalysis : {};
-    const normalizeList = (list, fallbackList) => {
-        const sourceList = Array.isArray(list) ? list : [];
-        const normalized = sourceList
+
+    // 兼容旧结构：如果只有 primary_emotions 等旧字段，简单转换
+    if (!source.wordcloud && Array.isArray(source.primary_emotions)) {
+        const oldToCloud = (list, category) => (Array.isArray(list) ? list : [])
+            .filter(item => item && typeof item === 'object' && (item.name || item.label))
+            .map(item => ({ name: item.name || item.label, value: safePercent(item.value, 0), category }));
+        const wordcloud = [
+            ...oldToCloud(source.primary_emotions, 'emotion'),
+            ...oldToCloud(source.target_anxieties, 'anxiety'),
+            ...oldToCloud(source.motivations, 'motivation'),
+            ...oldToCloud(source.triggers, 'trigger'),
+            ...oldToCloud(source.expectations, 'expectation'),
+            ...oldToCloud(source.payoff_scenarios, 'payoff')
+        ].slice(0, 12);
+        return { ...mockEmotionalAnalysis, wordcloud };
+    }
+
+    const normalizeWordcloud = (list) => {
+        if (!Array.isArray(list) || list.length === 0) return mockEmotionalAnalysis.wordcloud;
+        return list
+            .filter(item => item && typeof item === 'object' && (item.name || item.label))
+            .map(item => ({
+                name: String(item.name || item.label),
+                value: Math.max(0, Math.min(100, safePercent(item.value, 0))),
+                category: String(item.category || 'emotion')
+            }))
+            .slice(0, 12);
+    };
+
+    const normalizeRankings = (list) => {
+        if (!Array.isArray(list) || list.length === 0) return mockEmotionalAnalysis.emotion_rankings;
+        return list
+            .filter(item => item && typeof item === 'object' && item.title)
+            .map(item => ({
+                rank: safePercent(item.rank, 0),
+                title: String(item.title),
+                primary_emotion: String(item.primary_emotion || item.emotion || '心理补偿'),
+                anxiety: String(item.anxiety || '亲密关系失衡'),
+                trigger: String(item.trigger || '复仇打脸'),
+                one_line: String(item.one_line || item.one_line_insight || '')
+            }))
+            .slice(0, 3);
+    };
+
+    const normalizeTrends = (list) => {
+        if (!Array.isArray(list) || list.length === 0) return mockEmotionalAnalysis.trends;
+        return list
+            .filter(item => item && typeof item === 'object' && item.name)
+            .map(item => ({
+                name: String(item.name),
+                change: safePercent(item.change, 0),
+                trend: String(item.trend || 'same')
+            }))
+            .slice(0, 6);
+    };
+
+    const normalizeInsights = (list) => {
+        if (!Array.isArray(list) || list.length === 0) return mockEmotionalAnalysis.actionable_insights;
+        return list
             .filter(item => item && typeof item === 'object')
-            .map(item => normalizeEmotionMetric(item, { name: '', value: 0 }))
-            .filter(item => item.name);
-        if (normalized.length === 0) {
-            return fallbackList.map((fallback, index) => normalizeEmotionMetric(sourceList[index], fallback));
-        }
-        return normalized.slice(0, fallbackList.length);
+            .map(item => ({
+                icon: String(item.icon || '💡'),
+                title: String(item.title || '创作建议'),
+                content: String(item.content || item.desc || '')
+            }))
+            .slice(0, 3);
     };
 
     return {
-        primary_emotions: normalizeList(source.primary_emotions, mockEmotionalAnalysis.primary_emotions),
-        target_anxieties: normalizeList(source.target_anxieties, mockEmotionalAnalysis.target_anxieties),
-        motivations: normalizeList(source.motivations, mockEmotionalAnalysis.motivations),
-        triggers: normalizeList(source.triggers, mockEmotionalAnalysis.triggers),
-        expectations: normalizeList(source.expectations, mockEmotionalAnalysis.expectations),
-        payoff_scenarios: normalizeList(source.payoff_scenarios, mockEmotionalAnalysis.payoff_scenarios)
+        summary: String(source.summary || mockEmotionalAnalysis.summary),
+        dominant_emotion: String(source.dominant_emotion || mockEmotionalAnalysis.dominant_emotion),
+        dominant_anxiety: String(source.dominant_anxiety || mockEmotionalAnalysis.dominant_anxiety),
+        top_trigger: String(source.top_trigger || mockEmotionalAnalysis.top_trigger),
+        wordcloud: normalizeWordcloud(source.wordcloud),
+        emotion_rankings: normalizeRankings(source.emotion_rankings),
+        trends: normalizeTrends(source.trends),
+        actionable_insights: normalizeInsights(source.actionable_insights)
     };
 }
 
@@ -1031,74 +1293,160 @@ function escapeAttribute(value) {
 }
 
 function renderEmotionChart(rawAnalysis) {
-    const container = document.getElementById('emotionChart');
-    if (!container) return;
+    const summaryEl = document.getElementById('emotion-summary');
+    const rankingsContainer = document.getElementById('emotion-rankings-container');
+    const insightsContainer = document.getElementById('emotion-insights-container');
+    const trendsContainer = document.getElementById('emotion-trends-container');
 
     const analysis = normalizeEmotionalAnalysis(rawAnalysis);
+
+    // 总览摘要
+    if (summaryEl) {
+        summaryEl.innerHTML = `<strong>今日洞察：</strong>${escapeHtml(analysis.summary)} <span style="color:#a78bfa;margin-left:8px;">主导情绪：${escapeHtml(analysis.dominant_emotion)}</span> · <span style="color:#60a5fa;">主导焦虑：${escapeHtml(analysis.dominant_anxiety)}</span> · <span style="color:#fbbf24;">TOP触发：${escapeHtml(analysis.top_trigger)}</span>`;
+    }
+
+    // TOP3 情绪典型剧目
+    if (rankingsContainer) {
+        rankingsContainer.innerHTML = analysis.emotion_rankings.map(item => `
+            <div class="emotion-ranking-item">
+                <div class="emotion-ranking-header">
+                    <span class="emotion-ranking-rank">${item.rank}</span>
+                    <span class="emotion-ranking-title">${escapeHtml(item.title)}</span>
+                </div>
+                <div class="emotion-ranking-tags">
+                    <span class="emotion-ranking-tag emotion">${escapeHtml(item.primary_emotion)}</span>
+                    <span class="emotion-ranking-tag anxiety">${escapeHtml(item.anxiety)}</span>
+                    <span class="emotion-ranking-tag trigger">${escapeHtml(item.trigger)}</span>
+                </div>
+                <div class="emotion-ranking-oneliner">${escapeHtml(item.one_line)}</div>
+            </div>
+        `).join('');
+    }
+
+    // 行动建议
+    if (insightsContainer) {
+        insightsContainer.innerHTML = analysis.actionable_insights.map(item => `
+            <div class="emotion-insight-item">
+                <div class="emotion-insight-title">${item.icon} ${escapeHtml(item.title)}</div>
+                <div class="emotion-insight-content">${escapeHtml(item.content)}</div>
+            </div>
+        `).join('');
+    }
+
+    // 环比趋势
+    if (trendsContainer) {
+        trendsContainer.innerHTML = analysis.trends.map(item => {
+            let changeHtml = '';
+            const t = String(item.trend).toLowerCase();
+            if (t === 'new') changeHtml = '<span class="emotion-trend-change trend-new">🔥 新晋</span>';
+            else if (t === 'up') changeHtml = `<span class="emotion-trend-change trend-up">↑${item.change}</span>`;
+            else if (t === 'down') changeHtml = `<span class="emotion-trend-change trend-down">↓${Math.abs(item.change)}</span>`;
+            else changeHtml = '<span class="emotion-trend-change trend-same">-</span>';
+            return `
+                <div class="emotion-trend-item">
+                    <span class="emotion-trend-name">${escapeHtml(item.name)}</span>
+                    ${changeHtml}
+                </div>
+            `;
+        }).join('');
+    }
+
     if (!window.echarts) {
-        container.innerHTML = '<div style="color:#64748b; font-size:12px; padding:24px;">ECharts未加载</div>';
+        console.warn('ECharts未加载，跳过情绪图表渲染');
         return;
     }
 
     // 清理旧实例
-    if (window.emotionChartInstances) {
-        window.emotionChartInstances.forEach(inst => inst.dispose());
-    }
-    window.emotionChartInstances = [];
-    container.innerHTML = '';
+    ['emotionWordcloudChartInstance', 'emotionRelationChartInstance'].forEach(key => {
+        if (window[key]) { window[key].dispose(); window[key] = null; }
+    });
 
-    const dimensions = [
-        { key: 'primary_emotions', title: '情绪驱动', icon: 'fa-heart', color: '#f472b6' },
-        { key: 'target_anxieties', title: '现实焦虑', icon: 'fa-bolt', color: '#60a5fa' },
-        { key: 'motivations', title: '观看动机', icon: 'fa-eye', color: '#a78bfa' },
-        { key: 'triggers', title: '剧情触发点', icon: 'fa-fire', color: '#fbbf24' },
-        { key: 'expectations', title: '内容期待', icon: 'fa-star', color: '#34d399' },
-        { key: 'payoff_scenarios', title: '代偿场景', icon: 'fa-masks-theater', color: '#fb7185' }
-    ];
+    // 颜色映射
+    const categoryColors = {
+        emotion: '#f472b6',
+        anxiety: '#60a5fa',
+        trigger: '#fbbf24',
+        payoff: '#fb7185',
+        expectation: '#34d399',
+        motivation: '#a78bfa'
+    };
 
-    dimensions.forEach(dim => {
-        const data = analysis[dim.key] || [];
-        if (!data.length) return;
-
-        const card = document.createElement('div');
-        card.className = 'emotion-card-mini';
-        card.innerHTML = `
-            <div class="emotion-card-title"><i class="fas ${dim.icon}" style="color:${dim.color};"></i> ${escapeHtml(dim.title)}</div>
-            <div class="emotion-chart-mini" id="emotion-chart-${dim.key}"></div>
-        `;
-        container.appendChild(card);
-
-        const chartDom = card.querySelector('.emotion-chart-mini');
-        const chart = echarts.init(chartDom, 'dark');
-        window.emotionChartInstances.push(chart);
-
-        chart.setOption({
+    // 1. 情绪热力 TOP8 横向条形图
+    const wordcloudEl = document.getElementById('emotion-wordcloud-chart');
+    if (wordcloudEl) {
+        const wordData = analysis.wordcloud.slice(0, 8);
+        window.emotionWordcloudChartInstance = echarts.init(wordcloudEl, 'dark');
+        window.emotionWordcloudChartInstance.setOption({
             backgroundColor: 'transparent',
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}' },
-            grid: { left: 4, right: 28, top: 4, bottom: 4 },
+            grid: { left: 4, right: 32, top: 4, bottom: 4 },
             xAxis: { type: 'value', splitLine: { show: false }, axisLabel: { show: false } },
             yAxis: {
                 type: 'category',
-                data: [...data].reverse().map(item => item.name),
+                data: [...wordData].reverse().map(item => item.name),
                 axisLine: { show: false },
                 axisTick: { show: false },
                 axisLabel: { color: '#cbd5e1', fontSize: 10 }
             },
             series: [{
                 type: 'bar',
-                barWidth: 10,
-                data: [...data].reverse().map(item => item.value),
-                itemStyle: {
-                    borderRadius: [0, 5, 5, 0],
-                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                        { offset: 0, color: dim.color },
-                        { offset: 1, color: adjustColorOpacity(dim.color, 0.6) }
-                    ])
-                },
+                barWidth: 12,
+                data: [...wordData].reverse().map(item => ({
+                    value: item.value,
+                    itemStyle: {
+                        borderRadius: [0, 5, 5, 0],
+                        color: categoryColors[item.category] || '#a78bfa'
+                    }
+                })),
                 label: { show: true, position: 'right', color: '#94a3b8', fontSize: 9, formatter: '{c}' }
             }]
         });
-    });
+    }
+
+    // 2. 情绪-焦虑-触发关联图
+    const relationEl = document.getElementById('emotion-relation-chart');
+    if (relationEl) {
+        const nodes = [];
+        const links = [];
+        const addedNodes = new Set();
+        const addNode = (name, category) => {
+            if (!name || addedNodes.has(name)) return;
+            addedNodes.add(name);
+            nodes.push({ name, category, itemStyle: { color: categoryColors[category] || '#94a3b8' } });
+        };
+
+        // 核心节点
+        addNode(analysis.dominant_emotion, 'emotion');
+        addNode(analysis.dominant_anxiety, 'anxiety');
+        addNode(analysis.top_trigger, 'trigger');
+
+        // 从 TOP3 剧目建立关联
+        analysis.emotion_rankings.forEach(item => {
+            addNode(item.primary_emotion, 'emotion');
+            addNode(item.anxiety, 'anxiety');
+            addNode(item.trigger, 'trigger');
+            links.push({ source: item.anxiety, target: item.primary_emotion, value: 2 });
+            links.push({ source: item.primary_emotion, target: item.trigger, value: 2 });
+        });
+
+        window.emotionRelationChartInstance = echarts.init(relationEl, 'dark');
+        window.emotionRelationChartInstance.setOption({
+            backgroundColor: 'transparent',
+            tooltip: { formatter: '{b}' },
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                roam: false,
+                label: { show: true, color: '#e2e8f0', fontSize: 10 },
+                edgeSymbol: ['none', 'arrow'],
+                edgeSymbolSize: [0, 6],
+                data: nodes,
+                links: links,
+                force: { repulsion: 180, edgeLength: [40, 90] },
+                lineStyle: { color: 'rgba(148, 163, 184, 0.35)', curveness: 0.2 }
+            }]
+        });
+    }
 }
 
 // 辅助：把 #rrggbb 转成 rgba
@@ -1395,9 +1743,8 @@ window.addEventListener('resize', () => {
     if (window.regionChartInstance) window.regionChartInstance.resize();
     if (window.contentChartInstance) window.contentChartInstance.resize();
     if (window.viewingTimeChartInstance) window.viewingTimeChartInstance.resize();
-    if (Array.isArray(window.emotionChartInstances)) {
-        window.emotionChartInstances.forEach(inst => inst.resize());
-    }
+    if (window.emotionWordcloudChartInstance) window.emotionWordcloudChartInstance.resize();
+    if (window.emotionRelationChartInstance) window.emotionRelationChartInstance.resize();
 });
 </script>
 </body>

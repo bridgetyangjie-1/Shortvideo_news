@@ -149,11 +149,14 @@ search_node
                             ↓
                     genre_distribution_node
                             ↓
-                       insights_node
-                            ↓
-                       history_data_node
-                            ↓
-                         push_node → END
+              ┌──── emotion_analysis_node
+              │
+              ↓
+            insights_node
+              ↓
+        history_data_node
+              ↓
+            push_node → END
 ```
 
 - `news_node` 与 `process_node` 在 `search_node` 后并行。
@@ -173,6 +176,7 @@ search_node
 | `industry_node` | `industry_node.py` | 搜索行业宏观数据，输出 IndustryData + PlatformData | 是（Kimi） |
 | `audience_profile_node` | `audience_profile_node.py` | 基于当日榜单反推受众画像：性别/年龄/地域/题材偏好/观看时段/付费能力/用户分层 | 是（DeepSeek） |
 | `genre_distribution_node` | `genre_distribution_node.py` | 近7天榜单加权聚合标签频次，按题材/人设/爽点/情感/时代分类，并计算标签环比趋势 | 否 |
+| `emotion_analysis_node` | `emotion_analysis_node.py` | 基于当日榜单规则化统计情绪维度，DeepSeek 提炼总览、TOP3 情绪剧目与行动建议 | 是（DeepSeek） |
 | `insights_node` | `insights_node.py` | Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察 | 是（Kimi+DeepSeek） |
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
 | `history_data_node` | `history_data_node.py` | 生成播放趋势、周榜历史、排名变化 | 否 |
@@ -210,13 +214,14 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 1. **search_node**：抓取红果官网 100 条 + DataEye 30 条交叉验证，生成融合榜单；再用 Kimi 搜索 1 次行业宏观数据。
 2. **news_node**：并行运行，Kimi 搜索 3 组新闻 → DeepSeek 生成 ≤6 条快讯。
 3. **process_node**：优先解析红果直接爬取数据，转换为标准榜单；无数据时用 Kimi 从搜索结果提取。
-4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整 JSON（含 emotional_analysis：情绪驱动/现实焦虑/观看动机/剧情触发点/内容期待/代偿场景六维拆解）。
+4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整榜单 JSON。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；不足时用 DeepSeek 兜底。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
 7. **audience_profile_node**：用 DeepSeek 基于当日榜单反推受众画像，输出性别、年龄、地域、题材偏好、观看时段、付费能力、用户分层。
 8. **genre_distribution_node**：读取近7天历史榜单加权聚合标签（今日权重最高），按本地 taxonomy 分为题材/人设/爽点/情感关系/时代背景等类别，并计算较昨日的 `trending` 趋势。
-9. **insights_node**：Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察。
-10. **history_data_node**：更新 `assets/history_data.json`，生成播放趋势、周榜、排名变化。
+9. **emotion_analysis_node**：基于 `enriched_rankings` 规则化映射题材/标签到情绪、焦虑、触发点等维度，加权统计后调用 DeepSeek 生成总览摘要、TOP3 情绪剧目、行动建议与环比趋势。
+10. **insights_node**：Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察。
+11. **history_data_node**：更新 `assets/history_data.json`，生成播放趋势、周榜、排名变化。
 11. **push_node**：输出 `latest.json`（TOP20）、`latest_full.json`（全量）、`assets/data/history/YYYY-MM-DD.json`、`assets/data/all_history.json`。
 
 ## 8. 编码规范
@@ -406,6 +411,7 @@ python -m unittest tests.test_ranking_quality
 | 2026-06-12 | `enrich_node`：优先本地缓存，缓存 miss 时批量补充 |
 | 2026-06-12 | `history_data_node`：计算排名变化（new/up/down/same） |
 | 2026-06-12 | `push_node`：输出 statistics/trends/anomalies 统计信息 |
+| 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端改为词云+TOP3剧目+行动建议+关联图+环比趋势 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |

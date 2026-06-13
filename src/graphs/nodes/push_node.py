@@ -23,6 +23,7 @@ from graphs.state import (
     DailyNews,
     AudienceProfile,
     GenreDistribution,
+    EmotionalAnalysis,
     PlayTrend,
     OverviewStats,
 )
@@ -234,6 +235,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "generated_at": generated_at,
         "data_date": data_date,
         "genre_distribution": state.genre_distribution.model_dump() if state.genre_distribution else {},
+        "emotional_analysis": state.emotional_analysis.model_dump() if state.emotional_analysis else {},
         "industry": state.industry.model_dump() if state.industry else {},
         "rankings": [r.model_dump() for r in top20_rankings],
         "actors": state.actors.model_dump() if state.actors else {"female": [], "male": []},
@@ -257,6 +259,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "generated_at": generated_at,
         "data_date": data_date,
         "genre_distribution": state.genre_distribution.model_dump() if state.genre_distribution else {},
+        "emotional_analysis": state.emotional_analysis.model_dump() if state.emotional_analysis else {},
         "industry": state.industry.model_dump() if state.industry else {},
         "rankings": [r.model_dump() for r in full_rankings],
         "rankings_count": len(full_rankings),
@@ -319,6 +322,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         insights=state.insights,
         audience_profile=state.audience_profile,
         genre_distribution=state.genre_distribution,
+        emotional_analysis=state.emotional_analysis,
         play_trend=state.play_trend,
         quality_score=state.quality_score or 60.0,
         error_message=(state.error_message or "") + (("\n".join(error_messages) + "\n") if error_messages else "")
