@@ -257,9 +257,31 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
 /* 近一周热门标签 */
 .sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
-.hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.tag-pill { background: #2d3436; color: #dfe6e9; padding: 4px 10px; border-radius: 16px; font-size: 12px; border: 1px solid #636e72; display: inline-flex; align-items: center; gap: 4px; }
-.tag-value { color: #74b9ff; font-weight: bold; }
+.hot-tags-layout { display: flex; flex-direction: column; gap: 14px; }
+.hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-pill { background: rgba(30, 34, 48, 0.6); color: #e2e8f0; padding: 4px 10px; border-radius: 16px; font-size: 12px; border: 1px solid rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; }
+.tag-pill:hover { background: rgba(99, 102, 241, 0.18); border-color: rgba(129, 140, 248, 0.45); transform: translateY(-1px); }
+.tag-value { color: #818cf8; font-weight: 700; }
+
+.tag-category-title { font-size: 12px; font-weight: 700; margin-bottom: 7px; display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 6px; width: fit-content; }
+.tag-category-title.theme { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
+.tag-category-title.role { background: rgba(244, 114, 182, 0.12); color: #f472b6; }
+.tag-category-title.hook { background: rgba(251, 191, 36, 0.12); color: #fbbf24; }
+.tag-category-title.emotion { background: rgba(167, 139, 250, 0.12); color: #a78bfa; }
+.tag-category-title.era { background: rgba(34, 197, 94, 0.12); color: #4ade80; }
+.tag-category-title.other { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
+
+.tag-trending-list { display: flex; flex-direction: column; gap: 8px; }
+.tag-trend-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; background: rgba(30, 34, 48, 0.35); border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); }
+.tag-trend-left { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #e2e8f0; }
+.tag-trend-rank { width: 18px; height: 18px; border-radius: 4px; background: rgba(51,65,85,0.5); color: #94a3b8; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.tag-trend-change { font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; }
+.trend-up { color: #fbbf24; }
+.trend-down { color: #fb7185; }
+.trend-new { color: #4ade80; }
+.trend-same { color: #64748b; }
+
+.tag-summary { font-size: 11px; color: #64748b; margin-top: 2px; }
 
 /* 核心观众画像 */
 .audience-layout { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
@@ -491,9 +513,29 @@ const fallbackData = {
     },
     "genre_distribution": {
         "hot_tags": [
-            { "name": "穿越年代", "value": 1 },
-            { "name": "带球跑", "value": 2 },
-            { "name": "总裁追妻", "value": 1 }
+            { "name": "打脸虐渣", "value": 10 },
+            { "name": "都市爱情", "value": 6 },
+            { "name": "现代", "value": 5 },
+            { "name": "总裁", "value": 4 },
+            { "name": "逆袭", "value": 4 },
+            { "name": "都市日常", "value": 4 },
+            { "name": "逆袭打脸", "value": 3 },
+            { "name": "闪婚", "value": 3 },
+            { "name": "古代", "value": 2 },
+            { "name": "古风爱情", "value": 2 }
+        ],
+        "categories": [
+            { "category": "爽点", "tags": [{ "name": "打脸虐渣", "value": 10 }, { "name": "逆袭", "value": 4 }, { "name": "逆袭打脸", "value": 3 }] },
+            { "category": "题材", "tags": [{ "name": "都市爱情", "value": 6 }, { "name": "都市日常", "value": 4 }, { "name": "古风爱情", "value": 2 }] },
+            { "category": "时代背景", "tags": [{ "name": "现代", "value": 5 }, { "name": "古代", "value": 2 }] },
+            { "category": "人设", "tags": [{ "name": "总裁", "value": 4 }] },
+            { "category": "情感关系", "tags": [{ "name": "闪婚", "value": 3 }] }
+        ],
+        "trending": [
+            { "name": "打脸虐渣", "value": 10, "change": 3, "trend": "up" },
+            { "name": "都市爱情", "value": 6, "change": 0, "trend": "same" },
+            { "name": "闪婚", "value": 3, "change": 2, "trend": "new" },
+            { "name": "古风爱情", "value": 2, "change": -1, "trend": "down" }
         ]
     },
     "audience_profile": {
@@ -812,6 +854,84 @@ function renderEmotionChart(rawAnalysis) {
     });
 }
 
+// 渲染近一周热门标签（分类 + 趋势）
+function renderHotTags(genreDistribution) {
+    const container = document.getElementById('hot-tags-container');
+    if (!container) return;
+
+    const gd = genreDistribution || {};
+    const categories = Array.isArray(gd.categories) && gd.categories.length > 0
+        ? gd.categories
+        : (Array.isArray(gd.hot_tags) && gd.hot_tags.length > 0
+            ? [{ category: '热门标签', tags: gd.hot_tags }]
+            : []);
+    const trending = Array.isArray(gd.trending) ? gd.trending : [];
+
+    if (!categories.length && !trending.length) {
+        container.innerHTML = '<div style="color:#64748b; font-size:12px; padding:12px 0;">热门标签数据待补充</div>';
+        return;
+    }
+
+    const categoryClassMap = {
+        '题材': 'theme',
+        '人设': 'role',
+        '爽点': 'hook',
+        '情感关系': 'emotion',
+        '时代背景': 'era',
+        '其他': 'other'
+    };
+
+    let html = '<div class="hot-tags-layout">';
+
+    // 分类标签云
+    categories.forEach(cat => {
+        const cls = categoryClassMap[cat.category] || 'other';
+        const tags = (cat.tags || []).slice(0, 8);
+        if (!tags.length) return;
+        const pills = tags.map(t => {
+            const name = escapeHtml(typeof t.name === 'string' ? t.name : '');
+            const value = Number.isInteger(t.value) ? t.value : parseInt(t.value, 10) || 0;
+            return `<span class="tag-pill"><span>${name}</span><span class="tag-value">${value}</span></span>`;
+        }).join('');
+        html += `
+            <div>
+                <div class="tag-category-title ${cls}">${escapeHtml(cat.category)}</div>
+                <div class="hot-tags-cloud">${pills}</div>
+            </div>
+        `;
+    });
+
+    // 趋势榜
+    if (trending.length > 0) {
+        html += '<div><div class="tag-category-title other"><i class="fas fa-fire"></i> 标签异动</div><div class="tag-trending-list">';
+        trending.forEach((t, idx) => {
+            const name = escapeHtml(typeof t.name === 'string' ? t.name : '');
+            const value = Number.isInteger(t.value) ? t.value : parseInt(t.value, 10) || 0;
+            const change = Number.isInteger(t.change) ? t.change : parseInt(t.change, 10) || 0;
+            const trend = String(t.trend || 'same').toLowerCase();
+            let changeHtml = '';
+            if (trend === 'new') changeHtml = '<span class="tag-trend-change trend-new">🔥 新晋</span>';
+            else if (trend === 'up') changeHtml = `<span class="tag-trend-change trend-up">↑${change}</span>`;
+            else if (trend === 'down') changeHtml = `<span class="tag-trend-change trend-down">↓${Math.abs(change)}</span>`;
+            else changeHtml = '<span class="tag-trend-change trend-same">-</span>';
+            html += `
+                <div class="tag-trend-item">
+                    <div class="tag-trend-left">
+                        <span class="tag-trend-rank">${idx + 1}</span>
+                        <span>${name}</span>
+                        <span class="tag-value">${value}</span>
+                    </div>
+                    ${changeHtml}
+                </div>
+            `;
+        });
+        html += '</div></div>';
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+}
+
 // 渲染榜单：表格平铺 TOP20，固定高度滚动
 function renderRankings(rankings) {
     const container = document.getElementById('rankings-container');
@@ -972,32 +1092,7 @@ async function renderDashboard(dateParam = null) {
     document.getElementById('actors-male-container').innerHTML = (data.actors?.male || []).slice(0, 5).map(a => renderActor(a, 'male')).join('');
 
     // 近一周热门标签
-    const hotTagsContainer = document.getElementById('hot-tags-container');
-    if (hotTagsContainer) {
-        hotTagsContainer.textContent = '';
-        const hotTags = Array.isArray(data.genre_distribution?.hot_tags) ? data.genre_distribution.hot_tags : [];
-
-        if (hotTags.length > 0) {
-            hotTags.forEach((tag) => {
-                const tagName = typeof tag.name === 'string' ? tag.name.trim() : '';
-                const tagValue = Number.isInteger(tag.value) ? tag.value : parseInt(tag.value, 10);
-                if (!tagName || !Number.isFinite(tagValue)) return;
-
-                const pill = document.createElement('span');
-                pill.className = 'tag-pill';
-                pill.innerHTML = `<span>${tagName}</span><span class="tag-value">${tagValue}</span>`;
-                hotTagsContainer.appendChild(pill);
-            });
-        }
-
-        if (!hotTagsContainer.children.length) {
-            const emptyText = document.createElement('span');
-            emptyText.style.color = '#64748b';
-            emptyText.style.fontSize = '12px';
-            emptyText.textContent = '热门标签数据待补充';
-            hotTagsContainer.appendChild(emptyText);
-        }
-    }
+    renderHotTags(data.genre_distribution);
 
     // 观众画像
     renderAudienceProfile(data.audience_profile);

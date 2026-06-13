@@ -172,7 +172,7 @@ search_node
 | `actor_ranking_node` | `actor_ranking_node.py` | 从 enriched_rankings 统计演员频次，生成女频/男频 TOP10 | 否 / DeepSeek 兜底 |
 | `industry_node` | `industry_node.py` | 搜索行业宏观数据，输出 IndustryData + PlatformData | 是（Kimi） |
 | `audience_profile_node` | `audience_profile_node.py` | 基于当日榜单反推受众画像 | 是（DeepSeek） |
-| `genre_distribution_node` | `genre_distribution_node.py` | 本地统计 genre/tags/core_trope 标签频次 | 否 |
+| `genre_distribution_node` | `genre_distribution_node.py` | 近7天榜单加权聚合标签频次，按题材/人设/爽点/情感/时代分类，并计算标签环比趋势 | 否 |
 | `insights_node` | `insights_node.py` | Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察 | 是（Kimi+DeepSeek） |
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
 | `history_data_node` | `history_data_node.py` | 生成播放趋势、周榜历史、排名变化 | 否 |
@@ -214,7 +214,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；不足时用 DeepSeek 兜底。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
 7. **audience_profile_node**：用 DeepSeek 基于当日榜单反推受众画像。
-8. **genre_distribution_node**：本地统计标签频次，输出 hot_tags。
+8. **genre_distribution_node**：读取近7天历史榜单加权聚合标签（今日权重最高），按本地 taxonomy 分为题材/人设/爽点/情感关系/时代背景等类别，并计算较昨日的 `trending` 趋势。
 9. **insights_node**：Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察。
 10. **history_data_node**：更新 `assets/history_data.json`，生成播放趋势、周榜、排名变化。
 11. **push_node**：输出 `latest.json`（TOP20）、`latest_full.json`（全量）、`assets/data/history/YYYY-MM-DD.json`、`assets/data/all_history.json`。
@@ -322,7 +322,7 @@ python -m unittest tests.test_ranking_quality
 | `rankings` | `List[DramaRanking]` | TOP20 短剧榜单 |
 | `daily_news` | `List[DailyNews]` | 6 条快讯 |
 | `insights` | `List[Insight]` | 具体行业事件，必须含真实数据 |
-| `genre_distribution` | `GenreDistribution` | 题材分布和标签热度 |
+| `genre_distribution` | `GenreDistribution` | 题材分布、标签热度、分类标签、标签趋势 |
 | `actors` | `ActorRanking` | 女频/男频演员榜 |
 | `industry` | `IndustryData` | APP 月活、AI 短剧渗透率、剧集总量等 |
 | `audience_profile` | `AudienceProfile` | 性别、年龄、地域画像 |
