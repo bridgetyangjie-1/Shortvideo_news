@@ -88,7 +88,8 @@
     "2026-06-09",
     "2026-06-10",
     "2026-06-11",
-    "2026-06-12"
+    "2026-06-12",
+    "2026-06-13"
   ],
   "last_updated": "2026-06-09 11:40:31",
   "data": {
@@ -1704,6 +1705,1608 @@
       ],
       "quality_score": 85.0,
       "error_message": ""
+    },
+    "2026-06-13": {
+      "success": true,
+      "generated_at": "2026-06-13T06:30:14+08:00",
+      "data_date": "2026-06-13",
+      "genre_distribution": {
+        "hot_tags": [
+          {
+            "name": "打脸虐渣",
+            "value": 235
+          },
+          {
+            "name": "现代",
+            "value": 163
+          },
+          {
+            "name": "都市",
+            "value": 136
+          },
+          {
+            "name": "都市爱情",
+            "value": 120
+          },
+          {
+            "name": "逆袭",
+            "value": 109
+          },
+          {
+            "name": "总裁",
+            "value": 108
+          },
+          {
+            "name": "重生",
+            "value": 102
+          },
+          {
+            "name": "都市日常",
+            "value": 80
+          },
+          {
+            "name": "日久生情",
+            "value": 61
+          },
+          {
+            "name": "甜宠",
+            "value": 55
+          },
+          {
+            "name": "宅斗",
+            "value": 54
+          },
+          {
+            "name": "复仇",
+            "value": 52
+          },
+          {
+            "name": "穿越",
+            "value": 52
+          },
+          {
+            "name": "重生复仇",
+            "value": 51
+          },
+          {
+            "name": "霸总",
+            "value": 48
+          },
+          {
+            "name": "逆袭打脸",
+            "value": 46
+          },
+          {
+            "name": "古代",
+            "value": 40
+          },
+          {
+            "name": "古风爱情",
+            "value": 40
+          },
+          {
+            "name": "大男主",
+            "value": 40
+          },
+          {
+            "name": "闪婚",
+            "value": 39
+          }
+        ],
+        "categories": [
+          {
+            "category": "题材",
+            "tags": [
+              {
+                "name": "都市",
+                "value": 136
+              },
+              {
+                "name": "都市爱情",
+                "value": 120
+              },
+              {
+                "name": "逆袭",
+                "value": 109
+              },
+              {
+                "name": "重生",
+                "value": 102
+              },
+              {
+                "name": "都市日常",
+                "value": 80
+              },
+              {
+                "name": "甜宠",
+                "value": 55
+              },
+              {
+                "name": "复仇",
+                "value": 52
+              },
+              {
+                "name": "穿越",
+                "value": 52
+              },
+              {
+                "name": "重生复仇",
+                "value": 51
+              },
+              {
+                "name": "逆袭打脸",
+                "value": 46
+              }
+            ]
+          },
+          {
+            "category": "爽点",
+            "tags": [
+              {
+                "name": "打脸虐渣",
+                "value": 235
+              },
+              {
+                "name": "闪婚",
+                "value": 39
+              }
+            ]
+          },
+          {
+            "category": "时代背景",
+            "tags": [
+              {
+                "name": "现代",
+                "value": 163
+              },
+              {
+                "name": "古代",
+                "value": 40
+              }
+            ]
+          },
+          {
+            "category": "人设",
+            "tags": [
+              {
+                "name": "总裁",
+                "value": 108
+              },
+              {
+                "name": "霸总",
+                "value": 48
+              }
+            ]
+          },
+          {
+            "category": "其他",
+            "tags": [
+              {
+                "name": "宅斗",
+                "value": 54
+              },
+              {
+                "name": "古风爱情",
+                "value": 40
+              },
+              {
+                "name": "大男主",
+                "value": 40
+              }
+            ]
+          },
+          {
+            "category": "情感关系",
+            "tags": [
+              {
+                "name": "日久生情",
+                "value": 61
+              }
+            ]
+          }
+        ],
+        "trending": [
+          {
+            "name": "打脸虐渣",
+            "value": 25,
+            "change": 15,
+            "trend": "up"
+          },
+          {
+            "name": "现代",
+            "value": 19,
+            "change": 14,
+            "trend": "up"
+          },
+          {
+            "name": "都市",
+            "value": 16,
+            "change": 12,
+            "trend": "up"
+          },
+          {
+            "name": "总裁",
+            "value": 12,
+            "change": 8,
+            "trend": "up"
+          },
+          {
+            "name": "都市爱情",
+            "value": 12,
+            "change": 6,
+            "trend": "up"
+          },
+          {
+            "name": "逆袭",
+            "value": 10,
+            "change": 6,
+            "trend": "up"
+          }
+        ]
+      },
+      "industry": {
+        "user_scale": "7.18亿",
+        "market_size": "504.4亿元",
+        "drama_count": "未知",
+        "billion_dramas": 20,
+        "ai_ratio": 20,
+        "female_ratio": 80,
+        "male_ratio": 20,
+        "app_mau": "3.04亿",
+        "app_mau_yoy": "+1.4亿"
+      },
+      "rankings": [
+        {
+          "rank": 1,
+          "title": "伪名媛混圈手册",
+          "female_lead": "施景子",
+          "male_lead": "赵振栋",
+          "views": "未知",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市爱情, 逆袭, 打脸虐渣, 总裁, 现代, 都市",
+          "tags": [
+            "都市爱情",
+            "逆袭",
+            "打脸虐渣",
+            "总裁",
+            "现代",
+            "都市"
+          ],
+          "trend": "",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "纸醉金迷的豪门世界，一场亿万遗产争夺战，伪名媛如何逆袭打脸，步步为营。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "逆袭打脸",
+            "豪门争斗",
+            "身份伪装"
+          ],
+          "episodes_count": 81,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 2,
+          "title": "分手后，我娶了前任的老板",
+          "female_lead": "徐艺真",
+          "male_lead": "曾辉",
+          "views": "未知",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市日常, 马甲, 打脸虐渣, 总裁, 黑客, 都市, 现代",
+          "tags": [
+            "都市日常",
+            "马甲",
+            "打脸虐渣",
+            "总裁",
+            "黑客",
+            "都市",
+            "现代"
+          ],
+          "trend": "",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "分手后男主逆袭，娶了前任的老板，凭借黑客技能和隐藏身份，打脸前任，走向人生巅峰。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "马甲逆袭",
+            "打脸前任",
+            "黑客技能"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 3,
+          "title": "妈妈的成全",
+          "female_lead": "马秋元",
+          "male_lead": "何健麒",
+          "views": "未知",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "女性成长, 重生, 打脸虐渣, 大女主, 萌宝, 都市, 现代",
+          "tags": [
+            "女性成长",
+            "重生",
+            "打脸虐渣",
+            "大女主",
+            "萌宝",
+            "都市",
+            "现代"
+          ],
+          "trend": "",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "重生归来的母亲，带着萌宝逆袭，打脸渣男和小三，用母爱和智慧成全自己与孩子的幸福。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "重生复仇",
+            "萌宝助攻",
+            "母爱逆袭"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 4,
+          "title": "春运之游子归乡",
+          "female_lead": "王艺瑾",
+          "male_lead": "王道铁",
+          "views": "未知",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市日常, 马甲, 强者回归, 亲情, 大男主, 现代",
+          "tags": [
+            "都市日常",
+            "马甲",
+            "强者回归",
+            "亲情",
+            "大男主",
+            "现代"
+          ],
+          "trend": "",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "游子春运归乡，隐藏强者身份，面对亲人误解和乡邻嘲讽，最终展现实力，守护家庭亲情。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "强者回归",
+            "亲情守护",
+            "打脸乡邻"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 5,
+          "title": "从来爱恨两难清",
+          "female_lead": "白妍",
+          "male_lead": "孙晨越",
+          "views": "未知",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "家庭伦理, 女性成长, 亲情, 打脸虐渣, 逆袭, 大女主, 现代, 都市",
+          "tags": [
+            "家庭伦理",
+            "女性成长",
+            "亲情",
+            "打脸虐渣",
+            "逆袭",
+            "大女主",
+            "现代",
+            "都市"
+          ],
+          "trend": "",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "在家庭伦理的漩涡中，女主经历亲情与爱情的纠葛，最终逆袭成长，打脸所有伤害过她的人。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "家庭伦理",
+            "女性逆袭",
+            "打脸虐渣"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 6,
+          "title": "萌妃嘴甜心黑，世子却宠她如宝",
+          "female_lead": "赵佳",
+          "male_lead": "张集骏",
+          "views": "未知",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "古风爱情, 穿越, 日久生情, 打脸虐渣, 世子, 女强, 古代",
+          "tags": [
+            "古风爱情",
+            "穿越",
+            "日久生情",
+            "打脸虐渣",
+            "世子",
+            "女强",
+            "古代"
+          ],
+          "trend": "",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "穿越女主成为萌妃，表面嘴甜心黑，实则智计百出，世子却对她宠爱有加，联手打脸各路反派。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "穿越甜宠",
+            "打脸虐渣",
+            "世子宠妻"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 7,
+          "title": "纸玫瑰第二部",
+          "female_lead": "余茵",
+          "male_lead": "刘萧旭",
+          "views": "未知",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市爱情, 破镜重圆, 追妻, 总裁, 现代, 都市",
+          "tags": [
+            "都市爱情",
+            "破镜重圆",
+            "追妻",
+            "总裁",
+            "现代",
+            "都市"
+          ],
+          "trend": "",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "破镜重圆的都市爱情，总裁追妻火葬场，虐心之后甜蜜回归，第二部延续经典。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "破镜重圆",
+            "追妻火葬场",
+            "总裁甜宠"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 8,
+          "title": "花开岁岁暖",
+          "female_lead": "杨咩咩",
+          "male_lead": "鹿单东",
+          "views": "未知",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市爱情, 年龄差, 日久生情, 打脸虐渣, 总裁, 姐弟恋, 现代, 都市",
+          "tags": [
+            "都市爱情",
+            "年龄差",
+            "日久生情",
+            "打脸虐渣",
+            "总裁",
+            "姐弟恋",
+            "现代",
+            "都市"
+          ],
+          "trend": "",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "姐弟恋的都市爱情故事，年龄差带来的甜蜜与阻碍，女主打脸虐渣，最终与总裁弟弟修成正果。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "姐弟恋",
+            "日久生情",
+            "打脸虐渣"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 9,
+          "title": "掌心窥爱",
+          "female_lead": "滕泽文",
+          "male_lead": "甄永涛",
+          "views": "热度上榜",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "暗恋成真",
+            "打脸虐渣",
+            "女强",
+            "总裁",
+            "现代",
+            "都市"
+          ],
+          "trend": "",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "现代都市中，女主暗恋男主多年，凭借自身能力逆袭，最终打脸虐渣，收获爱情与事业。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "暗恋成真",
+            "打脸虐渣",
+            "女强逆袭"
+          ],
+          "episodes_count": 79,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 10,
+          "title": "旖旎婚色",
+          "female_lead": "郭宇欣",
+          "male_lead": "张峻鸣",
+          "views": "热度上榜",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "闪婚",
+            "甜宠",
+            "总裁",
+            "现代",
+            "职场"
+          ],
+          "trend": "",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "女主与总裁闪婚后，在职场与生活中甜蜜互动，共同面对挑战，最终收获幸福。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "闪婚",
+            "甜宠",
+            "总裁追妻"
+          ],
+          "episodes_count": 89,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 11,
+          "title": "灵泉种田：我在古代当大佬",
+          "female_lead": "钱谦",
+          "male_lead": "孔悦城",
+          "views": "热度上榜",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "奇幻脑洞",
+          "tags": [
+            "奇幻脑洞",
+            "种田经营",
+            "穿越",
+            "逆袭",
+            "打脸虐渣",
+            "大男主",
+            "古代"
+          ],
+          "trend": "",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "主角穿越古代，凭借灵泉空间种田经商，一步步逆袭成为一方大佬，打脸所有看不起他的人。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "穿越种田",
+            "灵泉金手指",
+            "逆袭打脸"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 12,
+          "title": "我是司令千金",
+          "female_lead": "范琪",
+          "male_lead": "曾辉",
+          "views": "热度上榜",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "民国爱情",
+          "tags": [
+            "民国爱情",
+            "打脸虐渣",
+            "民国"
+          ],
+          "trend": "",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "民国时期，司令千金与特种兵相爱，在乱世中相互守护，打脸恶势力，最终收获爱情。",
+          "change": "",
+          "heat": 0,
+          "production_house": "杭州刚刚好影视有限公司",
+          "core_trope": [
+            "民国千金",
+            "乱世爱情",
+            "打脸虐渣"
+          ],
+          "episodes_count": 61,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 13,
+          "title": "春意遥遥",
+          "female_lead": "魏凡舒",
+          "male_lead": "沈淮",
+          "views": "热度上榜",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "古风爱情",
+          "tags": [
+            "古风爱情",
+            "宫斗宅斗",
+            "逆袭",
+            "打脸虐渣",
+            "大小姐",
+            "古代",
+            "宫廷"
+          ],
+          "trend": "",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "古代大小姐在宫廷宅斗中逆袭，打脸所有对手，最终收获爱情与地位。",
+          "change": "",
+          "heat": 0,
+          "production_house": "嘉兴九州文化传媒有限公司",
+          "core_trope": [
+            "宫斗宅斗",
+            "逆袭打脸",
+            "大小姐逆袭"
+          ],
+          "episodes_count": 50,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 14,
+          "title": "父爱如山为女撑腰",
+          "female_lead": "张楚嫣",
+          "male_lead": "龚俊",
+          "views": "热度上榜",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市日常",
+          "tags": [
+            "都市日常",
+            "打脸虐渣",
+            "总裁",
+            "都市",
+            "现代"
+          ],
+          "trend": "",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "父亲为保护女儿，与各种恶势力斗智斗勇，最终为女儿撑起一片天。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "父爱如山",
+            "打脸虐渣",
+            "亲情守护"
+          ],
+          "episodes_count": 50,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 15,
+          "title": "闪婚甜妻有点野",
+          "female_lead": "王燕飞",
+          "male_lead": "王梓亦",
+          "views": "热度上榜",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "日久生情",
+            "打脸虐渣",
+            "逆袭",
+            "总裁",
+            "现代",
+            "都市"
+          ],
+          "trend": "",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "女主闪婚总裁后，凭借自己的“野性”魅力，与总裁日久生情，打脸所有看不起她的人。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "闪婚",
+            "日久生情",
+            "打脸逆袭"
+          ],
+          "episodes_count": 89,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 16,
+          "title": "东江边的姐姐",
+          "female_lead": "贾翼瑄",
+          "male_lead": "刘擎",
+          "views": "热度上榜",
+          "views_num": 0,
+          "platform": "红果",
+          "genre": "都市日常",
+          "tags": [
+            "都市日常",
+            "逆袭",
+            "打脸虐渣",
+            "大男主",
+            "都市",
+            "现代"
+          ],
+          "trend": "",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "男主在东江边遇到一位神秘的姐姐，在她的帮助下逆袭人生，打脸所有看不起他的人。",
+          "change": "",
+          "heat": 0,
+          "production_house": "独立厂牌",
+          "core_trope": [
+            "神秘姐姐",
+            "逆袭打脸",
+            "都市逆袭"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 17,
+          "title": "我在八零年代当后妈",
+          "female_lead": "贾青",
+          "male_lead": "苏袀禾",
+          "views": "1000万",
+          "views_num": 10000,
+          "platform": "DataEye",
+          "genre": "穿越/年代/甜宠",
+          "tags": [
+            "穿越",
+            "八零年代",
+            "后妈",
+            "甜宠",
+            "逆袭"
+          ],
+          "trend": "飙升",
+          "trend_tag": "🔥 飙升",
+          "trend_type": "up",
+          "category": "female",
+          "is_ai": false,
+          "desc": "现代女主穿越到八零年代，被迫给三个孩子当后妈，凭借现代智慧和情商，化解家庭矛盾，收获爱情与事业。",
+          "change": "",
+          "heat": 10000,
+          "production_house": "点众科技",
+          "core_trope": [
+            "穿越逆袭",
+            "后妈翻身",
+            "年代甜宠",
+            "打脸极品亲戚"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 18,
+          "title": "重生之我在霸总身边当卧底",
+          "female_lead": "李婉晴",
+          "male_lead": "何健麒",
+          "views": "800万",
+          "views_num": 8000,
+          "platform": "DataEye",
+          "genre": "重生/霸总/复仇",
+          "tags": [
+            "重生",
+            "霸总",
+            "卧底",
+            "复仇",
+            "甜虐"
+          ],
+          "trend": "平稳",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "女主重生后成为霸总身边的卧底，在复仇与爱情之间挣扎，最终揭开真相，收获真爱。",
+          "change": "",
+          "heat": 8000,
+          "production_house": "九州文化",
+          "core_trope": [
+            "重生复仇",
+            "卧底虐恋",
+            "霸总追妻",
+            "身份反转"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 19,
+          "title": "总裁的替身新娘",
+          "female_lead": "吴明晶",
+          "male_lead": "包涵",
+          "views": "700万",
+          "views_num": 7000,
+          "platform": "DataEye",
+          "genre": "替身/霸总/虐恋",
+          "tags": [
+            "替身",
+            "霸总",
+            "虐恋",
+            "先婚后爱",
+            "逆袭"
+          ],
+          "trend": "平稳",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "女主被迫替妹妹嫁给冷酷霸总，在婚姻中受尽委屈，最终凭借智慧与能力逆袭，让霸总刮目相看。",
+          "change": "",
+          "heat": 7000,
+          "production_house": "蜜糖文化",
+          "core_trope": [
+            "替身新娘",
+            "先婚后爱",
+            "霸总追妻",
+            "打脸逆袭"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        },
+        {
+          "rank": 20,
+          "title": "嫡女归来",
+          "female_lead": "李婉晴",
+          "male_lead": "蔡伦",
+          "views": "600万",
+          "views_num": 6000,
+          "platform": "DataEye",
+          "genre": "古装/重生/宅斗",
+          "tags": [
+            "重生",
+            "嫡女",
+            "宅斗",
+            "复仇",
+            "权谋"
+          ],
+          "trend": "平稳",
+          "trend_tag": "📌 近7日补位",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "嫡女重生归来，凭借前世记忆，在宅斗中步步为营，揭露阴谋，夺回属于自己的一切。",
+          "change": "",
+          "heat": 6000,
+          "production_house": "麦芽传媒",
+          "core_trope": [
+            "重生复仇",
+            "嫡女逆袭",
+            "宅斗打脸",
+            "权谋智斗"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.7,
+          "data_source": "hongguo",
+          "rank_change": 0,
+          "previous_rank": 0,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "series_id": "",
+          "cover": ""
+        }
+      ],
+      "rankings_count": 20,
+      "actors": {
+        "female": [
+          {
+            "rank": 1,
+            "name": "李婉晴",
+            "popularity": 20,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "重生之我在霸总身边当卧底、嫡女归来",
+            "trend": "same"
+          },
+          {
+            "rank": 2,
+            "name": "施景子",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "伪名媛混圈手册",
+            "trend": "same"
+          },
+          {
+            "rank": 3,
+            "name": "徐艺真",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "分手后，我娶了前任的老板",
+            "trend": "same"
+          },
+          {
+            "rank": 4,
+            "name": "马秋元",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "妈妈的成全",
+            "trend": "same"
+          },
+          {
+            "rank": 5,
+            "name": "王艺瑾",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "春运之游子归乡",
+            "trend": "same"
+          },
+          {
+            "rank": 6,
+            "name": "白妍",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "从来爱恨两难清",
+            "trend": "same"
+          },
+          {
+            "rank": 7,
+            "name": "赵佳",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "萌妃嘴甜心黑，世子却宠她如宝",
+            "trend": "same"
+          },
+          {
+            "rank": 8,
+            "name": "余茵",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "纸玫瑰第二部",
+            "trend": "same"
+          },
+          {
+            "rank": 9,
+            "name": "杨咩咩",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "花开岁岁暖",
+            "trend": "same"
+          },
+          {
+            "rank": 10,
+            "name": "滕泽文",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "掌心窥爱",
+            "trend": "same"
+          }
+        ],
+        "male": [
+          {
+            "rank": 1,
+            "name": "曾辉",
+            "popularity": 20,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "分手后，我娶了前任的老板、我是司令千金",
+            "trend": "same"
+          },
+          {
+            "rank": 2,
+            "name": "何健麒",
+            "popularity": 20,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "妈妈的成全、重生之我在霸总身边当卧底",
+            "trend": "same"
+          },
+          {
+            "rank": 3,
+            "name": "赵振栋",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "伪名媛混圈手册",
+            "trend": "same"
+          },
+          {
+            "rank": 4,
+            "name": "王道铁",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "春运之游子归乡",
+            "trend": "same"
+          },
+          {
+            "rank": 5,
+            "name": "孙晨越",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "从来爱恨两难清",
+            "trend": "same"
+          },
+          {
+            "rank": 6,
+            "name": "张集骏",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "萌妃嘴甜心黑，世子却宠她如宝",
+            "trend": "same"
+          },
+          {
+            "rank": 7,
+            "name": "刘萧旭",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "纸玫瑰第二部",
+            "trend": "same"
+          },
+          {
+            "rank": 8,
+            "name": "鹿单东",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "花开岁岁暖",
+            "trend": "same"
+          },
+          {
+            "rank": 9,
+            "name": "甄永涛",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "掌心窥爱",
+            "trend": "same"
+          },
+          {
+            "rank": 10,
+            "name": "张峻鸣",
+            "popularity": 10,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "旖旎婚色",
+            "trend": "same"
+          }
+        ]
+      },
+      "platform": {
+        "apps": [
+          {
+            "name": "红果免费短剧",
+            "mau": 3.04,
+            "mau_unit": "亿",
+            "yoy": "+1.4亿",
+            "share": 85,
+            "trend": "up"
+          }
+        ],
+        "mini_programs": []
+      },
+      "audience_profile": {
+        "gender": {
+          "female": 85.0,
+          "male": 15.0
+        },
+        "age": {
+          "18-24": 30.0,
+          "25-34": 45.0,
+          "35-44": 20.0,
+          "45+": 5.0
+        },
+        "regions": [
+          {
+            "name": "广东",
+            "value": 15.5
+          },
+          {
+            "name": "江苏",
+            "value": 11.8
+          },
+          {
+            "name": "浙江",
+            "value": 9.6
+          },
+          {
+            "name": "四川",
+            "value": 8.2
+          },
+          {
+            "name": "河南",
+            "value": 7.1
+          }
+        ],
+        "traits": [
+          "热衷逆袭打脸和身份伪装爽点",
+          "偏好甜宠与虐渣并存的剧情冲突",
+          "常因萌宝或亲情元素触发情感共鸣",
+          "习惯睡前或通勤时碎片化追剧"
+        ],
+        "content_preferences": [
+          {
+            "name": "都市爱情",
+            "value": 32
+          },
+          {
+            "name": "打脸虐渣",
+            "value": 28
+          },
+          {
+            "name": "穿越重生",
+            "value": 18
+          },
+          {
+            "name": "马甲逆袭",
+            "value": 12
+          },
+          {
+            "name": "家庭伦理",
+            "value": 10
+          }
+        ],
+        "viewing_time": [
+          {
+            "name": "睡前 22-24点",
+            "value": 35
+          },
+          {
+            "name": "通勤/午休",
+            "value": 22
+          },
+          {
+            "name": "晚饭后 19-21点",
+            "value": 28
+          },
+          {
+            "name": "周末下午",
+            "value": 15
+          }
+        ],
+        "spending_power": {
+          "paid_ratio": 35,
+          "arpu": "¥18",
+          "willingness": "中高"
+        },
+        "user_segments": [
+          {
+            "name": "核心追更党",
+            "share": 28,
+            "desc": "日更必追、愿意为爆款付费解锁"
+          },
+          {
+            "name": "碎片路人",
+            "share": 45,
+            "desc": "通勤/睡前刷剧，免费内容为主"
+          },
+          {
+            "name": "情感共鸣型",
+            "share": 18,
+            "desc": "被亲情或虐渣情节打动后付费"
+          },
+          {
+            "name": "尝鲜观望者",
+            "share": 9,
+            "desc": "偶尔刷到热门剧集，极少付费"
+          }
+        ]
+      },
+      "play_trend": {
+        "daily": [
+          {
+            "date": "2026-06-13",
+            "total_views": 31000
+          },
+          {
+            "date": "2026-06-12",
+            "total_views": 0
+          },
+          {
+            "date": "2026-06-11",
+            "total_views": 45000
+          },
+          {
+            "date": "2026-06-10",
+            "total_views": 37000
+          },
+          {
+            "date": "2026-06-09",
+            "total_views": 79700
+          }
+        ],
+        "weekly": [
+          {
+            "week": "2026-W23",
+            "start_date": "2026-06-08",
+            "end_date": "2026-06-14",
+            "top1_title": "伪名媛混圈手册",
+            "top1_views": "未知",
+            "total_views": 31000
+          }
+        ],
+        "trend_direction": "down"
+      },
+      "daily_news": [
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "AI短剧市场爆发式增长",
+          "content": "【事件核心】：2026年6月13日，国内短剧市场迎来爆发式增长，AI短剧赛道成为核心驱动力，行业机构预测AI漫剧用户规模将大幅增长，市场规模有望达到240亿元。\n【数据支撑】：行业机构预测，2026年AI动漫短剧用户规模将从2025年的约1.2亿增长至2.8亿，市场规模预计达240亿元，AI短剧凭借低成本、高效率优势迅速获得市场关注。\n【商业洞察】：AI短剧的爆发将重塑内容生产格局，降低制作门槛，但可能加剧同质化竞争，对传统短剧制作方形成冲击，同时为AI技术提供商和平台方带来新商业机会。\n【决策价值】：建议短剧制作方积极布局AI技术，探索AI与真人短剧融合模式，优先投资AI漫剧赛道以抢占市场先机，同时关注内容差异化以避免同质化风险。",
+          "insight": "",
+          "source_url": "https://wallstreetcn.com/livenews/3067642"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "AI短剧用户规模预测",
+          "content": "【事件核心】：2026年6月13日，社交平台上AI短剧讨论热情高涨，基于人工智能技术生成画面、剧情、配音的短剧凭借低成本、高效率优势，行业规模与上线数量呈爆发式增长。\n【数据支撑】：行业机构预测，2026年AI动漫短剧用户规模将从2025年的约1.2亿增长至2.8亿，市场规模有望达到240亿元，显示AI短剧正快速渗透市场。\n【商业洞察】：AI短剧的爆发将推动内容生产自动化，降低人力成本，但可能引发版权和内容质量争议，对平台审核和分发机制提出新挑战，同时为AI工具开发商创造巨大需求。\n【决策价值】：建议投流团队关注AI短剧的用户增长趋势，优先测试AI短剧的投放效果，制作方应加速AI技术应用以提升效率，但需建立内容质量把控机制。",
+          "insight": "",
+          "source_url": "https://xueqiu.com/9204387113/373344084"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "短剧市场热度榜动态",
+          "content": "【事件核心】：2026年6月13日，DataEye发布短剧热度榜，汇总当日国内短剧市场的热门题材、平台表现及用户互动数，为行业提供实时市场动态分析。\n【数据支撑】：榜单涵盖热门题材、平台表现和用户互动数等关键指标，但搜索结果未提供具体数字，仅显示多平台转载该分析，如新浪财经、搜狐等。\n【商业洞察】：热度榜数据可反映用户偏好变化，指导内容创作和投流策略，热门题材的集中可能加剧竞争，平台表现差异影响分发效率，用户互动数则直接关联变现潜力。\n【决策价值】：建议制作方和投流团队每日跟踪DataEye热度榜，及时调整题材选择和投放策略，优先布局高互动题材，同时关注平台流量分配变化以优化渠道。",
+          "insight": "",
+          "source_url": "https://finance.sina.cn/tech/2025-07-14/detail-inffmaxa5056056.d.html"
+        },
+        {
+          "type": "商业",
+          "icon": "💰",
+          "title": "短剧产业政策与市场双驱动",
+          "content": "【事件核心】：2026年6月13日，短剧产业迎来政策与市场双重驱动，广电总局部署微短剧精品创作计划，联合11个省级广电主管部门及6家重点平台，构建“总局、省、平台”三位一体协同机制。\n【数据支撑】：行业整体呈现“提质增效、两极分化”特征，政策推动行业向规范化、精品化转型，但搜索结果未提供具体数字，仅描述趋势。\n【商业洞察】：政策扶持将加速行业洗牌，头部平台和精品内容方受益，中小制作方面临合规成本上升压力，精品化趋势可能提高内容门槛，但为优质创作者创造更大市场空间。\n【决策价值】：建议制作方积极申请政策扶持资金，优先参与精品创作计划，投资方应关注头部平台和合规能力强的团队，避免投资低质内容。",
+          "insight": "",
+          "source_url": "https://m.chinairn.com/news/20260515/1518387.shtml"
+        },
+        {
+          "type": "商业",
+          "icon": "💰",
+          "title": "短剧行业投融资回归理性",
+          "content": "【事件核心】：2026年6月13日，短剧行业投融资热度显著降温，2023-2025年投融资事件数持续走低，整体回归理性，大额融资以头部上市公司为主，阿里、腾讯等机构参与度高。\n【数据支撑】：中国微短剧关联行业单笔投资金额TOP5集中在头部影视与传媒平台，大额交易主导，但搜索结果未提供具体数字，仅描述趋势。\n【商业洞察】：投融资降温表明市场进入成熟期，资本更青睐头部企业，中小制作方融资难度加大，可能加速行业整合，头部平台通过资本优势巩固地位。\n【决策价值】：建议中小制作方寻求差异化竞争或与头部平台合作，投资方应聚焦头部项目，避免分散投资，同时关注政策扶持下的新兴机会。",
+          "insight": "",
+          "source_url": "https://www.163.com/dy/article/KTMEIRDU051480KF.html"
+        },
+        {
+          "type": "商业",
+          "icon": "💰",
+          "title": "微短剧产业政策扶持加码",
+          "content": "【事件核心】：2026年6月13日，微短剧产业热度持续飙升，2025年成为政策扶持“大年”，全国多地出台专项政策，通过资金激励、资源整合、创作引导等方式，全力助推行业高质量发展。\n【数据支撑】：政策覆盖剧本创作、拍摄制作、上线播出、作品出海等全链条，但搜索结果未提供具体数字，仅描述政策趋势。\n【商业洞察】：政策扶持将降低创作成本，激励精品内容产出，同时推动短剧出海，为制作方和平台方创造新增长点，但可能加剧区域竞争，需关注政策落地效果。\n【决策价值】：建议制作方积极研究各地政策，优先选择扶持力度大的地区注册或拍摄，出海团队应利用政策资源拓展海外市场，同时关注合规要求。",
+          "insight": "",
+          "source_url": "http://mp.weixin.qq.com/s?__biz=Mzg3MDU4MTYyNQ==&mid=2247485978&idx=1&sn=90797bd125fce2c5f264b86aaa22921c"
+        }
+      ],
+      "insights": [
+        {
+          "icon": "🔥",
+          "title": "微信新规倒逼内容升级，人均时长成核心KPI",
+          "content": "2026年6月13日，微信发布微短剧小程序激励新规，考核标准从剧集转向用户人均访问时长。爆款归因：受众定位为追求沉浸式体验的IAA用户，爽点公式为“长留存+高粘性”，投流预估将更侧重内容质量而非短期点击。买量建议：CPA优势题材为家庭伦理和女性成长类，投放平台首选微信小程序，利用IAA广告变现和官方联合发行优惠。",
+          "source": "微信官方政策"
+        },
+        {
+          "icon": "💰",
+          "title": "AI短剧融资3400万美元，技术驱动内容生产变革",
+          "content": "2026年6月13日，StoReel完成3400万美元融资，用于提升AI内容生产能力。爆款归因：受众定位为全球年轻用户，爽点公式为“AI生成+低成本+高频更新”，投流预估将依赖AI优化投放效率。买量建议：CPA优势题材为奇幻脑洞和穿越种田，投放平台为TikTok和YouTube，利用AI工具降低制作成本，快速测试市场反应。",
+          "source": "StoReel融资新闻"
+        }
+      ],
+      "quality_score": 95.0,
+      "statistics": {
+        "total": 20,
+        "avg_confidence": 0.7,
+        "source_distribution": {
+          "hongguo": 20
+        },
+        "with_actors": 0,
+        "with_studio": 0
+      },
+      "trends": {
+        "rank_changes": {
+          "new": 20,
+          "up": 0,
+          "down": 0,
+          "stable": 0
+        },
+        "hot_tags": [
+          {
+            "tag": "打脸虐渣",
+            "count": 13
+          },
+          {
+            "tag": "现代",
+            "count": 12
+          },
+          {
+            "tag": "都市",
+            "count": 10
+          },
+          {
+            "tag": "逆袭",
+            "count": 8
+          },
+          {
+            "tag": "总裁",
+            "count": 8
+          },
+          {
+            "tag": "都市爱情",
+            "count": 6
+          },
+          {
+            "tag": "都市日常",
+            "count": 4
+          },
+          {
+            "tag": "重生",
+            "count": 3
+          },
+          {
+            "tag": "大男主",
+            "count": 3
+          },
+          {
+            "tag": "穿越",
+            "count": 3
+          }
+        ],
+        "trend_direction": "stable"
+      },
+      "anomalies": [
+        {
+          "type": "missing_actors",
+          "severity": "warning",
+          "count": 20,
+          "message": "20部剧缺少演员信息，占比100%",
+          "items": [
+            "伪名媛混圈手册",
+            "分手后，我娶了前任的老板",
+            "妈妈的成全",
+            "春运之游子归乡",
+            "从来爱恨两难清"
+          ]
+        }
+      ],
+      "error_message": "rankings 不足 20 条，已由 8 条补齐到 20 条（使用近 7 天历史榜单补位）。\n"
     }
   }
 }
