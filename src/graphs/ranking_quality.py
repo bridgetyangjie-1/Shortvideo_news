@@ -1,7 +1,7 @@
 """
 榜单数量质量门禁。
 
-前端展示为 TOP8，因此数据链路不能把少于 8 条的 rankings 直接发布。
+前端展示为 TOP20，因此数据链路不能把少于 20 条的 rankings 直接发布。
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any, Iterable, List, Tuple
 
 
-REQUIRED_TOP_RANKING_COUNT = 8
+REQUIRED_TOP_RANKING_COUNT = 20
 RECENT_HISTORY_DAYS = 7
 
 
@@ -55,7 +55,7 @@ def ensure_top_rankings(
     if len(items) < target_count:
         raise RankingCountError(
             f"榜单数量不足：当前可用 {len(items)} 条，要求至少 {target_count} 条；"
-            "已拒绝发布以避免 TOP8 页面显示不完整。"
+            "已拒绝发布以避免 TOP20 页面显示不完整。"
         )
 
     items = _renumber(items[:target_count])

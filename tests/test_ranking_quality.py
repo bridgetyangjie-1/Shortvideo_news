@@ -17,7 +17,7 @@ def _ranking(rank: int, title: str, views_num: int) -> dict:
 
 
 class RankingQualityTest(unittest.TestCase):
-    def test_uses_recent_history_to_reach_top8(self) -> None:
+    def test_uses_recent_history_to_reach_top20(self) -> None:
         with TemporaryDirectory() as tmp_dir:
             root = Path(tmp_dir)
             history_dir = root / "assets" / "data" / "history"
@@ -25,7 +25,7 @@ class RankingQualityTest(unittest.TestCase):
             history_payload = {
                 "rankings": [
                     _ranking(index, f"历史补位{index}", 9000 - index)
-                    for index in range(1, 9)
+                    for index in range(1, 19)
                 ]
             }
             (history_dir / "2026-06-10.json").write_text(
@@ -39,12 +39,12 @@ class RankingQualityTest(unittest.TestCase):
                 workspace_path=str(root),
             )
 
-        self.assertEqual(len(rankings), 8)
-        self.assertEqual([item["rank"] for item in rankings], list(range(1, 9)))
-        self.assertIn("补齐到 8 条", warning)
+        self.assertEqual(len(rankings), 20)
+        self.assertEqual([item["rank"] for item in rankings], list(range(1, 21)))
+        self.assertIn("补齐到 20 条", warning)
         self.assertEqual(rankings[0]["title"], "今日冠军")
 
-    def test_raises_when_sources_cannot_reach_top8(self) -> None:
+    def test_raises_when_sources_cannot_reach_top20(self) -> None:
         with TemporaryDirectory() as tmp_dir:
             with self.assertRaises(RankingCountError):
                 ensure_top_rankings(
