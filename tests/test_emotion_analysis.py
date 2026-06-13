@@ -55,6 +55,19 @@ class TestEmotionAnalysis(unittest.TestCase):
         self.assertIn("anxiety", categories)
         self.assertIn("emotion", categories)
 
+    def test_build_wordcloud_not_all_max(self):
+        """词云分值应做归一化，避免全部顶到 100"""
+        scores = {
+            "复仇打脸": 300,
+            "亲密关系失衡": 200,
+            "身份逆袭": 100,
+        }
+        cloud = _build_wordcloud(scores)
+        values = [item.value for item in cloud]
+        self.assertEqual(max(values), 100)
+        self.assertTrue(any(v < 100 for v in values), "归一化后不应全部等于 100")
+        self.assertEqual(len(set(values)), 3, "三个不同分值应保留区分度")
+
     def test_build_emotion_rankings_binding(self):
         """TOP3 剧目应绑定情绪/焦虑/触发点"""
         dramas = [

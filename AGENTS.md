@@ -412,6 +412,7 @@ python -m unittest tests.test_ranking_quality
 | 2026-06-12 | `history_data_node`：计算排名变化（new/up/down/same） |
 | 2026-06-12 | `push_node`：输出 statistics/trends/anomalies 统计信息 |
 | 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端改为词云+TOP3剧目+行动建议+关联图+环比趋势 |
+| 2026-06-13 | `emotion_analysis_node` 词云分值改为 log1p + max-normalization，避免多个维度同时顶到 100 失去区分度 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |

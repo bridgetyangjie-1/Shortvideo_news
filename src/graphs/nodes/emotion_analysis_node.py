@@ -5,6 +5,7 @@
 import os
 import json
 import re
+import math
 import logging
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Tuple, Optional
@@ -148,11 +149,23 @@ def _aggregate_emotion_scores(rankings: List[Any]) -> Dict[str, int]:
 
 
 def _build_wordcloud(scores: Dict[str, int]) -> List[EmotionWordCloudItem]:
-    """把得分转成词云，按 category 分类，取 TOP15。"""
+    """把得分转成词云，按 category 分类，取 TOP15。
+
+    采用 log1p 压缩 + max-normalization，避免多个维度同时顶到 100 失去区分度。
+    """
+    if not scores:
+        return []
+
+    # log1p 压缩：削弱极端高分，保留相对差异
+    log_scores = {name: math.log1p(value) for name, value in scores.items()}
+    max_log = max(log_scores.values()) if log_scores else 1.0
+
     items = []
-    for name, value in scores.items():
+    for name, value in log_scores.items():
         cat = DIMENSION_CATEGORIES.get(name, "emotion")
-        items.append(EmotionWordCloudItem(name=name, value=min(100, value), category=cat))
+        normalized = int(value / max_log * 100) if max_log > 0 else 0
+        items.append(EmotionWordCloudItem(name=name, value=normalized, category=cat))
+
     items.sort(key=lambda x: x.value, reverse=True)
     return items[:15]
 
