@@ -597,8 +597,18 @@ class HistoryDataInput(BaseModel):
     enriched_rankings: List[DramaRanking] = Field(default=[], description="补充后的完整榜单")
 
 
+class RankChange(BaseModel):
+    """排名变化条目"""
+    title: str = Field(default="", description="剧名")
+    current_rank: int = Field(default=0, description="当前排名")
+    previous_rank: Optional[int] = Field(default=None, description="昨日排名，None表示昨日不在榜")
+    change_type: str = Field(default="new", description="变化类型：new/up/down/stable")
+    change_value: int = Field(default=0, description="变化幅度")
+
+
 class HistoryDataOutput(BaseModel):
     """历史数据节点输出"""
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     weekly_rankings: List[WeeklyRankingItem] = Field(default=[], description="周榜历史")
+    rank_changes: List[RankChange] = Field(default=[], description="排名变化分析")
     error_message: str = Field(default="", description="错误信息")
