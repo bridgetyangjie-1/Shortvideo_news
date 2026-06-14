@@ -126,7 +126,9 @@ class GenreDistributionNodeTest(unittest.TestCase):
         self.assertEqual(_classify_tag("霸道总裁"), "人设")
         self.assertEqual(_classify_tag("打脸"), "爽点")
         self.assertEqual(_classify_tag("复仇打脸"), "题材")  # "复仇" 在题材分类中优先命中
-        self.assertEqual(_classify_tag("先婚后爱"), "爽点")
+        self.assertEqual(_classify_tag("先婚后爱"), "情感关系")  # 关系动态归入情感关系
+        self.assertEqual(_classify_tag("闪婚"), "情感关系")
+        self.assertEqual(_classify_tag("日久生情"), "情感关系")
         self.assertEqual(_classify_tag("八零"), "时代背景")
         self.assertEqual(_classify_tag("未知标签"), "其他")
 

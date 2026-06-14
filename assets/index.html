@@ -87,7 +87,6 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
 /* 榜单表格 */
 .rankings-container {
-    max-height: 520px;
     overflow-y: auto;
     padding-right: 4px;
 }
@@ -279,13 +278,17 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 /* 近一周热门标签 */
 .sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
 .sub-grid.two-cols { grid-template-columns: repeat(2, 1fr); }
-.hot-tags-layout { display: flex; flex-direction: column; gap: 8px; }
+.hot-tags-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 12px; }
+@media (max-width: 768px) {
+  .hot-tags-layout { grid-template-columns: 1fr; }
+}
+.tag-trending-section { grid-column: 1 / -1; }
 .hot-tags-cloud { display: flex; flex-wrap: wrap; gap: 4px; }
-.tag-pill { background: rgba(30, 34, 48, 0.6); color: #e2e8f0; padding: 2px 6px; border-radius: 10px; font-size: 11px; border: 1px solid rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 3px; transition: all 0.2s; }
+.tag-pill { background: rgba(30, 34, 48, 0.6); color: #e2e8f0; padding: 1px 5px; border-radius: 10px; font-size: 10px; border: 1px solid rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 3px; transition: all 0.2s; }
 .tag-pill:hover { background: rgba(99, 102, 241, 0.18); border-color: rgba(129, 140, 248, 0.45); }
-.tag-value { color: #818cf8; font-weight: 700; font-size: 10px; }
+.tag-value { color: #818cf8; font-weight: 700; font-size: 9px; }
 
-.tag-category-title { font-size: 11px; font-weight: 700; margin-bottom: 4px; display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; width: fit-content; }
+.tag-category-title { font-size: 11px; font-weight: 700; margin-bottom: 5px; display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; width: fit-content; }
 .tag-category-title.theme { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
 .tag-category-title.role { background: rgba(244, 114, 182, 0.12); color: #f472b6; }
 .tag-category-title.hook { background: rgba(251, 191, 36, 0.12); color: #fbbf24; }
@@ -303,7 +306,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .trend-new { color: #4ade80; }
 .trend-same { color: #64748b; }
 
-.tag-divider { height: 1px; background: rgba(255,255,255,0.05); margin: 2px 0; }
+.tag-divider { display: none; }
 .tag-summary { font-size: 11px; color: #64748b; margin-top: 2px; }
 
 /* 核心观众画像 */
@@ -371,6 +374,15 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     gap: 5px;
 }
 .emotion-wordcloud-chart { width: 100%; height: 230px; flex: 1; }
+
+/* 洞察 Tab 合并热力与趋势后的紧凑面板 */
+.emotion-insight-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; margin-top: 10px; }
+.emotion-heat-panel { min-height: 150px; padding: 10px; }
+.emotion-heat-chart { height: 130px; }
+.emotion-trend-panel { min-height: auto; padding: 10px; }
+@media (max-width: 768px) {
+  .emotion-insight-grid { grid-template-columns: 1fr; }
+}
 
 .emotion-ranking-item {
     background: rgba(30, 34, 48, 0.35);
@@ -534,6 +546,8 @@ body.emotion-mobile-locked { overflow: hidden; }
   .emotion-panel { padding: 10px; min-height: auto; }
   .emotion-panel-title { font-size: 11px; margin-bottom: 8px; }
   .emotion-wordcloud-chart { height: 160px; }
+  .emotion-heat-chart { height: 110px; }
+  .emotion-heat-panel { min-height: auto; }
   .emotion-ranking-item { padding: 8px; margin-bottom: 6px; }
   .emotion-ranking-title { font-size: 11px; }
   .emotion-ranking-oneliner { font-size: 10px; }
@@ -674,7 +688,6 @@ body.emotion-mobile-locked { overflow: hidden; }
       
       <div class="emotion-tabs">
         <button class="emotion-tab active" data-tab="insight" onclick="switchEmotionTab('insight')">洞察</button>
-        <button class="emotion-tab" data-tab="heat" onclick="switchEmotionTab('heat')">热力</button>
         <button class="emotion-tab" data-tab="action" onclick="switchEmotionTab('action')">建议</button>
       </div>
       
@@ -685,16 +698,15 @@ body.emotion-mobile-locked { overflow: hidden; }
           <div class="emotion-expand-btn" id="emotion-expand-btn" onclick="toggleEmotionSummary(this)">展开 <i class="fas fa-chevron-down"></i></div>
           <div class="emotion-keywords" id="emotion-keywords"></div>
         </div>
-      </div>
-      
-      <div class="emotion-tab-content" data-tab-content="heat">
-        <div class="emotion-panel" style="min-height: 180px;">
-          <div class="emotion-panel-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 情绪热力 TOP8</div>
-          <div id="emotion-wordcloud-chart" class="emotion-wordcloud-chart"></div>
-        </div>
-        <div class="emotion-panel" style="min-height: auto; margin-top: 10px;">
-          <div class="emotion-panel-title"><i class="fas fa-chart-line" style="color:#fb7185;"></i> 环比趋势</div>
-          <div id="emotion-trends-container"></div>
+        <div class="emotion-insight-grid">
+          <div class="emotion-panel emotion-heat-panel">
+            <div class="emotion-panel-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 情绪热力 TOP8</div>
+            <div id="emotion-wordcloud-chart" class="emotion-wordcloud-chart emotion-heat-chart"></div>
+          </div>
+          <div class="emotion-panel emotion-trend-panel">
+            <div class="emotion-panel-title"><i class="fas fa-chart-line" style="color:#fb7185;"></i> 环比趋势</div>
+            <div id="emotion-trends-container"></div>
+          </div>
         </div>
       </div>
       
@@ -811,11 +823,11 @@ const fallbackData = {
             { "name": "古风爱情", "value": 2 }
         ],
         "categories": [
+            { "category": "题材", "tags": [{ "name": "都市爱情", "value": 6 }, { "name": "都市日常", "value": 4 }, { "name": "古风爱情", "value": 2 }, { "name": "逆袭", "value": 3 }] },
             { "category": "爽点", "tags": [{ "name": "打脸虐渣", "value": 10 }, { "name": "逆袭", "value": 4 }, { "name": "逆袭打脸", "value": 3 }] },
-            { "category": "题材", "tags": [{ "name": "都市爱情", "value": 6 }, { "name": "都市日常", "value": 4 }, { "name": "古风爱情", "value": 2 }] },
-            { "category": "时代背景", "tags": [{ "name": "现代", "value": 5 }, { "name": "古代", "value": 2 }] },
-            { "category": "人设", "tags": [{ "name": "总裁", "value": 4 }] },
-            { "category": "情感关系", "tags": [{ "name": "闪婚", "value": 3 }] }
+            { "category": "人设", "tags": [{ "name": "总裁", "value": 4 }, { "name": "真千金", "value": 3 }, { "name": "王妃", "value": 2 }] },
+            { "category": "情感关系", "tags": [{ "name": "闪婚", "value": 3 }, { "name": "日久生情", "value": 2 }, { "name": "先婚后爱", "value": 2 }] },
+            { "category": "时代背景", "tags": [{ "name": "现代", "value": 5 }, { "name": "古代", "value": 2 }] }
         ],
         "trending": [
             { "name": "打脸虐渣", "value": 10, "change": 3, "trend": "up" },
@@ -1397,7 +1409,8 @@ function switchEmotionTab(tabName) {
     cockpit.querySelectorAll('.emotion-tab-content').forEach(content => {
         content.classList.toggle('active', content.dataset.tabContent === tabName);
     });
-    if (tabName === 'heat' && window.emotionWordcloudChartInstance) {
+    // 洞察 Tab 已合并情绪热力图，切换时需要 resize
+    if (tabName === 'insight' && window.emotionWordcloudChartInstance) {
         setTimeout(() => window.emotionWordcloudChartInstance.resize(), 50);
     }
 }
@@ -1426,7 +1439,7 @@ function toggleEmotionMobile() {
     document.body.classList.toggle('emotion-mobile-locked', isOpen);
     if (isOpen) {
         const activeTab = cockpit.querySelector('.emotion-tab.active');
-        if (activeTab && activeTab.dataset.tab === 'heat' && window.emotionWordcloudChartInstance) {
+        if (activeTab && activeTab.dataset.tab === 'insight' && window.emotionWordcloudChartInstance) {
             setTimeout(() => window.emotionWordcloudChartInstance.resize(), 300);
         }
     }
@@ -1644,7 +1657,7 @@ function renderHotTags(genreDistribution) {
 
     // 趋势榜
     if (trending.length > 0) {
-        html += '<div><div class="tag-category-title other"><i class="fas fa-fire"></i> 标签异动</div><div class="tag-trending-list">';
+        html += '<div class="tag-trending-section"><div class="tag-category-title other"><i class="fas fa-fire"></i> 标签异动</div><div class="tag-trending-list">';
         trending.forEach((t, idx) => {
             const name = escapeHtml(typeof t.name === 'string' ? t.name : '');
             const value = Number.isInteger(t.value) ? t.value : parseInt(t.value, 10) || 0;

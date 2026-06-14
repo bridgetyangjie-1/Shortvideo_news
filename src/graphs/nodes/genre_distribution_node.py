@@ -59,20 +59,11 @@ TAG_TAXONOMY: List[Tuple[str, List[str]]] = [
         ],
     ),
     (
-        "人设",
-        [
-            "总裁", "霸总", "千金", "嫡女", "庶女", "王妃", "皇后", "贵妃", "公主",
-            "小娇妻", "大叔", "弟弟", "保镖", "秘书", "医生", "律师", "战神", "神医",
-            "厨神", "学霸", "学渣", "千金小姐", "灰姑娘", "替身", "前妻", "前夫",
-            "继女", "养女", "真千金", "假千金", "白月光", "朱砂痣", "青梅竹马",
-        ],
-    ),
-    (
         "爽点",
         [
             "打脸", "虐渣", "复仇", "逆袭", "马甲", "掉马", "火葬场", "追妻", "追夫",
-            "带球跑", "萌宝", "先婚后爱", "闪婚", "离婚", "复合", "身份揭晓",
-            "实力碾压", "扮猪吃虎", "翻身", "上位", "夺回", "复仇打脸",
+            "带球跑", "萌宝", "身份揭晓", "实力碾压", "扮猪吃虎", "翻身", "上位", "夺回",
+            "复仇打脸",
         ],
     ),
     (
@@ -80,6 +71,18 @@ TAG_TAXONOMY: List[Tuple[str, List[str]]] = [
         [
             "甜宠", "虐恋", "先婚后爱", "闪婚", "离婚", "复婚", "替身", "暗恋",
             "双向奔赴", "强取豪夺", "契约婚姻", "豪门恩怨", "日久生情", "破镜重圆",
+            "青梅竹马", "契约", "追爱", "错嫁", "替嫁", "禁欲", "高甜", "高虐",
+        ],
+    ),
+    (
+        "人设",
+        [
+            "总裁", "霸总", "千金", "嫡女", "庶女", "王妃", "皇后", "贵妃", "公主",
+            "小娇妻", "大叔", "弟弟", "保镖", "秘书", "医生", "律师", "战神", "神医",
+            "厨神", "学霸", "学渣", "千金小姐", "灰姑娘", "替身", "前妻", "前夫",
+            "继女", "养女", "真千金", "假千金", "白月光", "朱砂痣", "青梅竹马",
+            "赘婿", "奶爸", "保镖", "特工", "重生女", "重生男", "穿越女", "穿越男",
+            "嫡长子", "庶子", "王爷", "太子", "皇子", "世子", "将军", "谋士",
         ],
     ),
     (
@@ -240,24 +243,37 @@ def genre_distribution_node(
             for tag, count in _rankings_to_label_counter(hist_rankings).items():
                 weighted_counter[tag] += count * weight
 
-        # 热门标签 TOP20
+        # 热门标签 TOP20（全局加权热度，用于总览与趋势）
         sorted_weighted = sorted(weighted_counter.items(), key=lambda item: (-item[1], item[0]))
         top_tags = sorted_weighted[:20]
         hot_tags = [TagItem(name=name, value=int(count)) for name, count in top_tags]
 
-        # 按类别聚合
+        # 按类别聚合：每个维度独立取 TOP N，避免“全局 TOP20”把某些人/情感标签挤出
         category_groups: Dict[str, List[TagItem]] = {}
-        for item in hot_tags:
-            category = _classify_tag(item.name)
-            category_groups.setdefault(category, []).append(item)
+        for name, count in weighted_counter.items():
+            category = _classify_tag(name)
+            category_groups.setdefault(category, []).append(TagItem(name=name, value=int(count)))
 
-        categories = [
-            TagCategory(category=category, tags=sorted(tags, key=lambda t: (-t.value, t.name)))
-            for category, tags in sorted(
-                category_groups.items(),
-                key=lambda pair: (-sum(t.value for t in pair[1]), pair[0]),
-            )
-        ]
+        # 各类别展示数量：保证每个核心维度都有足够标签，减少空白
+        CATEGORY_TOP_N: Dict[str, int] = {
+            "题材": 8,
+            "爽点": 6,
+            "人设": 6,
+            "情感关系": 5,
+            "时代背景": 4,
+            "其他": 4,
+        }
+        # 固定展示顺序，符合用户从“题材→爽点→人设→情感→时代”的认知路径
+        CATEGORY_ORDER = ["题材", "爽点", "人设", "情感关系", "时代背景", "其他"]
+
+        categories: List[TagCategory] = []
+        for category in CATEGORY_ORDER:
+            tags = category_groups.get(category, [])
+            if not tags:
+                continue
+            top_n = CATEGORY_TOP_N.get(category, 5)
+            sorted_tags = sorted(tags, key=lambda t: (-t.value, t.name))[:top_n]
+            categories.append(TagCategory(category=category, tags=sorted_tags))
 
         # 趋势：今日 vs 昨日
         yesterday_counter = next(

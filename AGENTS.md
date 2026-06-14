@@ -8,7 +8,7 @@
 这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取红果官网榜单、补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
 
 - **项目名称**：`shortvideo-news`
-- **当前版本**：`v1.9.0`
+- **当前版本**：`v1.10.6`
 - **在线地址**：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - **数据入口**：`assets/data/latest.json`（TOP20 展示）、`assets/data/latest_full.json`（Full100 归档）
 - **GitHub Actions 入口**：`src/run_github.py`
@@ -462,6 +462,8 @@ python src/utils/config_validator.py
 | 2026-06-13 | **v1.10.3 拆分 state.py**：将 808 行的 `src/graphs/state.py` 按领域拆分为 `src/graphs/models/` 下 8 个文件；`state.py` 保留为 re-export 入口，现有 `from graphs.state import X` 路径完全兼容 |
 | 2026-06-13 | **v1.10.4 解耦 enrich_node**：将原 429 行的 `enrich_node.py` 拆分为 `src/graphs/nodes/enrich/` 下 5 个子模块（cache_adapter / metadata_fetcher / actor_resolver / json_refiner / fallback），主节点仅负责编排；新增 `tests/test_enrich_submodules.py` |
 | 2026-06-14 | **v1.10.5 前端信息降噪**：`assets/index.html` 右侧情绪面板改为 Tab 切换 + 移动端底部滑出面板；左侧热门标签紧凑化；今日洞察摘要化（50 字内）；创作者行动建议默认折叠；隐藏情绪-焦虑-触发关联图 |
+| 2026-06-14 | **v1.10.6 热门标签维度均衡**：`genre_distribution_node` 从“全局 TOP20 后分类”改为“按题材/爽点/人设/情感关系/时代背景独立取 TOP N”，保证每个维度都有多个标签；关系型标签（先婚后爱/闪婚/离婚/复婚）归入「情感关系」，扩展人设/情感关系词库；前端热门标签改为 2 列紧凑网格 |
+| 2026-06-14 | **v1.10.6 情绪驾驶舱二合一**：`assets/index.html` 将「洞察」与「热力」两个 Tab 合并为「洞察」Tab（含今日洞察、关键词、情绪热力 TOP8、环比趋势），保留「建议」Tab；桌面端洞察 Tab 内采用 2 列网格（热力图 + 趋势），移动端自动堆叠 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |
