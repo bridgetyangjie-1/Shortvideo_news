@@ -26,6 +26,7 @@ from graphs.models.history import (
     HistoryDataOutput,
 )
 from graphs.models.news import Insight, Innovation, DailyNews
+from graphs.models.alerts import AlertItem
 from graphs.models.node_io import (
     SearchNodeInput,
     SearchNodeOutput,
@@ -46,6 +47,8 @@ from graphs.models.node_io import (
     ShouldPushInput,
     QualityGateInput,
     QualityGateOutput,
+    AlertNodeInput,
+    AlertNodeOutput,
     GenderDistribution,
     AudienceProfileInput,
     AudienceProfileOutput,
@@ -97,6 +100,8 @@ __all__ = [
     "Insight",
     "Innovation",
     "DailyNews",
+    # alerts
+    "AlertItem",
     # node io
     "SearchNodeInput",
     "SearchNodeOutput",
@@ -117,6 +122,8 @@ __all__ = [
     "ShouldPushInput",
     "QualityGateInput",
     "QualityGateOutput",
+    "AlertNodeInput",
+    "AlertNodeOutput",
     "GenderDistribution",
     "AudienceProfileInput",
     "AudienceProfileOutput",

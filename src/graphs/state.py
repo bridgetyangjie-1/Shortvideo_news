@@ -33,6 +33,7 @@ from graphs.models.history import (
     HistoryDataOutput,
 )
 from graphs.models.news import Insight, Innovation, DailyNews
+from graphs.models.alerts import AlertItem
 from graphs.models.node_io import (
     SearchNodeInput,
     SearchNodeOutput,
@@ -53,6 +54,8 @@ from graphs.models.node_io import (
     ShouldPushInput,
     QualityGateInput,
     QualityGateOutput,
+    AlertNodeInput,
+    AlertNodeOutput,
     GenderDistribution,
     AudienceProfileInput,
     AudienceProfileOutput,
@@ -84,7 +87,10 @@ class GlobalState(BaseModel):
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     weekly_rankings: List[WeeklyRankingItem] = Field(default=[], description="周榜历史")
+    quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
     quality_score: float = Field(default=0.0, description="数据质量分数 (0-100)")
+    alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")
+    alert_count: int = Field(default=0, description="告警数量")
     error_message: Annotated[str, operator.add] = Field(default="", description="错误信息")
 
 
@@ -125,5 +131,8 @@ class GraphOutput(BaseModel):
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     daily_news: List[DailyNews] = Field(default=[], description="每日行业快讯")
     insights: List[Insight] = Field(default=[], description="异动点评列表")
+    quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
     quality_score: float = Field(default=0.0, description="数据质量分数")
+    alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")
+    alert_count: int = Field(default=0, description="告警数量")
     error_message: str = Field(default="", description="错误信息")

@@ -11,6 +11,7 @@ from graphs.models.genre import GenreDistribution, GenreStat
 from graphs.models.emotion import EmotionalAnalysis, default_emotional_analysis
 from graphs.models.history import PlayTrend, WeeklyRankingItem
 from graphs.models.news import DailyNews, Insight
+from graphs.models.alerts import AlertItem
 
 
 class SearchNodeInput(BaseModel):
@@ -117,6 +118,9 @@ class PushNodeInput(BaseModel):
         description="核心情绪与动机拆解",
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
+    alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")
+    alert_count: int = Field(default=0, description="告警数量")
+    quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
     quality_score: float = Field(default=0.0, description="数据质量分数")
     error_message: str = Field(default="", description="错误信息")
 
@@ -139,6 +143,9 @@ class PushNodeOutput(BaseModel):
         description="核心情绪与动机拆解",
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
+    alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")
+    alert_count: int = Field(default=0, description="告警数量")
+    quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
     quality_score: float = Field(default=0.0, description="数据质量分数")
     error_message: str = Field(default="", description="错误信息")
     storage_url: str = Field(default="", description="对象存储URL（用于GitHub同步）")
@@ -155,6 +162,13 @@ class QualityGateInput(BaseModel):
     industry: IndustryData = Field(default_factory=IndustryData, description="行业数据")
     platform: PlatformData = Field(default_factory=PlatformData, description="平台数据")
     insights: List[Insight] = Field(default_factory=list, description="异动点评列表")
+    audience_profile: AudienceProfile = Field(default_factory=AudienceProfile, description="观众画像")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
+    emotional_analysis: EmotionalAnalysis = Field(
+        default_factory=default_emotional_analysis,
+        description="核心情绪与动机拆解",
+    )
+    play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     quality_score: float = Field(default=0.0, description="当前数据质量分数")
     error_message: str = Field(default="", description="上游错误信息")
 
@@ -165,6 +179,33 @@ class QualityGateOutput(BaseModel):
     quality_score: float = Field(default=0.0, description="重新计算后的数据质量分数 (0-100)")
     quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
     error_message: str = Field(default="", description="错误/告警信息")
+
+
+class AlertNodeInput(BaseModel):
+    """异常监测节点输入"""
+    data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
+    enriched_rankings: List[DramaRanking] = Field(default_factory=list, description="补充后的完整榜单")
+    actors: ActorsData = Field(default_factory=ActorsData, description="演员榜单")
+    industry: IndustryData = Field(default_factory=IndustryData, description="行业数据")
+    platform: PlatformData = Field(default_factory=PlatformData, description="平台数据")
+    daily_news: List[DailyNews] = Field(default_factory=list, description="每日行业快讯")
+    insights: List[Insight] = Field(default_factory=list, description="异动点评列表")
+    genre_distribution: GenreDistribution = Field(default_factory=GenreDistribution, description="近一周热门标签")
+    emotional_analysis: EmotionalAnalysis = Field(
+        default_factory=default_emotional_analysis,
+        description="核心情绪与动机拆解",
+    )
+    play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
+    quality_score: float = Field(default=0.0, description="数据质量分数")
+    quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
+    error_message: str = Field(default="", description="上游错误信息")
+
+
+class AlertNodeOutput(BaseModel):
+    """异常监测节点输出"""
+    alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")
+    alert_count: int = Field(default=0, description="告警数量")
+    error_message: str = Field(default="", description="错误信息")
 
 
 class ShouldPushInput(BaseModel):

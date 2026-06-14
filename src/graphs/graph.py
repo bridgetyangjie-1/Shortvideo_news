@@ -26,6 +26,7 @@ from graphs.nodes.insights_node import insights_node
 from graphs.nodes.news_node import news_node
 from graphs.nodes.history_data_node import history_data_node
 from graphs.nodes.quality_gate_node import quality_gate_node
+from graphs.nodes.alert_node import alert_node
 from graphs.nodes.push_node import push_node
 
 
@@ -44,7 +45,7 @@ def should_push_data(state: ShouldPushInput) -> str:
     if state.quality_score < 60:
         return "跳过推送"
     
-    return "推送数据"
+    return "生成告警"
 
 
 # ==================== 主图编排 ====================
@@ -64,7 +65,9 @@ def create_graph():
     8. 题材分布（genre_distribution_node）- 统计题材分布
     9. 异动点评（insights_node）- 发现数据异动，输出商业建议
     10. 历史数据（history_data_node）- 生成周榜历史和播放趋势
-    11. 数据推送（push_node）- 推送到后端服务器
+    11. 质量门禁（quality_gate_node）- 统一校验数据质量
+    12. 异常监测（alert_node）- 自动生成业务告警
+    13. 数据推送（push_node）- 保存 JSON 数据文件
     """
     # 创建状态图
     builder = StateGraph(
@@ -143,7 +146,10 @@ def create_graph():
     # 10. 数据质量门禁节点（新增）
     builder.add_node("quality_gate_node", quality_gate_node)
     
-    # 11. 数据推送节点
+    # 11. 异常监测节点
+    builder.add_node("alert_node", alert_node)
+    
+    # 12. 数据推送节点
     builder.add_node("push_node", push_node)
     
     # ==================== 设置边 ====================
@@ -183,10 +189,13 @@ def create_graph():
         "quality_gate_node",
         should_push_data,
         {
-            "推送数据": "push_node",
+            "生成告警": "alert_node",
             "跳过推送": END,
         },
     )
+    
+    # 异常监测后推送
+    builder.add_edge("alert_node", "push_node")
     
     # 结束
     builder.add_edge("push_node", END)

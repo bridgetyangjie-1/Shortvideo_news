@@ -14,7 +14,7 @@ from coze_coding_utils.runtime_ctx.context import Context
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from tools.ip_supply_chain import build_supply_chain
 from graphs.state import (
-    PushNodeInput, 
+    PushNodeInput,
     PushNodeOutput,
     DramaRanking,
     ActorsData,
@@ -27,6 +27,7 @@ from graphs.state import (
     EmotionalAnalysis,
     PlayTrend,
     OverviewStats,
+    AlertItem,
 )
 
 # 初始化日志
@@ -209,6 +210,9 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
             audience_profile=state.audience_profile,
             genre_distribution=state.genre_distribution,
             play_trend=state.play_trend,
+            alerts=state.alerts or [],
+            alert_count=state.alert_count or 0,
+            quality_report=state.quality_report or {},
             quality_score=state.quality_score or 0.0,
             error_message=(state.error_message or "") + error_message + "\n",
         )
@@ -241,6 +245,9 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
             audience_profile=state.audience_profile,
             genre_distribution=state.genre_distribution,
             play_trend=state.play_trend,
+            alerts=state.alerts or [],
+            alert_count=state.alert_count or 0,
+            quality_report=state.quality_report or {},
             quality_score=0.0,
             error_message=(state.error_message or "") + error_message + "\n"
         )
@@ -295,6 +302,9 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "statistics": statistics,
         "trends": trends,
         "anomalies": anomalies,
+        "alerts": [a.model_dump() for a in state.alerts] if state.alerts else [],
+        "alert_count": state.alert_count or 0,
+        "quality_report": state.quality_report or {},
         "error_message": state.error_message or ""
     }
     
@@ -320,6 +330,9 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "statistics": statistics,
         "trends": trends,
         "anomalies": anomalies,
+        "alerts": [a.model_dump() for a in state.alerts] if state.alerts else [],
+        "alert_count": state.alert_count or 0,
+        "quality_report": state.quality_report or {},
         "error_message": state.error_message or ""
     }
     
@@ -371,6 +384,9 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         genre_distribution=state.genre_distribution,
         emotional_analysis=state.emotional_analysis,
         play_trend=state.play_trend,
+        alerts=state.alerts or [],
+        alert_count=state.alert_count or 0,
+        quality_report=state.quality_report or {},
         quality_score=state.quality_score or 60.0,
         error_message=(state.error_message or "") + (("\n".join(error_messages) + "\n") if error_messages else "")
     )
