@@ -777,14 +777,24 @@ const fallbackData = {
             { "rank": 2, "name": "王格格", "popularity": 921, "works": "重生之我在霸总短剧里当保姆" },
             { "rank": 3, "name": "赵佳", "popularity": 873, "works": "我的26岁女房客" },
             { "rank": 4, "name": "李柯以", "popularity": 850, "works": "前夫请滚远点" },
-            { "rank": 5, "name": "张晋宜", "popularity": 820, "works": "离婚后前夫跪求复合" }
+            { "rank": 5, "name": "张晋宜", "popularity": 820, "works": "离婚后前夫跪求复合" },
+            { "rank": 6, "name": "徐艺真", "popularity": 795, "works": "闪婚后傅先生马甲藏不住了" },
+            { "rank": 7, "name": "马秋元", "popularity": 762, "works": "厚爱无需多言" },
+            { "rank": 8, "name": "王艺瑾", "popularity": 738, "works": "契约新娘" },
+            { "rank": 9, "name": "白妍", "popularity": 705, "works": "离婚后她带崽嫁入豪门" },
+            { "rank": 10, "name": "余茵", "popularity": 681, "works": "替嫁后我成了偏执老公心尖宠" }
         ],
         "male": [
             { "rank": 1, "name": "李菲", "popularity": 956, "works": "闪婚后傅先生马甲藏不住了" },
             { "rank": 2, "name": "张集骏", "popularity": 898, "works": "前夫请滚远点" },
             { "rank": 3, "name": "曾辉", "popularity": 880, "works": "我在精神病院学斩神" },
             { "rank": 4, "name": "王皓祯", "popularity": 850, "works": "重生后她成了霸总的白月光" },
-            { "rank": 5, "name": "陈哲远", "popularity": 820, "works": "裴总每天都想父凭子贵" }
+            { "rank": 5, "name": "陈哲远", "popularity": 820, "works": "裴总每天都想父凭子贵" },
+            { "rank": 6, "name": "何健麒", "popularity": 791, "works": "救命！闪婚老公竟是我教授" },
+            { "rank": 7, "name": "孙晨越", "popularity": 758, "works": "斩神之凡尘神域" },
+            { "rank": 8, "name": "王道铁", "popularity": 732, "works": "重生之我在霸总短剧里当保姆" },
+            { "rank": 9, "name": "甄永涛", "popularity": 699, "works": "都市极品医神" },
+            { "rank": 10, "name": "刘擎", "popularity": 675, "works": "她带三宝惊艳全球" }
         ]
     },
     "genre_distribution": {
@@ -1533,14 +1543,21 @@ function renderEmotionChart(rawAnalysis) {
         window.emotionWordcloudChartInstance.setOption({
             backgroundColor: 'transparent',
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}' },
-            grid: { left: 4, right: 32, top: 4, bottom: 4 },
+            grid: { left: 72, right: 36, top: 4, bottom: 4 },
             xAxis: { type: 'value', splitLine: { show: false }, axisLabel: { show: false } },
             yAxis: {
                 type: 'category',
                 data: [...wordData].reverse().map(item => item.name),
                 axisLine: { show: false },
                 axisTick: { show: false },
-                axisLabel: { color: '#cbd5e1', fontSize: 10 }
+                axisLabel: {
+                    color: '#cbd5e1',
+                    fontSize: 10,
+                    width: 60,
+                    overflow: 'truncate',
+                    ellipsis: '...',
+                    align: 'right'
+                }
             },
             series: [{
                 type: 'bar',
@@ -1824,8 +1841,8 @@ async function renderDashboard(dateParam = null) {
             <span class="actor-name">${a.name}</span>
             <span class="actor-pop ${colorClass}">${a.popularity}</span>
         </div>`;
-    document.getElementById('actors-female-container').innerHTML = (data.actors?.female || []).slice(0, 5).map(a => renderActor(a, 'female')).join('');
-    document.getElementById('actors-male-container').innerHTML = (data.actors?.male || []).slice(0, 5).map(a => renderActor(a, 'male')).join('');
+    document.getElementById('actors-female-container').innerHTML = (data.actors?.female || []).slice(0, 10).map(a => renderActor(a, 'female')).join('');
+    document.getElementById('actors-male-container').innerHTML = (data.actors?.male || []).slice(0, 10).map(a => renderActor(a, 'male')).join('');
 
     // 近一周热门标签
     renderHotTags(data.genre_distribution);
