@@ -138,9 +138,9 @@ def search_node(
             if dataeye_data:
                 logger.info(f"✅ DataEye爬取成功，获取 {len(dataeye_data)} 条数据")
             else:
-                logger.warning("⚠️ DataEye爬取返回空数据")
+                logger.info("DataEye未返回数据，继续使用红果数据")
         except Exception as e:
-            logger.warning(f"⚠️ DataEye爬取失败: {e}")
+            logger.info(f"DataEye爬取不可用: {e}")
         
         # ========== 第三步：数据融合与交叉验证 ==========
         logger.info("=" * 50)

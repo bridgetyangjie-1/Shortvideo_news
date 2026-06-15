@@ -3,6 +3,7 @@ DataEye 短剧热力榜爬虫
 用于交叉验证红果数据
 """
 import urllib.request
+import urllib.error
 import json
 import logging
 import time
@@ -56,16 +57,16 @@ def fetch_dataeye_rankings(top_n: int = 30) -> List[Dict[str, Any]]:
         return []
         
     except urllib.error.HTTPError as e:
-        logger.warning(f"DataEye HTTP错误: {e.code}")
+        logger.debug(f"DataEye HTTP错误: {e.code}")
         return []
     except urllib.error.URLError as e:
-        logger.warning(f"DataEye URL错误: {e.reason}")
+        logger.debug(f"DataEye URL错误: {e.reason}")
         return []
     except json.JSONDecodeError as e:
-        logger.warning(f"DataEye JSON解析失败: {e}")
+        logger.debug(f"DataEye JSON解析失败: {e}")
         return []
     except Exception as e:
-        logger.warning(f"DataEye爬取失败: {e}")
+        logger.debug(f"DataEye爬取失败: {e}")
         return []
 
 
@@ -116,7 +117,7 @@ def fetch_dataeye_via_search(keyword: str = "短剧热力榜", top_n: int = 30) 
         return []
         
     except Exception as e:
-        logger.warning(f"DataEye备用爬取失败: {e}")
+        logger.debug(f"DataEye备用爬取失败: {e}")
         return []
 
 
