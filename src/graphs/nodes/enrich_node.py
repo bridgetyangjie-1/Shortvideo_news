@@ -145,9 +145,15 @@ def enrich_node(
                     category=item.get("category", "female"),
                     is_ai=item.get("is_ai", False),
                     desc=item.get("desc", ""),
-                    production_house=item.get("production_house", "独立厂牌"),
+                    change=item.get("change", ""),
+                    heat=item.get("heat", 0),
+                    production_house=item.get("production_house", ""),
                     core_trope=item.get("core_trope", []),
                     episodes_count=item.get("episodes_count", 80),
+                    confidence_score=item.get("confidence_score", 0.7),
+                    data_source=item.get("data_source", "hongguo"),
+                    series_id=item.get("series_id", ""),
+                    cover=item.get("cover", ""),
                 )
             )
 

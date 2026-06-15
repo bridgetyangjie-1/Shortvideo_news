@@ -87,6 +87,7 @@ class GlobalState(BaseModel):
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
     weekly_rankings: List[WeeklyRankingItem] = Field(default=[], description="周榜历史")
+    rank_changes: List[RankChange] = Field(default=[], description="排名变化分析")
     quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
     quality_score: float = Field(default=0.0, description="数据质量分数 (0-100)")
     alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")

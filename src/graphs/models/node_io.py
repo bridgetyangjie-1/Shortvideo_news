@@ -9,7 +9,7 @@ from graphs.models.industry import IndustryData, PlatformData
 from graphs.models.audience import AudienceProfile
 from graphs.models.genre import GenreDistribution, GenreStat
 from graphs.models.emotion import EmotionalAnalysis, default_emotional_analysis
-from graphs.models.history import PlayTrend, WeeklyRankingItem
+from graphs.models.history import PlayTrend, WeeklyRankingItem, RankChange
 from graphs.models.news import DailyNews, Insight
 from graphs.models.alerts import AlertItem
 
@@ -118,6 +118,7 @@ class PushNodeInput(BaseModel):
         description="核心情绪与动机拆解",
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
+    rank_changes: List[RankChange] = Field(default=[], description="排名变化分析")
     alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")
     alert_count: int = Field(default=0, description="告警数量")
     quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")

@@ -13,10 +13,12 @@ from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from tools.ip_supply_chain import build_supply_chain
+from tools.hongguo_crawler import HongguoCrawler
 from graphs.state import (
     PushNodeInput,
     PushNodeOutput,
     DramaRanking,
+    RankChange,
     ActorsData,
     IndustryData,
     PlatformData,
@@ -93,7 +95,7 @@ def _generate_statistics(rankings: List[DramaRanking]) -> Dict[str, Any]:
         "avg_confidence": round(sum(confidence_scores) / len(confidence_scores), 2) if confidence_scores else 0,
         "source_distribution": source_counts,
         "with_actors": sum(1 for r in rankings if getattr(r, 'actors', None) and r.actors),
-        "with_studio": sum(1 for r in rankings if getattr(r, 'studio', None) and r.studio and r.studio != "未知"),
+        "with_studio": sum(1 for r in rankings if getattr(r, 'production_house', None) and r.production_house and r.production_house != "未知"),
     }
 
 
@@ -180,6 +182,63 @@ def _generate_anomalies(rankings: List[DramaRanking], industry: Optional[Industr
     return anomalies
 
 
+def _attach_rank_changes(rankings: List[DramaRanking], rank_changes: List[RankChange]) -> None:
+    """将历史节点计算的排名变化合并到榜单条目中，供前端趋势列展示。"""
+    if not rank_changes or not rankings:
+        return
+    change_map = {rc.title: rc for rc in rank_changes}
+    for r in rankings:
+        rc = change_map.get(r.title)
+        if not rc:
+            continue
+        r.previous_rank = rc.previous_rank or 0
+        if rc.change_type == "new":
+            r.rank_change = -1
+            r.trend_type = "new"
+            r.trend = "new"
+            r.change = "new"
+        elif rc.change_type == "up":
+            r.rank_change = rc.change_value
+            r.trend_type = "up"
+            r.trend = f"up{rc.change_value}"
+            r.change = f"up{rc.change_value}"
+        elif rc.change_type == "down":
+            r.rank_change = -rc.change_value
+            r.trend_type = "down"
+            r.trend = f"down{rc.change_value}"
+            r.change = f"down{rc.change_value}"
+        else:
+            r.rank_change = 0
+            r.trend_type = "same"
+            r.trend = "same"
+            r.change = "same"
+
+
+def _empty_supply_chain(series_id: str = "") -> Dict[str, Any]:
+    return {
+        "has_ip_source": False,
+        "source_title": "",
+        "source_author": "",
+        "source_platform": "",
+        "match_confidence": 0.0,
+        "series_id": series_id,
+    }
+
+
+def _build_supply_chain_for_ranking(r: DramaRanking, crawler: HongguoCrawler) -> Dict[str, Any]:
+    """为单部剧构建 IP/供应链信息，失败时返回空结构不阻塞流程。"""
+    series_id = getattr(r, "series_id", "") or ""
+    if not series_id:
+        return _empty_supply_chain(series_id)
+    try:
+        chain = build_supply_chain(r.title, series_id, crawler.fetch_series_html)
+        chain["series_id"] = series_id
+        return chain
+    except Exception as exc:
+        logger.warning("push_node: 供应链补充失败 %s: %s", r.title, exc)
+        return _empty_supply_chain(series_id)
+
+
 def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> PushNodeOutput:
     """
     title: 数据输出
@@ -225,6 +284,8 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
             workspace_path=WORKSPACE_PATH,
         )
         output_rankings = [DramaRanking(**item) for item in ranking_dicts]
+        # 合并历史节点产出的排名变化到榜单条目
+        _attach_rank_changes(output_rankings, state.rank_changes or [])
         if count_warning:
             logger.warning("push_node: %s", count_warning)
             error_messages.append(f"push_node: {count_warning}")
@@ -255,27 +316,40 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     # ========== 构建TOP20数据（前端展示用） ==========
     top20_rankings = output_rankings[:20]
 
-    # 为 TOP20 榜单附加供应链信息（当前不触发实时网络请求，使用占位结构）
+    # 为 TOP20 榜单附加供应链信息
+    crawler = HongguoCrawler()
     top20_ranking_dicts = []
+    supply_chains: List[Dict[str, Any]] = []
     for r in top20_rankings:
         item = r.model_dump()
-        series_id = getattr(r, 'series_id', '') or ''
-        # 供应链占位：后续可调用 build_supply_chain(r.title, series_id, crawler.fetch_series_html) 批量补充
-        item["supply_chain"] = {
-            "has_ip_source": False,
-            "source_title": "",
-            "source_author": "",
-            "source_platform": "",
-            "match_confidence": 0.0,
-            "series_id": series_id
-        }
+        chain = _build_supply_chain_for_ranking(r, crawler)
+        item["supply_chain"] = chain
+        supply_chains.append(chain)
         top20_ranking_dicts.append(item)
 
-    # 顶层供应链汇总（当前为占位，后续随数据补充自动聚合）
+    # 顶层供应链汇总
+    adapted_chains = [c for c in supply_chains if c.get("has_ip_source")]
+    source_platform_counts: Dict[str, int] = {}
+    for c in adapted_chains:
+        platform = c.get("source_platform") or "未知平台"
+        source_platform_counts[platform] = source_platform_counts.get(platform, 0) + 1
+    top_sources = sorted(
+        [{"platform": k, "count": v} for k, v in source_platform_counts.items()],
+        key=lambda x: x["count"],
+        reverse=True,
+    )[:5]
     supply_chain_summary = {
-        "total_adapted": 0,
-        "top_sources": [],
-        "sample_matches": []
+        "total_adapted": len(adapted_chains),
+        "top_sources": top_sources,
+        "sample_matches": [
+            {
+                "title": r.title,
+                "source_title": c.get("source_title", ""),
+                "source_platform": c.get("source_platform", ""),
+            }
+            for r, c in zip(top20_rankings, supply_chains)
+            if c.get("has_ip_source")
+        ][:5],
     }
 
     # ========== 生成统计/趋势/异常报告 ==========
@@ -310,6 +384,11 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     
     # ========== 构建Full100数据（历史归档用） ==========
     full_rankings = output_rankings  # 全部榜单
+    full_ranking_dicts = []
+    for r in full_rankings:
+        item = r.model_dump()
+        item["supply_chain"] = _build_supply_chain_for_ranking(r, crawler)
+        full_ranking_dicts.append(item)
     
     output_data_full = {
         "success": True,
@@ -318,7 +397,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "genre_distribution": state.genre_distribution.model_dump() if state.genre_distribution else {},
         "emotional_analysis": state.emotional_analysis.model_dump() if state.emotional_analysis else {},
         "industry": state.industry.model_dump() if state.industry else {},
-        "rankings": [r.model_dump() for r in full_rankings],
+        "rankings": full_ranking_dicts,
         "rankings_count": len(full_rankings),
         "actors": state.actors.model_dump() if state.actors else {"female": [], "male": []},
         "platform": state.platform.model_dump() if state.platform else {},

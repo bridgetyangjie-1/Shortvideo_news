@@ -108,7 +108,7 @@ class JsonRefiner:
       "category": "female/male/ai",
       "is_ai": false,
       "desc": "剧情描述",
-      "production_house": "制作厂牌",
+      "production_house": "制作厂牌（无明确厂牌信息时请留空，不要填'独立厂牌'或'未知'）",
       "core_trope": ["核心爽点"],
       "episodes_count": 80
     }}

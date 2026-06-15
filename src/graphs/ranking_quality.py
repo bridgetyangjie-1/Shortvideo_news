@@ -103,7 +103,7 @@ def _normalize_rankings(rankings: Iterable[Any]) -> List[dict]:
                 "desc": _safe_text(item.get("desc"), ""),
                 "change": _safe_text(item.get("change"), ""),
                 "heat": _safe_int(item.get("heat"), _safe_int(item.get("views_num"), 0)),
-                "production_house": _safe_text(item.get("production_house"), "独立厂牌"),
+                "production_house": _safe_text(item.get("production_house"), ""),
                 "core_trope": _ensure_text_list(item.get("core_trope")),
                 "episodes_count": _safe_int(item.get("episodes_count"), 80),
             }

@@ -82,6 +82,8 @@ def _convert_hongguo_to_rankings(hongguo_data: List[Dict[str, Any]]) -> List[Dic
             "female_lead": item.get("female_lead", ""),
             "male_lead": item.get("male_lead", ""),
             "production_house": item.get("studio", ""),
+            "series_id": item.get("series_id", ""),
+            "cover": item.get("cover", ""),
             "core_trope": [],
             "episodes_count": _parse_episodes(item.get("episodes", "")),
         }

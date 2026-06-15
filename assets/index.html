@@ -1766,7 +1766,7 @@ function renderRankings(rankings) {
             </td>
             <td class="ep-cell">${drama.episodes_count ?? '-'}</td>
             <td class="tags-cell">${tags}</td>
-            <td class="studio-cell">${escapeHtml(drama.studio || drama.production_house || '独立厂牌')}</td>
+            <td class="studio-cell">${escapeHtml(drama.studio || drama.production_house || '-')}</td>
             <td class="trend-cell">${trendBadge}</td>
             <td class="ip-cell">${ipBadge}</td>
         </tr>
