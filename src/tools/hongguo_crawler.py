@@ -161,7 +161,9 @@ class HongguoCrawler:
         """获取详情页 HTML（供供应链提取使用）"""
         try:
             url = f"https://novelquickapp.com/series/{series_id}"
-            req = urllib.request.Request(url, headers=self.headers)
+            headers = self.headers.copy()
+            headers["Accept-Encoding"] = "identity"  # 不请求压缩，避免 gzip 解压问题
+            req = urllib.request.Request(url, headers=headers)
             with urllib.request.urlopen(req, timeout=10) as r:
                 return r.read().decode("utf-8", errors="ignore")
         except Exception:

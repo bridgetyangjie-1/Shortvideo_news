@@ -41,6 +41,7 @@ def _backfill_basic_fields(
 ) -> List[Dict[str, Any]]:
     """用红果直爬的原始可信字段回填 DeepSeek 输出中缺失的元数据。"""
     basic_by_title: Dict[str, Dict[str, Any]] = {}
+    basic_by_rank: Dict[int, Dict[str, Any]] = {}
     for item in basic:
         if hasattr(item, "model_dump"):
             src = item.model_dump()
@@ -51,12 +52,23 @@ def _backfill_basic_fields(
         title = src.get("title", "")
         if title:
             basic_by_title[title] = src
+        rank = src.get("rank")
+        if rank is not None:
+            basic_by_rank[int(rank)] = src
 
-    for item in refined:
+    for idx, item in enumerate(refined):
         if not isinstance(item, dict):
             continue
-        title = item.get("title", "")
-        src = basic_by_title.get(title)
+        # 优先按标题匹配，其次按 rank 字段，最后按列表下标兜底
+        src = basic_by_title.get(item.get("title", ""))
+        if not src:
+            src = basic_by_rank.get(int(item.get("rank", 0) or 0))
+        if not src and idx < len(basic):
+            candidate = basic[idx]
+            if hasattr(candidate, "model_dump"):
+                src = candidate.model_dump()
+            elif isinstance(candidate, dict):
+                src = candidate
         if not src:
             continue
         # 仅当 DeepSeek 未返回或返回空时回填

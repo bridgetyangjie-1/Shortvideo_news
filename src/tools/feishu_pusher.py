@@ -15,7 +15,7 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-DASHBOARD_URL = "https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html"
+DASHBOARD_URL = "https://shortvideo.bridgetyangjie.cn/"
 
 
 def _get_webhook_url() -> Optional[str]:
