@@ -1,6 +1,10 @@
 {
   "daily_play_trend": [
     {
+      "date": "2026-06-15",
+      "total_views": 0
+    },
+    {
       "date": "2026-06-14",
       "total_views": 0
     },
@@ -27,6 +31,14 @@
   ],
   "weekly_rankings": [
     {
+      "week": "2026-W24",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-21",
+      "top1_title": "东江边的姐姐",
+      "top1_views": "热度上榜",
+      "total_views": 0
+    },
+    {
       "week": "2026-W23",
       "start_date": "2026-06-08",
       "end_date": "2026-06-14",
@@ -35,5 +47,5 @@
       "total_views": 0
     }
   ],
-  "last_updated": "2026-06-14 07:45:59"
+  "last_updated": "2026-06-15 06:35:07"
 }
