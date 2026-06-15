@@ -84,6 +84,10 @@ class JsonRefiner:
 - 严禁填"未知"！如果实在不确定，请从上述名单中选择最可能的演员
 - 必须填写具体的演员名字，不要出现"未知"
 
+🚨【元数据保留规则】：
+- 基础榜单中已提供的 `series_id` 和 `cover` 必须原样保留，禁止清空。
+- 若检索资料中提及制作公司/工作室/出品方，请在 `production_house` 填写真实厂牌；无明确信息时留空，不要填"独立厂牌"或"未知"。
+
 🚨【趋势标签判定规则】：
 - 请根据检索到的资料，判断该剧的爆发速度。
 - 如果该剧是刚刚上线几天就冲入榜单，或者新闻中明确提到其播放量增速极快、成为黑马，请将该剧的 `trend_tag` 字段赋值为 "🔥 飙升" 或 "🚀 新晋"。
@@ -108,9 +112,11 @@ class JsonRefiner:
       "category": "female/male/ai",
       "is_ai": false,
       "desc": "剧情描述",
-      "production_house": "制作厂牌（无明确厂牌信息时请留空，不要填'独立厂牌'或'未知'）",
+      "production_house": "制作厂牌（无明确厂牌信息时请留空）",
       "core_trope": ["核心爽点"],
-      "episodes_count": 80
+      "episodes_count": 80,
+      "series_id": "红果series_id",
+      "cover": "封面URL"
     }}
   ]
 }}"""

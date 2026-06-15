@@ -34,6 +34,50 @@ from graphs.nodes.enrich.actor_resolver import ActorResolver
 from graphs.nodes.enrich.json_refiner import JsonRefiner
 from graphs.nodes.enrich.fallback import fill_unknown_actors
 
+
+def _backfill_basic_fields(
+    refined: List[Dict[str, Any]],
+    basic: List[Any],
+) -> List[Dict[str, Any]]:
+    """用红果直爬的原始可信字段回填 DeepSeek 输出中缺失的元数据。"""
+    basic_by_title: Dict[str, Dict[str, Any]] = {}
+    for item in basic:
+        if hasattr(item, "model_dump"):
+            src = item.model_dump()
+        elif isinstance(item, dict):
+            src = dict(item)
+        else:
+            continue
+        title = src.get("title", "")
+        if title:
+            basic_by_title[title] = src
+
+    for item in refined:
+        if not isinstance(item, dict):
+            continue
+        title = item.get("title", "")
+        src = basic_by_title.get(title)
+        if not src:
+            continue
+        # 仅当 DeepSeek 未返回或返回空时回填
+        if not item.get("series_id"):
+            item["series_id"] = src.get("series_id", "")
+        if not item.get("cover"):
+            item["cover"] = src.get("cover", "")
+        if not item.get("production_house"):
+            item["production_house"] = src.get("production_house") or src.get("studio", "")
+        if not item.get("platform"):
+            item["platform"] = src.get("platform", "红果")
+        if not item.get("tags"):
+            item["tags"] = list(src.get("tags", []))
+        if not item.get("views") and src.get("views"):
+            item["views"] = src.get("views")
+        if not item.get("views_num") and src.get("views_num"):
+            item["views_num"] = src.get("views_num")
+        if not item.get("episodes_count") and src.get("episodes_count"):
+            item["episodes_count"] = src.get("episodes_count")
+    return refined
+
 logger = logging.getLogger(__name__)
 
 
@@ -97,10 +141,13 @@ def enrich_node(
             temperature=temperature,
         )
 
-        # 第三步：兜底填充演员
+        # 第三步：用原始红果数据回填 DeepSeek 可能丢失的可信字段（series_id/cover/厂牌等）
+        rankings_data = _backfill_basic_fields(rankings_data, basic_rankings_list)
+
+        # 第四步：兜底填充演员
         rankings_data = fill_unknown_actors(rankings_data)
 
-        # 第四步：榜单数量补齐
+        # 第五步：榜单数量补齐
         rankings_json_list = [
             item.model_dump() if hasattr(item, "model_dump") else item
             for item in basic_rankings_list
