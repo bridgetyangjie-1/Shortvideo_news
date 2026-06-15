@@ -108,14 +108,12 @@ def _generate_trends(rankings: List[DramaRanking]) -> Dict[str, Any]:
     stable_count = 0
     
     for r in rankings:
-        change = getattr(r, 'rank_change', None)
-        if not change:
+        trend_type = getattr(r, 'trend_type', 'same') or 'same'
+        if trend_type == "new":
             new_count += 1
-        elif change == "new":
-            new_count += 1
-        elif change.startswith("up"):
+        elif trend_type == "up":
             up_count += 1
-        elif change.startswith("down"):
+        elif trend_type == "down":
             down_count += 1
         else:
             stable_count += 1
