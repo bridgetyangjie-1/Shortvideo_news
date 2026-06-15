@@ -38,6 +38,7 @@ jobs:
           MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
           MOONSHOT_BASE_URL: ${{ secrets.MOONSHOT_BASE_URL }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           export PYTHONPATH="${GITHUB_WORKSPACE}/src"

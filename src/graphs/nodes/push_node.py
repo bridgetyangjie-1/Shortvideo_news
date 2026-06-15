@@ -14,6 +14,7 @@ from coze_coding_utils.runtime_ctx.context import Context
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from tools.ip_supply_chain import build_supply_chain
 from tools.hongguo_crawler import HongguoCrawler
+from tools.feishu_pusher import push_daily, push_alert
 from graphs.state import (
     PushNodeInput,
     PushNodeOutput,
@@ -249,10 +250,20 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
     generated_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S+08:00")
 
-    # 质量门禁未通过时拒绝覆盖线上数据
+    # 质量门禁未通过时拒绝覆盖线上数据，并推送告警
     if not getattr(state, "success", True):
         error_message = "push_node: 质量门禁未通过，已拒绝覆盖 latest.json 等线上数据"
         logger.error(error_message)
+        alert_message = (
+            f"数据日期：{state.data_date or '未知'}\n"
+            f"质量分：{state.quality_score or 0}\n"
+            f"错误：{state.error_message or '质量门禁未通过'}\n"
+            f"告警数：{state.alert_count or 0}"
+        )
+        try:
+            push_alert("质量门禁未通过", alert_message)
+        except Exception as feishu_exc:
+            logger.warning("push_node: 飞书告警推送失败（不影响主流程）: %s", feishu_exc)
         return PushNodeOutput(
             success=False,
             output_path=DATA_FILE_PATH,
@@ -444,6 +455,12 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         error_messages.append(f"push_node: 保存历史索引失败: {ALL_HISTORY_PATH}")
     
     logger.info(f"✅ 数据输出完成 - TOP20已保存({len(top20_rankings)}条)，Full100已归档({len(full_rankings)}条)")
+
+    # 发送飞书日报推送（失败不阻断主流程）
+    try:
+        push_daily(output_data)
+    except Exception as feishu_exc:
+        logger.warning("push_node: 飞书日报推送失败（不影响主流程）: %s", feishu_exc)
     
     # 返回完整数据，确保GraphOutput包含所有数据
     return PushNodeOutput(

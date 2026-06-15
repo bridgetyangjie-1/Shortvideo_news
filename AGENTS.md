@@ -430,6 +430,67 @@ python src/utils/config_validator.py
 - 新增依赖时必须写入 `pyproject.toml` 并执行 `uv sync` 更新 `uv.lock`。
 - 不要运行 `git commit`、`git push`、`git reset`、`git rebase` 等 git 变更操作，除非用户明确授权。
 
+## 15. 飞书机器人推送
+
+### 15.1 功能说明
+
+每日工作流生成 `latest.json` 后，自动通过飞书群机器人 webhook 推送一张**完整版交互式日报卡片**到指定群组；质量门禁失败时改为推送告警卡片。推送失败不影响主流程，仅记录日志。
+
+### 15.2 环境变量
+
+| 名称 | 用途 | 是否必填 |
+|---|---|---|
+| `FEISHU_WEBHOOK` | 飞书机器人 webhook 地址 | ✅ |
+| `FEISHU_WEBHOOK_SECRET` | 飞书签名密钥（未配置时不启用签名校验） | 可选 |
+
+GitHub Actions 中已通过 `${{ secrets.FEISHU_WEBHOOK }}` 注入，详见 `.github/workflows/daily_update.yml`。
+
+### 15.3 推送内容模块
+
+日报卡片按顺序包含：
+
+1. **header**：日期 + 质量分 + 行业宏观摘要（短剧数 / APP月活 / AI占比 / 女男频占比）
+2. **榜单 TOP5**：排名、剧名、播放量、趋势、题材
+3. **今日黑马**：新晋或上升 ≥3 位的剧目
+4. **演员热力 TOP3**：女频 / 男频各 3 人
+5. **行业快讯 TOP3**：类型 + 标题 + 内容摘要
+6. **今日洞察**：最多 2 条商业洞察
+7. **题材 & 标签风向标**：环比异动标签 + 热门标签
+8. **情绪驾驶舱**：一句话摘要 + 主导情绪 / TOP1 触发点 + 创作者建议
+9. **异常监测**：汇总 `alerts`
+10. **底部按钮**：跳转完整看板、TOP20 JSON 数据
+
+### 15.4 手动触发
+
+```bash
+# 推送当前 latest.json
+./scripts/push_feishu.sh
+
+# 发送告警测试卡片
+./scripts/push_feishu.sh --alert
+
+# 只构建卡片并打印，不发送
+./scripts/push_feishu.sh --dry-run
+
+# 推送其他数据文件
+./scripts/push_feishu.sh --data assets/data/latest_full.json
+```
+
+也可直接调用 Python 模块：
+
+```bash
+export FEISHU_WEBHOOK="https://open.feishu.cn/open-apis/bot/v2/hook/xxxxx"
+export PYTHONPATH="$PWD/src"
+.venv/bin/python -m src.tools.feishu_pusher
+```
+
+### 15.5 代码位置
+
+- 核心实现：`src/tools/feishu_pusher.py`
+- 工作流接入：`src/graphs/nodes/push_node.py`（保存数据成功后调用 `push_daily`，质量门禁失败时调用 `push_alert`）
+- 手动脚本：`scripts/push_feishu.sh`
+- CI 环境变量：`.github/workflows/daily_update.yml`
+
 ## 14. 开发约定
 
 - **入口选择**：本地完整运行使用 `src/run_github.py`；Coze 平台调试使用 `src/main.py`。
@@ -464,6 +525,7 @@ python src/utils/config_validator.py
 | 2026-06-14 | **v1.10.5 前端信息降噪**：`assets/index.html` 右侧情绪面板改为 Tab 切换 + 移动端底部滑出面板；左侧热门标签紧凑化；今日洞察摘要化（50 字内）；创作者行动建议默认折叠；隐藏情绪-焦虑-触发关联图 |
 | 2026-06-14 | **v1.10.6 热门标签维度均衡**：`genre_distribution_node` 从“全局 TOP20 后分类”改为“按题材/爽点/人设/情感关系/时代背景独立取 TOP N”，保证每个维度都有多个标签；关系型标签（先婚后爱/闪婚/离婚/复婚）归入「情感关系」，扩展人设/情感关系词库；前端热门标签改为 2 列紧凑网格 |
 | 2026-06-14 | **v1.10.6 情绪驾驶舱二合一**：`assets/index.html` 将「洞察」与「热力」两个 Tab 合并为「洞察」Tab（含今日洞察、关键词、情绪热力 TOP8、环比趋势），保留「建议」Tab；桌面端洞察 Tab 内采用 2 列网格（热力图 + 趋势），移动端自动堆叠 |
+| 2026-06-16 | **v1.10.7 飞书机器人推送**：新增 `src/tools/feishu_pusher.py`，每日工作流完成后自动推送完整版交互式日报卡片；支持手动触发测试与质量门禁失败告警；GitHub Actions 通过 `FEISHU_WEBHOOK` secret 注入 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |
