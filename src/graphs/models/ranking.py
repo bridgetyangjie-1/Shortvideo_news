@@ -83,6 +83,8 @@ class ActorRanking(BaseModel):
     badge: str = Field(default="", description="徽章")
     works: str = Field(default="", description="代表作")
     trend: str = Field(default="", description="趋势描述")
+    trend_value: int = Field(default=0, description="热度变化值，正数上升负数下降")
+    baike_url: str = Field(default="", description="百度百科链接")
 
     @field_validator("name", mode="before")
     @classmethod

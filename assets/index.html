@@ -269,9 +269,11 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .actor-col-title.female { background: rgba(244, 114, 182, 0.1); color: #f472b6; }
 .actor-col-title.male { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
 .actor-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: rgba(30,34,48,0.3); border-radius: 6px; margin-bottom: 4px; }
-.actor-rank { width: 18px; height: 18px; border-radius: 4px; background: rgba(51,65,85,0.5); color: #94a3b8; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-.actor-name { font-size: 12px; color: #f8fafc; font-weight: 600; }
-.actor-pop { font-size: 11px; font-weight: 700; margin-left: auto; }
+.actor-rank { width: 18px; height: 18px; border-radius: 4px; background: rgba(51,65,85,0.5); color: #94a3b8; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.actor-name { font-size: 12px; color: #f8fafc; font-weight: 600; flex: 1; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.actor-name:hover { color: #a78bfa; text-decoration: underline; }
+.actor-trend { font-size: 10px; font-weight: 700; margin-left: 4px; flex-shrink: 0; }
+.actor-pop { font-size: 11px; font-weight: 700; flex-shrink: 0; }
 .actor-pop.female { color: #f472b6; }
 .actor-pop.male { color: #60a5fa; }
 
@@ -1848,12 +1850,34 @@ async function renderDashboard(dateParam = null) {
         </div>`).join('');
 
     // 演员榜
-    const renderActor = (a, colorClass) => `
+    const renderActor = (a, colorClass) => {
+        const trend = (a.trend || 'same').toLowerCase();
+        const trendValue = a.trend_value || 0;
+        let trendIcon = '→';
+        let trendClass = 'trend-same';
+        let trendText = '持平';
+        if (trend === 'up') {
+            trendIcon = '↑';
+            trendClass = 'trend-up';
+            trendText = `+${trendValue}`;
+        } else if (trend === 'down') {
+            trendIcon = '↓';
+            trendClass = 'trend-down';
+            trendText = `${trendValue}`;
+        } else if (trend === 'new') {
+            trendIcon = '●';
+            trendClass = 'trend-new';
+            trendText = '新';
+        }
+        const baikeUrl = a.baike_url || `https://baike.baidu.com/item/${encodeURIComponent(a.name || '')}`;
+        return `
         <div class="actor-item">
             <span class="actor-rank" style="${a.rank <= 3 ? 'background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff;' : ''}">${a.rank}</span>
-            <span class="actor-name">${a.name}</span>
+            <a class="actor-name" href="${baikeUrl}" target="_blank" rel="noopener" title="查看 ${a.name} 的百度百科">${a.name}</a>
+            <span class="actor-trend ${trendClass}" title="${trend === 'new' ? '新上榜' : '热度变化'}">${trendIcon}${trendText}</span>
             <span class="actor-pop ${colorClass}">${a.popularity}</span>
         </div>`;
+    };
     document.getElementById('actors-female-container').innerHTML = (data.actors?.female || []).slice(0, 10).map(a => renderActor(a, 'female')).join('');
     document.getElementById('actors-male-container').innerHTML = (data.actors?.male || []).slice(0, 10).map(a => renderActor(a, 'male')).join('');
 

@@ -53,6 +53,7 @@ class EnrichNodeOutput(BaseModel):
 
 class ActorRankingNodeInput(BaseModel):
     """演员榜单生成节点输入"""
+    data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
     enriched_rankings: List[DramaRanking] = Field(default=[], description="补充后的完整榜单")
 
 

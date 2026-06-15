@@ -7,6 +7,8 @@ import json
 import re
 import logging
 import math
+from datetime import datetime, timedelta
+from urllib.parse import quote
 from typing import Dict, Any, List
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
@@ -32,6 +34,81 @@ from graphs.state import (
 logger = logging.getLogger(__name__)
 
 
+def _build_baike_url(name: str) -> str:
+    """生成演员百度百科搜索链接（按名字精确匹配）。"""
+    if not name:
+        return ""
+    return f"https://baike.baidu.com/item/{quote(str(name).strip())}"
+
+
+def _load_yesterday_actors(data_date: str) -> Dict[str, int]:
+    """
+    读取昨日历史归档中的演员人气值，用于计算今日热度变化。
+
+    Returns:
+        {演员名: 昨日人气值}
+    """
+    if not data_date:
+        return {}
+    try:
+        yesterday = (datetime.strptime(data_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+    except (ValueError, TypeError):
+        return {}
+
+    workspace = os.getenv("COZE_WORKSPACE_PATH", ".")
+    yesterday_file = os.path.join(workspace, "assets", "data", "history", f"{yesterday}.json")
+    if not os.path.exists(yesterday_file):
+        return {}
+
+    try:
+        with open(yesterday_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        logger.warning(f"读取昨日演员榜失败: {e}")
+        return {}
+
+    yesterday_actors: Dict[str, int] = {}
+    actors_data = data.get("actors") or {}
+    for gender in ("female", "male"):
+        for actor in actors_data.get(gender, []) or []:
+            name = actor.get("name", "")
+            if name:
+                yesterday_actors[name] = actor.get("popularity", 0) or 0
+    return yesterday_actors
+
+
+def _compute_actor_trends(actors_dict: Dict[str, List[Dict[str, Any]]], yesterday_actors: Dict[str, int]) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    基于昨日人气值计算每位演员的热度变化值与趋势标签，并补充百度百科链接。
+
+    - 今日人气高于昨日：trend=up，trend_value=今日-昨日
+    - 今日人气低于昨日：trend=down，trend_value=今日-昨日（负数）
+    - 昨日无记录：trend=new，trend_value=今日人气（视为从零上升）
+    - 人气相等：trend=same，trend_value=0
+    """
+    for gender in ("female", "male"):
+        for actor in actors_dict.get(gender, []) or []:
+            name = actor.get("name", "")
+            today_pop = actor.get("popularity", 0) or 0
+            yesterday_pop = yesterday_actors.get(name)
+
+            if yesterday_pop is None:
+                actor["trend"] = "new"
+                actor["trend_value"] = today_pop
+            elif today_pop > yesterday_pop:
+                actor["trend"] = "up"
+                actor["trend_value"] = today_pop - yesterday_pop
+            elif today_pop < yesterday_pop:
+                actor["trend"] = "down"
+                actor["trend_value"] = today_pop - yesterday_pop
+            else:
+                actor["trend"] = "same"
+                actor["trend_value"] = 0
+
+            actor["baike_url"] = _build_baike_url(name)
+    return actors_dict
+
+
 def _extract_actors_from_rankings(rankings_data: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
     """
     从榜单数据中提取演员信息，综合排名、播放量与趋势计算差异化热度值。
@@ -41,6 +118,9 @@ def _extract_actors_from_rankings(rankings_data: List[Dict[str, Any]]) -> Dict[s
     - 播放量权重：按 log1p(播放量) 给予额外加分，避免头部过度集中。
     - 趋势权重：up/new +10，same +5，down 0。
     - 多作品加成：每多一部上榜作品额外 +5，鼓励持续曝光。
+
+    注意：此函数仅计算基础人气值，trend/trend_value/baike_url 需调用方
+    通过 _compute_actor_trends 结合昨日数据二次补充。
 
     Returns:
         {"female": [演员信息], "male": [演员信息]}
@@ -116,13 +196,6 @@ def _extract_actors_from_rankings(rankings_data: List[Dict[str, Any]]) -> Dict[s
             works = entry["works"][:3]
             trends = entry["trends"]
 
-            if any(t in ("up", "new") for t in trends):
-                trend = "up"
-            elif "same" in trends:
-                trend = "same"
-            else:
-                trend = "down"
-
             actors.append({
                 "rank": rank,
                 "name": name,
@@ -131,7 +204,9 @@ def _extract_actors_from_rankings(rankings_data: List[Dict[str, Any]]) -> Dict[s
                 "platform": "红果",
                 "badge": "热门演员" if works_count >= 2 else "",
                 "works": "、".join(works),
-                "trend": trend,
+                "trend": "same",  # 占位，后续由 _compute_actor_trends 覆盖
+                "trend_value": 0,
+                "baike_url": "",
             })
         return actors
 
@@ -173,6 +248,8 @@ def _ensure_top10(parsed_list: List[Dict[str, Any]], source_list: List[Dict[str,
             "badge": item.get("badge", ""),
             "works": item.get("works", ""),
             "trend": item.get("trend", "same"),
+            "trend_value": item.get("trend_value", 0),
+            "baike_url": item.get("baike_url", ""),
         })
     return result
 
@@ -220,7 +297,12 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         logger.info("=" * 50)
         
         extracted_actors = _extract_actors_from_rankings(rankings_data)
-        actors_dict = extracted_actors
+
+        # 读取昨日演员人气值并计算热度变化/百科链接
+        yesterday_actors = _load_yesterday_actors(state.data_date)
+        actors_dict = _compute_actor_trends(extracted_actors, yesterday_actors)
+        if yesterday_actors:
+            logger.info(f"已结合昨日演员榜计算热度变化，昨日记录数: {len(yesterday_actors)}")
 
         # 检查是否需要推理补充（目标男女各 TOP10）
         female_count = len(actors_dict.get("female", []))
@@ -270,6 +352,8 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
                             "female": _ensure_top10(parsed.get("female", []), extracted_actors.get("female", [])),
                             "male": _ensure_top10(parsed.get("male", []), extracted_actors.get("male", [])),
                         }
+                        # 为补充后的演员重新计算趋势/百科链接
+                        actors_dict = _compute_actor_trends(actors_dict, yesterday_actors)
                         logger.info("✅ DeepSeek推理补充演员成功")
             except Exception as e:
                 logger.warning(f"DeepSeek推理补充失败: {e}，使用原始提取结果")
@@ -287,7 +371,9 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
                 platform=item.get("platform", "红果"),
                 badge=item.get("badge", ""),
                 works=item.get("works", ""),
-                trend=item.get("trend", "")
+                trend=item.get("trend", ""),
+                trend_value=item.get("trend_value", 0),
+                baike_url=item.get("baike_url", ""),
             )
             female_actors.append(actor)
         
@@ -301,7 +387,9 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
                 platform=item.get("platform", "红果"),
                 badge=item.get("badge", ""),
                 works=item.get("works", ""),
-                trend=item.get("trend", "")
+                trend=item.get("trend", ""),
+                trend_value=item.get("trend_value", 0),
+                baike_url=item.get("baike_url", ""),
             )
             male_actors.append(actor)
         
