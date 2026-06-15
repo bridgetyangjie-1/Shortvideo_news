@@ -4,7 +4,7 @@
 
 ## 当前稳定能力
 
-- GitHub Actions 每日北京时间 9:00 自动执行 `src/run_github.py`。
+- GitHub Actions 每日北京时间 8:23 自动执行 `src/run_github.py`，避开整点调度高峰。
 - 前端读取 `assets/data/latest.json`，支持历史数据。
 - 剧集榜单目标为 TOP20。
 - 前端“榜单 TOP20”已有代码层门禁：少于 20 条会补齐到 20 条，补齐失败则拒绝覆盖数据文件。

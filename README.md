@@ -2,7 +2,7 @@
 
 > 作者：Bridget Yang  
 > 当前版本：v1.10.6  
-> 更新频率：每日北京时间 9:00 自动更新
+> 更新频率：每日北京时间 8:23 自动更新
 
 ## 功能概览
 
@@ -97,7 +97,7 @@ uv run python src/run_github.py
 
 自动化入口：`.github/workflows/daily_update.yml`
 
-- 触发时间：UTC 1:00，即北京时间 9:00。
+- 触发时间：UTC 0:23，即北京时间 8:23（避开 GitHub Actions 整点调度高峰）。
 - 手动触发：支持 `workflow_dispatch`。
 - 必需 secrets：
   - `MOONSHOT_API_KEY`

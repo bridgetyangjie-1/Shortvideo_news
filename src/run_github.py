@@ -7,7 +7,9 @@ import os
 import sys
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+
+BEIJING_TZ = timezone(timedelta(hours=8))
 
 # 设置路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -34,8 +36,8 @@ def main():
         # 创建工作流
         graph = create_graph()
         
-        # 准备输入数据
-        today = datetime.now().strftime("%Y-%m-%d")
+        # 准备输入数据。GitHub Actions runner 使用 UTC，本项目按北京时间发布每日数据。
+        today = datetime.now(BEIJING_TZ).strftime("%Y-%m-%d")
         input_data = {
             "data_date": today
         }
