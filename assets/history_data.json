@@ -1,6 +1,10 @@
 {
   "daily_play_trend": [
     {
+      "date": "2026-06-16",
+      "total_views": 0
+    },
+    {
       "date": "2026-06-15",
       "total_views": 0
     },
@@ -34,7 +38,7 @@
       "week": "2026-W24",
       "start_date": "2026-06-15",
       "end_date": "2026-06-21",
-      "top1_title": "重生后我带母亲逆风翻盘",
+      "top1_title": "我刚离婚，系统就来了",
       "top1_views": "热度上榜",
       "total_views": 0
     },
@@ -47,5 +51,5 @@
       "total_views": 0
     }
   ],
-  "last_updated": "2026-06-15 17:13:43"
+  "last_updated": "2026-06-16 06:41:10"
 }
