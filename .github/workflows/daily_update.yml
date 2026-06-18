@@ -2,7 +2,9 @@ name: Daily Update
 
 on:
   schedule:
-    - cron: '0 1 * * *'
+    # Run at 08:23 Beijing time. Avoid exact-hour cron slots because GitHub
+    # scheduled workflows can be delayed heavily around the top of the hour.
+    - cron: '23 0 * * *'
   workflow_dispatch:
 
 concurrency:

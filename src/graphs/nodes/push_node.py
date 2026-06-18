@@ -5,7 +5,7 @@
 import os
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
 from langchain_core.runnables import RunnableConfig
@@ -35,6 +35,8 @@ from graphs.state import (
 
 # 初始化日志
 logger = logging.getLogger(__name__)
+
+BEIJING_TZ = timezone(timedelta(hours=8))
 
 # 输出文件路径 - 使用当前工作目录
 WORKSPACE_PATH = os.getcwd()
@@ -247,8 +249,9 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     _ensure_dirs()
     
     # 获取数据日期
-    data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
-    generated_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S+08:00")
+    now_beijing = datetime.now(BEIJING_TZ)
+    data_date = state.data_date or now_beijing.strftime("%Y-%m-%d")
+    generated_at = now_beijing.isoformat(timespec="seconds")
 
     # 质量门禁未通过时拒绝覆盖线上数据，并推送告警
     if not getattr(state, "success", True):

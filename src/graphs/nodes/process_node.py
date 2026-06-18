@@ -6,7 +6,7 @@ import os
 import json
 import re
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, List
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
@@ -27,6 +27,8 @@ from graphs.state import ProcessNodeInput, ProcessNodeOutput
 
 # 初始化日志
 logger = logging.getLogger(__name__)
+
+BEIJING_TZ = timezone(timedelta(hours=8))
 
 
 def _parse_hongguo_direct_data(search_results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -117,10 +119,7 @@ def process_node(
     # 处理默认日期
     data_date = state.data_date
     if not data_date:
-        data_date = datetime.now().strftime("%Y-%m-%d")
-    
-    # 生成时间戳
-    generated_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S+08:00")
+        data_date = datetime.now(BEIJING_TZ).strftime("%Y-%m-%d")
     
     try:
         if not state.search_results:

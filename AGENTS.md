@@ -5,7 +5,7 @@
 
 ## 1. 项目概述
 
-这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取红果官网榜单、补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
+这是一个自动化的**短剧行业数据看板**系统。每天北京时间 8:23（UTC 0:23）由 GitHub Actions 触发，爬取红果官网榜单、补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
 
 - **项目名称**：`shortvideo-news`
 - **当前版本**：`v1.10.6`
@@ -379,7 +379,7 @@ python src/utils/config_validator.py
 
 - **工作流文件**：`.github/workflows/daily_update.yml`
 - **触发条件**：
-  - 定时：`cron: '0 1 * * *'`（UTC 1:00 = 北京时间 9:00）
+  - 定时：`cron: '23 0 * * *'`（UTC 0:23 = 北京时间 8:23，避开 GitHub Actions 整点调度高峰）
   - 手动：`workflow_dispatch`
 - **权限**：`contents: write`（用于自动提交生成的数据文件）
 
@@ -505,6 +505,7 @@ export PYTHONPATH="$PWD/src"
 
 | 日期 | 改动 |
 |------|------|
+| 2026-06-15 | GitHub Actions 每日更新从整点 `0 1 * * *` 调整为 `23 0 * * *`（北京时间 8:23），避开整点调度延迟；`run_github.py` / `push_node.py` / `process_node.py` 统一使用北京时间生成日期与时间戳 |
 | 2026-06-12 | **v1.9.0 第二阶段优化**：本地缓存 + 多源验证 + 排名趋势 |
 | 2026-06-12 | 新增 `tools/cache_db.py`：本地 SQLite 缓存，7 天内有效，避免重复搜索 |
 | 2026-06-12 | 新增 `tools/tag_normalizer.py`：标签标准化与题材分类 |
