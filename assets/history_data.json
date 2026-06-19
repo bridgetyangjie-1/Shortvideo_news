@@ -1,6 +1,10 @@
 {
   "daily_play_trend": [
     {
+      "date": "2026-06-19",
+      "total_views": 0
+    },
+    {
       "date": "2026-06-18",
       "total_views": 0
     },
@@ -46,7 +50,7 @@
       "week": "2026-W24",
       "start_date": "2026-06-15",
       "end_date": "2026-06-21",
-      "top1_title": "都市：开局一支笔推动完美意外",
+      "top1_title": "远嫁八年，回娘家难如登天",
       "top1_views": "热度上榜",
       "total_views": 0
     },
@@ -59,5 +63,5 @@
       "total_views": 0
     }
   ],
-  "last_updated": "2026-06-18 06:02:21"
+  "last_updated": "2026-06-19 06:26:58"
 }
