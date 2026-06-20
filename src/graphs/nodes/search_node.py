@@ -12,7 +12,8 @@ from coze_coding_utils.runtime_ctx.context import Context
 from tools.moonshot_api import MoonshotClient
 from tools.duanjugongcheng_crawler import fetch_latest_full_ranking, fetch_homepage_top10
 from tools.hongguo_crawler import fetch_hongguo_data
-from tools.dataeye_crawler import fetch_dataeye_rankings
+# DataEye 榜单当前不可用，已停用
+# from tools.dataeye_crawler import fetch_dataeye_rankings
 
 # Fallback for test_run environment
 try:
@@ -30,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 def _merge_hongguo_dataeye(hongguo_data: List[Dict], dataeye_data: List[Dict]) -> List[Dict]:
     """
-    融合红果和DataEye数据（辅助数据源）
+    处理红果推荐页数据（DataEye 当前不可用，dataeye_data 通常为空）。
     
     注意：红果网页端返回的是推荐列表，不是真实热榜，仅用于补充元数据和日变化追踪。
     """
@@ -149,40 +150,23 @@ def search_node(
         except Exception as e:
             logger.warning(f"红果推荐页爬取失败: {e}")
         
-        # ========== 第三步：爬取DataEye榜单（交叉验证，可选）==========
-        logger.info("=" * 50)
-        logger.info("第三步：爬取DataEye榜单进行交叉验证（可选）")
-        logger.info("=" * 50)
-        
-        dataeye_data = []
-        try:
-            dataeye_data = fetch_dataeye_rankings(top_n=30)
-            if dataeye_data:
-                logger.info(f"✅ DataEye爬取成功，获取 {len(dataeye_data)} 条数据")
-            else:
-                logger.info("DataEye未返回数据")
-        except Exception as e:
-            logger.info(f"DataEye爬取不可用: {e}")
-        
-        # 红果 + DataEye 融合（仅作为辅助）
+        # 红果推荐页数据（仅作元数据补充，不再调用 DataEye）
         if hongguo_data:
-            merged_data = _merge_hongguo_dataeye(hongguo_data, dataeye_data)
+            merged_data = _merge_hongguo_dataeye(hongguo_data, [])
             search_results.append({
-                "keyword": "红果推荐页+DataEye辅助",
+                "keyword": "红果推荐页辅助",
                 "title": f"红果推荐页辅助数据 {data_date}",
-                "url": "multi_source_merged",
-                "snippet": f"红果推荐页{len(hongguo_data)}条 + DataEye{len(dataeye_data)}条",
+                "url": "hongguo_recommend",
+                "snippet": f"红果推荐页{len(hongguo_data)}条",
                 "summary": json.dumps(merged_data, ensure_ascii=False),
-                "site_name": "多源融合",
+                "site_name": "红果推荐页",
                 "publish_time": data_date,
                 "raw_content": json.dumps(merged_data, ensure_ascii=False),
                 "type": "hongguo_recommend",
                 "data_count": len(merged_data),
             })
         
-        # ========== 第四步：Kimi搜索行业宏观数据（仅1次调用）==========
-        logger.info("=" * 50)
-        logger.info("第四步：Kimi搜索补充行业数据（仅1次调用）")
+        # ========== 第三步：Kimi搜索补充行业数据（仅1次调用）==========
         logger.info("=" * 50)
         
         client = MoonshotClient()
@@ -226,7 +210,7 @@ def search_node(
             logger.warning(f"行业数据搜索失败: {e}")
         
         logger.info("=" * 50)
-        logger.info(f"数据抓取完成：短剧工程 {len(duanju_data)} 条 + 红果 {len(hongguo_data)} 条 + DataEye {len(dataeye_data)} 条 + 行业搜索 1 次")
+        logger.info(f"数据抓取完成：短剧工程 {len(duanju_data)} 条 + 红果 {len(hongguo_data)} 条 + 行业搜索 1 次")
         logger.info("=" * 50)
         
         return SearchNodeOutput(
