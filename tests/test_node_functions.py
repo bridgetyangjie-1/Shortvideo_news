@@ -30,8 +30,9 @@ class SearchNodeMergeTest(unittest.TestCase):
         ]
         merged = _merge_hongguo_dataeye(hongguo, [])
         self.assertEqual(len(merged), 2)
-        self.assertEqual(merged[0]["data_source"], "hongguo")
-        self.assertEqual(merged[0]["confidence_score"], 0.7)
+        # 红果网页端为推荐列表，不是真实热榜，因此置信度降低并明确标注来源
+        self.assertEqual(merged[0]["data_source"], "hongguo_recommend")
+        self.assertEqual(merged[0]["confidence_score"], 0.5)
         self.assertFalse(merged[0]["cross_validated"])
 
     def test_merge_cross_validated_increases_confidence(self) -> None:
@@ -40,9 +41,10 @@ class SearchNodeMergeTest(unittest.TestCase):
         merged = _merge_hongguo_dataeye(hongguo, dataeye)
         self.assertEqual(len(merged), 1)
         self.assertEqual(merged[0]["data_source"], "hongguo+dataeye")
-        self.assertEqual(merged[0]["confidence_score"], 0.95)
+        # 红果推荐页本身质量较低，即使交叉验证也不应给予过高置信度
+        self.assertEqual(merged[0]["confidence_score"], 0.6)
         self.assertTrue(merged[0]["cross_validated"])
-        self.assertEqual(merged[0]["heat"], 110)
+        self.assertEqual(merged[0]["heat"], 120)
 
     def test_merge_fuzzy_match_by_substring(self) -> None:
         hongguo = [{"title": "霸道总裁的小娇妻", "heat": 100}]

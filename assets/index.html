@@ -33,6 +33,15 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .source-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; padding: 10px 12px; background: rgba(30, 34, 48, 0.3); border-radius: 8px; }
 .source-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; }
 
+/* 周榜基准条 */
+.weekly-base-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; margin-bottom: 12px; background: linear-gradient(90deg, rgba(251, 191, 36, 0.12), rgba(244, 63, 95, 0.08)); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 8px; font-size: 12px; }
+.weekly-base-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.weekly-base-badge { padding: 2px 8px; background: rgba(251, 191, 36, 0.18); color: #fbbf24; border-radius: 4px; font-size: 10px; font-weight: 700; }
+.weekly-base-title { color: #f8fafc; font-weight: 700; }
+.weekly-base-meta { color: #94a3b8; font-size: 11px; }
+.weekly-base-index { color: #fbbf24; font-weight: 800; }
+.weekly-base-desc { color: #64748b; font-size: 10px; text-align: right; }
+
 /* 头部 */
 .header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
 .header-left h1 { font-size: 1.25rem; font-weight: 800; background: linear-gradient(135deg, #e0e7ff 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -644,7 +653,8 @@ body.emotion-mobile-locked { overflow: hidden; }
   <!-- 两列布局 -->
   <div class="main-grid">
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> 榜单 TOP20 <span class="source-tag tier1">📊 红果直爬</span> + <span class="source-tag tier2">🔍 搜补</span></div>
+      <div class="section-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> 榜单 TOP20 <span class="source-tag tier1">📊 周榜坐标</span> + <span class="source-tag tier2">🔍 日榜追踪</span></div>
+      <div id="weekly-base-banner"></div>
       <div id="rankings-container"></div>
     </div>
     
@@ -1688,6 +1698,28 @@ function renderHotTags(genreDistribution) {
     container.innerHTML = html;
 }
 
+// 渲染周榜基准标注
+function renderWeeklyBase(weeklyBase) {
+    const container = document.getElementById('weekly-base-banner');
+    if (!container) return;
+    const wb = weeklyBase || {};
+    if (!wb.available) {
+        container.style.display = 'none';
+        return;
+    }
+    container.style.display = 'flex';
+    const weekDateLabel = wb.week_date ? `(${wb.week_date} 周榜)` : '';
+    container.innerHTML = `
+        <div class="weekly-base-left">
+            <span class="weekly-base-badge">🏆 周榜坐标</span>
+            <span class="weekly-base-title">${escapeHtml(wb.top1_title || '--')}</span>
+            <span class="weekly-base-meta">本周 TOP1 ${weekDateLabel} · ${escapeHtml(wb.top1_genre || '--')}</span>
+            <span class="weekly-base-index">${Number(wb.top1_index || 0).toLocaleString()} 热度</span>
+        </div>
+        <div class="weekly-base-desc">${escapeHtml(wb.description || '')}</div>
+    `;
+}
+
 // 渲染榜单：表格平铺 TOP20，固定高度滚动
 function renderRankings(rankings) {
     const container = document.getElementById('rankings-container');
@@ -1840,6 +1872,7 @@ async function renderDashboard(dateParam = null) {
     }).join('');
 
     // 榜单（支持滚动加载）
+    renderWeeklyBase(data.weekly_base);
     renderRankings(data.rankings);
 
     // 异动点评

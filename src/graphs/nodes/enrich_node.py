@@ -71,7 +71,34 @@ def _backfill_basic_fields(
                 src = candidate
         if not src:
             continue
-        # 仅当 DeepSeek 未返回或返回空时回填
+        # 判断来源可信度：短剧工程周榜为高质量数据源，优先保留其热度/指数
+        is_high_confidence = src.get("data_source") == "duanjugongcheng" or (src.get("confidence_score") or 0) >= 0.85
+        
+        if is_high_confidence:
+            # 高可信来源：覆盖 DeepSeek 可能丢失或改写的热度相关字段
+            item["views"] = src.get("views", item.get("views", ""))
+            item["views_num"] = src.get("views_num", item.get("views_num", 0))
+            item["heat"] = src.get("heat", item.get("heat", 0))
+            item["data_source"] = src.get("data_source", item.get("data_source", "unknown"))
+            item["confidence_score"] = src.get("confidence_score", item.get("confidence_score", 0.7))
+            if src.get("release_date"):
+                item["release_date"] = src.get("release_date")
+            if src.get("week_date"):
+                item["week_date"] = src.get("week_date")
+            if src.get("weekly_index"):
+                item["weekly_index"] = src.get("weekly_index")
+            if src.get("total_index"):
+                item["total_index"] = src.get("total_index")
+        else:
+            # 低可信来源（如红果推荐页）：仅当 DeepSeek 未返回或返回空时回填
+            if not item.get("views") and src.get("views"):
+                item["views"] = src.get("views")
+            if not item.get("views_num") and src.get("views_num"):
+                item["views_num"] = src.get("views_num")
+            if not item.get("heat") and src.get("heat"):
+                item["heat"] = src.get("heat")
+        
+        # 通用元数据回填（适用于所有来源）
         if not item.get("series_id"):
             item["series_id"] = src.get("series_id", "")
         if not item.get("cover"):
@@ -82,10 +109,6 @@ def _backfill_basic_fields(
             item["platform"] = src.get("platform", "红果")
         if not item.get("tags"):
             item["tags"] = list(src.get("tags", []))
-        if not item.get("views") and src.get("views"):
-            item["views"] = src.get("views")
-        if not item.get("views_num") and src.get("views_num"):
-            item["views_num"] = src.get("views_num")
         if not item.get("episodes_count") and src.get("episodes_count"):
             item["episodes_count"] = src.get("episodes_count")
     return refined

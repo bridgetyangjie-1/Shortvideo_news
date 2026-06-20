@@ -1,6 +1,6 @@
 """
 数据处理节点 - 清洗和结构化数据
-优先处理红果官网直接爬取的数据，无数据时使用Kimi搜索结果
+关键变更：主数据源改为短剧工程周榜，红果推荐页仅作辅助/元数据补充。
 """
 import os
 import json
@@ -29,44 +29,113 @@ from graphs.state import ProcessNodeInput, ProcessNodeOutput
 logger = logging.getLogger(__name__)
 
 
-def _parse_hongguo_direct_data(search_results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """
-    从搜索结果中提取红果直接爬取的数据
-    兼容：hongguo_direct（旧版）和 merged_ranking（新版融合数据）
-    """
+def _parse_duanju_data(search_results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """从搜索结果中提取短剧工程周榜数据"""
     for item in search_results:
-        item_type = item.get("type", "")
-        # 兼容新版 merged_ranking 和旧版 hongguo_direct
-        if item_type in ("hongguo_direct", "merged_ranking"):
+        if item.get("type") == "duanjugongcheng_ranking":
             raw_content = item.get("raw_content", "")
             if raw_content:
                 try:
                     data = json.loads(raw_content)
                     if isinstance(data, list):
-                        logger.info(f"✅ 从融合数据中提取 {len(data)} 条榜单")
+                        logger.info(f"✅ 从短剧工程数据中提取 {len(data)} 条榜单")
                         return data
                 except json.JSONDecodeError as e:
-                    logger.warning(f"解析融合数据失败: {e}")
+                    logger.warning(f"解析短剧工程数据失败: {e}")
     return []
 
 
-def _convert_hongguo_to_rankings(hongguo_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """
-    将红果直接爬取的数据转换为标准榜单格式
+def _parse_hongguo_recommend_data(search_results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """从搜索结果中提取红果推荐页数据"""
+    for item in search_results:
+        item_type = item.get("type", "")
+        if item_type in ("hongguo_direct", "merged_ranking", "hongguo_recommend"):
+            raw_content = item.get("raw_content", "")
+            if raw_content:
+                try:
+                    data = json.loads(raw_content)
+                    if isinstance(data, list):
+                        logger.info(f"✅ 从红果推荐数据中提取 {len(data)} 条")
+                        return data
+                except json.JSONDecodeError as e:
+                    logger.warning(f"解析红果推荐数据失败: {e}")
+    return []
+
+
+def _convert_duanju_to_rankings(duanju_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """将短剧工程周榜数据转换为标准榜单格式"""
+    rankings = []
     
-    Args:
-        hongguo_data: 红果官网直接爬取的数据
+    for item in duanju_data:
+        weekly_index = int(item.get("weekly_index", 0) or 0)
+        total_index = int(item.get("total_index", 0) or 0)
         
-    Returns:
-        标准格式的榜单数据
-    """
+        # views 使用热播指数展示
+        views_str = f"{weekly_index}" if weekly_index > 0 else "热度上榜"
+        
+        ranking = {
+            "rank": item.get("rank", 0),
+            "title": item.get("title", ""),
+            "views": views_str,
+            "views_num": weekly_index,
+            "platform": item.get("platform", "红果"),
+            "genre": item.get("genre", ""),
+            "tags": [],  # 后续用红果数据回填
+            "trend": "",
+            "trend_tag": "新上架" if item.get("is_new") else "",
+            "trend_type": "new" if item.get("is_new") else "same",
+            "category": _infer_category(item.get("genre", "")),
+            "is_ai": False,
+            "desc": "",
+            "change": "",
+            "heat": weekly_index,
+            "female_lead": "",
+            "male_lead": "",
+            "production_house": "",
+            "series_id": "",
+            "cover": "",
+            "core_trope": [],
+            "episodes_count": 80,
+            "release_date": item.get("release_date", ""),
+            "week_date": item.get("week_date", ""),
+            "weekly_index": weekly_index,
+            "total_index": total_index,
+            "confidence_score": 0.9,
+            "data_source": "duanjugongcheng",
+        }
+        rankings.append(ranking)
+    
+    return rankings
+
+
+def _infer_category(genre: str) -> str:
+    """根据题材推断分类：female/male/ai"""
+    if not genre:
+        return "female"
+    
+    genre_lower = str(genre).lower()
+    male_keywords = ["玄幻", "武侠", "战神", "赘婿", "历史", "大男主", "男频", "系统", "修仙", "特种兵", "荒野求生"]
+    ai_keywords = ["ai", "aigc", "漫剧", "动画", "动漫"]
+    
+    for kw in ai_keywords:
+        if kw in genre_lower:
+            return "ai"
+    for kw in male_keywords:
+        if kw in genre_lower:
+            return "male"
+    
+    return "female"
+
+
+def _convert_hongguo_to_rankings(hongguo_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """将红果推荐页数据转换为标准榜单格式（降级备用）"""
     rankings = []
     
     for item in hongguo_data:
         ranking = {
             "rank": item.get("rank", 0),
             "title": item.get("title", ""),
-            "views": "热度上榜",  # 红果官网没有播放量，用占位符
+            "views": "热度上榜",
             "views_num": 0,
             "platform": item.get("platform", "红果"),
             "genre": "",
@@ -74,11 +143,11 @@ def _convert_hongguo_to_rankings(hongguo_data: List[Dict[str, Any]]) -> List[Dic
             "trend": "",
             "trend_tag": "",
             "trend_type": "same",
-            "category": "female",  # 默认女频
+            "category": "female",
             "is_ai": False,
             "desc": "",
             "change": "",
-            "heat": 100 - item.get("rank", 0),  # 简单热度计算
+            "heat": 0,
             "female_lead": item.get("female_lead", ""),
             "male_lead": item.get("male_lead", ""),
             "production_house": item.get("studio", ""),
@@ -86,6 +155,8 @@ def _convert_hongguo_to_rankings(hongguo_data: List[Dict[str, Any]]) -> List[Dic
             "cover": item.get("cover", ""),
             "core_trope": [],
             "episodes_count": _parse_episodes(item.get("episodes", "")),
+            "confidence_score": 0.5,
+            "data_source": "hongguo_recommend",
         }
         rankings.append(ranking)
     
@@ -96,10 +167,104 @@ def _parse_episodes(episodes_str: str) -> int:
     """解析集数字符串，如'全92集' -> 92"""
     if not episodes_str:
         return 80
-    match = re.search(r'(\d+)', episodes_str)
+    match = re.search(r'(\d+)', str(episodes_str))
     if match:
         return int(match.group(1))
     return 80
+
+
+def _backfill_hongguo_metadata(
+    rankings: List[Dict[str, Any]],
+    hongguo_data: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
+    """用红果推荐页数据补充短剧工程榜单的 series_id/cover/tags/episodes"""
+    if not hongguo_data:
+        return rankings
+    
+    metadata_index: Dict[str, Dict[str, Any]] = {}
+    for item in hongguo_data:
+        title = item.get("title", "").strip()
+        if title:
+            metadata_index[title] = item
+            metadata_index[title.replace(" ", "")] = item
+    
+    for item in rankings:
+        title = item.get("title", "").strip()
+        meta = metadata_index.get(title) or metadata_index.get(title.replace(" ", ""))
+        if not meta:
+            continue
+        
+        if not item.get("series_id"):
+            item["series_id"] = meta.get("series_id", "")
+        if not item.get("cover"):
+            item["cover"] = meta.get("cover", "")
+        if not item.get("tags"):
+            item["tags"] = list(meta.get("tags", []))
+        if not item.get("production_house"):
+            item["production_house"] = meta.get("studio", "")
+        if item.get("episodes_count", 80) == 80:
+            item["episodes_count"] = _parse_episodes(meta.get("episodes", ""))
+    
+    return rankings
+
+
+def _extract_rankings_from_search(
+    search_results: List[Dict[str, Any]],
+    data_date: str,
+    client: MoonshotClient,
+    cfg: Dict[str, Any]
+) -> List[Dict[str, Any]]:
+    """使用 Kimi 从搜索结果中提取榜单（兜底方案）"""
+    sp = cfg.get("sp", "")
+    up = cfg.get("up", "")
+    temperature = cfg.get("config", {}).get("temperature", 0.3)
+    max_completion_tokens = cfg.get("config", {}).get("max_completion_tokens", 2000)
+    
+    search_text = ""
+    for idx, item in enumerate(search_results, 1):
+        if item.get("type") in ("duanjugongcheng_ranking", "hongguo_recommend"):
+            continue
+        search_text += f"\n【来源 {idx}】\n"
+        search_text += f"关键词: {item.get('keyword', '')}\n"
+        search_text += f"标题: {item.get('title', '')}\n"
+        search_text += f"来源网站: {item.get('site_name', '')}\n"
+        search_text += f"摘要: {item.get('summary', '') or item.get('snippet', '')}\n"
+        search_text += f"发布时间: {item.get('publish_time', '')}\n"
+    
+    up_tpl = Template(up)
+    user_prompt = up_tpl.render({
+        "data_date": data_date,
+        "search_results": search_text
+    })
+    
+    messages = [
+        {"role": "system", "content": sp},
+        {"role": "user", "content": user_prompt}
+    ]
+    
+    result_data = client.structured_output(
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_completion_tokens
+    )
+    
+    rankings: List[Dict[str, Any]] = []
+    if isinstance(result_data, list):
+        rankings = [item for item in result_data if isinstance(item, dict)]
+    elif isinstance(result_data, dict):
+        raw_rankings = (
+            result_data.get("rankings")
+            or result_data.get("top20")
+            or result_data.get("top10")
+            or result_data.get("data")
+            or []
+        )
+        if isinstance(raw_rankings, list):
+            rankings = [item for item in raw_rankings if isinstance(item, dict)]
+    else:
+        raise ValueError(f"process_node 解析结果类型错误: {type(result_data)}")
+    
+    return rankings
 
 
 def process_node(
@@ -109,8 +274,8 @@ def process_node(
 ) -> ProcessNodeOutput:
     """
     title: 🧹 数据清洗与结构化
-    desc: 优先处理红果官网直接爬取数据，无数据时使用Kimi搜索
-    integrations: Moonshot API, 红果官网爬虫
+    desc: 优先处理短剧工程周榜，红果推荐页补充元数据，均无数据时用Kimi搜索兜底
+    integrations: 短剧工程爬虫, 红果官网爬虫, Moonshot API
     """
     ctx = runtime.context
     
@@ -132,20 +297,36 @@ def process_node(
                 success=False,
                 error_message=error_message + "\n"
             )
-
-        # ========== 优先处理红果直接爬取的数据 ==========
-        hongguo_data = _parse_hongguo_direct_data(state.search_results)
         
+        # 读取LLM配置（兜底方案会用到）
+        cfg_file = os.path.join(
+            os.getenv("COZE_WORKSPACE_PATH", "."), 
+            config["metadata"]["llm_cfg"]
+        )
+        with open(cfg_file, 'r', encoding='utf-8') as fd:
+            _cfg = json.load(fd)
+        
+        # 同时准备红果推荐页数据（用于元数据回填）
+        hongguo_data = _parse_hongguo_recommend_data(state.search_results)
         if hongguo_data:
+            logger.info(f"✅ 获取红果推荐页 {len(hongguo_data)} 条，用于补充元数据")
+        
+        # ========== 第一步：优先处理短剧工程周榜 ==========
+        duanju_data = _parse_duanju_data(state.search_results)
+        
+        if duanju_data:
             logger.info("=" * 50)
-            logger.info("使用红果官网直接爬取的数据")
+            logger.info("使用短剧工程周榜作为主数据源")
             logger.info("=" * 50)
             
-            # 转换为标准榜单格式
-            rankings = _convert_hongguo_to_rankings(hongguo_data)
+            rankings = _convert_duanju_to_rankings(duanju_data)
             
             if rankings:
                 logger.info(f"✅ 成功转换 {len(rankings)} 条榜单数据")
+                
+                # 用红果数据回填元数据
+                if hongguo_data:
+                    rankings = _backfill_hongguo_metadata(rankings, hongguo_data)
                 
                 # 数据质量检查
                 count_warning = ""
@@ -168,8 +349,14 @@ def process_node(
                 if count_warning:
                     logger.warning("process_node: %s", count_warning)
                 
-                # 计算数据质量分数
-                quality_score = 85.0  # 红果直接爬取的数据质量较高
+                # 计算质量分：短剧工程有真实热度指数
+                valid_count = sum(
+                    1 for item in rankings
+                    if item.get("rank", 0) > 0 and item.get("title")
+                    and item.get("weekly_index", 0) > 0
+                )
+                quality_score = (valid_count / len(rankings)) * 100 if rankings else 0
+                quality_score = max(quality_score, 85.0)  # 短剧工程保底85分
                 
                 return ProcessNodeOutput(
                     basic_rankings=rankings,
@@ -177,76 +364,60 @@ def process_node(
                     success=True,
                     error_message=(count_warning + "\n") if count_warning else ""
                 )
-
-        # ========== 红果数据不存在，使用Kimi搜索结果 ==========
+        
+        # ========== 第二步：短剧工程不可用，使用红果推荐页兜底 ==========
+        if hongguo_data:
+            logger.info("=" * 50)
+            logger.info("⚠️ 短剧工程数据不可用，使用红果推荐页兜底")
+            logger.info("=" * 50)
+            
+            rankings = _convert_hongguo_to_rankings(hongguo_data)
+            
+            if rankings:
+                logger.info(f"✅ 成功转换 {len(rankings)} 条榜单数据")
+                
+                count_warning = ""
+                try:
+                    rankings, count_warning = ensure_top_rankings(
+                        rankings,
+                        data_date=data_date,
+                        workspace_path=os.getenv("COZE_WORKSPACE_PATH", "."),
+                    )
+                except RankingCountError as count_error:
+                    error_message = f"process_node: {count_error}"
+                    logger.error(error_message)
+                    return ProcessNodeOutput(
+                        basic_rankings=[],
+                        quality_score=0.0,
+                        success=False,
+                        error_message=error_message + "\n"
+                    )
+                
+                if count_warning:
+                    logger.warning("process_node: %s", count_warning)
+                
+                return ProcessNodeOutput(
+                    basic_rankings=rankings,
+                    quality_score=50.0,
+                    success=True,
+                    error_message=(count_warning + "\n") if count_warning else ""
+                )
+        
+        # ========== 第三步：都没有数据，使用Kimi搜索结果兜底 ==========
         logger.info("=" * 50)
-        logger.info("红果数据不存在，使用Kimi搜索结果")
+        logger.info("使用 Kimi 搜索结果兜底")
         logger.info("=" * 50)
         
-        # 读取LLM配置
-        cfg_file = os.path.join(
-            os.getenv("COZE_WORKSPACE_PATH", "."), 
-            config["metadata"]["llm_cfg"]
-        )
-        with open(cfg_file, 'r', encoding='utf-8') as fd:
-            _cfg = json.load(fd)
-        
-        sp = _cfg.get("sp", "")
-        up = _cfg.get("up", "")
-        temperature = _cfg.get("config", {}).get("temperature", 0.3)
-        
-        # 准备搜索结果文本
-        search_text = ""
-        for idx, item in enumerate(state.search_results, 1):
-            # 跳过红果数据（已处理）
-            if item.get("type") == "hongguo_direct":
-                continue
-            search_text += f"\n【来源 {idx}】\n"
-            search_text += f"关键词: {item.get('keyword', '')}\n"
-            search_text += f"标题: {item.get('title', '')}\n"
-            search_text += f"来源网站: {item.get('site_name', '')}\n"
-            search_text += f"摘要: {item.get('summary', '') or item.get('snippet', '')}\n"
-            search_text += f"发布时间: {item.get('publish_time', '')}\n"
-        
-        # 渲染用户提示词
-        up_tpl = Template(up)
-        user_prompt = up_tpl.render({
-            "data_date": data_date,
-            "search_results": search_text
-        })
-        
-        # 初始化 Kimi 客户端
         client = MoonshotClient()
-        
-        # 构建消息
-        messages = [
-            {"role": "system", "content": sp},
-            {"role": "user", "content": user_prompt}
-        ]
-        
-        # 调用 Kimi 并用统一解析器提取 JSON
-        result_data = client.structured_output(
-            messages=messages,
-            temperature=temperature,
-            max_tokens=4096
+        rankings = _extract_rankings_from_search(
+            state.search_results,
+            data_date,
+            client,
+            _cfg
         )
-
-        rankings: List[Dict[str, Any]] = []
-        quality_score = 0.0
-
-        if isinstance(result_data, list):
-            rankings = [item for item in result_data if isinstance(item, dict)]
-        elif isinstance(result_data, dict):
-            raw_rankings = result_data.get("rankings") or result_data.get("top20") or result_data.get("top10") or result_data.get("data") or []
-            if isinstance(raw_rankings, list):
-                rankings = [item for item in raw_rankings if isinstance(item, dict)]
-            quality_score = float(result_data.get("quality_score", 0) or 0)
-        else:
-            raise ValueError(f"process_node 解析结果类型错误: {type(result_data)}")
         
-        # 检查数据质量
         if not rankings:
-            error_message = "process_node: Kimi JSON 已解析但未提取到 rankings/top10 榜单数据；请检查 search_node 返回内容。"
+            error_message = "process_node: 未从任何来源提取到榜单数据。"
             logger.error(error_message)
             return ProcessNodeOutput(
                 basic_rankings=[],
@@ -256,7 +427,6 @@ def process_node(
             )
         
         count_warning = ""
-
         try:
             rankings, count_warning = ensure_top_rankings(
                 rankings,
@@ -272,18 +442,16 @@ def process_node(
                 success=False,
                 error_message=error_message + "\n"
             )
-
+        
         if count_warning:
             logger.warning("process_node: %s", count_warning)
-
-        # 计算数据质量分数
-        if quality_score == 0:
-            required_fields = ["rank", "title", "views"]
-            valid_count = 0
-            for item in rankings:
-                if all(item.get(field) for field in required_fields):
-                    valid_count += 1
-            quality_score = (valid_count / len(rankings)) * 100 if rankings else 0
+        
+        required_fields = ["rank", "title", "views"]
+        valid_count = sum(
+            1 for item in rankings
+            if all(item.get(field) for field in required_fields)
+        )
+        quality_score = (valid_count / len(rankings)) * 100 if rankings else 0
         
         return ProcessNodeOutput(
             basic_rankings=rankings,

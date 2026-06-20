@@ -1,12 +1,12 @@
 # 短剧行业数据看板
 
 > 作者：Bridget Yang  
-> 当前版本：v1.10.6  
+> 当前版本：v1.10.8  
 > 更新频率：每日北京时间 9:00 自动更新
 
 ## 功能概览
 
-- 剧集榜单 TOP20：每日短剧播放热度排行，红果官网直爬504部短剧数据。
+- 剧集榜单 TOP20：每日短剧播放热度排行，以短剧工程周榜为坐标、红果推荐页追踪每日变化。
 - 前端榜单 TOP20：展示层必须严格有 20 条；生成链路少于 20 条会补齐或拒绝发布，避免页面只显示 1-2 条。
 - 演员热力榜：女频 TOP10 + 男频 TOP10。
 - 行业快讯：固定 6 条，每条包含 150-200 字四段式深度摘要，覆盖事件核心、数据支撑、商业洞察和决策价值。
@@ -40,7 +40,7 @@ GitHub Pages: https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.ht
 
 | 模块 | 技术 |
 |---|---|
-| 数据采集 | 红果官网直爬（HongguoCrawler）+ DataEye榜单爬取 |
+| 数据采集 | 短剧工程周榜（DuanjugongchengCrawler）+ 红果推荐页（HongguoCrawler） |
 | 本地缓存 | SQLite缓存（避免重复搜索） |
 | 联网搜索 | Kimi / Moonshot API |
 | JSON 推理 | DeepSeek API |
@@ -56,8 +56,12 @@ assets/
 ├── index.html
 └── data/
     ├── latest.json
+    ├── latest_full.json
     ├── all_history.json
-    └── history/
+    ├── history/
+    │   └── YYYY-MM-DD.json
+    └── weekly/
+        └── YYYY-MM-DD.json
 
 config/
 └── *_llm_cfg.json

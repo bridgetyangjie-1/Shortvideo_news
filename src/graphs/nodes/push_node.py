@@ -42,12 +42,14 @@ DATA_DIR = os.path.join(WORKSPACE_PATH, "assets", "data")
 DATA_FILE_PATH = os.path.join(DATA_DIR, "latest.json")
 DATA_FULL_PATH = os.path.join(DATA_DIR, "latest_full.json")  # 新增：完整100条数据
 HISTORY_DIR = os.path.join(DATA_DIR, "history")
+WEEKLY_DIR = os.path.join(DATA_DIR, "weekly")  # 新增：周榜归档
 ALL_HISTORY_PATH = os.path.join(DATA_DIR, "all_history.json")
 
 
 def _ensure_dirs() -> None:
     """确保数据目录存在"""
     os.makedirs(HISTORY_DIR, exist_ok=True)
+    os.makedirs(WEEKLY_DIR, exist_ok=True)
     os.makedirs(DATA_DIR, exist_ok=True)
 
 
@@ -366,6 +368,26 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     trends = _generate_trends(output_rankings)
     anomalies = _generate_anomalies(output_rankings, state.industry)
 
+    # ========== 构建周榜基准信息（供前端展示） ==========
+    weekly_base_rankings = [
+        r for r in output_rankings
+        if getattr(r, "data_source", "") == "duanjugongcheng"
+    ]
+    weekly_base_info: Dict[str, Any] = {"available": False}
+    if weekly_base_rankings:
+        weekly_top = sorted(weekly_base_rankings, key=lambda x: x.rank)[0]
+        week_date = getattr(weekly_top, "week_date", "") or data_date
+        weekly_base_info = {
+            "available": True,
+            "week_date": week_date,
+            "top1_title": weekly_top.title,
+            "top1_genre": weekly_top.genre,
+            "top1_index": weekly_top.views_num or weekly_top.heat,
+            "total_count": len(weekly_base_rankings),
+            "data_source": "duanjugongcheng",
+            "description": "基于红果短剧官方周榜数据，每周一更新",
+        }
+
     output_data = {
         "success": True,
         "generated_at": generated_at,
@@ -388,6 +410,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "alerts": [a.model_dump() for a in state.alerts] if state.alerts else [],
         "alert_count": state.alert_count or 0,
         "quality_report": state.quality_report or {},
+        "weekly_base": weekly_base_info,
         "error_message": state.error_message or ""
     }
     
@@ -421,6 +444,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "alerts": [a.model_dump() for a in state.alerts] if state.alerts else [],
         "alert_count": state.alert_count or 0,
         "quality_report": state.quality_report or {},
+        "weekly_base": weekly_base_info,
         "error_message": state.error_message or ""
     }
     
@@ -436,6 +460,49 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     history_file = os.path.join(HISTORY_DIR, f"{data_date}.json")
     if not _save_json_file(output_data_full, history_file):  # 历史归档保存完整数据
         error_messages.append(f"push_node: 保存历史数据失败: {history_file}")
+    
+    # 保存周榜数据（每周一，基于短剧工程周榜数据）
+    try:
+        dt = datetime.strptime(data_date, "%Y-%m-%d")
+        is_monday = dt.weekday() == 0
+        if is_monday:
+            weekly_rankings = [
+                {
+                    "rank": r.rank,
+                    "title": r.title,
+                    "genre": r.genre,
+                    "weekly_index": r.views_num or r.heat,
+                    "total_index": getattr(r, "total_index", 0) or 0,
+                    "release_date": getattr(r, "release_date", "") or "",
+                    "is_new": getattr(r, "is_new", False),
+                    "data_source": r.data_source,
+                    "week_date": getattr(r, "week_date", "") or data_date,
+                }
+                for r in output_rankings
+                if getattr(r, "data_source", "") == "duanjugongcheng"
+            ]
+            if weekly_rankings:
+                week_date = getattr(
+                    next((r for r in output_rankings if getattr(r, "data_source", "") == "duanjugongcheng"), None),
+                    "week_date",
+                    ""
+                ) or data_date
+                weekly_data = {
+                    "success": True,
+                    "generated_at": generated_at,
+                    "week_date": week_date,
+                    "rankings": weekly_rankings,
+                    "rankings_count": len(weekly_rankings),
+                }
+                weekly_file = os.path.join(WEEKLY_DIR, f"{week_date}.json")
+                if _save_json_file(weekly_data, weekly_file):
+                    logger.info(f"✅ 周榜数据已归档: {weekly_file} ({len(weekly_rankings)} 条)")
+                else:
+                    error_messages.append(f"push_node: 保存周榜数据失败: {weekly_file}")
+            else:
+                logger.info("push_node: 本周一但未获取到短剧工程周榜数据，跳过周榜归档")
+    except Exception as e:
+        logger.warning(f"push_node: 周榜归档处理异常: {e}")
     
     # 更新历史索引
     all_history = _load_all_history()

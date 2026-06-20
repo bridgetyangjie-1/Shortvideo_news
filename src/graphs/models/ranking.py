@@ -34,6 +34,10 @@ class DramaRanking(BaseModel):
     cross_validated: bool = Field(default=False, description="是否经DataEye交叉验证")
     dataeye_rank: int = Field(default=0, description="DataEye排名（0表示无）")
     dataeye_heat: int = Field(default=0, description="DataEye热度值")
+    total_index: int = Field(default=0, description="累计热播指数（短剧工程周榜字段）")
+    is_new: bool = Field(default=False, description="是否新剧首次入榜（短剧工程周榜字段）")
+    release_date: str = Field(default="", description="上架日期（短剧工程周榜字段）")
+    week_date: str = Field(default="", description="周榜日期，周一（短剧工程周榜字段）")
     series_id: str = Field(default="", description="红果剧目ID")
     cover: str = Field(default="", description="封面图URL")
 
@@ -44,13 +48,22 @@ class DramaRanking(BaseModel):
             return ""
         return str(v).strip()
 
-    @field_validator("rank", "views_num", "heat", "episodes_count", "dataeye_rank", "dataeye_heat", "previous_rank", mode="before")
+    @field_validator("rank", "views_num", "heat", "episodes_count", "dataeye_rank", "dataeye_heat", "previous_rank", "total_index", mode="before")
     @classmethod
     def _validate_non_negative_int(cls, v):
         try:
             return max(0, int(v or 0))
         except (TypeError, ValueError):
             return 0
+
+    @field_validator("is_new", mode="before")
+    @classmethod
+    def _validate_bool(cls, v):
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.lower() in ("true", "1", "yes", "新上架")
+        return bool(v)
 
     @field_validator("confidence_score", mode="before")
     @classmethod

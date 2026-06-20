@@ -5,12 +5,12 @@
 
 ## 1. 项目概述
 
-这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取红果官网榜单、补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
+这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取短剧工程周榜（基于红果官方周榜）为主、红果推荐页为辅，补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
 
 - **项目名称**：`shortvideo-news`
-- **当前版本**：`v1.10.6`
+- **当前版本**：`v1.10.8`
 - **在线地址**：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
-- **数据入口**：`assets/data/latest.json`（TOP20 展示）、`assets/data/latest_full.json`（Full100 归档）
+- **数据入口**：`assets/data/latest.json`（TOP20 展示）、`assets/data/latest_full.json`（Full100 归档）、`assets/data/weekly/YYYY-MM-DD.json`（周榜归档，每周一）
 - **GitHub Actions 入口**：`src/run_github.py`
 - **前端入口**：`assets/index.html`
 
@@ -53,7 +53,8 @@
 │       ├── latest.json                  # TOP20 展示数据
 │       ├── latest_full.json             # 全量榜单（可达 100 条）
 │       ├── all_history.json             # 近 30 天历史索引
-│       └── history/YYYY-MM-DD.json      # 按日归档
+│       ├── history/YYYY-MM-DD.json      # 按日归档
+│       └── weekly/YYYY-MM-DD.json       # 周榜归档（每周一）
 ├── config/                              # LLM 提示词与模型配置
 │   └── *_llm_cfg.json
 ├── docs/
@@ -188,8 +189,8 @@ search_node
 
 | 节点 | 文件 | 主要功能 | 是否依赖 LLM |
 |---|---|---|---|
-| `search_node` | `search_node.py` | 红果官网直爬 + DataEye 交叉验证 + 1 次 Kimi 行业宏观搜索 | 否（爬虫）+ Kimi 1 次 |
-| `process_node` | `process_node.py` | 优先处理红果数据；无数据时用 Kimi 提取榜单 | 是（Kimi，备选） |
+| `search_node` | `search_node.py` | 短剧工程周榜为主 + 红果推荐页为辅 + DataEye 交叉验证 + 1 次 Kimi 行业宏观搜索 | 否（爬虫）+ Kimi 1 次 |
+| `process_node` | `process_node.py` | 优先处理短剧工程周榜；用红果推荐页补充 series_id/cover/tags/episodes；均无数据时用 Kimi 兜底 | 否（主路径）/ 是（Kimi 兜底） |
 | `enrich_node` | `enrich_node.py` | 本地缓存 → 红果详情页爬虫 → Kimi 批量补充 → DeepSeek 生成完整 JSON | 是（DeepSeek/Kimi） |
 | `actor_ranking_node` | `actor_ranking_node.py` | 从 enriched_rankings 统计演员频次，生成女频/男频 TOP10 | 否 / DeepSeek 兜底 |
 | `industry_node` | `industry_node.py` | 搜索行业宏观数据，输出 IndustryData + PlatformData | 是（Kimi） |
@@ -201,14 +202,15 @@ search_node
 | `history_data_node` | `history_data_node.py` | 生成播放趋势、周榜历史、排名变化 | 否 |
 | `quality_gate_node` | `quality_gate_node.py` | 统一质量门禁：校验榜单/演员/快讯/行业数据/API 错误 | 否 |
 | `alert_node` | `alert_node.py` | 异常监测：基于质量报告与业务规则自动生成 Alerts | 否 |
-| `push_node` | `push_node.py` | 保存 latest.json、latest_full.json、历史归档、all_history.json | 否 |
+| `push_node` | `push_node.py` | 保存 latest.json、latest_full.json、历史归档、周榜归档（周一）、all_history.json | 否 |
 
 ### 6.2 `src/tools/` 工具层
 
 | 工具 | 文件 | 作用 |
 |---|---|---|
-| `HongguoCrawler` | `hongguo_crawler.py` | 爬取 `novelquickapp.com` 首页 `_ROUTER_DATA`，获取最多 100 条榜单 |
-| `DataEyeCrawler` | `dataeye_crawler.py` | 爬取 DataEye 热力榜，用于交叉验证 |
+| `DuanjugongchengCrawler` | `duanjugongcheng_crawler.py` | 爬取 `duanjugongcheng.com/cn/bangdan/`，获取基于红果官方周榜的 TOP50 榜单（主数据源） |
+| `HongguoCrawler` | `hongguo_crawler.py` | 爬取 `novelquickapp.com` 首页 `_ROUTER_DATA`，获取最多 100 条推荐列表（仅作元数据补充） |
+| `DataEyeCrawler` | `dataeye_crawler.py` | 爬取 DataEye 热力榜，用于交叉验证（当前 API 不稳定，作为可选补充） |
 | `CacheDB` | `cache_db.py` | SQLite 本地缓存，7 天有效期，存储演员/工作室/标签 |
 | `TagNormalizer` | `tag_normalizer.py` | 标签同义词映射、题材分类（female/male/neutral） |
 | `MoonshotClient` | `moonshot_api.py` | Kimi 客户端：chat、search、JSON 提取、429 退避、API 预算熔断 |
@@ -232,9 +234,9 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 
 ## 7. 数据流说明
 
-1. **search_node**：抓取红果官网 100 条 + DataEye 30 条交叉验证，生成融合榜单；再用 Kimi 搜索 1 次行业宏观数据。
+1. **search_node**：爬取短剧工程周榜 TOP50（或首页 TOP10）作为主数据源；抓取红果官网 100 条推荐页作为辅助；尝试 DataEye 30 条交叉验证；再用 Kimi 搜索 1 次行业宏观数据。
 2. **news_node**：并行运行，Kimi 搜索 3 组新闻 → DeepSeek 生成 ≤6 条快讯。
-3. **process_node**：优先解析红果直接爬取数据，转换为标准榜单；无数据时用 Kimi 从搜索结果提取。
+3. **process_node**：优先解析 `duanjugongcheng_ranking` 中的短剧工程周榜，转换为标准榜单（`weekly_index` 作为 `heat`/`views_num`）；用红果推荐页回填 `series_id`、`cover`、`tags`、`episodes`；短剧工程不可用时降级使用红果推荐页；均不可用时用 Kimi 从搜索结果提取。
 4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整榜单 JSON。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；不足时用 DeepSeek 兜底。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
@@ -245,7 +247,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 11. **history_data_node**：更新 `assets/history_data.json`，生成播放趋势、周榜、排名变化。
 12. **quality_gate_node**：统一校验榜单、演员、快讯、行业数据与 API 错误，输出 `quality_report`。
 13. **alert_node**：基于质量报告与业务规则自动生成 `alerts`，供前端异常面板展示。
-14. **push_node**：输出 `latest.json`（TOP20）、`latest_full.json`（全量）、`assets/data/history/YYYY-MM-DD.json`、`assets/data/all_history.json`。
+14. **push_node**：输出 `latest.json`（TOP20）、`latest_full.json`（全量）、`assets/data/history/YYYY-MM-DD.json`、`assets/data/weekly/YYYY-MM-DD.json`（每周一，当数据源为短剧工程时）、`assets/data/all_history.json`；同时在 `latest.json`/`latest_full.json` 中写入 `weekly_base` 字段供前端展示周榜 TOP1 坐标。
 
 ## 8. 编码规范
 
@@ -327,8 +329,9 @@ python src/utils/config_validator.py
 
 ### 10.1 数据采集优先级
 
-1. **红果官网直接爬取**：`tools/hongguo_crawler.py` 直接抓取 `novelquickapp.com` 首页榜单，获取 100 条实时数据。
-2. **Kimi 搜索补充**：行业宏观数据、标签分布、演员信息等。
+1. **短剧工程周榜**：`tools/duanjugongcheng_crawler.py` 抓取 `duanjugongcheng.com/cn/bangdan/`，基于红果官方周榜数据，每周一更新 TOP50，含排名、剧名、题材、本周热播指数、累计指数、上架日期、是否新剧。
+2. **红果推荐页**：`tools/hongguo_crawler.py` 抓取 `novelquickapp.com` 首页推荐列表，获取 100 条，仅用于补充 `series_id`、`cover`、`tags`、`episodes` 等元数据，以及追踪周榜剧在推荐页的位置变化。
+3. **Kimi 搜索补充**：行业宏观数据、标签分布、演员信息等。
 3. **历史数据兜底**：近 7 天归档数据用于补齐不足 20 条的榜单。
 
 ### 10.2 时间铁律
@@ -372,6 +375,7 @@ python src/utils/config_validator.py
 | `alerts` | `List[AlertItem]` | 自动异常监测告警列表 |
 | `alert_count` | `int` | 告警数量 |
 | `quality_report` | `Dict[str, Any]` | 质量门禁 8 项检查详情 |
+| `weekly_base` | `Dict[str, Any]` | 周榜基准信息：本周 TOP1 剧名、热度、题材、数据说明 |
 
 ## 11. 部署流程
 
@@ -526,6 +530,8 @@ export PYTHONPATH="$PWD/src"
 | 2026-06-14 | **v1.10.6 热门标签维度均衡**：`genre_distribution_node` 从“全局 TOP20 后分类”改为“按题材/爽点/人设/情感关系/时代背景独立取 TOP N”，保证每个维度都有多个标签；关系型标签（先婚后爱/闪婚/离婚/复婚）归入「情感关系」，扩展人设/情感关系词库；前端热门标签改为 2 列紧凑网格 |
 | 2026-06-14 | **v1.10.6 情绪驾驶舱二合一**：`assets/index.html` 将「洞察」与「热力」两个 Tab 合并为「洞察」Tab（含今日洞察、关键词、情绪热力 TOP8、环比趋势），保留「建议」Tab；桌面端洞察 Tab 内采用 2 列网格（热力图 + 趋势），移动端自动堆叠 |
 | 2026-06-16 | **v1.10.7 飞书机器人推送**：新增 `src/tools/feishu_pusher.py`，每日工作流完成后自动推送完整版交互式日报卡片；支持手动触发测试与质量门禁失败告警；GitHub Actions 通过 `FEISHU_WEBHOOK` secret 注入 |
+| 2026-06-20 | **v1.10.8 数据源重构（短剧工程周榜）**：红果网页端首页仅为推荐列表、DataEye API 不可用，改以 `duanjugongcheng.com` 短剧工程周榜为主数据源，红果推荐页仅作元数据补充；新增 `tools/duanjugongcheng_crawler.py`，`search_node` 与 `process_node` 优先处理短剧工程数据 |
+| 2026-06-20 | **v1.10.8 周榜基准与归档**：`push_node.py` 在周一将短剧工程周榜归档为 `assets/data/weekly/YYYY-MM-DD.json`，并在 `latest.json`/`latest_full.json` 中输出 `weekly_base` 字段；前端榜单区域新增「🏆 周榜坐标」基准条，展示本周 TOP1 剧名、热度与题材 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |
 | 2026-06-12 | `enrich_node`：删除循环 Kimi 搜索，改为先爬红果详情页 + 批量 DeepSeek 补充 |
 | 2026-06-12 | `search_node`：删除标签搜索和剧目详情搜索，只保留 1 次行业数据搜索 |
