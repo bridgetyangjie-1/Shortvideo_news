@@ -2,7 +2,7 @@
   "daily_play_trend": [
     {
       "date": "2026-06-20",
-      "total_views": 0
+      "total_views": 180597
     },
     {
       "date": "2026-06-19",
@@ -54,9 +54,9 @@
       "week": "2026-W24",
       "start_date": "2026-06-15",
       "end_date": "2026-06-21",
-      "top1_title": "老公偏听偏信，我大义灭亲",
-      "top1_views": "热度上榜",
-      "total_views": 0
+      "top1_title": "少夫人来自东北2",
+      "top1_views": "16067",
+      "total_views": 180597
     },
     {
       "week": "2026-W23",
@@ -67,5 +67,5 @@
       "total_views": 0
     }
   ],
-  "last_updated": "2026-06-20 05:22:19"
+  "last_updated": "2026-06-20 13:29:42"
 }
