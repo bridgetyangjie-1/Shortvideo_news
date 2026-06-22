@@ -142,7 +142,7 @@ class ActorResolver:
     def _search_missing(self, missing_dramas: List[Dict[str, Any]]) -> str:
         """对缺失演员信息的剧目进行批量搜索。"""
         titles = [f"《{d['title']}》" for d in missing_dramas[: self.max_search]]
-        query = f"短剧演员信息查询，请告诉我以下短剧的主演（女主男主）和制作公司：{', '.join(titles)}"
+        query = f"短剧信息查询，请分别列出以下短剧的：1) 主演（女主、男主）；2) 制作公司/工作室/出品方/厂牌。剧单：{', '.join(titles)}"
 
         try:
             result = self.searcher(query)
