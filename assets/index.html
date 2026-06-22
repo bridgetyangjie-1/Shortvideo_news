@@ -225,6 +225,15 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     color: #fbbf24;
     font-weight: 700;
 }
+.ip-source-sub {
+    font-size: 10px;
+    color: #818cf8;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
 
 .actor-cell {
     font-size: 12px;
@@ -1820,14 +1829,17 @@ function renderRankings(rankings) {
         }
 
         const supplyChain = drama.supply_chain || {};
-        let ipBadge = '<span class="ip-badge empty">-</span>';
         const sourceTitle = (supplyChain.source_title || '').trim();
         const sourcePlatform = (supplyChain.source_platform || '').trim();
         const hasSource = supplyChain.has_ip_source && sourceTitle && sourcePlatform;
+        let ipBadge = '<span class="ip-badge empty">-</span>';
+        let ipSourceSub = '';
         if (hasSource) {
             const sourceAuthor = (supplyChain.source_author || '').trim();
-            const authorPart = sourceAuthor ? `（作者：${escapeHtml(sourceAuthor)}）` : '';
-            ipBadge = `<span class="ip-badge" title="改编自 ${escapeHtml(sourcePlatform)}《${escapeHtml(sourceTitle)}》${authorPart}">📚</span>`;
+            const authorPart = sourceAuthor ? ` · ${escapeHtml(sourceAuthor)}` : '';
+            const ipLabel = `改编自 ${escapeHtml(sourcePlatform)}《${escapeHtml(sourceTitle)}》${authorPart}`;
+            ipBadge = `<span class="ip-badge" title="${ipLabel}">📚</span>`;
+            ipSourceSub = `<div class="ip-source-sub" title="${ipLabel}">${ipLabel}</div>`;
         }
 
         html += `
@@ -1836,6 +1848,7 @@ function renderRankings(rankings) {
             <td class="title-cell">
                 <div class="title-main">${escapeHtml(drama.title)} ${newBadge}</div>
                 <div class="title-sub">${escapeHtml(drama.platform || '红果')}</div>
+                ${ipSourceSub}
             </td>
             <td class="actor-cell">
                 <span class="actor-name">${escapeHtml(femaleLead)}</span> / ${escapeHtml(maleLead)}
