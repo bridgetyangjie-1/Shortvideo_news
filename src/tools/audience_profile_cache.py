@@ -16,42 +16,17 @@ CACHE_FILE = os.path.join(
     os.getenv("COZE_WORKSPACE_PATH", os.getcwd()), "data", "audience_profile_cache.json"
 )
 
-DEFAULT_PROFILE: Dict[str, Any] = {
-    "gender": {"female": 70, "male": 30},
-    "age": {"18-24": 20, "25-34": 42, "35-44": 28, "45+": 10},
-    "regions": [
-        {"name": "广东", "value": 15.5},
-        {"name": "江苏", "value": 11.8},
-        {"name": "浙江", "value": 9.6},
-        {"name": "山东", "value": 8.4},
-        {"name": "河南", "value": 7.2},
-    ],
-    "traits": [
-        "偏好强反转高密度剧情",
-        "关注女性逆袭与情绪补偿",
-        "习惯通勤睡前碎片化追更",
-        "对复仇打脸和身份揭晓爽点敏感",
-    ],
-    "content_preferences": [
-        {"name": "都市爱情", "value": 32},
-        {"name": "穿越重生", "value": 24},
-        {"name": "复仇逆袭", "value": 18},
-        {"name": "古装宫斗", "value": 14},
-        {"name": "甜宠萌宝", "value": 12},
-    ],
-    "viewing_time": [
-        {"name": "睡前 22-24点", "value": 35},
-        {"name": "晚间 20-22点", "value": 28},
-        {"name": "通勤/午休", "value": 22},
-        {"name": "周末白天", "value": 15},
-    ],
-    "spending_power": {"paid_ratio": 35, "arpu": "¥18", "willingness": "中高"},
-    "user_segments": [
-        {"name": "核心追更党", "share": 28, "desc": "日更必追、愿意为爆款付费解锁"},
-        {"name": "碎片路人", "share": 45, "desc": "通勤/睡前刷剧，免费内容为主"},
-        {"name": "高消费用户", "share": 18, "desc": "对优质内容付费意愿强，关注主演"},
-        {"name": "尝鲜猎奇党", "share": 9, "desc": "热衷新题材和黑马剧，易流失"},
-    ],
+# 兜底画像：仅在月度报告搜索完全失败且榜单标签也无法解析时使用。
+# 方向 A：优先留空，不返回整套固定画像；此兜底仅用于保证流程不崩溃。
+FALLBACK_PROFILE: Dict[str, Any] = {
+    "gender": {"female": 0, "male": 0},
+    "age": {"18-24": 0, "25-34": 0, "35-44": 0, "45+": 0},
+    "regions": [],
+    "traits": [],
+    "content_preferences": [],
+    "viewing_time": [],
+    "spending_power": {},
+    "user_segments": [],
 }
 
 
@@ -130,5 +105,5 @@ def save_cache(
 
 
 def get_default_profile() -> Dict[str, Any]:
-    """返回默认画像，作为最终兜底。"""
-    return json.loads(json.dumps(DEFAULT_PROFILE, ensure_ascii=False))
+    """返回兜底画像（空结构），作为最终兜底。"""
+    return json.loads(json.dumps(FALLBACK_PROFILE, ensure_ascii=False))

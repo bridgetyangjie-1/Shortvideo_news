@@ -40,12 +40,28 @@ class PlayTrend(BaseModel):
     daily: List[DailyPlayTrend] = Field(default=[], description="每日数据")
     weekly: List[WeeklyRankingItem] = Field(default=[], description="每周数据")
     trend_direction: str = Field(default="stable", description="整体趋势：up/down/stable")
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'周榜历史归档统计'",
+    )
+    update_frequency: str = Field(
+        default="weekly",
+        description="更新频率：daily/weekly/monthly",
+    )
 
 
 class HistoryData(BaseModel):
     """历史数据"""
     weekly_rankings: List[WeeklyRankingItem] = Field(default=[], description="周榜历史")
     daily_play_trend: List[DailyPlayTrend] = Field(default=[], description="每日播放趋势")
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'历史归档数据'",
+    )
+    update_frequency: str = Field(
+        default="weekly",
+        description="更新频率：daily/weekly/monthly",
+    )
 
 
 class DailyPlayData(BaseModel):

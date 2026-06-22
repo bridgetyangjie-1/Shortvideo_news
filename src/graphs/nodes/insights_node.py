@@ -141,7 +141,9 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
                             icon=item.get("icon", "📊"),
                             title=item.get("title", ""),
                             content=item.get("content", ""),
-                            source=item.get("source", "")
+                            source=item.get("source", ""),
+                            data_source="Kimi 搜索 + DeepSeek 提炼",
+                            update_frequency="daily",
                         )
                         insights.append(insight)
             else:
@@ -159,13 +161,17 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
                     icon="🔥",
                     title=f"爆款归因：{top_drama.get('title', 'TOP1')}",
                     content=f"受众定位25-35岁女性，爽点公式：{', '.join(top_drama.get('core_trope', ['逆袭', '甜宠']))}",
-                    source="榜单推演"
+                    source="榜单推演",
+                    data_source="当日榜单规则推演",
+                    update_frequency="daily",
                 ))
                 insights.append(Insight(
                     icon="💰",
                     title="买量建议",
                     content=f"建议关注{top_drama.get('genre', '甜宠')}题材投流机会",
-                    source="数据分析"
+                    source="数据分析",
+                    data_source="当日榜单规则推演",
+                    update_frequency="daily",
                 ))
         
         logger.info(f"洞察生成完成，共{len(insights)}条")
@@ -181,7 +187,14 @@ def insights_node(state: InsightsNodeInput, config: RunnableConfig, runtime: Run
         logger.error(error_message, exc_info=True)
         return InsightsNodeOutput(
             insights=[
-                Insight(icon="📊", title="数据待补充", content="请稍后再试", source="")
+                Insight(
+                    icon="📊",
+                    title="数据待补充",
+                    content="请稍后再试",
+                    source="",
+                    data_source="洞察生成失败",
+                    update_frequency="daily",
+                )
             ],
             success=False,
             error_message=error_message + "\n"

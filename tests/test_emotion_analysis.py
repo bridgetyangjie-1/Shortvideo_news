@@ -102,16 +102,16 @@ class TestEmotionAnalysis(unittest.TestCase):
         self.assertEqual(names["甜宠撒糖"].trend, "down")
         self.assertEqual(names["甜宠撒糖"].change, -20)
 
-    def test_default_emotional_analysis_structure(self):
-        """默认情绪分析结构符合新模型"""
+    def test_default_emotional_analysis_is_empty(self):
+        """默认情绪分析应为空结构（方向 A：缺失时留空）"""
         ea = default_emotional_analysis()
         self.assertIsInstance(ea, EmotionalAnalysis)
-        self.assertTrue(ea.summary)
-        self.assertTrue(ea.dominant_emotion)
-        self.assertTrue(ea.wordcloud)
-        self.assertTrue(ea.emotion_rankings)
-        self.assertTrue(ea.actionable_insights)
-        self.assertEqual(len(ea.actionable_insights), 3)
+        self.assertFalse(ea.summary)
+        self.assertFalse(ea.dominant_emotion)
+        self.assertFalse(ea.wordcloud)
+        self.assertFalse(ea.emotion_rankings)
+        self.assertFalse(ea.actionable_insights)
+        self.assertEqual(len(ea.actionable_insights), 0)
 
     def test_load_emotion_rules_from_json(self):
         """能从外置 JSON 加载规则"""

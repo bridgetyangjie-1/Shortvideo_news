@@ -300,6 +300,8 @@ def genre_distribution_node(
             hot_tags=hot_tags,
             categories=categories,
             trending=trending,
+            data_source="近7天榜单统计",
+            update_frequency="weekly",
         )
 
         logger.info(
@@ -321,7 +323,10 @@ def genre_distribution_node(
         error_message = f"genre_distribution_node: 统计热门标签失败: {e}"
         logger.error(error_message, exc_info=True)
         return GenreDistributionOutput(
-            genre_distribution=GenreDistribution(),
+            genre_distribution=GenreDistribution(
+                data_source="近7天榜单统计失败",
+                update_frequency="weekly",
+            ),
             total_count=0,
             total_views=0,
             error_message=error_message + "\n",

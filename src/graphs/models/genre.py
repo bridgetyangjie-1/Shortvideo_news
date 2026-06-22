@@ -59,3 +59,11 @@ class GenreDistribution(BaseModel):
         default_factory=list,
         description="较昨日变化明显的标签，含 change/trend",
     )
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'近7天榜单统计'",
+    )
+    update_frequency: str = Field(
+        default="weekly",
+        description="更新频率：daily/weekly/monthly",
+    )

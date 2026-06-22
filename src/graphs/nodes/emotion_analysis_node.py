@@ -582,6 +582,8 @@ JSON 结构：
             emotion_rankings=emotion_rankings,
             trends=trends,
             actionable_insights=actionable_insights,
+            data_source="当日榜单规则统计 + DeepSeek 提炼" if parsed else "当日榜单规则统计（DeepSeek 提炼失败）",
+            update_frequency="daily",
         )
 
         return EmotionAnalysisNodeOutput(

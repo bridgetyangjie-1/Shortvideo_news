@@ -34,12 +34,7 @@ class AudienceProfile(BaseModel):
         description="地域分布，元素包含name省份和value比例",
     )
     traits: List[str] = Field(
-        default_factory=lambda: [
-            "偏好强反转高密度剧情",
-            "关注女性成长与逆袭补偿",
-            "习惯碎片化连续追更",
-            "对身份反差爽点敏感",
-        ],
+        default_factory=list,
         description="4个具体受众特征标签",
     )
     content_preferences: List[Dict[str, Any]] = Field(
@@ -57,4 +52,12 @@ class AudienceProfile(BaseModel):
     user_segments: List[Dict[str, Any]] = Field(
         default_factory=list,
         description="用户分层，元素包含name、share占比、desc描述",
+    )
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'QuestMobile 2025Q1 报告'或'本地规则估算'",
+    )
+    update_frequency: str = Field(
+        default="monthly",
+        description="更新频率：monthly/weekly/daily",
     )

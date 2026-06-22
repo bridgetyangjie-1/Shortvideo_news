@@ -36,6 +36,23 @@ def _make_news(title: str, url: str = "https://example.com/news") -> DailyNews:
     )
 
 
+def _make_industry() -> IndustryData:
+    return IndustryData(
+        app_mau="3.04亿",
+        drama_count="25万+",
+        ai_ratio=15,
+        data_source="Kimi 搜索行业报告",
+        update_frequency="monthly",
+    )
+
+
+def _make_platform() -> PlatformData:
+    return PlatformData(
+        data_source="Kimi 搜索行业报告",
+        update_frequency="monthly",
+    )
+
+
 def _run_gate(state: QualityGateInput):
     return quality_gate_node(state, None, None)
 
@@ -48,18 +65,14 @@ class QualityGateNodeTest(unittest.TestCase):
             male=[_make_actor(f"男演员{i}", i) for i in range(1, 11)],
         )
         news = [_make_news(f"新闻{i}") for i in range(1, 7)]
-        industry = IndustryData(
-            app_mau={"value": 1.5, "unit": "亿", "yoy": "+12%"},
-            drama_count="1.2万部",
-            ai_ratio=15,
-        )
+        industry = _make_industry()
 
         state = QualityGateInput(
             enriched_rankings=rankings,
             actors=actors,
             daily_news=news,
             industry=industry,
-            platform=PlatformData(),
+            platform=_make_platform(),
         )
         result = _run_gate(state)
 
@@ -78,7 +91,7 @@ class QualityGateNodeTest(unittest.TestCase):
             enriched_rankings=rankings,
             actors=actors,
             daily_news=news,
-            industry=IndustryData(),
+            industry=_make_industry(),
         )
         result = _run_gate(state)
 
@@ -98,7 +111,7 @@ class QualityGateNodeTest(unittest.TestCase):
             enriched_rankings=rankings,
             actors=actors,
             daily_news=news,
-            industry=IndustryData(),
+            industry=_make_industry(),
         )
         result = _run_gate(state)
 
@@ -118,7 +131,7 @@ class QualityGateNodeTest(unittest.TestCase):
             enriched_rankings=rankings,
             actors=actors,
             daily_news=news,
-            industry=IndustryData(),
+            industry=_make_industry(),
         )
         result = _run_gate(state)
 
@@ -137,13 +150,37 @@ class QualityGateNodeTest(unittest.TestCase):
             enriched_rankings=rankings,
             actors=actors,
             daily_news=news,
-            industry=IndustryData(),
+            industry=_make_industry(),
             error_message="DeepSeek API key invalid: unauthorized",
         )
         result = _run_gate(state)
 
         self.assertFalse(result.success)
         self.assertIn("API", result.error_message)
+
+
+    def test_fails_when_industry_source_unreliable(self) -> None:
+        rankings = [_make_ranking(f"剧{i}", i) for i in range(1, 21)]
+        actors = ActorsData(
+            female=[_make_actor(f"女演员{i}", i) for i in range(1, 11)],
+            male=[_make_actor(f"男演员{i}", i) for i in range(1, 11)],
+        )
+        news = [_make_news(f"新闻{i}") for i in range(1, 7)]
+
+        state = QualityGateInput(
+            enriched_rankings=rankings,
+            actors=actors,
+            daily_news=news,
+            industry=IndustryData(
+                app_mau="3.04亿",
+                drama_count="25万+",
+                data_source="行业数据获取失败，暂无真实来源",
+            ),
+        )
+        result = _run_gate(state)
+
+        self.assertFalse(result.success)
+        self.assertIn("行业数据来源不真实", result.error_message)
 
 
 class IndustryDataNormalizationTest(unittest.TestCase):

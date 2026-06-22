@@ -10,6 +10,14 @@ class Insight(BaseModel):
     title: str = Field(default="", description="洞察标题（10字以内）")
     content: str = Field(default="", description="洞察详细描述（150-200字）")
     source: str = Field(default="", description="洞察来源说明")
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'Kimi 搜索 + DeepSeek 提炼'",
+    )
+    update_frequency: str = Field(
+        default="daily",
+        description="更新频率：daily/weekly/monthly",
+    )
 
 
 class Innovation(BaseModel):
@@ -27,3 +35,11 @@ class DailyNews(BaseModel):
     content: str = Field(default="", description="快讯内容缩写（不超过100字）")
     insight: str = Field(default="", description="深度洞察分析（100字左右）")
     source_url: str = Field(default="", description="原文地址链接")
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'Kimi 搜索 + DeepSeek 提炼'",
+    )
+    update_frequency: str = Field(
+        default="daily",
+        description="更新频率：daily/weekly/monthly",
+    )

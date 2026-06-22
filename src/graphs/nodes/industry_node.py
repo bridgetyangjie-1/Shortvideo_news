@@ -1,5 +1,10 @@
 """
 行业数据节点 - 获取行业宏观数据
+
+策略：
+1. 行业宏观数据以自然月为粒度缓存，月初/缓存缺失时使用 Kimi 联网搜索最新行业报告。
+2. 日常运行直接读取缓存，不重复调用 API。
+3. 方向 A：搜索失败或字段缺失时留空（不再返回固定默认值），并在 data_source 中标注来源。
 """
 import os
 import json
@@ -20,6 +25,7 @@ except ImportError:
     def is_api_budget_error(exc: Exception) -> bool:
         return str(exc) == "API \u8c03\u7528\u6b21\u6570\u8fc7\u591a\uff0c\u5df2\u718f\u65ad"
 
+from tools.industry_cache import load_cache, save_cache
 from graphs.state import (
     IndustryNodeInput,
     IndustryNodeOutput,
@@ -28,7 +34,6 @@ from graphs.state import (
     PlatformApp
 )
 
-# 初始化日志
 logger = logging.getLogger(__name__)
 
 
@@ -40,7 +45,7 @@ def _safe_int(value: Any, default: int, min_value: int = 0, max_value: int | Non
         elif isinstance(value, (int, float)):
             number = int(round(value))
         elif isinstance(value, str):
-            cleaned = value.strip().replace(",", "")
+            cleaned = value.strip().replace(",", "").replace("%", "")
             if not cleaned or cleaned in {"未知", "无", "暂无", "N/A", "n/a", "null", "None", "-"}:
                 number = default
             else:
@@ -89,198 +94,297 @@ def _safe_text(value: Any, default: str) -> str:
     return str(value)
 
 
-def _first_present(data: dict[str, Any], keys: tuple[str, ...], default: Any) -> Any:
+def _first_present(data: dict[str, Any], keys: tuple[str, ...]) -> Any:
     for key in keys:
         if key in data and data[key] not in (None, ""):
             return data[key]
-    return default
+    return None
+
+
+def _load_llm_cfg(config: RunnableConfig) -> Dict[str, Any]:
+    """读取 LLM 配置文件"""
+    cfg_path = ""
+    metadata = config.get("metadata", {}) if config else {}
+    if metadata.get("llm_cfg"):
+        cfg_path = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), metadata["llm_cfg"])
+
+    if cfg_path and os.path.exists(cfg_path):
+        try:
+            with open(cfg_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            logger.warning("industry_node: 读取 LLM 配置失败: %s", e)
+
+    return {}
+
+
+def _build_search_prompts(date_str: str, cfg: Dict[str, Any]) -> tuple[str, str]:
+    """构建 AI 渗透率和行业宏观数据搜索 prompt"""
+    try:
+        dt = datetime.strptime(date_str, "%Y-%m-%d")
+        year, month = dt.year, dt.month
+    except ValueError:
+        now = datetime.now()
+        year, month = now.year, now.month
+
+    sp = cfg.get(
+        "sp",
+        "你是短剧行业数据分析师，擅长搜索行业报告和统计数据。你必须联网搜索，优先使用有具体数字的权威来源。",
+    )
+    up_template = cfg.get("up", "")
+
+    ai_query = f"""请联网搜索 {year}年{month}月 短剧行业AI短剧占比最新数据。
+请返回JSON格式，包含以下字段：
+- ai_ratio: AI短剧占比百分比，如25
+- ai_drama_count: AI短剧数量（可选）
+- ai_trend: 趋势，值为"上升"、"持平"或"下降"（可选）
+
+如果找不到确切数据，请返回空字符串或省略字段，不要编造具体数字。"""
+
+    macro_query = f"""请联网搜索 {year}年{month}月 国内短剧行业宏观数据，包括：
+1. APP月活用户数（红果、抖音等）
+2. 短剧数量（总剧目数）
+3. 亿元播放量短剧数量
+4. 主要平台的月活用户数和同比增长
+5. 用户规模、市场规模
+
+请返回JSON格式。如果某字段找不到，请使用空字符串或省略字段，不要编造具体数字。"""
+
+    if up_template:
+        try:
+            macro_query = Template(up_template).render(year=year, month=month, date=date_str)
+        except Exception as e:
+            logger.warning("industry_node: Jinja2 渲染 prompt 失败，使用内置 prompt: %s", e)
+
+    return sp, ai_query, macro_query
+
+
+def _search_industry_data(client: MoonshotClient, date_str: str, cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """使用 Kimi 搜索行业宏观数据"""
+    sp, ai_query, macro_query = _build_search_prompts(date_str, cfg)
+    config_model = cfg.get("config", {})
+    temperature = float(config_model.get("temperature", 0.2))
+    max_tokens = int(config_model.get("max_completion_tokens", 3000) or 3000)
+
+    # 第一轮搜索：AI 短剧渗透率
+    ai_data: Dict[str, Any] = {}
+    try:
+        ai_data = client.search_json(
+            query=ai_query,
+            system_prompt=sp,
+            temperature=temperature,
+            max_tokens=1000,
+            expected_type=dict
+        )
+        if not isinstance(ai_data, dict):
+            ai_data = {}
+        logger.info("AI短剧渗透率搜索结果: %s", ai_data)
+    except Exception as e:
+        logger.warning("AI短剧渗透率搜索失败: %s", e)
+        ai_data = {}
+
+    # 第二轮搜索：其他行业宏观数据
+    data: Dict[str, Any] = {}
+    try:
+        data = client.search_json(
+            query=macro_query,
+            system_prompt=sp,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            expected_type=dict
+        )
+        if not isinstance(data, dict):
+            data = {}
+    except Exception as e:
+        logger.warning("行业宏观数据搜索失败: %s", e)
+        if is_api_budget_error(e):
+            raise
+        data = {}
+
+    # 合并 AI 数据
+    if ai_data.get("ai_ratio") not in (None, ""):
+        data["ai_ratio"] = ai_data.get("ai_ratio")
+
+    return data
+
+
+def _parse_platform_apps(data: Dict[str, Any]) -> list:
+    """解析平台 APP 数据"""
+    platform_apps = _first_present(data, ("platform_apps", "top_mau", "apps"))
+    if not isinstance(platform_apps, list):
+        return []
+
+    apps = []
+    for app_data in platform_apps:
+        if not isinstance(app_data, dict):
+            continue
+        app = PlatformApp(
+            name=_safe_text(_first_present(app_data, ("name", "app", "platform")), ""),
+            mau=_safe_float(app_data.get("mau"), 0.0),
+            mau_unit=_safe_text(_first_present(app_data, ("mau_unit", "unit")), "亿"),
+            yoy=_safe_text(app_data.get("yoy"), ""),
+            share=_safe_ratio(app_data.get("share"), 0),
+            trend=_safe_text(app_data.get("trend"), "same")
+        )
+        apps.append(app)
+    return apps
+
+
+def _build_empty_industry() -> IndustryData:
+    """构建空的行业数据（方向 A：缺失时留空）"""
+    return IndustryData(
+        user_scale="",
+        market_size="",
+        drama_count="",
+        billion_dramas=0,
+        ai_ratio=0,
+        female_ratio=0,
+        male_ratio=0,
+        app_mau="",
+        app_mau_yoy="",
+        data_source="行业数据获取失败，暂无真实来源",
+        update_frequency="monthly",
+    )
+
+
+def _build_empty_platform() -> PlatformData:
+    """构建空的平台数据"""
+    return PlatformData(
+        apps=[],
+        mini_programs=[],
+        data_source="行业数据获取失败，暂无真实来源",
+        update_frequency="monthly",
+    )
 
 
 def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> IndustryNodeOutput:
     """
     title: 行业数据获取
-    desc: 使用 Kimi 联网搜索获取最新的行业宏观数据（用户规模、市场规模、AI短剧占比等）
-    integrations: Moonshot API
+    desc: 使用 Kimi 联网搜索获取最新的行业宏观数据；以月为粒度缓存，缺失时留空
+    integrations: Moonshot API（每月最多 1-2 次）
     """
-    ctx = runtime.context
-    
     try:
-        input_error_message = ""
-        if not state.enriched_rankings:
-            input_error_message = "industry_node: enriched_rankings 为空，AI/女频比例只能使用默认或搜索兜底；请检查 enrich_node。\n"
-            logger.error(input_error_message.strip())
+        data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
 
-        # 1. 统计榜单中的AI剧和女男频比例
+        # 1. 尝试读取月度缓存
+        cache = load_cache(today=data_date)
+        if cache:
+            industry_dict = cache.get("industry", {}) or {}
+            platform_dict = cache.get("platform", {}) or {}
+            industry_dict.setdefault("update_frequency", "monthly")
+            platform_dict.setdefault("update_frequency", "monthly")
+            industry = IndustryData(**industry_dict)
+            platform = PlatformData(**platform_dict)
+            return IndustryNodeOutput(
+                industry=industry,
+                platform=platform,
+                success=True,
+                error_message="",
+            )
+
+        # 2. 统计榜单中的 AI/女男频比例（作为参考，不强制覆盖搜索数据）
         ai_count = sum(1 for r in state.enriched_rankings if r.is_ai)
         female_count = sum(1 for r in state.enriched_rankings if r.category == "female")
         male_count = sum(1 for r in state.enriched_rankings if r.category == "male")
         ranking_total = len(state.enriched_rankings)
-        total = ranking_total if ranking_total else 1
-        default_ai_ratio = int(ai_count / total * 100) if ranking_total else 38
-        default_female_ratio = int(female_count / total * 100) if ranking_total else 95
-        default_male_ratio = int(male_count / total * 100) if ranking_total else 5
-        
-        # 2. 读取LLM配置
-        cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), config["metadata"]["llm_cfg"])
-        with open(cfg_file, "r", encoding="utf-8") as fd:
-            _cfg = json.load(fd)
-        
-        sp = _cfg.get("sp", "")
-        up = _cfg.get("up", "")
-        temperature = _cfg.get("config", {}).get("temperature", 0.2)
-        
-        # 3. 使用 Kimi 联网搜索行业数据（v1.7.11: 优化AI短剧渗透率搜索）
+
+        # 3. 读取配置并搜索
+        cfg = _load_llm_cfg(config)
         client = MoonshotClient()
-        
-        # 第一轮搜索：AI短剧渗透率专项搜索
-        date_str = state.data_date or datetime.now().strftime("%Y-%m-%d")
-        ai_search_query = f"""请联网搜索短剧行业AI短剧占比最新数据。
-参考日期：{date_str}
 
-搜索关键词建议：
-- "短剧行业 AI短剧占比 {date_str}"
-- "短剧 AI生成 比例 趋势"
-- "AI短剧 市场份额 数据"
-
-请返回JSON格式，包含以下字段：
-- ai_ratio: AI短剧占比百分比，如25
-- ai_drama_count: AI短剧数量
-- ai_trend: 趋势，值为"上升"、"持平"或"下降"
-
-如果找不到确切数据，请根据行业趋势估算（建议15-25%）。
-"""
-        
-        ai_data = {}
         try:
-            ai_data = client.search_json(
-                query=ai_search_query,
-                system_prompt="你是短剧行业数据分析师，擅长搜索行业报告和统计数据。",
-                temperature=0.2,
-                max_tokens=1000,
-                expected_type=dict
-            )
-            logger.info(f"AI短剧渗透率搜索结果: {ai_data}")
-            if not isinstance(ai_data, dict):
-                ai_data = {}
+            data = _search_industry_data(client, data_date, cfg)
         except Exception as e:
-            logger.warning(f"AI短剧渗透率搜索失败: {e}")
-            ai_data = {}
-        
-        # 第二轮搜索：其他行业宏观数据
-        search_query = f"""请搜索互联网，获取最新的短剧行业宏观数据，包括：
-1. APP月活用户数（红果、抖音等）
-2. 短剧数量（总剧目数）
-3. 亿元播放量短剧数量
-4. 主要平台的月活用户数和同比增长
+            if is_api_budget_error(e):
+                raise
+            logger.error("industry_node: 行业数据搜索失败: %s", e)
+            return IndustryNodeOutput(
+                industry=_build_empty_industry(),
+                platform=_build_empty_platform(),
+                success=True,
+                error_message=f"industry_node: 行业数据搜索失败: {e}\n",
+            )
 
-参考日期：{date_str}
-
-请返回JSON格式的数据。
-"""
-        
-        # 执行 Kimi 官方 $web_search 并解析 JSON
-        data = client.search_json(
-            query=search_query,
-            system_prompt=sp or "你是专业的行业数据分析师，擅长搜索和整理行业宏观统计数据。",
-            temperature=temperature,
-            max_tokens=3000,
-            expected_type=dict
+        # 4. 解析行业数据（找不到则留空）
+        # 方向 A：如果搜索返回空数据，直接返回空结构，不标注为"Kimi 搜索"
+        has_any_data = any(
+            data.get(k) not in (None, "")
+            for k in ("user_scale", "market_size", "drama_count", "app_mau", "ai_ratio")
         )
-        if not isinstance(data, dict):
-            data = {}
-        
-        # 合并AI短剧数据（优先使用专项搜索结果）
-        if ai_data.get("ai_ratio"):
-            data["ai_ratio"] = ai_data.get("ai_ratio")
+        if not has_any_data:
+            logger.warning("industry_node: Kimi 搜索未返回有效行业数据，留空处理")
+            return IndustryNodeOutput(
+                industry=_build_empty_industry(),
+                platform=_build_empty_platform(),
+                success=True,
+                error_message="industry_node: Kimi 搜索未返回有效行业数据\n",
+            )
 
-        ai_ratio = _safe_ratio(data.get("ai_ratio"), default_ai_ratio)
-        female_ratio = _safe_ratio(data.get("female_ratio"), default_female_ratio)
-        male_ratio = _safe_ratio(data.get("male_ratio"), default_male_ratio)
-        if "male_ratio" not in data and female_ratio != default_female_ratio:
-            male_ratio = max(0, 100 - female_ratio)
-        elif "female_ratio" not in data and male_ratio != default_male_ratio:
-            female_ratio = max(0, 100 - male_ratio)
-        
-        # 5. 构建行业数据（使用搜索结果或榜单统计）
+        source_title = str(data.get("source_title", "") or "Kimi 搜索行业报告").strip()
+        source_url = str(data.get("source_url", "") or "").strip()
+        source_note = source_title
+        if source_url:
+            source_note = f"{source_note} ({source_url})"
+
+        ai_ratio = _safe_ratio(data.get("ai_ratio"), 0)
+        female_ratio = _safe_ratio(data.get("female_ratio"), 0)
+        male_ratio = _safe_ratio(data.get("male_ratio"), 0)
+
+        # 如果搜索未返回性别比例，可用榜单统计作为参考，但标注来源
+        if ("female_ratio" not in data or data.get("female_ratio") in (None, "")) and ranking_total > 0:
+            female_ratio = int(female_count / ranking_total * 100)
+            male_ratio = int(male_count / ranking_total * 100)
+            source_note = f"{source_note}；性别比例来自当日榜单统计"
+
         industry = IndustryData(
-            user_scale=_first_present(data, ("user_scale", "userScale"), "7.18亿"),
-            market_size=_first_present(data, ("market_size", "marketSize"), "1000亿+"),
-            drama_count=_safe_text(_first_present(data, ("drama_count", "total_dramas", "drama_total"), "25万+"), "25万+"),
-            billion_dramas=_safe_int(_first_present(data, ("billion_dramas", "billionDramaCount"), 20), 20),
+            user_scale=_safe_text(_first_present(data, ("user_scale", "userScale")), ""),
+            market_size=_safe_text(_first_present(data, ("market_size", "marketSize")), ""),
+            drama_count=_safe_text(_first_present(data, ("drama_count", "total_dramas", "drama_total")), ""),
+            billion_dramas=_safe_int(_first_present(data, ("billion_dramas", "billionDramaCount")), 0),
             ai_ratio=ai_ratio,
             female_ratio=female_ratio,
             male_ratio=male_ratio,
-            app_mau=_safe_text(_first_present(data, ("app_mau", "appMau"), "3.04亿"), "3.04亿"),
-            app_mau_yoy=_safe_text(_first_present(data, ("app_mau_yoy", "appMauYoy"), "+1.4亿"), "+1.4亿")
+            app_mau=_safe_text(_first_present(data, ("app_mau", "appMau")), ""),
+            app_mau_yoy=_safe_text(_first_present(data, ("app_mau_yoy", "appMauYoy")), ""),
+            data_source=source_note,
+            update_frequency="monthly",
         )
-        
-        # 6. 构建平台数据
-        apps = []
-        platform_apps = _first_present(data, ("platform_apps", "top_mau", "apps"), [])
-        if not isinstance(platform_apps, list):
-            platform_apps = []
-        for app_data in platform_apps or [{"name": "红果免费短剧", "mau": 3.04, "mau_unit": "亿", "yoy": "+1.4亿", "share": 85, "trend": "up"}]:
-            if not isinstance(app_data, dict):
-                continue
-            app = PlatformApp(
-                name=_safe_text(_first_present(app_data, ("name", "app", "platform"), "红果免费短剧"), "红果免费短剧"),
-                mau=_safe_float(app_data.get("mau"), 3.04),
-                mau_unit=_safe_text(_first_present(app_data, ("mau_unit", "unit"), "亿"), "亿"),
-                yoy=_safe_text(app_data.get("yoy"), "+1.4亿"),
-                share=_safe_ratio(app_data.get("share"), 85),
-                trend=_safe_text(app_data.get("trend"), "up")
-            )
-            apps.append(app)
-        if not apps:
-            apps.append(PlatformApp(
-                name="红果免费短剧",
-                mau=3.04,
-                mau_unit="亿",
-                yoy="+1.4亿",
-                share=85,
-                trend="up"
-            ))
-        
+
+        # 5. 解析平台数据
+        apps = _parse_platform_apps(data)
         mini_programs = data.get("mini_programs", [])
         if not isinstance(mini_programs, list):
             mini_programs = []
-        platform = PlatformData(apps=apps, mini_programs=mini_programs)
-        
+
+        platform = PlatformData(
+            apps=apps,
+            mini_programs=mini_programs,
+            data_source=source_note,
+            update_frequency="monthly",
+        )
+
+        # 6. 保存月度缓存
+        save_cache(
+            industry=industry.model_dump(),
+            platform=platform.model_dump(),
+            today=data_date,
+        )
+
         return IndustryNodeOutput(
             industry=industry,
             platform=platform,
             success=True,
-            error_message=input_error_message
+            error_message="",
         )
-        
+
     except Exception as e:
         if is_api_budget_error(e):
             raise
         error_message = f"industry_node: 行业数据搜索或 JSON 解析失败: {e}"
         logger.error(error_message, exc_info=True)
-        # 返回默认数据
         return IndustryNodeOutput(
-            industry=IndustryData(
-                user_scale="7.18亿",
-                market_size="1000亿+",
-                drama_count="25万+",
-                billion_dramas=20,
-                ai_ratio=38,
-                female_ratio=95,
-                male_ratio=5,
-                app_mau="3.04亿",
-                app_mau_yoy="+1.4亿"
-            ),
-            platform=PlatformData(
-                apps=[PlatformApp(
-                    name="红果免费短剧",
-                    mau=3.04,
-                    mau_unit="亿",
-                    yoy="+1.4亿",
-                    share=85,
-                    trend="up"
-                )]
-            ),
+            industry=_build_empty_industry(),
+            platform=_build_empty_platform(),
             success=True,
-            error_message=error_message + "\n"
+            error_message=error_message + "\n",
         )

@@ -2,6 +2,7 @@
 数据质量门禁节点。
 
 在 push_node 之前执行统一校验，防止低质量数据覆盖线上页面。
+方向 A：关键数据缺失或来源不真实时不发布。
 """
 import logging
 import re
@@ -18,7 +19,7 @@ logger = logging.getLogger(__name__)
 REQUIRED_TOP_RANKING_COUNT = 20
 REQUIRED_FEMALE_ACTORS = 10
 REQUIRED_MALE_ACTORS = 10
-REQUIRED_DAILY_NEWS_COUNT = 6
+MAX_DAILY_NEWS_COUNT = 6
 MIN_QUALITY_SCORE = 60
 
 API_ERROR_PATTERNS = [
@@ -34,6 +35,21 @@ API_ERROR_PATTERNS = [
 
 BLACKLISTED_ACTOR_NAMES = {"未知", "待定", "未识别", "unknown", "none", "n/a"}
 
+# 被视为不真实/失败的数据来源说明
+UNREALIABLE_SOURCE_PATTERNS = [
+    re.compile(r"获取失败"),
+    re.compile(r"暂无真实来源"),
+    re.compile(r"本地规则估算"),
+    re.compile(r"失败"),
+]
+
+
+def _is_unreliable_source(source: str) -> bool:
+    """判断数据来源是否为失败/估算来源"""
+    if not source:
+        return True
+    return any(p.search(source) for p in UNREALIABLE_SOURCE_PATTERNS)
+
 
 def quality_gate_node(
     state: QualityGateInput,
@@ -42,7 +58,7 @@ def quality_gate_node(
 ) -> QualityGateOutput:
     """
     title: 数据质量门禁
-    desc: 在推送前统一校验榜单、演员、快讯、行业数据质量
+    desc: 在推送前统一校验榜单、演员、快讯、行业数据质量及数据来源真实性
     """
     report: Dict[str, Any] = {
         "checks": [],
@@ -57,6 +73,7 @@ def quality_gate_node(
     daily_news = state.daily_news or []
     industry = state.industry or {}
     platform = state.platform or {}
+    audience_profile = state.audience_profile or {}
 
     # 1. 榜单数量
     ranking_count = len(rankings)
@@ -123,42 +140,45 @@ def quality_gate_node(
     if not male_ok:
         errors.append(f"男频演员有效数量不足：{male_valid}/{REQUIRED_MALE_ACTORS}")
 
-    # 4. 每日快讯
-    news_count_ok = len(daily_news) == REQUIRED_DAILY_NEWS_COUNT
+    # 4. 每日快讯（0-6条均可，但每条必须有真实 URL）
+    news_count = len(daily_news)
+    news_count_ok = 0 <= news_count <= MAX_DAILY_NEWS_COUNT
     news_with_url = sum(
         1 for n in daily_news
         if (getattr(n, "source_url", "") or "").startswith(("http://", "https://"))
     )
-    news_url_ok = news_with_url == REQUIRED_DAILY_NEWS_COUNT
+    news_url_ok = news_with_url == news_count and news_count > 0
 
     report["checks"].append({
         "name": "daily_news_count",
         "passed": news_count_ok,
-        "value": len(daily_news),
-        "required": REQUIRED_DAILY_NEWS_COUNT,
+        "value": news_count,
+        "max": MAX_DAILY_NEWS_COUNT,
     })
     report["checks"].append({
         "name": "daily_news_url",
         "passed": news_url_ok,
         "value": news_with_url,
-        "required": REQUIRED_DAILY_NEWS_COUNT,
+        "total": news_count,
     })
     if not news_count_ok:
-        errors.append(f"快讯数量不符：当前 {len(daily_news)} 条，要求 {REQUIRED_DAILY_NEWS_COUNT} 条")
-    if not news_url_ok:
-        errors.append(f"快讯 source_url 不完整：{news_with_url}/{REQUIRED_DAILY_NEWS_COUNT}")
+        errors.append(f"快讯数量异常：当前 {news_count} 条，超过上限 {MAX_DAILY_NEWS_COUNT}")
+    if news_count > 0 and not news_url_ok:
+        errors.append(f"快讯 source_url 不完整：{news_with_url}/{news_count}")
 
-    # 5. 行业数据
+    # 5. 行业数据来源真实性（方向 A：缺失/失败时不发布）
     app_mau = getattr(industry, "app_mau", "") or ""
     drama_count = getattr(industry, "drama_count", "") or ""
     ai_ratio = getattr(industry, "ai_ratio", 0) or 0
+    industry_source = getattr(industry, "data_source", "") or ""
 
-    industry_ok = bool(app_mau) and bool(drama_count)
+    industry_has_data = bool(app_mau) and bool(drama_count)
     ratio_ok = 0 <= ai_ratio <= 100
+    industry_source_ok = not _is_unreliable_source(industry_source)
 
     report["checks"].append({
         "name": "industry_data",
-        "passed": industry_ok,
+        "passed": industry_has_data,
         "app_mau": app_mau,
         "drama_count": drama_count,
     })
@@ -167,17 +187,40 @@ def quality_gate_node(
         "passed": ratio_ok,
         "value": ai_ratio,
     })
-    if not industry_ok:
+    report["checks"].append({
+        "name": "industry_source",
+        "passed": industry_source_ok,
+        "source": industry_source,
+    })
+    if not industry_has_data:
         errors.append("行业宏观数据缺失 app_mau 或 drama_count")
     if not ratio_ok:
         errors.append(f"AI短剧占比异常：{ai_ratio}%")
+    if not industry_source_ok:
+        errors.append(f"行业数据来源不真实：{industry_source}")
 
     # 6. 平台数据（可选，仅告警）
     platform_apps = getattr(platform, "apps", []) or []
+    platform_source = getattr(platform, "data_source", "") or ""
     if not platform_apps:
         warnings.append("平台 APP 数据为空")
+    if _is_unreliable_source(platform_source):
+        warnings.append(f"平台数据来源不真实：{platform_source}")
 
-    # 7. API 错误检测
+    # 7. 观众画像数据来源真实性
+    audience_source = getattr(audience_profile, "data_source", "") or ""
+    audience_gender = getattr(audience_profile, "gender", {}) or {}
+    has_audience_data = bool(audience_gender.get("female") or audience_gender.get("male"))
+    audience_source_ok = not has_audience_data or not _is_unreliable_source(audience_source)
+    report["checks"].append({
+        "name": "audience_profile_source",
+        "passed": audience_source_ok,
+        "source": audience_source,
+    })
+    if has_audience_data and not audience_source_ok:
+        errors.append(f"观众画像数据来源不真实：{audience_source}")
+
+    # 8. API 错误检测
     upstream_error = state.error_message or ""
     api_errors = [p for p in API_ERROR_PATTERNS if p.search(upstream_error)]
     api_error_ok = len(api_errors) == 0
@@ -190,7 +233,7 @@ def quality_gate_node(
     if not api_error_ok:
         errors.append("上游节点存在 API 鉴权、限流或解析失败错误，禁止推送")
 
-    # 8. 计算质量分
+    # 9. 计算质量分
     check_results = [c["passed"] for c in report["checks"]]
     passed_checks = sum(check_results)
     total_checks = len(check_results)

@@ -46,9 +46,9 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
     sp = _cfg.get("sp", "")
     temperature = _cfg.get("config", {}).get("temperature", 0.3)
     
-    # 计算日期
-    today = datetime.now()
-    date_str = today.strftime("%Y-%m-%d")
+    # 计算日期：优先使用 state.data_date，保证按历史日期重跑时一致
+    data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
+    date_str = data_date
     
     # 初始化双客户端
     kimi_client = MoonshotClient()
@@ -170,7 +170,9 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                         title=str(item.get("title", ""))[:15],
                         content=str(item.get("content", ""))[:600],
                         insight=str(item.get("insight", ""))[:150],
-                        source_url=source_url
+                        source_url=source_url,
+                        data_source=f"Kimi 搜索 + DeepSeek 提炼 ({date_str})",
+                        update_frequency="daily",
                     )
                     daily_news.append(news_item)
                     

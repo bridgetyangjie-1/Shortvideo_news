@@ -395,7 +395,9 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         
         actors = ActorsData(
             female=female_actors,
-            male=male_actors
+            male=male_actors,
+            data_source="榜单统计",
+            update_frequency="weekly",
         )
         
         return ActorRankingNodeOutput(

@@ -19,6 +19,14 @@ class PlatformData(BaseModel):
     """平台数据"""
     apps: List[PlatformApp] = Field(default=[], description="APP列表")
     mini_programs: List[Dict[str, Any]] = Field(default=[], description="小程序列表")
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'Kimi 搜索行业报告'",
+    )
+    update_frequency: str = Field(
+        default="monthly",
+        description="更新频率：monthly/weekly/daily",
+    )
 
 
 class IndustryData(BaseModel):
@@ -32,6 +40,14 @@ class IndustryData(BaseModel):
     male_ratio: int = Field(default=0, description="男频占比(%)")
     app_mau: str = Field(default="", description="APP月活")
     app_mau_yoy: str = Field(default="", description="APP月活同比增长")
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'Kimi 搜索行业报告'或'榜单统计'",
+    )
+    update_frequency: str = Field(
+        default="monthly",
+        description="更新频率：monthly/weekly/daily",
+    )
 
     @field_validator("ai_ratio", "female_ratio", "male_ratio", mode="before")
     @classmethod

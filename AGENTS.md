@@ -8,7 +8,7 @@
 这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取短剧工程周榜（基于红果官方周榜）为主、红果推荐页为辅，补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
 
 - **项目名称**：`shortvideo-news`
-- **当前版本**：`v1.11.1`
+- **当前版本**：`v1.12.0`
 - **在线地址**：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - **数据入口**：`assets/data/latest.json`（TOP20 展示）、`assets/data/latest_full.json`（Full100 归档）、`assets/data/weekly/YYYY-MM-DD.json`（周榜归档，每周一）
 - **GitHub Actions 入口**：`src/run_github.py`
@@ -366,12 +366,12 @@ python src/utils/config_validator.py
 | 字段 | 类型 | 要求 |
 |---|---|---|
 | `rankings` | `List[DramaRanking]` | TOP20 短剧榜单 |
-| `daily_news` | `List[DailyNews]` | 6 条快讯 |
+| `daily_news` | `List[DailyNews]` | 0-6 条快讯，每条须有真实 source_url |
 | `insights` | `List[Insight]` | 具体行业事件，必须含真实数据 |
-| `genre_distribution` | `GenreDistribution` | 题材分布、标签热度、分类标签、标签趋势 |
+| `genre_distribution` | `GenreDistribution` | 题材分布、标签热度、分类标签、标签趋势；含 `data_source`/`update_frequency` |
 | `actors` | `ActorRanking` | 女频/男频演员榜 |
-| `industry` | `IndustryData` | APP 月活、AI 短剧渗透率、剧集总量等 |
-| `audience_profile` | `AudienceProfile` | 性别、年龄、地域、题材偏好、观看时段、付费能力、用户分层 |
+| `industry` | `IndustryData` | APP 月活、AI 短剧渗透率、剧集总量等；含 `data_source`/`update_frequency` |
+| `audience_profile` | `AudienceProfile` | 性别、年龄、地域、题材偏好、观看时段、付费能力、用户分层；含 `data_source`/`update_frequency` |
 | `alerts` | `List[AlertItem]` | 自动异常监测告警列表 |
 | `alert_count` | `int` | 告警数量 |
 | `quality_report` | `Dict[str, Any]` | 质量门禁 8 项检查详情 |
@@ -521,6 +521,7 @@ export PYTHONPATH="$PWD/src"
 | 2026-06-12 | `push_node`：输出 statistics/trends/anomalies 统计信息 |
 | 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端情绪面板按洞察/热力/建议三 Tab 组织，含词云、TOP3 剧目、行动建议、环比趋势 |
 | 2026-06-13 | `emotion_analysis_node` 词云分值改为 log1p + max-normalization，避免多个维度同时顶到 100 失去区分度 |
+| 2026-06-22 | **v1.12.0 数据真实性与更新频率标注**：`industry_node`/`audience_profile_node` 改为月度缓存，搜索失败或字段缺失时留空，不再返回固定默认值；`news_node` 取消 6 条强制凑数；所有主要数据模型增加 `data_source` 与 `update_frequency` 字段；`quality_gate_node` 增加数据来源真实性校验；前端移除 `mockAudienceProfile`/`mockEmotionalAnalysis`/`fallbackData` 回退，缺失数据显示 "--" 并展示更新频率标签 |
 | 2026-06-22 | **v1.11.1 情绪规则外置与动态兜底**：`emotion_analysis_node` 将 `EMOTION_RULES` / `DIMENSION_CATEGORIES` 硬编码映射迁移到 `config/emotion_rules.json`，支持按月审视更新；DeepSeek 失败时的 summary 与 actionable_insights 改为基于当日实际统计数据动态生成；`_build_emotion_rankings` 默认值从实际 scores 取，避免固定兜底 |
 | 2026-06-13 | **`audience_profile_node` 重构为纯本地规则推理**：基于榜单标签（tags/core_trope/genre）匹配受众画像规则，加权合并性别/年龄/地域/特征，不再调用 DeepSeek API，降低运行成本并保证 H5 前端数据格式兼容 |
 | 2026-06-13 | `audience_profile_node` 精简输出：仅保留 `gender` / `age` / `regions` / `traits` 四个前端必需字段，按排名加权平均并归一化为 100 |

@@ -168,6 +168,8 @@ def history_data_node(
         daily=daily_trend,
         weekly=weekly_trend,
         trend_direction=trend_direction,
+        data_source="周榜历史归档统计",
+        update_frequency="weekly",
     )
 
     # ========== 4. 计算排名变化 ==========

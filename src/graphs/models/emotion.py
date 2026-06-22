@@ -39,12 +39,12 @@ class ActionableInsight(BaseModel):
 class EmotionalAnalysis(BaseModel):
     """核心情绪与动机拆解"""
     summary: str = Field(
-        default="今日榜单以都市复仇与甜宠逆袭为主，观众通过剧情实现情绪代偿。",
+        default="",
         description="一句话总览"
     )
-    dominant_emotion: str = Field(default="心理补偿", description="主导情绪")
-    dominant_anxiety: str = Field(default="亲密关系失衡", description="主导现实焦虑")
-    top_trigger: str = Field(default="复仇打脸", description="TOP1 剧情触发点")
+    dominant_emotion: str = Field(default="", description="主导情绪")
+    dominant_anxiety: str = Field(default="", description="主导现实焦虑")
+    top_trigger: str = Field(default="", description="TOP1 剧情触发点")
     wordcloud: List[EmotionWordCloudItem] = Field(
         default_factory=list,
         description="情绪关键词云"
@@ -61,52 +61,16 @@ class EmotionalAnalysis(BaseModel):
         default_factory=list,
         description="3条创作者/投流行动建议"
     )
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'当日榜单规则统计 + DeepSeek 提炼'或'本地规则兜底'",
+    )
+    update_frequency: str = Field(
+        default="daily",
+        description="更新频率：daily/weekly/monthly",
+    )
 
 
 def default_emotional_analysis() -> EmotionalAnalysis:
-    """核心情绪与动机拆解默认结构"""
-    return EmotionalAnalysis(
-        summary="今日榜单以都市复仇与甜宠逆袭为主，观众通过剧情实现情绪代偿。",
-        dominant_emotion="心理补偿",
-        dominant_anxiety="亲密关系失衡",
-        top_trigger="复仇打脸",
-        wordcloud=[
-            EmotionWordCloudItem(name="复仇打脸", value=28, category="trigger"),
-            EmotionWordCloudItem(name="甜宠撒糖", value=22, category="trigger"),
-            EmotionWordCloudItem(name="身份逆袭", value=20, category="emotion"),
-            EmotionWordCloudItem(name="亲密关系失衡", value=19, category="anxiety"),
-            EmotionWordCloudItem(name="职场受挫", value=16, category="payoff"),
-            EmotionWordCloudItem(name="解压放空", value=15, category="motivation"),
-        ],
-        emotion_rankings=[
-            EmotionRankingItem(
-                rank=1,
-                title="示例剧目",
-                primary_emotion="身份逆袭",
-                anxiety="亲密关系失衡",
-                trigger="复仇打脸",
-                one_line="用逆袭打脸补偿亲密关系中的价值否定"
-            )
-        ],
-        trends=[
-            EmotionTrendItem(name="复仇打脸", change=0, trend="same"),
-            EmotionTrendItem(name="甜宠撒糖", change=0, trend="same"),
-        ],
-        actionable_insights=[
-            ActionableInsight(
-                icon="💡",
-                title="聚焦复仇逆袭情绪",
-                content="今日'复仇打脸'情绪显著，新剧本前3秒建议直接展示冲突反转，提升素材CTR。"
-            ),
-            ActionableInsight(
-                icon="📈",
-                title="瞄准亲密关系焦虑",
-                content="观众对'亲密关系失衡'代偿需求强，投流文案可直接点出情感痛点并展示反转爽点。"
-            ),
-            ActionableInsight(
-                icon="🎯",
-                title="复用高触发题材框架",
-                content="TOP3剧目均命中'复仇打脸'触发点，后续创作可延续该爽点框架并做微创新。"
-            ),
-        ],
-    )
+    """核心情绪与动机拆解默认空结构（方向A：缺失时留空，不回退到 mock 数据）"""
+    return EmotionalAnalysis()

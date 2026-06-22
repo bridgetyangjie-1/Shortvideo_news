@@ -393,6 +393,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
 /* 核心情绪与动机拆解 - 情绪驾驶舱 */
 .emotion-cockpit { padding: 16px; position: relative; }
+.emotion-empty-state { display: none; align-items: center; justify-content: center; min-height: 200px; color: #64748b; font-size: 13px; }
 .emotion-mobile-close { display: none; position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; border: none; background: rgba(255,255,255,0.08); color: #94a3b8; font-size: 14px; cursor: pointer; align-items: center; justify-content: center; z-index: 2; }
 .emotion-tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.06); margin: -12px -16px 12px -16px; padding: 0 16px; }
 .emotion-tab { padding: 10px 14px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
@@ -674,25 +675,25 @@ body.emotion-mobile-locked { overflow: hidden; }
       <div class="kpi-icon">📱</div>
       <div class="kpi-value" id="kpi-mau">--</div>
       <div class="kpi-label">APP月活</div>
-      <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
+      <div class="kpi-source" id="kpi-mau-source"><span class="source-tag tier2">🔍 搜补</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-icon">🤖</div>
       <div class="kpi-value gradient" id="kpi-ai">--</div>
       <div class="kpi-label">AI短剧渗透率</div>
-      <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
+      <div class="kpi-source" id="kpi-ai-source"><span class="source-tag tier2">🔍 搜补</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-icon">🎬</div>
       <div class="kpi-value" id="kpi-drama">--</div>
       <div class="kpi-label">剧集总量</div>
-      <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
+      <div class="kpi-source" id="kpi-drama-source"><span class="source-tag tier2">🔍 搜补</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-icon">🔥</div>
       <div class="kpi-value yellow" id="kpi-hit">--</div>
       <div class="kpi-label">破亿爆款剧</div>
-      <div class="kpi-source"><span class="source-tag tier2">🔍 搜补</span></div>
+      <div class="kpi-source" id="kpi-hit-source"><span class="source-tag tier2">🔍 搜补</span></div>
     </div>
   </div>
 
@@ -707,7 +708,7 @@ body.emotion-mobile-locked { overflow: hidden; }
     <div style="display: flex; flex-direction: column; gap: 16px;">
       
       <div class="glass-card" style="flex: 1;">
-        <div class="section-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 行业大事件 <span class="source-tag tier3">🤖 DeepSeek分析</span></div>
+        <div class="section-title" id="insights-title"><i class="fas fa-fire" style="color:#f472b6;"></i> 行业大事件 <span class="source-tag tier3">🤖 DeepSeek分析</span></div>
         <div id="insights-container"></div>
       </div>
       
@@ -730,19 +731,20 @@ body.emotion-mobile-locked { overflow: hidden; }
 
   <!-- 行业快讯 -->
   <div class="glass-card news-section">
-    <div class="section-title"><i class="fas fa-newspaper" style="color:#4ade80;"></i> 每日行业快讯 <span class="source-tag tier2">🔍 Kimi搜补</span></div>
+    <div class="section-title" id="news-title"><i class="fas fa-newspaper" style="color:#4ade80;"></i> 每日行业快讯 <span class="source-tag tier2">🔍 Kimi搜补</span></div>
     <div class="news-grid" id="news-container"></div>
   </div>
   
   <div class="sub-grid two-cols">
     <div class="glass-card">
-      <div class="section-title">🏷️ 近一周热门标签 <span class="source-tag tier1">📊 本地统计</span></div>
+      <div class="section-title" id="hot-tags-title">🏷️ 近一周热门标签 <span class="source-tag tier1">📊 本地统计</span></div>
       <div id="hot-tags-container"></div>
     </div>
     
     <div class="glass-card emotion-cockpit" id="emotion-cockpit">
       <button class="emotion-mobile-close" aria-label="关闭" onclick="toggleEmotionMobile()">✕</button>
-      <div class="section-title"><i class="fas fa-brain" style="color:#a78bfa;"></i> 核心情绪与动机拆解 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div class="section-title" id="emotion-title"><i class="fas fa-brain" style="color:#a78bfa;"></i> 核心情绪与动机拆解 <span class="source-tag tier3">🤖 DeepSeek推理</span></div>
+      <div id="emotion-empty-state" class="emotion-empty-state" style="display:none;">数据暂缺</div>
       
       <div class="emotion-tabs">
         <button class="emotion-tab active" data-tab="insight" onclick="switchEmotionTab('insight')">洞察</button>
@@ -786,7 +788,7 @@ body.emotion-mobile-locked { overflow: hidden; }
 
   <!-- 核心观众画像 -->
   <div class="glass-card audience-section">
-    <div class="section-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像 <span class="source-tag tier2">🔍 Kimi搜补+规则</span></div>
+    <div class="section-title" id="audience-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像 <span class="source-tag tier2">🔍 Kimi搜补+规则</span></div>
     <div class="audience-dashboard">
       <div class="audience-col">
         <div class="audience-charts">
@@ -1139,46 +1141,54 @@ function safePercent(value, fallback = 0) {
     return fallback;
 }
 
+function formatFrequencyLabel(freq) {
+    const map = { daily: '日更新', weekly: '周更新', monthly: '月更新' };
+    return map[freq] || '';
+}
+
+function formatUpdateTag(updateFrequency, dataSource) {
+    const freqLabel = formatFrequencyLabel(updateFrequency);
+    const source = dataSource || '';
+    if (freqLabel && source) return `${freqLabel} · ${source}`;
+    return freqLabel || source || '';
+}
+
+function updateSectionTag(elementId, updateFrequency, dataSource) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    const tagText = formatUpdateTag(updateFrequency, dataSource);
+    let tagEl = el.querySelector('.update-tag');
+    if (!tagEl && tagText) {
+        tagEl = document.createElement('span');
+        tagEl.className = 'source-tag tier3 update-tag';
+        el.appendChild(tagEl);
+    }
+    if (tagEl) {
+        tagEl.textContent = tagText;
+        tagEl.style.display = tagText ? 'inline-flex' : 'none';
+    }
+}
+
 function normalizeAudienceProfile(profile) {
     const source = profile && typeof profile === 'object' ? profile : {};
-    const hasNewGender = source.gender && typeof source.gender === 'object';
-    const hasNewAge = source.age && typeof source.age === 'object';
 
-    if (!hasNewGender || !hasNewAge || !Array.isArray(source.traits)) {
-        return JSON.parse(JSON.stringify(mockAudienceProfile));
-    }
-
-    const traits = source.traits
-        .filter((item) => typeof item === 'string' && item.trim())
-        .map((item) => item.trim());
-    mockAudienceProfile.traits.forEach((item) => {
-        if (traits.length < 4 && !traits.includes(item)) traits.push(item);
-    });
-
-    const normalizeNamedList = (rawList, fallbackList) => {
-        if (!Array.isArray(rawList) || rawList.length === 0) return fallbackList;
+    const normalizeNamedList = (rawList) => {
+        if (!Array.isArray(rawList) || rawList.length === 0) return [];
         return rawList
             .filter((item) => item && typeof item === 'object' && item.name)
             .map((item) => ({ name: String(item.name), value: safePercent(item.value, 0) }));
     };
 
-    const regions = normalizeNamedList(source.regions, mockAudienceProfile.regions).slice(0, 5);
-    const content_preferences = normalizeNamedList(source.content_preferences, mockAudienceProfile.content_preferences).slice(0, 6);
-    const viewing_time = normalizeNamedList(source.viewing_time, mockAudienceProfile.viewing_time).slice(0, 6);
+    const genderSource = source.gender && typeof source.gender === 'object' ? source.gender : {};
+    const ageSource = source.age && typeof source.age === 'object' ? source.age : {};
+    const spendingSource = source.spending_power && typeof source.spending_power === 'object' ? source.spending_power : {};
 
-    const spending = source.spending_power && typeof source.spending_power === 'object'
-        ? source.spending_power
-        : mockAudienceProfile.spending_power;
-    const spending_power = {
-        paid_ratio: safePercent(spending.paid_ratio, mockAudienceProfile.spending_power.paid_ratio),
-        arpu: String(spending.arpu || mockAudienceProfile.spending_power.arpu),
-        willingness: String(spending.willingness || mockAudienceProfile.spending_power.willingness)
-    };
+    const traits = (Array.isArray(source.traits) ? source.traits : [])
+        .filter((item) => typeof item === 'string' && item.trim())
+        .map((item) => item.trim())
+        .slice(0, 4);
 
-    const rawSegments = Array.isArray(source.user_segments) && source.user_segments.length > 0
-        ? source.user_segments
-        : mockAudienceProfile.user_segments;
-    const user_segments = rawSegments
+    const user_segments = (Array.isArray(source.user_segments) ? source.user_segments : [])
         .filter((item) => item && typeof item === 'object' && item.name)
         .map((item) => ({
             name: String(item.name),
@@ -1189,20 +1199,24 @@ function normalizeAudienceProfile(profile) {
 
     return {
         gender: {
-            female: safePercent(source.gender.female, mockAudienceProfile.gender.female),
-            male: safePercent(source.gender.male, mockAudienceProfile.gender.male)
+            female: safePercent(genderSource.female, 0),
+            male: safePercent(genderSource.male, 0)
         },
         age: {
-            "18-24": safePercent(source.age["18-24"], mockAudienceProfile.age["18-24"]),
-            "25-34": safePercent(source.age["25-34"], mockAudienceProfile.age["25-34"]),
-            "35-44": safePercent(source.age["35-44"], mockAudienceProfile.age["35-44"]),
-            "45+": safePercent(source.age["45+"], mockAudienceProfile.age["45+"])
+            "18-24": safePercent(ageSource["18-24"], 0),
+            "25-34": safePercent(ageSource["25-34"], 0),
+            "35-44": safePercent(ageSource["35-44"], 0),
+            "45+": safePercent(ageSource["45+"], 0)
         },
-        traits: traits.slice(0, 4),
-        regions,
-        content_preferences,
-        viewing_time,
-        spending_power,
+        traits,
+        regions: normalizeNamedList(source.regions).slice(0, 5),
+        content_preferences: normalizeNamedList(source.content_preferences).slice(0, 6),
+        viewing_time: normalizeNamedList(source.viewing_time).slice(0, 6),
+        spending_power: {
+            paid_ratio: safePercent(spendingSource.paid_ratio, 0),
+            arpu: String(spendingSource.arpu || '--'),
+            willingness: String(spendingSource.willingness || '--')
+        },
         user_segments
     };
 }
@@ -1210,25 +1224,38 @@ function normalizeAudienceProfile(profile) {
 function renderAudienceProfile(rawProfile) {
     const profile = normalizeAudienceProfile(rawProfile);
 
+    const showPlaceholder = (el, text = '--') => {
+        if (!el) return;
+        el.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;font-size:13px;">${text}</div>`;
+    };
+
     // 特征标签
     const traitsContainer = document.getElementById('audience-traits-container');
     if (traitsContainer) {
-        traitsContainer.innerHTML = profile.traits.map(t => `<span class="audience-trait">${escapeHtml(t)}</span>`).join('');
+        if (profile.traits.length) {
+            traitsContainer.innerHTML = profile.traits.map(t => `<span class="audience-trait">${escapeHtml(t)}</span>`).join('');
+        } else {
+            traitsContainer.innerHTML = '<span class="audience-trait" style="background:transparent;border-color:transparent;color:#64748b;">--</span>';
+        }
     }
 
     // 用户分层
     const segmentsContainer = document.getElementById('segments-container');
     if (segmentsContainer) {
-        segmentsContainer.innerHTML = profile.user_segments.map(seg => `
-            <div class="segment-item">
-                <div class="segment-header">
-                    <span class="segment-name">${escapeHtml(seg.name)}</span>
-                    <span class="segment-share">${seg.share}%</span>
+        if (profile.user_segments.length) {
+            segmentsContainer.innerHTML = profile.user_segments.map(seg => `
+                <div class="segment-item">
+                    <div class="segment-header">
+                        <span class="segment-name">${escapeHtml(seg.name)}</span>
+                        <span class="segment-share">${seg.share}%</span>
+                    </div>
+                    <div class="segment-bar-bg"><div class="segment-bar-fill" style="width: ${seg.share}%"></div></div>
+                    <div class="segment-desc">${escapeHtml(seg.desc)}</div>
                 </div>
-                <div class="segment-bar-bg"><div class="segment-bar-fill" style="width: ${seg.share}%"></div></div>
-                <div class="segment-desc">${escapeHtml(seg.desc)}</div>
-            </div>
-        `).join('');
+            `).join('');
+        } else {
+            segmentsContainer.innerHTML = '<div style="color:#64748b;font-size:12px;padding:8px 0;">--</div>';
+        }
     }
 
     // 付费能力
@@ -1262,96 +1289,122 @@ function renderAudienceProfile(rawProfile) {
     const commonGrid = { left: 10, right: 16, top: 28, bottom: 10 };
     const commonTooltip = { trigger: 'axis', axisPointer: { type: 'shadow' } };
 
+    const hasGender = profile.gender.female > 0 || profile.gender.male > 0;
+    const hasAge = Object.values(profile.age).some(v => v > 0);
+    const hasRegions = profile.regions.length > 0;
+    const hasContent = profile.content_preferences.length > 0;
+    const hasViewing = profile.viewing_time.length > 0;
+
     // 性别
     if (genderEl) {
-        const female = profile.gender.female;
-        const male = profile.gender.male;
-        window.genderChartInstance = echarts.init(genderEl, 'dark');
-        window.genderChartInstance.setOption({
-            backgroundColor: 'transparent',
-            title: { text: `${female}%`, subtext: '女性占比', left: 'center', top: '36%', textStyle: { color: '#f472b6', fontSize: 16, fontWeight: 800 }, subtextStyle: { color: '#94a3b8', fontSize: 10 } },
-            tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
-            series: [{
-                name: '性别分布', type: 'pie', radius: ['58%', '78%'], center: ['50%', '50%'],
-                label: { show: false }, labelLine: { show: false },
-                data: [
-                    { value: female, name: '女性', itemStyle: { color: '#f472b6' } },
-                    { value: male, name: '男性', itemStyle: { color: '#60a5fa' } }
-                ]
-            }]
-        });
+        if (hasGender) {
+            const female = profile.gender.female;
+            const male = profile.gender.male;
+            window.genderChartInstance = echarts.init(genderEl, 'dark');
+            window.genderChartInstance.setOption({
+                backgroundColor: 'transparent',
+                title: { text: `${female}%`, subtext: '女性占比', left: 'center', top: '36%', textStyle: { color: '#f472b6', fontSize: 16, fontWeight: 800 }, subtextStyle: { color: '#94a3b8', fontSize: 10 } },
+                tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
+                series: [{
+                    name: '性别分布', type: 'pie', radius: ['58%', '78%'], center: ['50%', '50%'],
+                    label: { show: false }, labelLine: { show: false },
+                    data: [
+                        { value: female, name: '女性', itemStyle: { color: '#f472b6' } },
+                        { value: male, name: '男性', itemStyle: { color: '#60a5fa' } }
+                    ]
+                }]
+            });
+        } else {
+            showPlaceholder(genderEl);
+        }
     }
 
     // 年龄
     if (ageEl) {
-        const ageKeys = ["18-24", "25-34", "35-44", "45+"];
-        window.ageChartInstance = echarts.init(ageEl, 'dark');
-        window.ageChartInstance.setOption({
-            backgroundColor: 'transparent',
-            grid: { left: 26, right: 8, top: 22, bottom: 22 },
-            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}%' },
-            xAxis: { type: 'category', data: ageKeys, axisLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.35)' } }, axisTick: { show: false }, axisLabel: { color: '#94a3b8', fontSize: 9 } },
-            yAxis: { type: 'value', splitLine: { show: false }, axisLabel: { color: '#64748b', fontSize: 9, formatter: '{value}%' } },
-            series: [{
-                name: '年龄分布', type: 'bar', barWidth: 12,
-                data: ageKeys.map(key => profile.age[key]),
-                itemStyle: { borderRadius: [4, 4, 0, 0], color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#a78bfa' }, { offset: 1, color: '#60a5fa' }]) }
-            }]
-        });
+        if (hasAge) {
+            const ageKeys = ["18-24", "25-34", "35-44", "45+"];
+            window.ageChartInstance = echarts.init(ageEl, 'dark');
+            window.ageChartInstance.setOption({
+                backgroundColor: 'transparent',
+                grid: { left: 26, right: 8, top: 22, bottom: 22 },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}%' },
+                xAxis: { type: 'category', data: ageKeys, axisLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.35)' } }, axisTick: { show: false }, axisLabel: { color: '#94a3b8', fontSize: 9 } },
+                yAxis: { type: 'value', splitLine: { show: false }, axisLabel: { color: '#64748b', fontSize: 9, formatter: '{value}%' } },
+                series: [{
+                    name: '年龄分布', type: 'bar', barWidth: 12,
+                    data: ageKeys.map(key => profile.age[key]),
+                    itemStyle: { borderRadius: [4, 4, 0, 0], color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#a78bfa' }, { offset: 1, color: '#60a5fa' }]) }
+                }]
+            });
+        } else {
+            showPlaceholder(ageEl);
+        }
     }
 
     // 地域 TOP5 横向条形
-    if (regionEl && profile.regions.length) {
-        window.regionChartInstance = echarts.init(regionEl, 'dark');
-        window.regionChartInstance.setOption({
-            backgroundColor: 'transparent',
-            title: { text: '地域分布', left: 0, top: 0, textStyle: { color: '#f8fafc', fontSize: 12, fontWeight: 700 } },
-            grid: { ...commonGrid, left: 46, top: 26, bottom: 4 },
-            tooltip: commonTooltip,
-            xAxis: { type: 'value', splitLine: { show: false }, axisLabel: { show: false } },
-            yAxis: { type: 'category', data: [...profile.regions].reverse().map(r => r.name), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#cbd5e1', fontSize: 10 } },
-            series: [{
-                name: '占比', type: 'bar', barWidth: 10, data: [...profile.regions].reverse().map(r => r.value),
-                itemStyle: { borderRadius: [0, 5, 5, 0], color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{ offset: 0, color: '#60a5fa' }, { offset: 1, color: '#34d399' }]) },
-                label: { show: true, position: 'right', color: '#94a3b8', fontSize: 9, formatter: '{c}%' }
-            }]
-        });
+    if (regionEl) {
+        if (hasRegions) {
+            window.regionChartInstance = echarts.init(regionEl, 'dark');
+            window.regionChartInstance.setOption({
+                backgroundColor: 'transparent',
+                title: { text: '地域分布', left: 0, top: 0, textStyle: { color: '#f8fafc', fontSize: 12, fontWeight: 700 } },
+                grid: { ...commonGrid, left: 46, top: 26, bottom: 4 },
+                tooltip: commonTooltip,
+                xAxis: { type: 'value', splitLine: { show: false }, axisLabel: { show: false } },
+                yAxis: { type: 'category', data: [...profile.regions].reverse().map(r => r.name), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#cbd5e1', fontSize: 10 } },
+                series: [{
+                    name: '占比', type: 'bar', barWidth: 10, data: [...profile.regions].reverse().map(r => r.value),
+                    itemStyle: { borderRadius: [0, 5, 5, 0], color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{ offset: 0, color: '#60a5fa' }, { offset: 1, color: '#34d399' }]) },
+                    label: { show: true, position: 'right', color: '#94a3b8', fontSize: 9, formatter: '{c}%' }
+                }]
+            });
+        } else {
+            showPlaceholder(regionEl);
+        }
     }
 
     // 题材偏好
-    if (contentEl && profile.content_preferences.length) {
-        window.contentChartInstance = echarts.init(contentEl, 'dark');
-        window.contentChartInstance.setOption({
-            backgroundColor: 'transparent',
-            title: { text: '题材偏好', left: 0, top: 0, textStyle: { color: '#f8fafc', fontSize: 12, fontWeight: 700 } },
-            grid: { ...commonGrid, left: 4, right: 4, top: 26, bottom: 20 },
-            tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
-            series: [{
-                name: '题材偏好', type: 'pie', radius: ['42%', '62%'], center: ['50%', '55%'],
-                label: { color: '#cbd5e1', fontSize: 9 },
-                data: profile.content_preferences.map((item, idx) => ({
-                    value: item.value, name: item.name,
-                    itemStyle: { color: ['#f472b6', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#fb7185'][idx % 6] }
-                }))
-            }]
-        });
+    if (contentEl) {
+        if (hasContent) {
+            window.contentChartInstance = echarts.init(contentEl, 'dark');
+            window.contentChartInstance.setOption({
+                backgroundColor: 'transparent',
+                title: { text: '题材偏好', left: 0, top: 0, textStyle: { color: '#f8fafc', fontSize: 12, fontWeight: 700 } },
+                grid: { ...commonGrid, left: 4, right: 4, top: 26, bottom: 20 },
+                tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
+                series: [{
+                    name: '题材偏好', type: 'pie', radius: ['42%', '62%'], center: ['50%', '55%'],
+                    label: { color: '#cbd5e1', fontSize: 9 },
+                    data: profile.content_preferences.map((item, idx) => ({
+                        value: item.value, name: item.name,
+                        itemStyle: { color: ['#f472b6', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#fb7185'][idx % 6] }
+                    }))
+                }]
+            });
+        } else {
+            showPlaceholder(contentEl);
+        }
     }
 
     // 观看时段
-    if (viewingEl && profile.viewing_time.length) {
-        window.viewingTimeChartInstance = echarts.init(viewingEl, 'dark');
-        window.viewingTimeChartInstance.setOption({
-            backgroundColor: 'transparent',
-            title: { text: '观看时段', left: 0, top: 0, textStyle: { color: '#f8fafc', fontSize: 12, fontWeight: 700 } },
-            grid: { ...commonGrid, left: 10, right: 10, top: 26, bottom: 22 },
-            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}%' },
-            xAxis: { type: 'category', data: profile.viewing_time.map(t => t.name), axisLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.35)' } }, axisTick: { show: false }, axisLabel: { color: '#94a3b8', fontSize: 9, rotate: 15 } },
-            yAxis: { type: 'value', splitLine: { show: false }, axisLabel: { color: '#64748b', fontSize: 9, formatter: '{value}%' } },
-            series: [{
-                name: '占比', type: 'bar', barWidth: 14, data: profile.viewing_time.map(t => t.value),
-                itemStyle: { borderRadius: [4, 4, 0, 0], color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#fbbf24' }, { offset: 1, color: '#f97316' }]) }
-            }]
-        });
+    if (viewingEl) {
+        if (hasViewing) {
+            window.viewingTimeChartInstance = echarts.init(viewingEl, 'dark');
+            window.viewingTimeChartInstance.setOption({
+                backgroundColor: 'transparent',
+                title: { text: '观看时段', left: 0, top: 0, textStyle: { color: '#f8fafc', fontSize: 12, fontWeight: 700 } },
+                grid: { ...commonGrid, left: 10, right: 10, top: 26, bottom: 22 },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}%' },
+                xAxis: { type: 'category', data: profile.viewing_time.map(t => t.name), axisLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.35)' } }, axisTick: { show: false }, axisLabel: { color: '#94a3b8', fontSize: 9, rotate: 15 } },
+                yAxis: { type: 'value', splitLine: { show: false }, axisLabel: { color: '#64748b', fontSize: 9, formatter: '{value}%' } },
+                series: [{
+                    name: '占比', type: 'bar', barWidth: 14, data: profile.viewing_time.map(t => t.value),
+                    itemStyle: { borderRadius: [4, 4, 0, 0], color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#fbbf24' }, { offset: 1, color: '#f97316' }]) }
+                }]
+            });
+        } else {
+            showPlaceholder(viewingEl);
+        }
     }
 }
 
@@ -1370,19 +1423,27 @@ function normalizeEmotionalAnalysis(rawAnalysis) {
         const oldToCloud = (list, category) => (Array.isArray(list) ? list : [])
             .filter(item => item && typeof item === 'object' && (item.name || item.label))
             .map(item => ({ name: item.name || item.label, value: safePercent(item.value, 0), category }));
-        const wordcloud = [
-            ...oldToCloud(source.primary_emotions, 'emotion'),
-            ...oldToCloud(source.target_anxieties, 'anxiety'),
-            ...oldToCloud(source.motivations, 'motivation'),
-            ...oldToCloud(source.triggers, 'trigger'),
-            ...oldToCloud(source.expectations, 'expectation'),
-            ...oldToCloud(source.payoff_scenarios, 'payoff')
-        ].slice(0, 12);
-        return { ...mockEmotionalAnalysis, wordcloud };
+        return {
+            summary: String(source.summary || ''),
+            dominant_emotion: String(source.dominant_emotion || ''),
+            dominant_anxiety: String(source.dominant_anxiety || ''),
+            top_trigger: String(source.top_trigger || ''),
+            wordcloud: [
+                ...oldToCloud(source.primary_emotions, 'emotion'),
+                ...oldToCloud(source.target_anxieties, 'anxiety'),
+                ...oldToCloud(source.motivations, 'motivation'),
+                ...oldToCloud(source.triggers, 'trigger'),
+                ...oldToCloud(source.expectations, 'expectation'),
+                ...oldToCloud(source.payoff_scenarios, 'payoff')
+            ].slice(0, 12),
+            emotion_rankings: [],
+            trends: [],
+            actionable_insights: []
+        };
     }
 
     const normalizeWordcloud = (list) => {
-        if (!Array.isArray(list) || list.length === 0) return mockEmotionalAnalysis.wordcloud;
+        if (!Array.isArray(list) || list.length === 0) return [];
         return list
             .filter(item => item && typeof item === 'object' && (item.name || item.label))
             .map(item => ({
@@ -1394,22 +1455,22 @@ function normalizeEmotionalAnalysis(rawAnalysis) {
     };
 
     const normalizeRankings = (list) => {
-        if (!Array.isArray(list) || list.length === 0) return mockEmotionalAnalysis.emotion_rankings;
+        if (!Array.isArray(list) || list.length === 0) return [];
         return list
             .filter(item => item && typeof item === 'object' && item.title)
             .map(item => ({
                 rank: safePercent(item.rank, 0),
                 title: String(item.title),
-                primary_emotion: String(item.primary_emotion || item.emotion || '心理补偿'),
-                anxiety: String(item.anxiety || '亲密关系失衡'),
-                trigger: String(item.trigger || '复仇打脸'),
+                primary_emotion: String(item.primary_emotion || item.emotion || ''),
+                anxiety: String(item.anxiety || ''),
+                trigger: String(item.trigger || ''),
                 one_line: String(item.one_line || item.one_line_insight || '')
             }))
             .slice(0, 3);
     };
 
     const normalizeTrends = (list) => {
-        if (!Array.isArray(list) || list.length === 0) return mockEmotionalAnalysis.trends;
+        if (!Array.isArray(list) || list.length === 0) return [];
         return list
             .filter(item => item && typeof item === 'object' && item.name)
             .map(item => ({
@@ -1421,22 +1482,22 @@ function normalizeEmotionalAnalysis(rawAnalysis) {
     };
 
     const normalizeInsights = (list) => {
-        if (!Array.isArray(list) || list.length === 0) return mockEmotionalAnalysis.actionable_insights;
+        if (!Array.isArray(list) || list.length === 0) return [];
         return list
             .filter(item => item && typeof item === 'object')
             .map(item => ({
                 icon: String(item.icon || '💡'),
-                title: String(item.title || '创作建议'),
+                title: String(item.title || ''),
                 content: String(item.content || item.desc || '')
             }))
             .slice(0, 3);
     };
 
     return {
-        summary: String(source.summary || mockEmotionalAnalysis.summary),
-        dominant_emotion: String(source.dominant_emotion || mockEmotionalAnalysis.dominant_emotion),
-        dominant_anxiety: String(source.dominant_anxiety || mockEmotionalAnalysis.dominant_anxiety),
-        top_trigger: String(source.top_trigger || mockEmotionalAnalysis.top_trigger),
+        summary: String(source.summary || ''),
+        dominant_emotion: String(source.dominant_emotion || ''),
+        dominant_anxiety: String(source.dominant_anxiety || ''),
+        top_trigger: String(source.top_trigger || ''),
         wordcloud: normalizeWordcloud(source.wordcloud),
         emotion_rankings: normalizeRankings(source.emotion_rankings),
         trends: normalizeTrends(source.trends),
@@ -1510,8 +1571,37 @@ function renderEmotionChart(rawAnalysis) {
     const rankingsContainer = document.getElementById('emotion-rankings-container');
     const insightsContainer = document.getElementById('emotion-insights-container');
     const trendsContainer = document.getElementById('emotion-trends-container');
+    const cockpit = document.getElementById('emotion-cockpit');
+    const emptyState = document.getElementById('emotion-empty-state');
 
     const analysis = normalizeEmotionalAnalysis(rawAnalysis);
+
+    const isEmpty = !analysis.summary && !analysis.dominant_emotion && !analysis.wordcloud.length && !analysis.emotion_rankings.length && !analysis.trends.length && !analysis.actionable_insights.length;
+
+    const tabs = cockpit ? cockpit.querySelector('.emotion-tabs') : null;
+    const contents = cockpit ? cockpit.querySelectorAll('.emotion-tab-content') : [];
+
+    if (isEmpty) {
+        if (emptyState) emptyState.style.display = 'flex';
+        if (tabs) tabs.style.display = 'none';
+        contents.forEach(c => c.style.display = 'none');
+        if (window.emotionWordcloudChartInstance) {
+            window.emotionWordcloudChartInstance.dispose();
+            window.emotionWordcloudChartInstance = null;
+        }
+        return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    if (tabs) tabs.style.display = 'flex';
+    contents.forEach(c => {
+        c.style.display = '';
+        c.classList.toggle('active', c.dataset.tabContent === 'insight');
+    });
+    const firstTab = cockpit ? cockpit.querySelector('.emotion-tab[data-tab="insight"]') : null;
+    const secondTab = cockpit ? cockpit.querySelector('.emotion-tab[data-tab="action"]') : null;
+    if (firstTab) firstTab.classList.add('active');
+    if (secondTab) secondTab.classList.remove('active');
 
     // 总览摘要：默认折叠到 50 字
     if (summaryEl) {
@@ -1609,40 +1699,44 @@ function renderEmotionChart(rawAnalysis) {
     // 情绪热力 TOP8 横向条形图
     const wordcloudEl = document.getElementById('emotion-wordcloud-chart');
     if (wordcloudEl) {
-        const wordData = analysis.wordcloud.slice(0, 8);
-        window.emotionWordcloudChartInstance = echarts.init(wordcloudEl, 'dark');
-        window.emotionWordcloudChartInstance.setOption({
-            backgroundColor: 'transparent',
-            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}' },
-            grid: { left: 72, right: 36, top: 4, bottom: 4 },
-            xAxis: { type: 'value', splitLine: { show: false }, axisLabel: { show: false } },
-            yAxis: {
-                type: 'category',
-                data: [...wordData].reverse().map(item => item.name),
-                axisLine: { show: false },
-                axisTick: { show: false },
-                axisLabel: {
-                    color: '#cbd5e1',
-                    fontSize: 10,
-                    width: 60,
-                    overflow: 'truncate',
-                    ellipsis: '...',
-                    align: 'right'
-                }
-            },
-            series: [{
-                type: 'bar',
-                barWidth: 12,
-                data: [...wordData].reverse().map(item => ({
-                    value: item.value,
-                    itemStyle: {
-                        borderRadius: [0, 5, 5, 0],
-                        color: categoryColors[item.category] || '#a78bfa'
+        if (analysis.wordcloud.length) {
+            const wordData = analysis.wordcloud.slice(0, 8);
+            window.emotionWordcloudChartInstance = echarts.init(wordcloudEl, 'dark');
+            window.emotionWordcloudChartInstance.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}' },
+                grid: { left: 72, right: 36, top: 4, bottom: 4 },
+                xAxis: { type: 'value', splitLine: { show: false }, axisLabel: { show: false } },
+                yAxis: {
+                    type: 'category',
+                    data: [...wordData].reverse().map(item => item.name),
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: {
+                        color: '#cbd5e1',
+                        fontSize: 10,
+                        width: 60,
+                        overflow: 'truncate',
+                        ellipsis: '...',
+                        align: 'right'
                     }
-                })),
-                label: { show: true, position: 'right', color: '#94a3b8', fontSize: 9, formatter: '{c}' }
-            }]
-        });
+                },
+                series: [{
+                    type: 'bar',
+                    barWidth: 12,
+                    data: [...wordData].reverse().map(item => ({
+                        value: item.value,
+                        itemStyle: {
+                            borderRadius: [0, 5, 5, 0],
+                            color: categoryColors[item.category] || '#a78bfa'
+                        }
+                    })),
+                    label: { show: true, position: 'right', color: '#94a3b8', fontSize: 9, formatter: '{c}' }
+                }]
+            });
+        } else {
+            wordcloudEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;font-size:13px;">--</div>';
+        }
     }
 }
 
@@ -1668,7 +1762,7 @@ function renderHotTags(genreDistribution) {
     const trending = Array.isArray(gd.trending) ? gd.trending : [];
 
     if (!categories.length && !trending.length) {
-        container.innerHTML = '<div style="color:#64748b; font-size:12px; padding:12px 0;">热门标签数据待补充</div>';
+        container.innerHTML = '<div style="color:#64748b; font-size:12px; padding:12px 0;">暂无数据</div>';
         return;
     }
 
@@ -1879,20 +1973,38 @@ function renderRankings(rankings) {
 }
 
 async function renderDashboard(dateParam = null) {
-    let data = fallbackData;
+    let data = null;
+    let loadError = null;
     try {
         let url = './data/latest.json';
         if (dateParam) {
             url = `./data/history/${dateParam}.json`;
         }
         const res = await fetch(url);
-        if (res.ok) { data = await res.json(); console.log('JSON数据加载成功:', data); }
-    } catch (e) { console.warn('JSON拉取失败，启用兜底数据', e); }
+        if (res.ok) {
+            data = await res.json();
+            console.log('JSON数据加载成功:', data);
+        } else {
+            loadError = `数据加载失败 (HTTP ${res.status})`;
+        }
+    } catch (e) {
+        console.warn('JSON拉取失败', e);
+        loadError = '数据加载失败';
+    }
 
-    // 基础指标
-    document.getElementById('update-time').innerText = `更新时间: ${data.data_date}`;
+    const updateTimeEl = document.getElementById('update-time');
     const qualityWarning = document.getElementById('quality-warning');
     const qualityWarningContent = document.getElementById('quality-warning-content');
+
+    if (loadError) {
+        if (updateTimeEl) updateTimeEl.innerText = '更新时间: --';
+        if (qualityWarning) qualityWarning.style.display = 'block';
+        if (qualityWarningContent) qualityWarningContent.innerText = loadError;
+        return;
+    }
+
+    // 基础指标
+    if (updateTimeEl) updateTimeEl.innerText = `更新时间: ${data.data_date || '--'}`;
     if (data.error_message) {
         qualityWarning.style.display = 'block';
         qualityWarningContent.innerText = data.error_message;
@@ -1901,11 +2013,31 @@ async function renderDashboard(dateParam = null) {
         qualityWarningContent.innerText = '';
     }
 
+    // 更新各区块来源/频率标签
+    updateSectionTag('audience-title', data.audience_profile?.update_frequency, data.audience_profile?.data_source);
+    updateSectionTag('emotion-title', data.emotional_analysis?.update_frequency, data.emotional_analysis?.data_source);
+    updateSectionTag('hot-tags-title', data.genre_distribution?.update_frequency, data.genre_distribution?.data_source);
+    updateSectionTag('news-title', data.daily_news?.update_frequency, data.daily_news?.data_source);
+    updateSectionTag('insights-title', data.insights?.update_frequency, data.insights?.data_source);
+
+    // KPI卡片来源/频率标签
+    const industryFreq = formatFrequencyLabel(data.industry?.update_frequency);
+    const industrySource = data.industry?.data_source || '';
+    const kpiTagText = [industryFreq, industrySource].filter(Boolean).join(' · ');
+    ['kpi-mau-source', 'kpi-ai-source', 'kpi-drama-source', 'kpi-hit-source'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerHTML = kpiTagText
+                ? `<span class="source-tag tier2">${escapeHtml(kpiTagText)}</span>`
+                : `<span class="source-tag tier2">🔍 搜补</span>`;
+        }
+    });
+
     // KPI卡片渲染
-    document.getElementById('kpi-mau').innerText = data.industry?.app_mau || '--';
-    document.getElementById('kpi-ai').innerText = (data.industry?.ai_ratio || '--') + '%';
-    document.getElementById('kpi-drama').innerText = data.industry?.drama_count || '--';
-    document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas || '--';
+    document.getElementById('kpi-mau').innerText = data.industry?.app_mau ?? '--';
+    document.getElementById('kpi-ai').innerText = data.industry?.ai_ratio != null ? `${data.industry.ai_ratio}%` : '--';
+    document.getElementById('kpi-drama').innerText = data.industry?.drama_count ?? '--';
+    document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas ?? '--';
 
     // 行业快讯（精简到 60 字，三列并排）
     function newsTypeLabel(type) {
@@ -1921,33 +2053,49 @@ async function renderDashboard(dateParam = null) {
         return 'data';
     }
 
-    document.getElementById('news-container').innerHTML = (data.daily_news || []).slice(0, 6).map(n => {
-        const typeClass = newsTypeClass(n.type);
-        const typeLabel = newsTypeLabel(n.type);
-        const rawContent = n.content || '';
-        const shortContent = rawContent.length > 200 ? rawContent.slice(0, 200) + '...' : rawContent;
-        const linkHtml = n.source_url ? `<a class="news-link" href="${escapeAttribute(n.source_url)}" target="_blank" rel="noopener noreferrer">原文链接 -&gt;</a>` : '';
-        return `
-            <div class="news-item">
-                <div class="news-header">
-                    <span class="news-type ${typeClass}">${escapeHtml(typeLabel)}</span>
-                    <span class="news-title">${escapeHtml(n.title || '行业快讯')}</span>
-                </div>
-                <div class="news-content">${escapeHtml(shortContent)}</div>
-                ${linkHtml}
-            </div>`;
-    }).join('');
+    const newsList = Array.isArray(data.daily_news) ? data.daily_news : [];
+    const newsContainer = document.getElementById('news-container');
+    if (newsContainer) {
+        if (newsList.length === 0) {
+            newsContainer.innerHTML = '<div style="grid-column: 1 / -1; color:#64748b; font-size:12px; padding:12px 0;">今日暂无带真实来源的快讯</div>';
+        } else {
+            newsContainer.innerHTML = newsList.slice(0, 6).map(n => {
+                const typeClass = newsTypeClass(n.type);
+                const typeLabel = newsTypeLabel(n.type);
+                const rawContent = n.content || '';
+                const shortContent = rawContent.length > 200 ? rawContent.slice(0, 200) + '...' : rawContent;
+                const linkHtml = n.source_url ? `<a class="news-link" href="${escapeAttribute(n.source_url)}" target="_blank" rel="noopener noreferrer">原文链接 -&gt;</a>` : '';
+                return `
+                    <div class="news-item">
+                        <div class="news-header">
+                            <span class="news-type ${typeClass}">${escapeHtml(typeLabel)}</span>
+                            <span class="news-title">${escapeHtml(n.title || '行业快讯')}</span>
+                        </div>
+                        <div class="news-content">${escapeHtml(shortContent)}</div>
+                        ${linkHtml}
+                    </div>`;
+            }).join('');
+        }
+    }
 
     // 榜单（支持滚动加载）
     renderWeeklyBase(data.weekly_base);
     renderRankings(data.rankings);
 
     // 异动点评
-    document.getElementById('insights-container').innerHTML = (data.insights || []).slice(0, 2).map(i => `
-        <div class="insight-item">
-            <div class="insight-item-title">${i.icon || '⚡'} ${i.title}</div>
-            <div class="insight-item-desc">${i.content}</div>
-        </div>`).join('');
+    const insightsList = Array.isArray(data.insights) ? data.insights : [];
+    const insightsContainer = document.getElementById('insights-container');
+    if (insightsContainer) {
+        if (insightsList.length === 0) {
+            insightsContainer.innerHTML = '<div style="color:#64748b; font-size:12px; padding:12px 0;">暂无行业洞察</div>';
+        } else {
+            insightsContainer.innerHTML = insightsList.slice(0, 2).map(i => `
+                <div class="insight-item">
+                    <div class="insight-item-title">${i.icon || '⚡'} ${i.title}</div>
+                    <div class="insight-item-desc">${i.content}</div>
+                </div>`).join('');
+        }
+    }
 
     // 演员榜
     const renderActor = (a, colorClass) => {

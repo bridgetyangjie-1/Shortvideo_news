@@ -384,21 +384,20 @@ def _build_traits(gender_category: str, enriched_rankings: List[Any]) -> List[st
 
 
 def _build_fallback_profile(enriched_rankings: List[Any]) -> Dict[str, Any]:
-    """搜索失败时的兜底画像：基于榜单规则 + 默认填充"""
+    """搜索失败时的兜底画像：基于榜单规则，其余字段留空"""
     profile = _infer_profile(enriched_rankings)
     gender_category = _dominant_gender(profile["gender"])
 
-    default = get_default_profile()
     return {
         "gender": profile["gender"],
         "age": profile["age"],
         "regions": _build_regions(gender_category, enriched_rankings),
         "traits": _build_traits(gender_category, enriched_rankings),
-        "content_preferences": default["content_preferences"],
-        "viewing_time": default["viewing_time"],
-        "spending_power": default["spending_power"],
-        "user_segments": default["user_segments"],
-        "source_title": "基于当日榜单标签规则推理（行业报告搜索失败或缺失）",
+        "content_preferences": [],
+        "viewing_time": [],
+        "spending_power": {},
+        "user_segments": [],
+        "source_title": "基于当日榜单标签规则推理（行业报告搜索失败或缺失，部分字段留空）",
         "source_url": "",
         "report_date": "",
     }
@@ -525,39 +524,20 @@ def _validate_profile(raw: Dict[str, Any]) -> bool:
 
 
 def _parse_profile(raw: Dict[str, Any]) -> Dict[str, Any]:
-    """将 Kimi 返回解析为标准画像字典"""
-    default = get_default_profile()
-
+    """将 Kimi 返回解析为标准画像字典（方向 A：缺失时留空，不用固定默认值填充）"""
     profile = {
         "gender": _safe_percent_dict(raw.get("gender"), ["female", "male"]),
         "age": _safe_percent_dict(raw.get("age"), ["18-24", "25-34", "35-44", "45+"]),
         "regions": _safe_named_list(raw.get("regions"), top_n=5),
         "traits": _safe_traits(raw.get("traits")),
-        "content_preferences": _safe_named_list(
-            raw.get("content_preferences"),
-            top_n=6,
-            default_names=[p["name"] for p in default["content_preferences"]],
-        ),
-        "viewing_time": _safe_named_list(
-            raw.get("viewing_time"),
-            top_n=6,
-            default_names=[p["name"] for p in default["viewing_time"]],
-        ),
-        "spending_power": _safe_spending(raw.get("spending_power")),
+        "content_preferences": _safe_named_list(raw.get("content_preferences"), top_n=6),
+        "viewing_time": _safe_named_list(raw.get("viewing_time"), top_n=6),
+        "spending_power": _safe_spending(raw.get("spending_power")) if raw.get("spending_power") else {},
         "user_segments": _safe_segments(raw.get("user_segments")),
         "source_title": str(raw.get("source_title", "") or "行业报告").strip(),
         "source_url": str(raw.get("source_url", "") or "").strip(),
         "report_date": str(raw.get("report_date", "") or "").strip(),
     }
-
-    # 兜底填充空字段
-    if not profile["regions"]:
-        profile["regions"] = default["regions"]
-    if not profile["traits"]:
-        profile["traits"] = default["traits"]
-    if not profile["user_segments"]:
-        profile["user_segments"] = default["user_segments"]
-
     return profile
 
 
@@ -708,6 +688,10 @@ def audience_profile_node(
         # 周度微调：基于当周榜单题材对基准做小幅修正
         profile = _adjust_profile_by_rankings(profile, enriched_rankings)
 
+        data_source = profile.get("source_title", "") or "本地规则估算"
+        if profile.get("source_url"):
+            data_source = f"{data_source} ({profile['source_url']})"
+
         audience_profile = AudienceProfile(
             gender=profile["gender"],
             age=profile["age"],
@@ -717,6 +701,8 @@ def audience_profile_node(
             viewing_time=profile.get("viewing_time", []),
             spending_power=profile.get("spending_power", {}),
             user_segments=profile.get("user_segments", []),
+            data_source=data_source,
+            update_frequency="monthly",
         )
 
         logger.info(
@@ -730,17 +716,19 @@ def audience_profile_node(
 
     except Exception as e:
         logger.error("audience_profile_node: 受众画像分析失败: %s", e, exc_info=True)
-        default_profile = get_default_profile()
+        empty_profile = get_default_profile()
         return AudienceProfileOutput(
             audience_profile=AudienceProfile(
-                gender=default_profile["gender"],
-                age=default_profile["age"],
-                regions=default_profile["regions"],
-                traits=default_profile["traits"],
-                content_preferences=default_profile["content_preferences"],
-                viewing_time=default_profile["viewing_time"],
-                spending_power=default_profile["spending_power"],
-                user_segments=default_profile["user_segments"],
+                gender=empty_profile["gender"],
+                age=empty_profile["age"],
+                regions=empty_profile["regions"],
+                traits=empty_profile["traits"],
+                content_preferences=empty_profile["content_preferences"],
+                viewing_time=empty_profile["viewing_time"],
+                spending_power=empty_profile["spending_power"],
+                user_segments=empty_profile["user_segments"],
+                data_source="受众画像分析失败，暂无真实来源",
+                update_frequency="monthly",
             ),
             error_message=f"受众画像分析失败: {e}\n",
         )

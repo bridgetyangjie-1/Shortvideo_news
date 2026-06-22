@@ -121,3 +121,11 @@ class ActorsData(BaseModel):
     """演员数据"""
     female: List[ActorRanking] = Field(default=[], description="女频演员TOP10")
     male: List[ActorRanking] = Field(default=[], description="男频演员TOP10")
+    data_source: str = Field(
+        default="",
+        description="数据来源说明，如'榜单统计'",
+    )
+    update_frequency: str = Field(
+        default="weekly",
+        description="更新频率：daily/weekly/monthly",
+    )
