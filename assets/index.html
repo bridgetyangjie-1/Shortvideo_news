@@ -225,14 +225,19 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     color: #fbbf24;
     font-weight: 700;
 }
-.ip-source-sub {
+.meta-sub {
     font-size: 10px;
-    color: #818cf8;
     margin-top: 3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
+}
+.ip-source-sub {
+    color: #818cf8;
+}
+.desc-sub {
+    color: #94a3b8;
 }
 
 .actor-cell {
@@ -1833,13 +1838,19 @@ function renderRankings(rankings) {
         const sourcePlatform = (supplyChain.source_platform || '').trim();
         const hasSource = supplyChain.has_ip_source && sourceTitle && sourcePlatform;
         let ipBadge = '<span class="ip-badge empty">-</span>';
-        let ipSourceSub = '';
+        let metaSub = '';
         if (hasSource) {
             const sourceAuthor = (supplyChain.source_author || '').trim();
             const authorPart = sourceAuthor ? ` · ${escapeHtml(sourceAuthor)}` : '';
             const ipLabel = `改编自 ${escapeHtml(sourcePlatform)}《${escapeHtml(sourceTitle)}》${authorPart}`;
             ipBadge = `<span class="ip-badge" title="${ipLabel}">📚</span>`;
-            ipSourceSub = `<div class="ip-source-sub" title="${ipLabel}">${ipLabel}</div>`;
+            metaSub = `<div class="meta-sub ip-source-sub" title="${ipLabel}">${ipLabel}</div>`;
+        }
+
+        const desc = (drama.desc || '').trim();
+        if (desc) {
+            const shortDesc = desc.length > 38 ? desc.slice(0, 38) + '…' : desc;
+            metaSub += `<div class="meta-sub desc-sub" title="${escapeHtml(desc)}">${escapeHtml(shortDesc)}</div>`;
         }
 
         html += `
@@ -1848,7 +1859,7 @@ function renderRankings(rankings) {
             <td class="title-cell">
                 <div class="title-main">${escapeHtml(drama.title)} ${newBadge}</div>
                 <div class="title-sub">${escapeHtml(drama.platform || '红果')}</div>
-                ${ipSourceSub}
+                ${metaSub}
             </td>
             <td class="actor-cell">
                 <span class="actor-name">${escapeHtml(femaleLead)}</span> / ${escapeHtml(maleLead)}
