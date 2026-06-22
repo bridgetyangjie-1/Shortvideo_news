@@ -240,6 +240,74 @@ def _build_supply_chain_for_ranking(r: DramaRanking, crawler: HongguoCrawler) ->
         return _empty_supply_chain(series_id)
 
 
+def _build_weekly_base_info(output_rankings: List[DramaRanking]) -> Dict[str, Any]:
+    """构建周榜基准信息（供前端展示本周 TOP1 坐标）"""
+    weekly_base_rankings = [
+        r for r in output_rankings
+        if getattr(r, "data_source", "") == "duanjugongcheng"
+    ]
+    if not weekly_base_rankings:
+        return {"available": False}
+    weekly_top = sorted(weekly_base_rankings, key=lambda x: x.rank)[0]
+    return {
+        "available": True,
+        "week_date": getattr(weekly_top, "week_date", "") or "",
+        "top1_title": weekly_top.title,
+        "top1_genre": weekly_top.genre,
+        "top1_index": weekly_top.views_num or weekly_top.heat,
+        "total_count": len(weekly_base_rankings),
+        "data_source": "duanjugongcheng",
+        "description": "基于红果短剧官方周榜数据，每周一更新",
+    }
+
+
+def _build_weekly_archive_data(
+    output_rankings: List[DramaRanking],
+    data_date: str,
+    generated_at: str,
+) -> Optional[Tuple[Dict[str, Any], str]]:
+    """
+    构建周榜归档数据。
+    仅当 data_date 为周一且存在短剧工程周榜数据时返回 (weekly_data, week_date)。
+    """
+    dt = datetime.strptime(data_date, "%Y-%m-%d")
+    if dt.weekday() != 0:
+        return None
+
+    weekly_rankings = [
+        {
+            "rank": r.rank,
+            "title": r.title,
+            "genre": r.genre,
+            "weekly_index": r.views_num or r.heat,
+            "total_index": getattr(r, "total_index", 0) or 0,
+            "release_date": getattr(r, "release_date", "") or "",
+            "is_new": getattr(r, "is_new", False),
+            "data_source": r.data_source,
+            "week_date": getattr(r, "week_date", "") or data_date,
+        }
+        for r in output_rankings
+        if getattr(r, "data_source", "") == "duanjugongcheng"
+    ]
+    if not weekly_rankings:
+        return None
+
+    week_date = getattr(
+        next((r for r in output_rankings if getattr(r, "data_source", "") == "duanjugongcheng"), None),
+        "week_date",
+        ""
+    ) or data_date
+
+    weekly_data = {
+        "success": True,
+        "generated_at": generated_at,
+        "week_date": week_date,
+        "rankings": weekly_rankings,
+        "rankings_count": len(weekly_rankings),
+    }
+    return weekly_data, week_date
+
+
 def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> PushNodeOutput:
     """
     title: 数据输出
@@ -369,24 +437,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     anomalies = _generate_anomalies(output_rankings, state.industry)
 
     # ========== 构建周榜基准信息（供前端展示） ==========
-    weekly_base_rankings = [
-        r for r in output_rankings
-        if getattr(r, "data_source", "") == "duanjugongcheng"
-    ]
-    weekly_base_info: Dict[str, Any] = {"available": False}
-    if weekly_base_rankings:
-        weekly_top = sorted(weekly_base_rankings, key=lambda x: x.rank)[0]
-        week_date = getattr(weekly_top, "week_date", "") or data_date
-        weekly_base_info = {
-            "available": True,
-            "week_date": week_date,
-            "top1_title": weekly_top.title,
-            "top1_genre": weekly_top.genre,
-            "top1_index": weekly_top.views_num or weekly_top.heat,
-            "total_count": len(weekly_base_rankings),
-            "data_source": "duanjugongcheng",
-            "description": "基于红果短剧官方周榜数据，每周一更新",
-        }
+    weekly_base_info = _build_weekly_base_info(output_rankings)
 
     output_data = {
         "success": True,
@@ -463,44 +514,16 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     
     # 保存周榜数据（每周一，基于短剧工程周榜数据）
     try:
-        dt = datetime.strptime(data_date, "%Y-%m-%d")
-        is_monday = dt.weekday() == 0
-        if is_monday:
-            weekly_rankings = [
-                {
-                    "rank": r.rank,
-                    "title": r.title,
-                    "genre": r.genre,
-                    "weekly_index": r.views_num or r.heat,
-                    "total_index": getattr(r, "total_index", 0) or 0,
-                    "release_date": getattr(r, "release_date", "") or "",
-                    "is_new": getattr(r, "is_new", False),
-                    "data_source": r.data_source,
-                    "week_date": getattr(r, "week_date", "") or data_date,
-                }
-                for r in output_rankings
-                if getattr(r, "data_source", "") == "duanjugongcheng"
-            ]
-            if weekly_rankings:
-                week_date = getattr(
-                    next((r for r in output_rankings if getattr(r, "data_source", "") == "duanjugongcheng"), None),
-                    "week_date",
-                    ""
-                ) or data_date
-                weekly_data = {
-                    "success": True,
-                    "generated_at": generated_at,
-                    "week_date": week_date,
-                    "rankings": weekly_rankings,
-                    "rankings_count": len(weekly_rankings),
-                }
-                weekly_file = os.path.join(WEEKLY_DIR, f"{week_date}.json")
-                if _save_json_file(weekly_data, weekly_file):
-                    logger.info(f"✅ 周榜数据已归档: {weekly_file} ({len(weekly_rankings)} 条)")
-                else:
-                    error_messages.append(f"push_node: 保存周榜数据失败: {weekly_file}")
+        archive_result = _build_weekly_archive_data(output_rankings, data_date, generated_at)
+        if archive_result:
+            weekly_data, week_date = archive_result
+            weekly_file = os.path.join(WEEKLY_DIR, f"{week_date}.json")
+            if _save_json_file(weekly_data, weekly_file):
+                logger.info(f"✅ 周榜数据已归档: {weekly_file} ({weekly_data['rankings_count']} 条)")
             else:
-                logger.info("push_node: 本周一但未获取到短剧工程周榜数据，跳过周榜归档")
+                error_messages.append(f"push_node: 保存周榜数据失败: {weekly_file}")
+        else:
+            logger.info("push_node: 非周一或无短剧工程周榜数据，跳过周榜归档")
     except Exception as e:
         logger.warning(f"push_node: 周榜归档处理异常: {e}")
     

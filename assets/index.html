@@ -132,23 +132,31 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     text-align: center;
 }
 .rank-table thead th:nth-child(2) {
-    width: 22%;
+    width: 20%;
 }
 .rank-table thead th:nth-child(3) {
-    width: 15%;
+    width: 14%;
 }
 .rank-table thead th:nth-child(4) {
-    width: 60px;
+    width: 55px;
     text-align: center;
 }
 .rank-table thead th:nth-child(5) {
-    width: 28%;
+    width: 25%;
 }
 .rank-table thead th:nth-child(6) {
-    width: 12%;
+    width: 10%;
 }
 .rank-table thead th:nth-child(7) {
-    width: 90px;
+    width: 70px;
+    text-align: center;
+}
+.rank-table thead th:nth-child(8) {
+    width: 80px;
+    text-align: center;
+}
+.rank-table thead th:nth-child(9) {
+    width: 65px;
     text-align: center;
 }
 
@@ -188,10 +196,34 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     color: #f8fafc;
     font-size: 13.5px;
 }
+.title-main {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
 .title-sub {
     font-size: 11px;
     color: #64748b;
     margin-top: 2px;
+}
+.new-badge {
+    padding: 1px 5px;
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+}
+.total-index-cell {
+    text-align: center;
+    font-size: 11px;
+    color: #94a3b8;
+}
+.total-index-value {
+    color: #fbbf24;
+    font-weight: 700;
 }
 
 .actor-cell {
@@ -1744,8 +1776,9 @@ function renderRankings(rankings) {
             <th>集数</th>
             <th>标签</th>
             <th>厂牌</th>
+            <th>累计</th>
             <th>趋势</th>
-            <th style="width:70px">IP来源</th>
+            <th>IP来源</th>
         </tr>
     </thead>
     <tbody>
@@ -1764,6 +1797,14 @@ function renderRankings(rankings) {
 
         const tags = (drama.tags || drama.core_trope || []).slice(0, 3)
             .map(t => `<span class="tag-mini">${escapeHtml(t)}</span>`).join('');
+
+        const totalIndex = Number(drama.total_index) || 0;
+        const totalIndexHtml = totalIndex > 0
+            ? `<span class="total-index-value" title="累计热播指数">${totalIndex.toLocaleString()}</span>`
+            : '<span class="total-index-value">-</span>';
+
+        const isNew = drama.is_new === true || drama.is_new === 'true' || String(drama.trend_type || '').toLowerCase() === 'new';
+        const newBadge = isNew ? '<span class="new-badge">新剧</span>' : '';
 
         const trendType = String(drama.trend_type || drama.trend || 'same').toLowerCase();
         const change = Number(drama.rank_change) || 0;
@@ -1792,7 +1833,7 @@ function renderRankings(rankings) {
         <tr>
             <td class="rank-cell"><span class="rank-badge-table ${rankClass}">${rank}</span></td>
             <td class="title-cell">
-                ${escapeHtml(drama.title)}
+                <div class="title-main">${escapeHtml(drama.title)} ${newBadge}</div>
                 <div class="title-sub">${escapeHtml(drama.platform || '红果')}</div>
             </td>
             <td class="actor-cell">
@@ -1801,6 +1842,7 @@ function renderRankings(rankings) {
             <td class="ep-cell">${drama.episodes_count ?? '-'}</td>
             <td class="tags-cell">${tags}</td>
             <td class="studio-cell">${escapeHtml(drama.studio || drama.production_house || '-')}</td>
+            <td class="total-index-cell">${totalIndexHtml}</td>
             <td class="trend-cell">${trendBadge}</td>
             <td class="ip-cell">${ipBadge}</td>
         </tr>

@@ -325,14 +325,22 @@ class MoonshotClient:
             last_content = message.content or ""
 
             if finish_reason == "tool_calls" and message.tool_calls:
-                if hasattr(message, "model_dump"):
-                    assistant_message = message.model_dump(exclude_none=True)
-                else:
-                    assistant_message = {
-                        "role": "assistant",
-                        "content": message.content,
-                        "tool_calls": message.tool_calls,
-                    }
+                # 手动构造 assistant message，避免 OpenAI SDK 的 model_dump 触发 Pydantic 序列化警告
+                assistant_message = {
+                    "role": "assistant",
+                    "content": message.content or "",
+                    "tool_calls": [
+                        {
+                            "id": tool_call.id,
+                            "type": "function",
+                            "function": {
+                                "name": tool_call.function.name,
+                                "arguments": tool_call.function.arguments or "{}",
+                            },
+                        }
+                        for tool_call in message.tool_calls
+                    ],
+                }
                 working_messages.append(assistant_message)
 
                 for tool_call in message.tool_calls:
