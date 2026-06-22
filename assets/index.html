@@ -1820,13 +1820,14 @@ function renderRankings(rankings) {
         }
 
         const supplyChain = drama.supply_chain || {};
-        let ipBadge = '';
-        if (supplyChain.has_ip_source) {
-            const source = supplyChain.source_title || '';
-            const platform = supplyChain.source_platform || '网络小说';
-            ipBadge = `<span class="ip-badge" title="改编自${platform}《${source}》">📚</span>`;
-        } else {
-            ipBadge = `<span class="ip-badge empty">-</span>`;
+        let ipBadge = '<span class="ip-badge empty">-</span>';
+        const sourceTitle = (supplyChain.source_title || '').trim();
+        const sourcePlatform = (supplyChain.source_platform || '').trim();
+        const hasSource = supplyChain.has_ip_source && sourceTitle && sourcePlatform;
+        if (hasSource) {
+            const sourceAuthor = (supplyChain.source_author || '').trim();
+            const authorPart = sourceAuthor ? `（作者：${escapeHtml(sourceAuthor)}）` : '';
+            ipBadge = `<span class="ip-badge" title="改编自 ${escapeHtml(sourcePlatform)}《${escapeHtml(sourceTitle)}》${authorPart}">📚</span>`;
         }
 
         html += `

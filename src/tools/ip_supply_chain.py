@@ -176,11 +176,13 @@ def extract_adaptation_from_html(html: str) -> Optional[Dict[str, str]]:
     for p in patterns:
         m = re.search(p, html)
         if m:
-            return {
-                "source_title": m.group(1).strip(),
-                "author": "",
-                "platform": "番茄小说"
-            }
+            source_title = m.group(1).strip()
+            if source_title:
+                return {
+                    "source_title": source_title,
+                    "author": "",
+                    "platform": "番茄小说"
+                }
 
     return None
 
@@ -252,10 +254,10 @@ def build_supply_chain(drama_title: str, series_id: str, fetch_detail_func) -> D
     except Exception:
         pass
 
-    # 2. 如果提取失败，尝试番茄小说匹配
+    # 2. 如果提取失败，尝试番茄小说榜单模糊匹配
     novels = fetch_fanqienovel_data(20)
     matched = match_drama_to_novel(drama_title, novels)
-    if matched:
+    if matched and matched.get("title"):
         result.update({
             "has_ip_source": True,
             "source_title": matched.get("title", ""),
