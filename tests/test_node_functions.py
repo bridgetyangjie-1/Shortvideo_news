@@ -12,6 +12,13 @@ from graphs.nodes.audience_profile_node import (
     _infer_profile,
     _dominant_gender,
     _build_traits,
+    _validate_profile,
+    _parse_profile,
+    _adjust_profile_by_rankings,
+    _safe_percent_dict,
+    _safe_named_list,
+    _safe_segments,
+    _safe_spending,
 )
 from graphs.nodes.genre_distribution_node import (
     _classify_tag,
@@ -115,6 +122,110 @@ class AudienceProfileNodeTest(unittest.TestCase):
         self.assertIn("总裁", tags)
         self.assertIn("逆袭", tags)
         self.assertIn("打脸", tags)
+
+    def test_validate_profile_accepts_reasonable_data(self) -> None:
+        profile = {
+            "gender": {"female": 70, "male": 30},
+            "age": {"18-24": 20, "25-34": 42, "35-44": 28, "45+": 10},
+        }
+        self.assertTrue(_validate_profile(profile))
+
+    def test_validate_profile_rejects_unbalanced_gender(self) -> None:
+        profile = {
+            "gender": {"female": 80, "male": 30},
+            "age": {"18-24": 20, "25-34": 42, "35-44": 28, "45+": 10},
+        }
+        self.assertFalse(_validate_profile(profile))
+
+    def test_parse_profile_normalizes_percentages(self) -> None:
+        raw = {
+            "source_title": "测试报告",
+            "gender": {"female": 68, "male": 32},
+            "age": {"18-24": 18, "25-34": 40, "35-44": 30, "45+": 12},
+            "regions": [{"name": "广东", "value": 50}, {"name": "江苏", "value": 50}],
+            "traits": ["特征一", "特征二", "特征三", "特征四"],
+            "content_preferences": [{"name": "都市爱情", "value": 60}, {"name": "甜宠", "value": 40}],
+            "viewing_time": [{"name": "睡前", "value": 100}],
+            "spending_power": {"paid_ratio": 40, "arpu": "¥20", "willingness": "高"},
+            "user_segments": [{"name": "核心用户", "share": 50, "desc": "描述"}],
+        }
+        parsed = _parse_profile(raw)
+        self.assertEqual(sum(parsed["gender"].values()), 100)
+        self.assertEqual(sum(parsed["age"].values()), 100)
+        self.assertEqual(parsed["spending_power"]["arpu"], "¥20")
+        self.assertEqual(len(parsed["traits"]), 4)
+
+    def test_adjust_profile_increases_male_when_male_dramas_rise(self) -> None:
+        base = {
+            "gender": {"female": 70, "male": 30},
+            "age": {"18-24": 20, "25-34": 40, "35-44": 30, "45+": 10},
+            "regions": [{"name": "广东", "value": 15}],
+        }
+        rankings = [
+            DramaRanking(rank=1, title="战神", category="male", genre="战神", tags=["战神"]),
+            DramaRanking(rank=2, title="赘婿", category="male", genre="赘婿", tags=["赘婿"]),
+            DramaRanking(rank=3, title="甜宠", category="female", genre="甜宠", tags=["甜宠"]),
+        ]
+        adjusted = _adjust_profile_by_rankings(base, rankings)
+        self.assertGreater(adjusted["gender"]["male"], 30)
+        self.assertEqual(sum(adjusted["gender"].values()), 100)
+
+    def test_safe_named_list_filters_invalid_items(self) -> None:
+        raw = [
+            {"name": "有效", "value": 60},
+            {"name": "", "value": 40},
+            {"value": 20},
+            "invalid",
+        ]
+        result = _safe_named_list(raw, top_n=6)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["name"], "有效")
+        self.assertEqual(result[0]["value"], 100)
+
+    def test_safe_spending_parses_string_values(self) -> None:
+        result = _safe_spending({"paid_ratio": "45%", "arpu": "¥25", "willingness": "高"})
+        self.assertEqual(result["paid_ratio"], 45)
+        self.assertEqual(result["arpu"], "¥25")
+
+
+class AudienceProfileCacheTest(unittest.TestCase):
+    def test_load_cache_returns_none_when_expired(self) -> None:
+        with TemporaryDirectory() as tmp_dir:
+            cache_file = Path(tmp_dir) / "audience_profile_cache.json"
+            cache_file.write_text(
+                json.dumps({
+                    "data_month": "2025-01",
+                    "profile": {"gender": {"female": 70, "male": 30}},
+                }),
+                encoding="utf-8",
+            )
+            import tools.audience_profile_cache as cache_module
+            original_path = cache_module.CACHE_FILE
+            cache_module.CACHE_FILE = str(cache_file)
+            try:
+                self.assertIsNone(cache_module.load_cache(today="2025-06-22"))
+            finally:
+                cache_module.CACHE_FILE = original_path
+
+    def test_save_and_load_cache_roundtrip(self) -> None:
+        with TemporaryDirectory() as tmp_dir:
+            cache_file = Path(tmp_dir) / "audience_profile_cache.json"
+            import tools.audience_profile_cache as cache_module
+            original_path = cache_module.CACHE_FILE
+            cache_module.CACHE_FILE = str(cache_file)
+            try:
+                profile = {
+                    "gender": {"female": 65, "male": 35},
+                    "age": {"18-24": 20, "25-34": 40, "35-44": 30, "45+": 10},
+                }
+                cache_module.save_cache(profile, source_url="http://test", source_title="测试", today="2025-06-22")
+                loaded = cache_module.load_cache(today="2025-06-22")
+                self.assertIsNotNone(loaded)
+                self.assertEqual(loaded["data_month"], "2025-06")
+                self.assertEqual(loaded["source_title"], "测试")
+                self.assertEqual(loaded["profile"]["gender"]["female"], 65)
+            finally:
+                cache_module.CACHE_FILE = original_path
 
 
 class GenreDistributionNodeTest(unittest.TestCase):

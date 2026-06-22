@@ -1,22 +1,48 @@
 """
-受众画像节点 - 基于榜单标签纯本地规则推理受众特征
-无需调用任何外部 API（Kimi / DeepSeek / DataEye），纯本地 Python 计算
-"""
-import logging
-from datetime import datetime
-from typing import Any, Dict, List
+受众画像节点 - 月度行业报告基准 + 周度榜单微调
 
+核心策略：
+1. 观众画像基于真实行业报告，报告发布周期为月度，因此以自然月为粒度缓存。
+2. 每月/缓存缺失时，使用 Kimi 联网搜索最新行业报告并解析完整画像。
+3. 每周根据当周榜单题材（男频/女频占比、年龄向标签）对基准画像做小幅修正。
+4. 搜索失败或解析异常时，降级为本地规则推理画像。
+"""
+import json
+import logging
+import os
+import re
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 
 from graphs.state import AudienceProfile, AudienceProfileInput, AudienceProfileOutput
+from tools.audience_profile_cache import (
+    get_default_profile,
+    load_cache,
+    save_cache,
+)
+
+# Fallback for test_run environment
+try:
+    from tools.moonshot_api import MoonshotClient, is_api_budget_error
+except ImportError:  # pragma: no cover
+    class MoonshotClient:  # type: ignore
+        def search_json(self, *args, **kwargs):
+            return {}
+
+    def is_api_budget_error(exc: Exception) -> bool:
+        return "API 调用次数过多，已熔断" in str(exc)
+
 
 logger = logging.getLogger(__name__)
 
 
-# ==================== 标签 → 受众画像映射规则 ====================
-# 每个规则包含性别与年龄分布；地域 / 特征由主导性别与高频标签二次推导
+# ==================== 兜底规则：本地标签 → 受众画像映射 ====================
+# 当 Kimi 搜索失败或缓存不可用时，仍基于榜单标签做规则推理，保证流程不中断。
 
 TAG_AUDIENCE_RULES: Dict[str, Dict[str, Dict[str, int]]] = {
     # 女频：都市爱情 / 甜宠
@@ -78,7 +104,6 @@ TAG_AUDIENCE_RULES: Dict[str, Dict[str, Dict[str, int]]] = {
     "现实": {"gender": {"female": 52, "male": 48}, "age": {"18-24": 15, "25-34": 30, "35-44": 35, "45+": 20}},
 }
 
-# 地域默认分布（当榜单没有明显地域偏好时使用）
 DEFAULT_REGIONS = [
     {"name": "广东", "value": 12},
     {"name": "山东", "value": 10},
@@ -87,7 +112,6 @@ DEFAULT_REGIONS = [
     {"name": "河北", "value": 7},
 ]
 
-# 男频榜单略有差异：山东 / 河北 / 河南占比更高
 MALE_REGIONS = [
     {"name": "山东", "value": 14},
     {"name": "河北", "value": 11},
@@ -96,7 +120,6 @@ MALE_REGIONS = [
     {"name": "广东", "value": 7},
 ]
 
-# 特征标签库，按性别主导分类
 TRAITS_LIBRARY = {
     "female": [
         "偏好强反转高密度剧情",
@@ -122,7 +145,7 @@ TRAITS_LIBRARY = {
 }
 
 
-# ==================== 辅助函数 ====================
+# ==================== 通用辅助函数 ====================
 
 def _drama_to_dict(drama: Any) -> Dict[str, Any]:
     """统一将 Pydantic 对象或字典转换为字典"""
@@ -173,9 +196,99 @@ def _normalize_to_100(values: Dict[str, int], keys: List[str]) -> Dict[str, int]
     return normalized
 
 
+def _safe_int(value: Any, default: int = 0, min_value: int = 0, max_value: int = 100) -> int:
+    try:
+        if isinstance(value, bool):
+            return default
+        if isinstance(value, (int, float)):
+            number = int(round(value))
+        elif isinstance(value, str):
+            cleaned = value.strip().replace(",", "").replace("%", "")
+            if not cleaned or cleaned.lower() in {"未知", "无", "暂无", "n/a", "null", "none", "-"}:
+                return default
+            match = re.search(r"-?\d+(?:\.\d+)?", cleaned)
+            number = int(round(float(match.group()))) if match else default
+        else:
+            return default
+        return max(min_value, min(max_value, number))
+    except Exception:
+        return default
+
+
+def _safe_percent_dict(raw: Any, keys: List[str]) -> Dict[str, int]:
+    """安全解析百分比字典，并归一化为 100"""
+    if not isinstance(raw, dict):
+        raw = {}
+    values = {k: _safe_int(raw.get(k), 0, 0, 100) for k in keys}
+    return _normalize_to_100(values, keys)
+
+
+def _safe_named_list(raw: Any, top_n: int = 6, default_names: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    """安全解析 [{name, value}] 列表，过滤非法项并归一化"""
+    if not isinstance(raw, list):
+        return []
+
+    items = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        name = item.get("name")
+        if not name or not isinstance(name, str) or not name.strip():
+            continue
+        items.append({"name": name.strip(), "value": _safe_int(item.get("value"), 0, 0, 100)})
+
+    if not items and default_names:
+        items = [{"name": name, "value": round(100 / len(default_names))} for name in default_names]
+
+    items = items[:top_n]
+    if not items:
+        return []
+
+    total = sum(item["value"] for item in items)
+    if total <= 0:
+        return [{"name": item["name"], "value": round(100 / len(items))} for item in items]
+
+    normalized = [{"name": item["name"], "value": round(item["value"] / total * 100)} for item in items]
+    diff = 100 - sum(item["value"] for item in normalized)
+    if diff != 0 and normalized:
+        normalized[0]["value"] += diff
+    return normalized
+
+
+def _safe_segments(raw: Any) -> List[Dict[str, Any]]:
+    """安全解析用户分层"""
+    if not isinstance(raw, list):
+        return []
+    segments = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        name = item.get("name")
+        if not name or not isinstance(name, str) or not name.strip():
+            continue
+        segments.append({
+            "name": name.strip(),
+            "share": _safe_int(item.get("share"), 0, 0, 100),
+            "desc": str(item.get("desc", "")).strip(),
+        })
+    return segments[:4]
+
+
+def _safe_spending(raw: Any) -> Dict[str, Any]:
+    """安全解析付费能力"""
+    if not isinstance(raw, dict):
+        return {"paid_ratio": 35, "arpu": "¥18", "willingness": "中高"}
+    return {
+        "paid_ratio": _safe_int(raw.get("paid_ratio"), 35, 0, 100),
+        "arpu": str(raw.get("arpu", "¥18")).strip() or "¥18",
+        "willingness": str(raw.get("willingness", "中高")).strip() or "中高",
+    }
+
+
+# ==================== 兜底规则推理 ====================
+
 def _infer_profile(enriched_rankings: List[Any]) -> Dict[str, Any]:
     """基于榜单标签加权推理核心受众画像（gender / age）"""
-    # 收集所有命中规则的标签及其权重
     values_female: List[float] = []
     values_male: List[float] = []
     values_age: Dict[str, List[float]] = {k: [] for k in ("18-24", "25-34", "35-44", "45+")}
@@ -184,7 +297,6 @@ def _infer_profile(enriched_rankings: List[Any]) -> Dict[str, Any]:
     for drama in enriched_rankings:
         drama_dict = _drama_to_dict(drama)
         rank = drama_dict.get("rank", 50)
-        # 排名越靠前权重越高：TOP1=20, TOP20=1
         weight = max(1.0, 21 - rank)
 
         for tag in _collect_tags(drama_dict):
@@ -200,7 +312,6 @@ def _infer_profile(enriched_rankings: List[Any]) -> Dict[str, Any]:
                 values_age[k].append(float(age[k]))
             weights.append(weight)
 
-    # 没有任何标签命中时，返回中性默认画像
     if not weights:
         return {
             "gender": {"female": 52, "male": 48},
@@ -228,9 +339,8 @@ def _dominant_gender(gender: Dict[str, int]) -> str:
     return "neutral"
 
 
-def _build_regions(gender_category: str, enriched_rankings: List[Any]) -> List[Dict[str, Any]]:
-    """根据主导性别与榜单题材生成地域分布"""
-    # 简单规则：男频主导时使用男频地域分布
+def _build_regions(gender_category: str, _enriched_rankings: List[Any]) -> List[Dict[str, Any]]:
+    """根据主导性别生成地域分布"""
     if gender_category == "male":
         return [r.copy() for r in MALE_REGIONS]
     return [r.copy() for r in DEFAULT_REGIONS]
@@ -266,12 +376,274 @@ def _build_traits(gender_category: str, enriched_rankings: List[Any]) -> List[st
         if trait not in result:
             result.append(trait)
 
-    # 兜底补全
     fallback = "习惯碎片化连续追更"
     while len(result) < 4:
         result.append(fallback)
 
     return result[:4]
+
+
+def _build_fallback_profile(enriched_rankings: List[Any]) -> Dict[str, Any]:
+    """搜索失败时的兜底画像：基于榜单规则 + 默认填充"""
+    profile = _infer_profile(enriched_rankings)
+    gender_category = _dominant_gender(profile["gender"])
+
+    default = get_default_profile()
+    return {
+        "gender": profile["gender"],
+        "age": profile["age"],
+        "regions": _build_regions(gender_category, enriched_rankings),
+        "traits": _build_traits(gender_category, enriched_rankings),
+        "content_preferences": default["content_preferences"],
+        "viewing_time": default["viewing_time"],
+        "spending_power": default["spending_power"],
+        "user_segments": default["user_segments"],
+        "source_title": "基于当日榜单标签规则推理（行业报告搜索失败或缺失）",
+        "source_url": "",
+        "report_date": "",
+    }
+
+
+# ==================== Kimi 搜索月度行业报告 ====================
+
+def _load_llm_cfg(config: RunnableConfig) -> Dict[str, Any]:
+    """读取 LLM 配置文件"""
+    cfg_path = ""
+    metadata = config.get("metadata", {}) if config else {}
+    if metadata.get("llm_cfg"):
+        cfg_path = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), metadata["llm_cfg"])
+
+    if cfg_path and os.path.exists(cfg_path):
+        try:
+            with open(cfg_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            logger.warning("audience_profile_node: 读取 LLM 配置失败: %s", e)
+
+    return {}
+
+
+def _search_monthly_profile(client: MoonshotClient, date_str: str, cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """使用 Kimi 搜索最新行业报告并解析为观众画像"""
+    try:
+        dt = datetime.strptime(date_str, "%Y-%m-%d")
+        year, month = dt.year, dt.month
+    except ValueError:
+        now = datetime.now()
+        year, month = now.year, now.month
+
+    sp = cfg.get(
+        "sp",
+        "你是专业的短剧行业研究分析师，擅长从互联网搜索并提取结构化行业报告数据。"
+        "你必须联网搜索，优先使用有具体数字的权威来源，不要编造数据。",
+    )
+
+    up_template = cfg.get("up")
+    if up_template:
+        try:
+            prompt = Template(up_template).render(year=year, month=month, date=date_str)
+        except Exception as e:
+            logger.warning("audience_profile_node: Jinja2 渲染 prompt 失败，使用内置 prompt: %s", e)
+            prompt = _build_inline_search_prompt(year, month)
+    else:
+        prompt = _build_inline_search_prompt(year, month)
+
+    config_model = cfg.get("config", {})
+    result = client.search_json(
+        query=prompt,
+        system_prompt=sp,
+        temperature=float(config_model.get("temperature", 0.2)),
+        max_tokens=int(config_model.get("max_completion_tokens", 2500) or 2500),
+        expected_type=dict,
+    )
+
+    if not isinstance(result, dict):
+        raise ValueError(f"Kimi 返回非字典结果: {type(result)}")
+
+    return result
+
+
+def _build_inline_search_prompt(year: int, month: int) -> str:
+    """内置搜索 prompt，当配置文件缺失时使用"""
+    return f"""请联网搜索 {year}年{month}月 国内短剧行业观众画像/用户研究报告，
+优先查找 QuestMobile、DataEye、蝉妈妈、勾正数据、艾瑞咨询等机构发布的报告。
+需要提取：性别比例、年龄分布、地域分布、内容题材偏好、观看时段、付费率/ARPU、用户分层。
+
+请严格返回以下 JSON 格式（不要省略字段），所有百分比类字段数值范围 0-100：
+{{
+  "source_title": "报告标题",
+  "source_url": "报告原始链接",
+  "report_date": "报告发布日期，格式 YYYY-MM-DD",
+  "gender": {{"female": 70, "male": 30}},
+  "age": {{"18-24": 20, "25-34": 42, "35-44": 28, "45+": 10}},
+  "regions": [{{"name": "广东", "value": 15.5}}, {{"name": "江苏", "value": 11.8}}],
+  "traits": ["特征1", "特征2", "特征3", "特征4"],
+  "content_preferences": [{{"name": "都市爱情", "value": 32}}, {{"name": "穿越重生", "value": 24}}],
+  "viewing_time": [{{"name": "睡前 22-24点", "value": 35}}, {{"name": "晚间 20-22点", "value": 28}}],
+  "spending_power": {{"paid_ratio": 35, "arpu": "¥18", "willingness": "中高"}},
+  "user_segments": [{{"name": "核心追更党", "share": 28, "desc": "日更必追、愿意为爆款付费解锁"}}]
+}}
+
+约束：
+1. gender 两个字段之和必须等于 100，age 四个字段之和必须等于 100。
+2. regions/content_preferences/viewing_time 如果有多个条目，value 之和尽量接近 100。
+3. 如果某字段确实搜索不到，使用合理估算值填充，并在 source_title 中注明"估算"。
+4. 不要返回任何 JSON 之外的解释文字。"""
+
+
+def _validate_profile(raw: Dict[str, Any]) -> bool:
+    """校验搜索返回的画像是否可用"""
+    if not isinstance(raw, dict):
+        return False
+
+    gender = raw.get("gender")
+    age = raw.get("age")
+    if not isinstance(gender, dict) or not isinstance(age, dict):
+        return False
+
+    # 读取原始值，要求模型返回的数据自身已经平衡
+    g_female = _safe_int(gender.get("female"), -1, 0, 100)
+    g_male = _safe_int(gender.get("male"), -1, 0, 100)
+    a_18_24 = _safe_int(age.get("18-24"), -1, 0, 100)
+    a_25_34 = _safe_int(age.get("25-34"), -1, 0, 100)
+    a_35_44 = _safe_int(age.get("35-44"), -1, 0, 100)
+    a_45_plus = _safe_int(age.get("45+"), -1, 0, 100)
+
+    if -1 in (g_female, g_male, a_18_24, a_25_34, a_35_44, a_45_plus):
+        return False
+
+    if abs(g_female + g_male - 100) > 1 or abs(a_18_24 + a_25_34 + a_35_44 + a_45_plus - 100) > 2:
+        return False
+
+    # 基本合理性校验
+    if not (20 <= g_female <= 90):
+        return False
+    if not (20 <= a_25_34 <= 70):
+        return False
+
+    return True
+
+
+def _parse_profile(raw: Dict[str, Any]) -> Dict[str, Any]:
+    """将 Kimi 返回解析为标准画像字典"""
+    default = get_default_profile()
+
+    profile = {
+        "gender": _safe_percent_dict(raw.get("gender"), ["female", "male"]),
+        "age": _safe_percent_dict(raw.get("age"), ["18-24", "25-34", "35-44", "45+"]),
+        "regions": _safe_named_list(raw.get("regions"), top_n=5),
+        "traits": _safe_traits(raw.get("traits")),
+        "content_preferences": _safe_named_list(
+            raw.get("content_preferences"),
+            top_n=6,
+            default_names=[p["name"] for p in default["content_preferences"]],
+        ),
+        "viewing_time": _safe_named_list(
+            raw.get("viewing_time"),
+            top_n=6,
+            default_names=[p["name"] for p in default["viewing_time"]],
+        ),
+        "spending_power": _safe_spending(raw.get("spending_power")),
+        "user_segments": _safe_segments(raw.get("user_segments")),
+        "source_title": str(raw.get("source_title", "") or "行业报告").strip(),
+        "source_url": str(raw.get("source_url", "") or "").strip(),
+        "report_date": str(raw.get("report_date", "") or "").strip(),
+    }
+
+    # 兜底填充空字段
+    if not profile["regions"]:
+        profile["regions"] = default["regions"]
+    if not profile["traits"]:
+        profile["traits"] = default["traits"]
+    if not profile["user_segments"]:
+        profile["user_segments"] = default["user_segments"]
+
+    return profile
+
+
+def _safe_traits(raw: Any) -> List[str]:
+    """安全解析特征标签"""
+    if not isinstance(raw, list):
+        return []
+    traits = [str(t).strip() for t in raw if isinstance(t, str) and t.strip()]
+    return traits[:4]
+
+
+# ==================== 周度榜单微调 ====================
+
+def _adjust_profile_by_rankings(
+    profile: Dict[str, Any], enriched_rankings: List[Any]
+) -> Dict[str, Any]:
+    """
+    根据当周榜单题材对月度基准画像做小幅修正。
+
+    修正逻辑：
+    - 男频剧占比高于 35% 时，男性占比上调（最多 +8%）。
+    - 家庭伦理/萌宝/亲情标签占比高时，35-44 岁和 45+ 占比略上调。
+    - 甜宠/高糖/年下恋占比高时，18-24 岁占比略上调。
+    """
+    if not enriched_rankings:
+        return profile
+
+    total = len(enriched_rankings)
+    male_count = sum(1 for r in enriched_rankings if _drama_to_dict(r).get("category") == "male")
+    male_ratio = male_count / total
+
+    all_tags: set = set()
+    for drama in enriched_rankings:
+        all_tags.update(_collect_tags(_drama_to_dict(drama)))
+
+    gender = dict(profile["gender"])
+    age = dict(profile["age"])
+
+    # 性别微调
+    if male_ratio > 0.35:
+        delta = min(8, int((male_ratio - 0.35) * 20))
+        gender["male"] = min(90, gender["male"] + delta)
+        gender["female"] = 100 - gender["male"]
+    elif male_ratio < 0.15 and gender["male"] > 30:
+        delta = min(5, int((0.15 - male_ratio) * 20))
+        gender["female"] = min(90, gender["female"] + delta)
+        gender["male"] = 100 - gender["female"]
+
+    # 年龄微调
+    family_tags = {"家庭伦理", "亲情", "萌宝", "带球跑"}
+    sweet_tags = {"甜宠", "高糖甜宠", "年下恋", "校园", "青春"}
+
+    family_score = sum(1 for t in family_tags if t in all_tags)
+    sweet_score = sum(1 for t in sweet_tags if t in all_tags)
+
+    if family_score >= 2:
+        # 家庭题材增加 35-44 和 45+ 占比
+        shift = min(5, family_score)
+        age["35-44"] = min(50, age["35-44"] + shift)
+        age["45+"] = min(40, age["45+"] + shift)
+        # 从 18-24 扣除
+        deduct = min(shift * 2, age["18-24"])
+        age["18-24"] -= deduct
+        remaining = shift * 2 - deduct
+        if remaining > 0:
+            age["25-34"] = max(10, age["25-34"] - remaining)
+
+    if sweet_score >= 2:
+        # 甜宠题材增加 18-24 占比
+        shift = min(5, sweet_score)
+        age["18-24"] = min(40, age["18-24"] + shift)
+        # 从 35-44/45+ 扣除
+        deduct = min(shift, age["35-44"])
+        age["35-44"] -= deduct
+        if deduct < shift:
+            age["45+"] = max(5, age["45+"] - (shift - deduct))
+
+    # 重新归一化
+    profile["gender"] = _normalize_to_100(gender, ["female", "male"])
+    profile["age"] = _normalize_to_100(age, ["18-24", "25-34", "35-44", "45+"])
+
+    # 根据男频占比调整地域（男频主导时北方省份占比略高）
+    if profile["gender"]["male"] >= 55:
+        profile["regions"] = [r.copy() for r in MALE_REGIONS]
+
+    return profile
 
 
 # ==================== 节点主函数 ====================
@@ -283,47 +655,92 @@ def audience_profile_node(
 ) -> AudienceProfileOutput:
     """
     title: 👥 受众画像分析
-    desc: 基于榜单标签，纯本地规则推理受众画像（gender / age / regions / traits）
-    integrations: 无外部 API 调用，纯本地 Python 计算
+    desc: 基于月度行业报告基准 + 当周榜单题材微调，输出观众画像
+    integrations: Moonshot API（仅月度缓存缺失时调用一次）
     """
     try:
         data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
         enriched_rankings = state.enriched_rankings or []
 
-        if not enriched_rankings:
-            logger.warning("audience_profile_node: 输入榜单为空，使用默认受众画像")
+        cache = load_cache(today=data_date)
+        source_note = ""
 
-        # 1. 核心画像加权推理
-        profile = _infer_profile(enriched_rankings)
-        gender = profile["gender"]
-        age = profile["age"]
+        if cache:
+            # 命中本月缓存，直接作为基准
+            profile = _parse_profile(cache.get("profile", {}))
+            source_note = (
+                f"数据来源：{cache.get('source_title', '行业报告')} "
+                f"（报告日期：{cache.get('report_date', '未知')}）"
+            )
+            logger.info("audience_profile_node: 使用本月缓存基准，%s", source_note)
+        else:
+            # 缓存缺失，尝试 Kimi 搜索
+            cfg = _load_llm_cfg(config)
+            client = MoonshotClient()
+            try:
+                raw_profile = _search_monthly_profile(client, data_date, cfg)
+                if _validate_profile(raw_profile):
+                    profile = _parse_profile(raw_profile)
+                    save_cache(
+                        profile=profile,
+                        source_url=profile.get("source_url", ""),
+                        source_title=profile.get("source_title", "行业报告"),
+                        report_date=profile.get("report_date", ""),
+                        today=data_date,
+                    )
+                    source_note = (
+                        f"数据来源：{profile.get('source_title', '行业报告')} "
+                        f"（报告日期：{profile.get('report_date', '未知')}）"
+                    )
+                    logger.info("audience_profile_node: 搜索并保存月度基准，%s", source_note)
+                else:
+                    raise ValueError("Kimi 返回画像未通过校验")
+            except Exception as e:
+                if is_api_budget_error(e):
+                    raise
+                logger.warning("audience_profile_node: 月度报告搜索失败，降级为本地规则: %s", e)
+                profile = _build_fallback_profile(enriched_rankings)
+                source_note = (
+                    f"数据来源：{profile.get('source_title', '本地规则兜底')} "
+                    f"（报告日期：{profile.get('report_date', '未知')}）"
+                )
 
-        # 2. 地域与特征由主导性别二次推导
-        gender_category = _dominant_gender(gender)
-        regions = _build_regions(gender_category, enriched_rankings)
-        traits = _build_traits(gender_category, enriched_rankings)
+        # 周度微调：基于当周榜单题材对基准做小幅修正
+        profile = _adjust_profile_by_rankings(profile, enriched_rankings)
 
         audience_profile = AudienceProfile(
-            gender=gender,
-            age=age,
-            regions=regions,
-            traits=traits,
+            gender=profile["gender"],
+            age=profile["age"],
+            regions=profile["regions"],
+            traits=profile["traits"],
+            content_preferences=profile.get("content_preferences", []),
+            viewing_time=profile.get("viewing_time", []),
+            spending_power=profile.get("spending_power", {}),
+            user_segments=profile.get("user_segments", []),
         )
 
-        # 前端 H5 兼容日志：必须包含 "受众画像完成：女性XX%，25-34岁占比XX%"
         logger.info(
-            "受众画像完成：女性%d%%，25-34岁占比%d%%",
-            gender["female"],
-            age["25-34"],
+            "受众画像完成：女性%d%%，25-34岁占比%d%%。%s",
+            audience_profile.gender["female"],
+            audience_profile.age["25-34"],
+            source_note,
         )
 
-        return AudienceProfileOutput(
-            audience_profile=audience_profile,
-        )
+        return AudienceProfileOutput(audience_profile=audience_profile)
 
     except Exception as e:
         logger.error("audience_profile_node: 受众画像分析失败: %s", e, exc_info=True)
+        default_profile = get_default_profile()
         return AudienceProfileOutput(
-            audience_profile=AudienceProfile(),
+            audience_profile=AudienceProfile(
+                gender=default_profile["gender"],
+                age=default_profile["age"],
+                regions=default_profile["regions"],
+                traits=default_profile["traits"],
+                content_preferences=default_profile["content_preferences"],
+                viewing_time=default_profile["viewing_time"],
+                spending_power=default_profile["spending_power"],
+                user_segments=default_profile["user_segments"],
+            ),
             error_message=f"受众画像分析失败: {e}\n",
         )

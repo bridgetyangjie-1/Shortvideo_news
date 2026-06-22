@@ -808,7 +808,7 @@ body.emotion-mobile-locked { overflow: hidden; }
   </div>
   
   <div class="glass-card">
-    <div class="section-title"><i class="fas fa-chart-area" style="color:#a78bfa;"></i> 播放量趋势 (近7日) <span class="source-tag tier1">📊 爬取</span></div>
+    <div class="section-title"><i class="fas fa-chart-area" style="color:#a78bfa;"></i> 周榜热度趋势 (近8周) <span class="source-tag tier1">📊 爬取</span></div>
     <div style="height: 200px;">
       <canvas id="trendChart"></canvas>
     </div>
@@ -1990,8 +1990,9 @@ async function renderDashboard(dateParam = null) {
     // 核心情绪与动机拆解
     renderEmotionChart(data.emotional_analysis);
 
-    // 趋势图表
-    if (data.play_trend?.daily) {
+    // 趋势图表（以周为粒度，基于短剧工程周榜总热度）
+    const weeklyTrend = data.play_trend?.weekly || data.play_trend?.daily || [];
+    if (weeklyTrend.length) {
         const ctx = document.getElementById('trendChart').getContext('2d');
         if (window.trendChartInstance) {
             window.trendChartInstance.destroy();
@@ -1999,10 +2000,10 @@ async function renderDashboard(dateParam = null) {
         window.trendChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: data.play_trend.daily.map(d => d.date),
+                labels: weeklyTrend.map(d => d.start_date || d.date).slice(0, 8).reverse(),
                 datasets: [{
-                    label: '播放量',
-                    data: data.play_trend.daily.map(d => d.total_views),
+                    label: '周榜总热度',
+                    data: weeklyTrend.map(d => d.total_views).slice(0, 8).reverse(),
                     borderColor: '#818cf8',
                     backgroundColor: 'rgba(129, 140, 248, 0.1)',
                     fill: true,

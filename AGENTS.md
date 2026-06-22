@@ -8,7 +8,7 @@
 这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取短剧工程周榜（基于红果官方周榜）为主、红果推荐页为辅，补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
 
 - **项目名称**：`shortvideo-news`
-- **当前版本**：`v1.10.8`
+- **当前版本**：`v1.11.0`
 - **在线地址**：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - **数据入口**：`assets/data/latest.json`（TOP20 展示）、`assets/data/latest_full.json`（Full100 归档）、`assets/data/weekly/YYYY-MM-DD.json`（周榜归档，每周一）
 - **GitHub Actions 入口**：`src/run_github.py`
@@ -48,7 +48,7 @@
 ├── .github/workflows/daily_update.yml   # GitHub Actions 自动化工作流
 ├── assets/
 │   ├── index.html                       # 前端看板页面
-│   ├── history_data.json                # 播放趋势与周榜历史
+│   ├── history_data.json                # 周榜热度趋势与周榜历史（以周为粒度）
 │   └── data/
 │       ├── latest.json                  # TOP20 展示数据
 │       ├── latest_full.json             # 全量榜单（可达 100 条）
@@ -194,12 +194,12 @@ search_node
 | `enrich_node` | `enrich_node.py` | 本地缓存 → 红果详情页爬虫 → Kimi 批量补充 → DeepSeek 生成完整 JSON | 是（DeepSeek/Kimi） |
 | `actor_ranking_node` | `actor_ranking_node.py` | 从 enriched_rankings 统计演员频次，生成女频/男频 TOP10 | 否 / DeepSeek 兜底 |
 | `industry_node` | `industry_node.py` | 搜索行业宏观数据，输出 IndustryData + PlatformData | 是（Kimi） |
-| `audience_profile_node` | `audience_profile_node.py` | 基于榜单标签本地规则推理受众画像：性别/年龄/地域/特征 | 否 |
+| `audience_profile_node` | `audience_profile_node.py` | 月度行业报告基准（Kimi 搜索）+ 当周榜单题材微调，输出完整 AudienceProfile；搜索失败时降级为本地规则 | 是（Kimi，每月最多 1 次） |
 | `genre_distribution_node` | `genre_distribution_node.py` | 近7天榜单加权聚合标签频次，按题材/人设/爽点/情感/时代分类，并计算标签环比趋势 | 否 |
 | `emotion_analysis_node` | `emotion_analysis_node.py` | 基于当日榜单规则化统计情绪维度，DeepSeek 提炼总览、TOP3 情绪剧目与行动建议 | 是（DeepSeek） |
 | `insights_node` | `insights_node.py` | Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察 | 是（Kimi+DeepSeek） |
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
-| `history_data_node` | `history_data_node.py` | 生成播放趋势、周榜历史、排名变化 | 否 |
+| `history_data_node` | `history_data_node.py` | 生成周榜热度趋势（近8周）、周榜历史、排名变化 | 否 |
 | `quality_gate_node` | `quality_gate_node.py` | 统一质量门禁：校验榜单/演员/快讯/行业数据/API 错误 | 否 |
 | `alert_node` | `alert_node.py` | 异常监测：基于质量报告与业务规则自动生成 Alerts | 否 |
 | `push_node` | `push_node.py` | 保存 latest.json、latest_full.json、历史归档、周榜归档（周一）、all_history.json | 否 |
@@ -240,11 +240,11 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整榜单 JSON。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；不足时用 DeepSeek 兜底。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
-7. **audience_profile_node**：基于 `enriched_rankings` 的 `tags`/`core_trope`/`genre` 标签，匹配本地规则映射表，加权合并推理受众画像，输出性别、年龄、地域、特征四个字段，不再调用 DeepSeek API。
+7. **audience_profile_node**：以自然月为粒度缓存行业报告画像。月初/缓存缺失时，使用 Kimi 联网搜索最新短剧观众画像报告并解析完整画像（性别、年龄、地域、特征、题材偏好、观看时段、付费能力、用户分层）；每周根据当周榜单男频/女频占比及题材标签对基准做小幅修正；搜索失败或解析异常时降级为本地规则推理。日常运行直接读取缓存，不重复调用 API。
 8. **genre_distribution_node**：读取近7天历史榜单加权聚合标签（今日权重最高），按本地 taxonomy 分为题材/人设/爽点/情感关系/时代背景等类别，并计算较昨日的 `trending` 趋势。
 9. **emotion_analysis_node**：基于 `enriched_rankings` 规则化映射题材/标签到情绪、焦虑、触发点等维度，加权统计后调用 DeepSeek 生成总览摘要、TOP3 情绪剧目、行动建议与环比趋势。
 10. **insights_node**：Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察。
-11. **history_data_node**：更新 `assets/history_data.json`，生成播放趋势、周榜、排名变化。
+11. **history_data_node**：更新 `assets/history_data.json`，以周为粒度生成周榜热度趋势（`daily` 由 `weekly_rankings` 派生，每周一个点，避免同一周热度重复写入），同时生成周榜历史与排名变化。
 12. **quality_gate_node**：统一校验榜单、演员、快讯、行业数据与 API 错误，输出 `quality_report`。
 13. **alert_node**：基于质量报告与业务规则自动生成 `alerts`，供前端异常面板展示。
 14. **push_node**：输出 `latest.json`（TOP20）、`latest_full.json`（全量）、`assets/data/history/YYYY-MM-DD.json`、`assets/data/weekly/YYYY-MM-DD.json`（每周一，当数据源为短剧工程时）、`assets/data/all_history.json`；同时在 `latest.json`/`latest_full.json` 中写入 `weekly_base` 字段供前端展示周榜 TOP1 坐标。
@@ -517,11 +517,13 @@ export PYTHONPATH="$PWD/src"
 | 2026-06-12 | `search_node`：红果 + DataEye 双源融合，置信度加权 |
 | 2026-06-12 | `enrich_node`：优先本地缓存，缓存 miss 时批量补充 |
 | 2026-06-12 | `history_data_node`：计算排名变化（new/up/down/same） |
+| 2026-06-22 | **v1.10.9 播放量趋势改为周榜热度趋势**：`history_data_node` 以短剧工程周榜为粒度生成趋势，`daily_play_trend` 由 `weekly_rankings` 派生，避免 0 值与同一周平线；前端「播放量趋势 (近7日)」改为「周榜热度趋势 (近8周)」|
 | 2026-06-12 | `push_node`：输出 statistics/trends/anomalies 统计信息 |
 | 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端情绪面板按洞察/热力/建议三 Tab 组织，含词云、TOP3 剧目、行动建议、环比趋势 |
 | 2026-06-13 | `emotion_analysis_node` 词云分值改为 log1p + max-normalization，避免多个维度同时顶到 100 失去区分度 |
 | 2026-06-13 | **`audience_profile_node` 重构为纯本地规则推理**：基于榜单标签（tags/core_trope/genre）匹配受众画像规则，加权合并性别/年龄/地域/特征，不再调用 DeepSeek API，降低运行成本并保证 H5 前端数据格式兼容 |
 | 2026-06-13 | `audience_profile_node` 精简输出：仅保留 `gender` / `age` / `regions` / `traits` 四个前端必需字段，按排名加权平均并归一化为 100 |
+| 2026-06-22 | **v1.11.0 观众画像引入真实行业报告**：`audience_profile_node` 改为月度行业报告基准 + 周度榜单微调策略；新增 `tools/audience_profile_cache.py` 月度缓存；缓存缺失时调用 Kimi 搜索权威报告并解析完整画像；输出扩展为 `gender` / `age` / `regions` / `traits` / `content_preferences` / `viewing_time` / `spending_power` / `user_segments` |
 | 2026-06-13 | **v1.10.1 P0 质量门禁**：新增 `quality_gate_node`，统一校验榜单数量、演员、快讯来源、行业数据与 API 错误；`IndustryData` / `DramaRanking` / `ActorRanking` 增加 Pydantic 字段校验；质量未通过时不覆盖 `latest.json` |
 | 2026-06-13 | **v1.10.2 P1 工程化**：新增 `utils/config_validator.py` 对 `config/*_llm_cfg.json` 做 Pydantic + Jinja2 校验；新增 `tests/test_config_validation.py` 和 `tests/test_node_functions.py`，覆盖 search/enrich/audience/genre 节点核心纯函数 |
 | 2026-06-13 | **v1.10.3 拆分 state.py**：将 808 行的 `src/graphs/state.py` 按领域拆分为 `src/graphs/models/` 下 8 个文件；`state.py` 保留为 re-export 入口，现有 `from graphs.state import X` 路径完全兼容 |
