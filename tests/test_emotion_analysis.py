@@ -8,12 +8,19 @@ import unittest
 # 确保能导入 src 下的模块
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
 from graphs.nodes.emotion_analysis_node import (
     _aggregate_emotion_scores,
     _build_wordcloud,
     _build_emotion_rankings,
     _build_trends,
     _rank_weight,
+    _load_emotion_rules,
+    _build_fallback_summary,
+    _build_fallback_insights,
 )
 from graphs.state import DramaRanking, EmotionalAnalysis, default_emotional_analysis
 
@@ -105,6 +112,60 @@ class TestEmotionAnalysis(unittest.TestCase):
         self.assertTrue(ea.emotion_rankings)
         self.assertTrue(ea.actionable_insights)
         self.assertEqual(len(ea.actionable_insights), 3)
+
+    def test_load_emotion_rules_from_json(self):
+        """能从外置 JSON 加载规则"""
+        with TemporaryDirectory() as tmp_dir:
+            config_dir = Path(tmp_dir) / "config"
+            config_dir.mkdir()
+            rules_file = config_dir / "emotion_rules.json"
+            rules_file.write_text(
+                json.dumps({
+                    "rules": [
+                        {"keywords": ["AI", "人工智能"], "dimension": "AI焦虑", "base_score": 55, "category": "anxiety"}
+                    ]
+                }, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            rules, categories = _load_emotion_rules(tmp_dir)
+            self.assertEqual(len(rules), 1)
+            self.assertEqual(rules[0][1], "AI焦虑")
+            self.assertEqual(categories["AI焦虑"], "anxiety")
+
+    def test_load_emotion_rules_fallback_when_missing(self):
+        """JSON 不存在时回退到内置默认规则"""
+        with TemporaryDirectory() as tmp_dir:
+            rules, categories = _load_emotion_rules(tmp_dir)
+            self.assertGreater(len(rules), 10)
+            self.assertIn("身份逆袭", categories)
+            self.assertEqual(categories["身份逆袭"], "emotion")
+
+    def test_build_fallback_summary_changes_with_input(self):
+        """兜底 summary 应随主导维度变化"""
+        s1 = _build_fallback_summary("身份逆袭", "亲密关系失衡", "复仇打脸", ["剧A", "剧B"])
+        s2 = _build_fallback_summary("浪漫幻想", "经济匮乏", "甜宠撒糖", ["剧C"])
+        self.assertNotEqual(s1, s2)
+        self.assertIn("身份逆袭", s1)
+        self.assertIn("甜宠撒糖", s2)
+
+    def test_build_fallback_insights_use_real_dimensions(self):
+        """兜底 insights 应基于实际维度生成"""
+        insights = _build_fallback_insights("猎奇刺激", "社会认同缺失", "高能悬念", ["悬疑剧"])
+        self.assertEqual(len(insights), 3)
+        contents = " ".join([i.content for i in insights])
+        self.assertIn("猎奇刺激", contents)
+        self.assertIn("社会认同缺失", contents)
+        self.assertIn("高能悬念", contents)
+
+    def test_emotion_rankings_default_from_scores_not_hardcoded(self):
+        """TOP3 剧目未匹配时，默认值应从 scores 取，不是固定写死"""
+        dramas = [
+            DramaRanking(rank=1, title="未知新剧", genre="剧情", tags=["未知标签"]),
+        ]
+        scores = {"浪漫幻想": 100, "亲密关系失衡": 80, "甜宠撒糖": 60}
+        rankings = _build_emotion_rankings(dramas, scores)
+        self.assertEqual(len(rankings), 1)
+        self.assertEqual(rankings[0].primary_emotion, "浪漫幻想")
 
 
 if __name__ == "__main__":

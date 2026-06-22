@@ -1,6 +1,8 @@
 """
 情绪与动机拆解节点 - 基于真实榜单做规则化归因 + DeepSeek 提炼
-优先使用 DeepSeek API（成本低），仅在需要联网搜索时才调用 Kimi。
+
+规则映射表外置到 config/emotion_rules.json，可按月审视更新，不再写死在代码里。
+DeepSeek 失败时，summary 与 insights 基于当日实际统计数据动态生成，避免每天同一套兜底文案。
 """
 import os
 import json
@@ -28,9 +30,10 @@ from graphs.state import (
 
 logger = logging.getLogger(__name__)
 
-# ==================== 规则映射表：题材/标签 → 情绪维度 ====================
 
-EMOTION_RULES: List[Tuple[List[str], str, int]] = [
+# ==================== 内置默认规则（config/emotion_rules.json 缺失时使用）====================
+
+_DEFAULT_EMOTION_RULES: List[Tuple[List[str], str, int]] = [
     # (匹配关键词列表, 维度名称, 基础强度)
     # 情绪
     (["打脸", "虐渣", "复仇", "逆袭", "重生", "马甲", "战神", "赘婿"], "身份逆袭", 60),
@@ -70,7 +73,7 @@ EMOTION_RULES: List[Tuple[List[str], str, int]] = [
     (["悬疑", "无限流", "新剧"], "猎奇尝鲜", 50),
 ]
 
-DIMENSION_CATEGORIES = {
+_DEFAULT_DIMENSION_CATEGORIES: Dict[str, str] = {
     "身份逆袭": "emotion",
     "浪漫幻想": "emotion",
     "心理补偿": "emotion",
@@ -104,6 +107,76 @@ DIMENSION_CATEGORIES = {
 }
 
 
+# ==================== 加载外置规则 ====================
+
+def _load_emotion_rules(
+    workspace_path: Optional[str] = None,
+) -> Tuple[List[Tuple[List[str], str, int]], Dict[str, str]]:
+    """
+    从 config/emotion_rules.json 加载情绪维度规则。
+
+    如果文件不存在或解析失败，返回内置默认规则，保证节点不中断。
+    """
+    root = workspace_path or os.getenv("COZE_WORKSPACE_PATH", os.getcwd())
+    rules_file = os.path.join(root, "config", "emotion_rules.json")
+
+    if not os.path.exists(rules_file):
+        logger.warning("emotion_analysis_node: config/emotion_rules.json 不存在，使用内置默认规则")
+        return _DEFAULT_EMOTION_RULES, _DEFAULT_DIMENSION_CATEGORIES
+
+    try:
+        with open(rules_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError) as e:
+        logger.warning("emotion_analysis_node: 解析 emotion_rules.json 失败: %s，使用内置默认规则", e)
+        return _DEFAULT_EMOTION_RULES, _DEFAULT_DIMENSION_CATEGORIES
+
+    rules_data = data.get("rules")
+    if not isinstance(rules_data, list) or not rules_data:
+        logger.warning("emotion_analysis_node: emotion_rules.json 中 rules 为空，使用内置默认规则")
+        return _DEFAULT_EMOTION_RULES, _DEFAULT_DIMENSION_CATEGORIES
+
+    rules: List[Tuple[List[str], str, int]] = []
+    categories: Dict[str, str] = {}
+
+    for item in rules_data:
+        if not isinstance(item, dict):
+            continue
+        keywords = item.get("keywords")
+        dimension = item.get("dimension")
+        base_score = item.get("base_score")
+        category = item.get("category")
+
+        if (
+            not isinstance(keywords, list)
+            or not dimension
+            or not isinstance(dimension, str)
+            or not isinstance(base_score, (int, float))
+        ):
+            continue
+
+        keywords = [str(k).strip() for k in keywords if isinstance(k, str) and k.strip()]
+        if not keywords:
+            continue
+
+        rules.append((keywords, dimension.strip(), int(base_score)))
+        if isinstance(category, str) and category.strip():
+            categories[dimension.strip()] = category.strip()
+
+    if not rules:
+        logger.warning("emotion_analysis_node: emotion_rules.json 未解析出有效规则，使用内置默认规则")
+        return _DEFAULT_EMOTION_RULES, _DEFAULT_DIMENSION_CATEGORIES
+
+    logger.info("emotion_analysis_node: 已从 config/emotion_rules.json 加载 %s 条情绪规则", len(rules))
+    return rules, categories
+
+
+# 模块加载时读取一次；后续如需热更新可重新调用 _load_emotion_rules
+EMOTION_RULES, DIMENSION_CATEGORIES = _load_emotion_rules()
+
+
+# ==================== 规则化统计与构建 ====================
+
 def _extract_text(drama: Any) -> str:
     """从剧目对象中提取可用于匹配规则的文本。"""
     texts: List[str] = []
@@ -129,8 +202,12 @@ def _rank_weight(rank: int) -> int:
     return max(1, 21 - rank)
 
 
-def _aggregate_emotion_scores(rankings: List[Any]) -> Dict[str, int]:
+def _aggregate_emotion_scores(
+    rankings: List[Any],
+    rules: Optional[List[Tuple[List[str], str, int]]] = None,
+) -> Dict[str, int]:
     """基于规则映射和排名加权，统计各情绪维度得分。"""
+    rules = rules or EMOTION_RULES
     scores: Dict[str, int] = defaultdict(int)
     for drama in rankings:
         rank = 0
@@ -142,17 +219,21 @@ def _aggregate_emotion_scores(rankings: List[Any]) -> Dict[str, int]:
         text = _extract_text(drama)
         if not text:
             continue
-        for keywords, dimension, base_score in EMOTION_RULES:
+        for keywords, dimension, base_score in rules:
             if any(kw in text for kw in keywords):
                 scores[dimension] += int(base_score * weight / 10)
     return dict(scores)
 
 
-def _build_wordcloud(scores: Dict[str, int]) -> List[EmotionWordCloudItem]:
+def _build_wordcloud(
+    scores: Dict[str, int],
+    categories: Optional[Dict[str, str]] = None,
+) -> List[EmotionWordCloudItem]:
     """把得分转成词云，按 category 分类，取 TOP15。
 
     采用 log1p 压缩 + max-normalization，避免多个维度同时顶到 100 失去区分度。
     """
+    categories = categories or DIMENSION_CATEGORIES
     if not scores:
         return []
 
@@ -162,7 +243,7 @@ def _build_wordcloud(scores: Dict[str, int]) -> List[EmotionWordCloudItem]:
 
     items = []
     for name, value in log_scores.items():
-        cat = DIMENSION_CATEGORIES.get(name, "emotion")
+        cat = categories.get(name, "emotion")
         normalized = int(value / max_log * 100) if max_log > 0 else 0
         items.append(EmotionWordCloudItem(name=name, value=normalized, category=cat))
 
@@ -170,11 +251,26 @@ def _build_wordcloud(scores: Dict[str, int]) -> List[EmotionWordCloudItem]:
     return items[:15]
 
 
-def _build_emotion_rankings(rankings: List[Any], scores: Dict[str, int]) -> List[EmotionRankingItem]:
+def _build_emotion_rankings(
+    rankings: List[Any],
+    scores: Dict[str, int],
+    rules: Optional[List[Tuple[List[str], str, int]]] = None,
+    categories: Optional[Dict[str, str]] = None,
+) -> List[EmotionRankingItem]:
     """为 TOP3 剧目绑定情绪标签。"""
+    rules = rules or EMOTION_RULES
+    categories = categories or DIMENSION_CATEGORIES
+
     # 找出得分最高的三个维度作为主导维度
     top_dims = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:3]
     top_dim_names = [d[0] for d in top_dims]
+
+    # 为每个分类预选一个最佳维度（从实际 scores 取，不再硬编码）
+    best_by_category: Dict[str, str] = {}
+    for dim, _ in top_dims:
+        cat = categories.get(dim, "emotion")
+        if cat not in best_by_category:
+            best_by_category[cat] = dim
 
     result = []
     for drama in rankings[:3]:
@@ -184,21 +280,21 @@ def _build_emotion_rankings(rankings: List[Any], scores: Dict[str, int]) -> List
 
         # 为该剧目匹配最相关的维度
         matched: List[Tuple[str, int]] = []
-        for keywords, dimension, base_score in EMOTION_RULES:
+        for keywords, dimension, base_score in rules:
             if any(kw in text for kw in keywords):
                 matched.append((dimension, base_score))
 
-        primary_emotion = "身份逆袭"
-        anxiety = "亲密关系失衡"
-        trigger = "复仇打脸"
+        # 默认值从实际 top scores 取，避免每天同一套兜底
+        primary_emotion = best_by_category.get("emotion", top_dim_names[0] if top_dim_names else "身份逆袭")
+        anxiety = best_by_category.get("anxiety", top_dim_names[0] if top_dim_names else "亲密关系失衡")
+        trigger = best_by_category.get("trigger", top_dim_names[0] if top_dim_names else "复仇打脸")
 
         if matched:
-            # 取频次最高且属于对应分类的维度
             dim_counts: Dict[str, int] = defaultdict(int)
             for dim, score in matched:
                 dim_counts[dim] += score
             best_dim = max(dim_counts.items(), key=lambda x: x[1])[0]
-            cat = DIMENSION_CATEGORIES.get(best_dim, "emotion")
+            cat = categories.get(best_dim, "emotion")
             if cat == "emotion":
                 primary_emotion = best_dim
             elif cat == "anxiety":
@@ -208,20 +304,24 @@ def _build_emotion_rankings(rankings: List[Any], scores: Dict[str, int]) -> List
             else:
                 trigger = best_dim
 
-        # 如果没匹配到，从全局 top 维度补齐
-        if primary_emotion not in [d for d, c in DIMENSION_CATEGORIES.items() if c == "emotion"]:
+        # 如果该剧目没匹配到某分类，从全局 top 维度补齐
+        valid_emotions = {d for d, c in categories.items() if c == "emotion"}
+        valid_anxieties = {d for d, c in categories.items() if c == "anxiety"}
+        valid_triggers = {d for d, c in categories.items() if c == "trigger"}
+
+        if primary_emotion not in valid_emotions:
             for d in top_dim_names:
-                if DIMENSION_CATEGORIES.get(d) == "emotion":
+                if categories.get(d) == "emotion":
                     primary_emotion = d
                     break
-        if anxiety not in [d for d, c in DIMENSION_CATEGORIES.items() if c == "anxiety"]:
+        if anxiety not in valid_anxieties:
             for d in top_dim_names:
-                if DIMENSION_CATEGORIES.get(d) == "anxiety":
+                if categories.get(d) == "anxiety":
                     anxiety = d
                     break
-        if trigger not in [d for d, c in DIMENSION_CATEGORIES.items() if c == "trigger"]:
+        if trigger not in valid_triggers:
             for d in top_dim_names:
-                if DIMENSION_CATEGORIES.get(d) == "trigger":
+                if categories.get(d) == "trigger":
                     trigger = d
                     break
 
@@ -235,6 +335,8 @@ def _build_emotion_rankings(rankings: List[Any], scores: Dict[str, int]) -> List
         ))
     return result
 
+
+# ==================== 历史趋势与 JSON 解析 ====================
 
 def _load_yesterday_wordcloud(data_date: str, workspace_path: str) -> Dict[str, int]:
     """读取前一天的 emotional_analysis.wordcloud 用于环比。"""
@@ -292,6 +394,61 @@ def _parse_json_response(response: str) -> Optional[Dict[str, Any]]:
         return None
 
 
+# ==================== 动态兜底文案生成 ====================
+
+def _build_fallback_summary(
+    dominant_emotion: str,
+    dominant_anxiety: str,
+    top_trigger: str,
+    top_titles: List[str],
+) -> str:
+    """DeepSeek 失败时，基于实际统计数据动态生成 summary。"""
+    titles_text = "、".join(top_titles[:3]) if top_titles else "头部剧目"
+    templates = [
+        f"今日榜单以{dominant_emotion}为核心驱动力，融合{dominant_anxiety}与{top_trigger}，"
+        f"《{titles_text}》等剧集中体现了观众对现实焦虑的强烈代偿需求。",
+        f"今日短剧市场由{dominant_emotion}主导，观众通过{top_trigger}释放{dominant_anxiety}，"
+        f"《{titles_text}》成为典型情绪载体。",
+        f"从今日榜单看，{dominant_emotion}情绪占据上风，{dominant_anxiety}是主要现实焦虑来源，"
+        f"{top_trigger}为最高频触发点，《{titles_text}》等作品精准命中该心理。",
+    ]
+    # 根据日期选择模板，保证同一日期稳定、不同日期有变化
+    day = int(datetime.now().strftime("%d"))
+    return templates[day % len(templates)]
+
+
+def _build_fallback_insights(
+    dominant_emotion: str,
+    dominant_anxiety: str,
+    top_trigger: str,
+    top_titles: List[str],
+) -> List[ActionableInsight]:
+    """DeepSeek 失败时，基于实际统计数据动态生成 3 条建议。"""
+    titles_text = "、".join(top_titles[:3]) if top_titles else "榜单TOP3"
+    return [
+        ActionableInsight(
+            icon="💡",
+            title="聚焦主导情绪",
+            content=f"今日'{dominant_emotion}'情绪显著，新剧本可围绕'{top_trigger}'设计前3秒冲突，"
+                    f"参考《{titles_text}》的爽点结构，提升素材CTR。",
+        ),
+        ActionableInsight(
+            icon="📈",
+            title="瞄准现实焦虑",
+            content=f"观众对'{dominant_anxiety}'的代偿需求强，投流文案可直接点出痛点并展示反转爽点，"
+                    f"强化情绪共鸣与转化。",
+        ),
+        ActionableInsight(
+            icon="🎯",
+            title="复用高触发题材",
+            content=f"《{titles_text}》均命中'{top_trigger}'，后续创作可延续该爽点框架，"
+                    f"在人物关系或时代背景上做微创新。",
+        ),
+    ]
+
+
+# ==================== 节点主函数 ====================
+
 def emotion_analysis_node(
     state: EmotionAnalysisNodeInput,
     config: RunnableConfig,
@@ -299,7 +456,7 @@ def emotion_analysis_node(
 ) -> EmotionAnalysisNodeOutput:
     """
     title: 核心情绪与动机拆解
-    desc: 基于今日榜单规则化统计情绪维度，DeepSeek 提炼总览与行动建议
+    desc: 基于外置规则表统计情绪维度，DeepSeek 提炼总览与行动建议；失败时动态兜底
     integrations: DeepSeek API
     """
     try:
@@ -324,26 +481,29 @@ def emotion_analysis_node(
         workspace_path = os.getenv("COZE_WORKSPACE_PATH", os.getcwd())
         data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
 
+        # 支持热更新：每次运行重新加载规则
+        rules, categories = _load_emotion_rules(workspace_path)
+
         # 1. 规则化统计情绪维度
-        scores = _aggregate_emotion_scores(rankings)
+        scores = _aggregate_emotion_scores(rankings, rules=rules)
         if not scores:
             scores = {
                 "心理补偿": 35, "身份逆袭": 32, "亲密关系失衡": 30,
                 "复仇打脸": 28, "解压放空": 25, "快节奏": 22
             }
 
-        wordcloud = _build_wordcloud(scores)
-        emotion_rankings = _build_emotion_rankings(rankings, scores)
+        wordcloud = _build_wordcloud(scores, categories=categories)
+        emotion_rankings = _build_emotion_rankings(rankings, scores, rules=rules, categories=categories)
 
         # 2. 计算环比趋势
         yesterday_scores = _load_yesterday_wordcloud(data_date, workspace_path)
         trends = _build_trends(scores, yesterday_scores)
 
-        # 3. 主导维度
+        # 3. 主导维度（从实际 scores 取，不再硬编码）
         sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-        dominant_emotion = next((n for n, _ in sorted_scores if DIMENSION_CATEGORIES.get(n) == "emotion"), "心理补偿")
-        dominant_anxiety = next((n for n, _ in sorted_scores if DIMENSION_CATEGORIES.get(n) == "anxiety"), "亲密关系失衡")
-        top_trigger = next((n for n, _ in sorted_scores if DIMENSION_CATEGORIES.get(n) == "trigger"), "复仇打脸")
+        dominant_emotion = next((n for n, _ in sorted_scores if categories.get(n) == "emotion"), sorted_scores[0][0] if sorted_scores else "身份逆袭")
+        dominant_anxiety = next((n for n, _ in sorted_scores if categories.get(n) == "anxiety"), sorted_scores[0][0] if sorted_scores else "亲密关系失衡")
+        top_trigger = next((n for n, _ in sorted_scores if categories.get(n) == "trigger"), sorted_scores[0][0] if sorted_scores else "复仇打脸")
 
         # 4. DeepSeek 提炼：总览 + 剧目 one_line + 行动建议
         ds_client = DeepSeekClient()
@@ -389,7 +549,7 @@ JSON 结构：
             logger.warning(f"DeepSeek 情绪提炼失败: {e}")
             parsed = {}
 
-        summary = parsed.get("summary") or f"今日榜单以{dominant_emotion}与{top_trigger}为主，观众通过剧情补偿{dominant_anxiety}。"
+        summary = parsed.get("summary") or _build_fallback_summary(dominant_emotion, dominant_anxiety, top_trigger, top_titles)
         oneliners = parsed.get("emotion_rankings_oneliners") or []
         insights_raw = parsed.get("actionable_insights") or []
 
@@ -400,22 +560,18 @@ JSON 结构：
             else:
                 item.one_line = f"用{item.primary_emotion}补偿{item.anxiety}中的价值缺失"
 
-        actionable_insights = []
-        default_insights = [
-            ActionableInsight(icon="💡", title="聚焦主导情绪", content=f"今日'{dominant_emotion}'情绪显著，新剧本可围绕'{top_trigger}'设计前3秒冲突，提升素材CTR。"),
-            ActionableInsight(icon="📈", title="瞄准现实焦虑", content=f"观众对'{dominant_anxiety}'的代偿需求强，投流文案可直接点出痛点并展示反转爽点。"),
-            ActionableInsight(icon="🎯", title="复用高触发题材", content=f"榜单TOP3剧目均命中'{top_trigger}'，后续创作可延续该爽点框架并做微创新。"),
-        ]
+        actionable_insights: List[ActionableInsight] = []
+        fallback_insights = _build_fallback_insights(dominant_emotion, dominant_anxiety, top_trigger, top_titles)
         for idx in range(3):
             if idx < len(insights_raw) and isinstance(insights_raw[idx], dict):
                 raw = insights_raw[idx]
                 actionable_insights.append(ActionableInsight(
-                    icon=str(raw.get("icon") or default_insights[idx].icon),
-                    title=str(raw.get("title") or default_insights[idx].title),
-                    content=str(raw.get("content") or default_insights[idx].content),
+                    icon=str(raw.get("icon") or fallback_insights[idx].icon),
+                    title=str(raw.get("title") or fallback_insights[idx].title),
+                    content=str(raw.get("content") or fallback_insights[idx].content),
                 ))
             else:
-                actionable_insights.append(default_insights[idx])
+                actionable_insights.append(fallback_insights[idx])
 
         emotional_analysis = EmotionalAnalysis(
             summary=summary,

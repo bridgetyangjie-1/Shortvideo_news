@@ -1,0 +1,186 @@
+{
+  "version": "1.0.0",
+  "description": "短剧情绪维度规则映射表。按月审视更新，补充新题材与关键词。",
+  "rules": [
+    {
+      "keywords": ["打脸", "虐渣", "复仇", "逆袭", "重生", "马甲", "战神", "赘婿"],
+      "dimension": "身份逆袭",
+      "base_score": 60,
+      "category": "emotion"
+    },
+    {
+      "keywords": ["甜宠", "撒糖", "总裁", "先婚后爱", "闪婚", "契约"],
+      "dimension": "浪漫幻想",
+      "base_score": 55,
+      "category": "emotion"
+    },
+    {
+      "keywords": ["萌宝", "带娃", "团宠"],
+      "dimension": "心理补偿",
+      "base_score": 55,
+      "category": "emotion"
+    },
+    {
+      "keywords": ["悬疑", "推理", "惊悚", "恐怖", "无限流"],
+      "dimension": "猎奇刺激",
+      "base_score": 55,
+      "category": "emotion"
+    },
+    {
+      "keywords": ["职场", "商战", "创业"],
+      "dimension": "自我实现",
+      "base_score": 50,
+      "category": "emotion"
+    },
+    {
+      "keywords": ["离婚", "前夫", "前妻", "出轨", "背叛", "追妻", "追夫"],
+      "dimension": "亲密关系失衡",
+      "base_score": 60,
+      "category": "anxiety"
+    },
+    {
+      "keywords": ["职场", "裁员", "加班", "上司", "同事"],
+      "dimension": "职场阶层固化",
+      "base_score": 55,
+      "category": "anxiety"
+    },
+    {
+      "keywords": ["破产", "欠债", "穷", "暴富", "千金", "首富"],
+      "dimension": "经济匮乏",
+      "base_score": 55,
+      "category": "anxiety"
+    },
+    {
+      "keywords": ["婆媳", "家斗", "亲戚", "极品"],
+      "dimension": "家庭矛盾",
+      "base_score": 50,
+      "category": "anxiety"
+    },
+    {
+      "keywords": ["容貌", "变美", "减肥", "逆袭", "丑女"],
+      "dimension": "容貌年龄焦虑",
+      "base_score": 45,
+      "category": "anxiety"
+    },
+    {
+      "keywords": ["校园", "霸凌", "社恐", "孤立"],
+      "dimension": "社会认同缺失",
+      "base_score": 45,
+      "category": "anxiety"
+    },
+    {
+      "keywords": ["打脸", "虐渣", "复仇"],
+      "dimension": "复仇打脸",
+      "base_score": 65,
+      "category": "trigger"
+    },
+    {
+      "keywords": ["甜宠", "撒糖", "吻"],
+      "dimension": "甜宠撒糖",
+      "base_score": 55,
+      "category": "trigger"
+    },
+    {
+      "keywords": ["身份", "马甲", "揭晓", "暴露"],
+      "dimension": "身份揭晓",
+      "base_score": 55,
+      "category": "trigger"
+    },
+    {
+      "keywords": ["反转", "虐心", "误会", "追妻火葬场"],
+      "dimension": "虐心反转",
+      "base_score": 50,
+      "category": "trigger"
+    },
+    {
+      "keywords": ["悬念", "推理", "凶手", "真相"],
+      "dimension": "高能悬念",
+      "base_score": 50,
+      "category": "trigger"
+    },
+    {
+      "keywords": ["萌宝", "团宠", "助攻"],
+      "dimension": "萌宝助攻",
+      "base_score": 50,
+      "category": "trigger"
+    },
+    {
+      "keywords": ["快节奏", "爽", "反转", "打脸"],
+      "dimension": "快节奏",
+      "base_score": 55,
+      "category": "expectation"
+    },
+    {
+      "keywords": ["大女主", "强女主", "女主", "女强"],
+      "dimension": "强女主",
+      "base_score": 55,
+      "category": "expectation"
+    },
+    {
+      "keywords": ["智商", "谋略", "智斗", "布局"],
+      "dimension": "智商在线",
+      "base_score": 50,
+      "category": "expectation"
+    },
+    {
+      "keywords": ["反套路", "创新", "穿越"],
+      "dimension": "反套路",
+      "base_score": 45,
+      "category": "expectation"
+    },
+    {
+      "keywords": ["职场", "裁员", "上司"],
+      "dimension": "职场受挫",
+      "base_score": 55,
+      "category": "payoff"
+    },
+    {
+      "keywords": ["离婚", "前夫", "亲密关系", "出轨"],
+      "dimension": "亲密关系",
+      "base_score": 60,
+      "category": "payoff"
+    },
+    {
+      "keywords": ["破产", "欠债", "穷"],
+      "dimension": "经济压力",
+      "base_score": 50,
+      "category": "payoff"
+    },
+    {
+      "keywords": ["婆媳", "家斗", "亲戚"],
+      "dimension": "家庭矛盾",
+      "base_score": 50,
+      "category": "payoff"
+    },
+    {
+      "keywords": ["孤独", "无聊", "解压", "下班"],
+      "dimension": "孤独无聊",
+      "base_score": 45,
+      "category": "payoff"
+    },
+    {
+      "keywords": ["爽", "打脸", "复仇"],
+      "dimension": "解压放空",
+      "base_score": 55,
+      "category": "motivation"
+    },
+    {
+      "keywords": ["甜宠", "总裁", "浪漫"],
+      "dimension": "情感代偿",
+      "base_score": 55,
+      "category": "motivation"
+    },
+    {
+      "keywords": ["连载", "追更", "日更"],
+      "dimension": "追更陪伴",
+      "base_score": 45,
+      "category": "motivation"
+    },
+    {
+      "keywords": ["悬疑", "无限流", "新剧"],
+      "dimension": "猎奇尝鲜",
+      "base_score": 50,
+      "category": "motivation"
+    }
+  ]
+}

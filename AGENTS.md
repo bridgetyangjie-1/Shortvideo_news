@@ -8,7 +8,7 @@
 这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取短剧工程周榜（基于红果官方周榜）为主、红果推荐页为辅，补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
 
 - **项目名称**：`shortvideo-news`
-- **当前版本**：`v1.11.0`
+- **当前版本**：`v1.11.1`
 - **在线地址**：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - **数据入口**：`assets/data/latest.json`（TOP20 展示）、`assets/data/latest_full.json`（Full100 归档）、`assets/data/weekly/YYYY-MM-DD.json`（周榜归档，每周一）
 - **GitHub Actions 入口**：`src/run_github.py`
@@ -196,7 +196,7 @@ search_node
 | `industry_node` | `industry_node.py` | 搜索行业宏观数据，输出 IndustryData + PlatformData | 是（Kimi） |
 | `audience_profile_node` | `audience_profile_node.py` | 月度行业报告基准（Kimi 搜索）+ 当周榜单题材微调，输出完整 AudienceProfile；搜索失败时降级为本地规则 | 是（Kimi，每月最多 1 次） |
 | `genre_distribution_node` | `genre_distribution_node.py` | 近7天榜单加权聚合标签频次，按题材/人设/爽点/情感/时代分类，并计算标签环比趋势 | 否 |
-| `emotion_analysis_node` | `emotion_analysis_node.py` | 基于当日榜单规则化统计情绪维度，DeepSeek 提炼总览、TOP3 情绪剧目与行动建议 | 是（DeepSeek） |
+| `emotion_analysis_node` | `emotion_analysis_node.py` | 从 `config/emotion_rules.json` 加载情绪维度规则，基于当日榜单规则化统计情绪维度；DeepSeek 提炼总览、TOP3 情绪剧目与行动建议；失败或兜底时基于实际统计数据动态生成文案 | 是（DeepSeek） |
 | `insights_node` | `insights_node.py` | Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察 | 是（Kimi+DeepSeek） |
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
 | `history_data_node` | `history_data_node.py` | 生成周榜热度趋势（近8周）、周榜历史、排名变化 | 否 |
@@ -242,7 +242,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
 7. **audience_profile_node**：以自然月为粒度缓存行业报告画像。月初/缓存缺失时，使用 Kimi 联网搜索最新短剧观众画像报告并解析完整画像（性别、年龄、地域、特征、题材偏好、观看时段、付费能力、用户分层）；每周根据当周榜单男频/女频占比及题材标签对基准做小幅修正；搜索失败或解析异常时降级为本地规则推理。日常运行直接读取缓存，不重复调用 API。
 8. **genre_distribution_node**：读取近7天历史榜单加权聚合标签（今日权重最高），按本地 taxonomy 分为题材/人设/爽点/情感关系/时代背景等类别，并计算较昨日的 `trending` 趋势。
-9. **emotion_analysis_node**：基于 `enriched_rankings` 规则化映射题材/标签到情绪、焦虑、触发点等维度，加权统计后调用 DeepSeek 生成总览摘要、TOP3 情绪剧目、行动建议与环比趋势。
+9. **emotion_analysis_node**：从 `config/emotion_rules.json` 加载情绪维度规则（可按月审视更新），基于 `enriched_rankings` 的题材/标签映射到情绪、焦虑、触发点等维度并加权统计；调用 DeepSeek 生成总览摘要、TOP3 情绪剧目、行动建议与环比趋势；DeepSeek 失败或兜底时，summary 与 actionable_insights 基于当日实际统计数据动态生成，避免固定文案。
 10. **insights_node**：Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察。
 11. **history_data_node**：更新 `assets/history_data.json`，以周为粒度生成周榜热度趋势（`daily` 由 `weekly_rankings` 派生，每周一个点，避免同一周热度重复写入），同时生成周榜历史与排名变化。
 12. **quality_gate_node**：统一校验榜单、演员、快讯、行业数据与 API 错误，输出 `quality_report`。
@@ -521,6 +521,7 @@ export PYTHONPATH="$PWD/src"
 | 2026-06-12 | `push_node`：输出 statistics/trends/anomalies 统计信息 |
 | 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端情绪面板按洞察/热力/建议三 Tab 组织，含词云、TOP3 剧目、行动建议、环比趋势 |
 | 2026-06-13 | `emotion_analysis_node` 词云分值改为 log1p + max-normalization，避免多个维度同时顶到 100 失去区分度 |
+| 2026-06-22 | **v1.11.1 情绪规则外置与动态兜底**：`emotion_analysis_node` 将 `EMOTION_RULES` / `DIMENSION_CATEGORIES` 硬编码映射迁移到 `config/emotion_rules.json`，支持按月审视更新；DeepSeek 失败时的 summary 与 actionable_insights 改为基于当日实际统计数据动态生成；`_build_emotion_rankings` 默认值从实际 scores 取，避免固定兜底 |
 | 2026-06-13 | **`audience_profile_node` 重构为纯本地规则推理**：基于榜单标签（tags/core_trope/genre）匹配受众画像规则，加权合并性别/年龄/地域/特征，不再调用 DeepSeek API，降低运行成本并保证 H5 前端数据格式兼容 |
 | 2026-06-13 | `audience_profile_node` 精简输出：仅保留 `gender` / `age` / `regions` / `traits` 四个前端必需字段，按排名加权平均并归一化为 100 |
 | 2026-06-22 | **v1.11.0 观众画像引入真实行业报告**：`audience_profile_node` 改为月度行业报告基准 + 周度榜单微调策略；新增 `tools/audience_profile_cache.py` 月度缓存；缓存缺失时调用 Kimi 搜索权威报告并解析完整画像；输出扩展为 `gender` / `age` / `regions` / `traits` / `content_preferences` / `viewing_time` / `spending_power` / `user_segments` |
