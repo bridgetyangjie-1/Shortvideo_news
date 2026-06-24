@@ -1,0 +1,117 @@
+{
+  "data_month": "2026-06",
+  "report_date": "2026-06-01",
+  "source_url": "https://www.example.com/report",
+  "source_title": "2026年6月国内短剧行业观众画像/用户研究报告估算",
+  "profile": {
+    "gender": {
+      "female": 70,
+      "male": 30
+    },
+    "age": {
+      "18-24": 20,
+      "25-34": 42,
+      "35-44": 28,
+      "45+": 10
+    },
+    "regions": [
+      {
+        "name": "广东",
+        "value": 30
+      },
+      {
+        "name": "江苏",
+        "value": 23
+      },
+      {
+        "name": "浙江",
+        "value": 19
+      },
+      {
+        "name": "山东",
+        "value": 15
+      },
+      {
+        "name": "河南",
+        "value": 13
+      }
+    ],
+    "traits": [
+      "偏好强反转高密度剧情",
+      "关注女性逆袭与情绪补偿",
+      "习惯通勤睡前碎片化追更",
+      "对复仇打脸和身份揭晓爽点敏感"
+    ],
+    "content_preferences": [
+      {
+        "name": "都市爱情",
+        "value": 32
+      },
+      {
+        "name": "穿越重生",
+        "value": 24
+      },
+      {
+        "name": "复仇逆袭",
+        "value": 18
+      },
+      {
+        "name": "古装宫斗",
+        "value": 14
+      },
+      {
+        "name": "甜宠萌宝",
+        "value": 12
+      }
+    ],
+    "viewing_time": [
+      {
+        "name": "睡前 22-24点",
+        "value": 35
+      },
+      {
+        "name": "晚间 20-22点",
+        "value": 28
+      },
+      {
+        "name": "通勤/午休",
+        "value": 22
+      },
+      {
+        "name": "周末白天",
+        "value": 15
+      }
+    ],
+    "spending_power": {
+      "paid_ratio": 35,
+      "arpu": "¥18",
+      "willingness": "中高"
+    },
+    "user_segments": [
+      {
+        "name": "核心追更党",
+        "share": 28,
+        "desc": "日更必追、愿意为爆款付费解锁"
+      },
+      {
+        "name": "碎片路人",
+        "share": 45,
+        "desc": "通勤/睡前刷剧，免费内容为主"
+      },
+      {
+        "name": "高消费用户",
+        "share": 18,
+        "desc": "对优质内容付费意愿强，关注主演"
+      },
+      {
+        "name": "尝鲜猎奇党",
+        "share": 9,
+        "desc": "热衷新题材和黑马剧，易流失"
+      }
+    ],
+    "source_title": "2026年6月国内短剧行业观众画像/用户研究报告估算",
+    "source_url": "https://www.example.com/report",
+    "report_date": "2026-06-01"
+  },
+  "updated_at": "2026-06-24T14:02:29.100791"
+}

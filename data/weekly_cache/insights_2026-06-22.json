@@ -1,0 +1,25 @@
+{
+  "week_key": "2026-06-22",
+  "data_date": "2026-06-24",
+  "payload": {
+    "insights": [
+      {
+        "icon": "🔥",
+        "title": "爆款归因：盛夏来信",
+        "content": "受众定位25-35岁女性，爽点公式：暗恋成真, 青春回忆, 双向奔赴",
+        "source": "榜单推演",
+        "data_source": "当周榜单规则推演",
+        "update_frequency": "weekly"
+      },
+      {
+        "icon": "💰",
+        "title": "买量建议",
+        "content": "建议关注都市爱情题材投流机会",
+        "source": "数据分析",
+        "data_source": "当周榜单规则推演",
+        "update_frequency": "weekly"
+      }
+    ]
+  },
+  "updated_at": "2026-06-24T14:02:46.118871"
+}
