@@ -14,7 +14,7 @@ from coze_coding_utils.runtime_ctx.context import Context
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from tools.ip_supply_chain import build_supply_chain
 from tools.hongguo_crawler import HongguoCrawler
-from tools.feishu_pusher import push_daily, push_alert
+from tools.feishu_pusher import push_report, push_alert, determine_report_type
 from graphs.state import (
     PushNodeInput,
     PushNodeOutput,
@@ -546,11 +546,14 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
     
     logger.info(f"✅ 数据输出完成 - TOP20已保存({len(top20_rankings)}条)，Full100已归档({len(full_rankings)}条)")
 
-    # 发送飞书日报推送（失败不阻断主流程）
+    # 发送飞书日报/周报/月报推送（失败不阻断主流程）
     try:
-        push_daily(output_data)
+        report_type = determine_report_type(data_date)
+        type_label = {"daily": "日报", "weekly": "周报", "monthly": "月报"}.get(report_type, "日报")
+        logger.info("push_node: 发送飞书%s", type_label)
+        push_report(output_data, report_type=report_type)
     except Exception as feishu_exc:
-        logger.warning("push_node: 飞书日报推送失败（不影响主流程）: %s", feishu_exc)
+        logger.warning("push_node: 飞书推送失败（不影响主流程）: %s", feishu_exc)
     
     # 返回完整数据，确保GraphOutput包含所有数据
     return PushNodeOutput(

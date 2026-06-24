@@ -192,12 +192,12 @@ search_node
 | `search_node` | `search_node.py` | 短剧工程周榜为主 + 红果推荐页为辅 + DataEye 交叉验证 + 1 次 Kimi 行业宏观搜索 | 否（爬虫）+ Kimi 1 次 |
 | `process_node` | `process_node.py` | 优先处理短剧工程周榜；用红果推荐页补充 series_id/cover/tags/episodes；均无数据时用 Kimi 兜底 | 否（主路径）/ 是（Kimi 兜底） |
 | `enrich_node` | `enrich_node.py` | 本地缓存 → 红果详情页爬虫 → Kimi 批量补充 → DeepSeek 生成完整 JSON | 是（DeepSeek/Kimi） |
-| `actor_ranking_node` | `actor_ranking_node.py` | 从 enriched_rankings 统计演员频次，生成女频/男频 TOP10 | 否 / DeepSeek 兜底 |
+| `actor_ranking_node` | `actor_ranking_node.py` | 从 enriched_rankings 统计演员频次，生成女频/男频 TOP10；DeepSeek 补充仅在周一触发 | 否（统计）/ 周一 DeepSeek 兜底 |
 | `industry_node` | `industry_node.py` | 搜索行业宏观数据，输出 IndustryData + PlatformData | 是（Kimi） |
 | `audience_profile_node` | `audience_profile_node.py` | 月度行业报告基准（Kimi 搜索）+ 当周榜单题材微调，输出完整 AudienceProfile；搜索失败时降级为本地规则 | 是（Kimi，每月最多 1 次） |
 | `genre_distribution_node` | `genre_distribution_node.py` | 近7天榜单加权聚合标签频次，按题材/人设/爽点/情感/时代分类，并计算标签环比趋势 | 否 |
 | `emotion_analysis_node` | `emotion_analysis_node.py` | 从 `config/emotion_rules.json` 加载情绪维度规则，基于当日榜单规则化统计情绪维度；DeepSeek 提炼总览、TOP3 情绪剧目与行动建议；失败或兜底时基于实际统计数据动态生成文案 | 是（DeepSeek） |
-| `insights_node` | `insights_node.py` | Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察 | 是（Kimi+DeepSeek） |
+| `insights_node` | `insights_node.py` | 周更：周一 Kimi 搜索行业事件 → DeepSeek 生成商业洞察并缓存；周二至周日直接读缓存 | 是（Kimi+DeepSeek，每周最多 1 次） |
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
 | `history_data_node` | `history_data_node.py` | 生成周榜热度趋势（近8周）、周榜历史、排名变化 | 否 |
 | `quality_gate_node` | `quality_gate_node.py` | 统一质量门禁：校验榜单/演员/快讯/行业数据/API 错误 | 否 |
@@ -238,12 +238,12 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 2. **news_node**：并行运行，Kimi 搜索 3 组新闻 → DeepSeek 生成 ≤6 条快讯。
 3. **process_node**：优先解析 `duanjugongcheng_ranking` 中的短剧工程周榜，转换为标准榜单（`weekly_index` 作为 `heat`/`views_num`）；用红果推荐页回填 `series_id`、`cover`、`tags`、`episodes`；短剧工程不可用时降级使用红果推荐页；均不可用时用 Kimi 从搜索结果提取。
 4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整榜单 JSON。
-5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；不足时用 DeepSeek 兜底。
+5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；男女频不足 10 人时，仅在周一调用 DeepSeek 推理补充，平日保留榜单提取结果以节省 token。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
 7. **audience_profile_node**：以自然月为粒度缓存行业报告画像。月初/缓存缺失时，使用 Kimi 联网搜索最新短剧观众画像报告并解析完整画像（性别、年龄、地域、特征、题材偏好、观看时段、付费能力、用户分层）；每周根据当周榜单男频/女频占比及题材标签对基准做小幅修正；搜索失败或解析异常时降级为本地规则推理。日常运行直接读取缓存，不重复调用 API。
 8. **genre_distribution_node**：读取近7天历史榜单加权聚合标签（今日权重最高），按本地 taxonomy 分为题材/人设/爽点/情感关系/时代背景等类别，并计算较昨日的 `trending` 趋势。
 9. **emotion_analysis_node**：从 `config/emotion_rules.json` 加载情绪维度规则（可按月审视更新），基于 `enriched_rankings` 的题材/标签映射到情绪、焦虑、触发点等维度并加权统计；调用 DeepSeek 生成总览摘要、TOP3 情绪剧目、行动建议与环比趋势；DeepSeek 失败或兜底时，summary 与 actionable_insights 基于当日实际统计数据动态生成，避免固定文案。
-10. **insights_node**：Kimi 搜索行业事件 → DeepSeek 生成 2 条商业洞察。
+10. **insights_node**：周更节点。周一使用 Kimi 搜索行业事件 → DeepSeek 生成商业洞察并写入 `tools/weekly_cache.py` 周缓存；周二至周日命中缓存时直接返回，不重复调用 API。缓存缺失时（如首次运行）会兜底生成。
 11. **history_data_node**：更新 `assets/history_data.json`，以周为粒度生成周榜热度趋势（`daily` 由 `weekly_rankings` 派生，每周一个点，避免同一周热度重复写入），同时生成周榜历史与排名变化。
 12. **quality_gate_node**：统一校验榜单、演员、快讯、行业数据与 API 错误，输出 `quality_report`。
 13. **alert_node**：基于质量报告与业务规则自动生成 `alerts`，供前端异常面板展示。
@@ -451,24 +451,24 @@ GitHub Actions 中已通过 `${{ secrets.FEISHU_WEBHOOK }}` 注入，详见 `.gi
 
 ### 15.3 推送内容模块
 
-日报卡片按顺序包含：
+| 报告类型 | 触发条件 | 包含模块 |
+|---|---|---|
+| **日报** | 周二~周日 | 榜单 TOP5、今日黑马、行业快讯 TOP1、异常监测（极简，只看每日变化） |
+| **周报** | 每周一 | 日报内容 + 演员热力 TOP3、行业快讯 TOP3、今日洞察、题材 & 标签风向标、情绪驾驶舱、周榜热度趋势 |
+| **月报** | 每月 1 日 | 周报内容 + 行业宏观数据（用户规模/市场规模/APP月活/AI占比）、平台月活、核心观众画像 |
 
-1. **header**：日期 + 质量分 + 行业宏观摘要（短剧数 / APP月活 / AI占比 / 女男频占比）
-2. **榜单 TOP5**：排名、剧名、播放量、趋势、题材
-3. **今日黑马**：新晋或上升 ≥3 位的剧目
-4. **演员热力 TOP3**：女频 / 男频各 3 人
-5. **行业快讯 TOP3**：类型 + 标题 + 内容摘要
-6. **今日洞察**：最多 2 条商业洞察
-7. **题材 & 标签风向标**：环比异动标签 + 热门标签
-8. **情绪驾驶舱**：一句话摘要 + 主导情绪 / TOP1 触发点 + 创作者建议
-9. **异常监测**：汇总 `alerts`
-10. **底部按钮**：跳转完整看板、TOP20 JSON 数据
+卡片按类型递进：日报最精简，月报最完整。
 
 ### 15.4 手动触发
 
 ```bash
-# 推送当前 latest.json
+# 按日期自动判断日报/周报/月报并推送
 ./scripts/push_feishu.sh
+
+# 强制发送指定类型
+./scripts/push_feishu.sh --daily
+./scripts/push_feishu.sh --weekly
+./scripts/push_feishu.sh --monthly
 
 # 发送告警测试卡片
 ./scripts/push_feishu.sh --alert
@@ -485,7 +485,9 @@ GitHub Actions 中已通过 `${{ secrets.FEISHU_WEBHOOK }}` 注入，详见 `.gi
 ```bash
 export FEISHU_WEBHOOK="https://open.feishu.cn/open-apis/bot/v2/hook/xxxxx"
 export PYTHONPATH="$PWD/src"
-.venv/bin/python -m src.tools.feishu_pusher
+.venv/bin/python -m src.tools.feishu_pusher              # 自动判断
+.venv/bin/python -m src.tools.feishu_pusher --weekly    # 强制周报
+.venv/bin/python -m src.tools.feishu_pusher --monthly   # 强制月报
 ```
 
 ### 15.5 代码位置
@@ -521,6 +523,8 @@ export PYTHONPATH="$PWD/src"
 | 2026-06-12 | `push_node`：输出 statistics/trends/anomalies 统计信息 |
 | 2026-06-13 | **v1.10.0 情绪驾驶舱重构**：新增 `emotion_analysis_node`，基于榜单规则化统计情绪维度；前端情绪面板按洞察/热力/建议三 Tab 组织，含词云、TOP3 剧目、行动建议、环比趋势 |
 | 2026-06-13 | `emotion_analysis_node` 词云分值改为 log1p + max-normalization，避免多个维度同时顶到 100 失去区分度 |
+| 2026-06-22 | **v1.13.1 Token 优化与周更缓存**：新增 `tools/weekly_cache.py` 通用周缓存；`insights_node` 改为周更（周一 Kimi+DeepSeek 生成并缓存，平日读缓存），`actor_ranking_node` DeepSeek 补充仅在周一触发；避免周更内容每日重复消耗 API token |
+| 2026-06-22 | **v1.13.0 飞书日报分级推送**：`src/tools/feishu_pusher.py` 支持日报/周报/月报三档卡片；日报精简（榜单+黑马+快讯），周报增加演员/标签/趋势/洞察/情绪，月报再增加行业宏观/平台/观众画像；`push_node` 根据 `data_date` 自动选择报告类型 |
 | 2026-06-22 | **v1.12.0 数据真实性与更新频率标注**：`industry_node`/`audience_profile_node` 改为月度缓存，搜索失败或字段缺失时留空，不再返回固定默认值；`news_node` 取消 6 条强制凑数；所有主要数据模型增加 `data_source` 与 `update_frequency` 字段；`quality_gate_node` 增加数据来源真实性校验；前端移除 `mockAudienceProfile`/`mockEmotionalAnalysis`/`fallbackData` 回退，缺失数据显示 "--" 并展示更新频率标签 |
 | 2026-06-22 | **v1.11.1 情绪规则外置与动态兜底**：`emotion_analysis_node` 将 `EMOTION_RULES` / `DIMENSION_CATEGORIES` 硬编码映射迁移到 `config/emotion_rules.json`，支持按月审视更新；DeepSeek 失败时的 summary 与 actionable_insights 改为基于当日实际统计数据动态生成；`_build_emotion_rankings` 默认值从实际 scores 取，避免固定兜底 |
 | 2026-06-13 | **`audience_profile_node` 重构为纯本地规则推理**：基于榜单标签（tags/core_trope/genre）匹配受众画像规则，加权合并性别/年龄/地域/特征，不再调用 DeepSeek API，降低运行成本并保证 H5 前端数据格式兼容 |
