@@ -43,12 +43,28 @@ UNREALIABLE_SOURCE_PATTERNS = [
     re.compile(r"失败"),
 ]
 
+# 行业数据中的占位/无效值，遇到时视为缺失
+_PLACEHOLDER_VALUES = {
+    "未知", "暂无", "无", "N/A", "n/a", "null", "None", "-", "—", "未提供",
+    "not found", "not available", "unknown", "none",
+}
+
 
 def _is_unreliable_source(source: str) -> bool:
     """判断数据来源是否为失败/估算来源"""
     if not source:
         return True
     return any(p.search(source) for p in UNREALIABLE_SOURCE_PATTERNS)
+
+
+def _is_meaningful_text(value: Any) -> bool:
+    """判断文本字段是否为有效值（非空且非占位符）"""
+    if value is None:
+        return False
+    if not isinstance(value, str):
+        value = str(value)
+    stripped = value.strip()
+    return bool(stripped) and stripped not in _PLACEHOLDER_VALUES
 
 
 def quality_gate_node(
@@ -172,7 +188,7 @@ def quality_gate_node(
     ai_ratio = getattr(industry, "ai_ratio", 0) or 0
     industry_source = getattr(industry, "data_source", "") or ""
 
-    industry_has_data = bool(app_mau) and bool(drama_count)
+    industry_has_data = _is_meaningful_text(app_mau) and _is_meaningful_text(drama_count)
     ratio_ok = 0 <= ai_ratio <= 100
     industry_source_ok = not _is_unreliable_source(industry_source)
 

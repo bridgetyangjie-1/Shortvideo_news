@@ -688,9 +688,9 @@ def audience_profile_node(
         # 周度微调：基于当周榜单题材对基准做小幅修正
         profile = _adjust_profile_by_rankings(profile, enriched_rankings)
 
+        # data_source 是“来源说明”，不应把完整 URL 拼进来（尤其搜索 URL 非常长，
+        # 会撑破前端卡片布局）。URL 如需展示可单独放到 source_url，但当前模型未启用。
         data_source = profile.get("source_title", "") or "本地规则估算"
-        if profile.get("source_url"):
-            data_source = f"{data_source} ({profile['source_url']})"
 
         audience_profile = AudienceProfile(
             gender=profile["gender"],

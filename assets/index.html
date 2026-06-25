@@ -2024,11 +2024,13 @@ async function renderDashboard(dateParam = null) {
     const industryFreq = formatFrequencyLabel(data.industry?.update_frequency);
     const industrySource = data.industry?.data_source || '';
     const kpiTagText = [industryFreq, industrySource].filter(Boolean).join(' · ');
+    // 对过长的来源说明做截断，防止企查查等搜索 URL 撑破卡片布局
+    const kpiTagTextShort = kpiTagText.length > 40 ? escapeHtml(kpiTagText.slice(0, 40)) + '…' : escapeHtml(kpiTagText);
     ['kpi-mau-source', 'kpi-ai-source', 'kpi-drama-source', 'kpi-hit-source'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
             el.innerHTML = kpiTagText
-                ? `<span class="source-tag tier2">${escapeHtml(kpiTagText)}</span>`
+                ? `<span class="source-tag tier2" title="${escapeHtml(kpiTagText)}">${kpiTagTextShort}</span>`
                 : `<span class="source-tag tier2">🔍 搜补</span>`;
         }
     });

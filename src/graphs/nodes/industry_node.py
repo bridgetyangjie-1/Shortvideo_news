@@ -85,11 +85,20 @@ def _safe_float(value: Any, default: float) -> float:
         return default
 
 
+# 被 LLM 返回的占位/无效值集合，遇到时视为缺失
+_PLACEHOLDER_VALUES = {
+    "未知", "暂无", "无", "N/A", "n/a", "null", "None", "-", "—", "未提供",
+    "not found", "not available", "unknown", "none",
+}
+
+
 def _safe_text(value: Any, default: str) -> str:
     if value is None:
         return default
     if isinstance(value, str):
         stripped = value.strip()
+        if stripped in _PLACEHOLDER_VALUES:
+            return default
         return stripped if stripped else default
     return str(value)
 
@@ -321,10 +330,9 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
             )
 
         source_title = str(data.get("source_title", "") or "Kimi 搜索行业报告").strip()
-        source_url = str(data.get("source_url", "") or "").strip()
+        # data_source 是“来源说明”，不应把完整 URL 拼进来（尤其企查查等搜索 URL 非常长，
+        # 会撑破前端 KPI 卡片布局）。URL 如需展示可单独放到 source_url，但当前模型未启用。
         source_note = source_title
-        if source_url:
-            source_note = f"{source_note} ({source_url})"
 
         ai_ratio = _safe_ratio(data.get("ai_ratio"), 0)
         female_ratio = _safe_ratio(data.get("female_ratio"), 0)
