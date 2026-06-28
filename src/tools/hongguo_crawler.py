@@ -35,13 +35,13 @@ class HongguoCrawler:
     
     def fetch_homepage_list(self, max_count: int = 100) -> List[Dict[str, Any]]:
         """
-        抓取红果官网首页榜单数据
+        抓取红果官网首页榜单数据，并尝试从详情页补充剧情简介。
         
         Args:
             max_count: 最大抓取数量，默认100条
             
         Returns:
-            短剧列表，包含基础信息（剧名、封面、标签、集数等）
+            短剧列表，包含基础信息（剧名、封面、标签、集数、简介等）
         """
         logger.info(f"开始抓取红果官网首页数据，目标数量: {max_count}")
         
@@ -63,6 +63,26 @@ class HongguoCrawler:
             
             # 解析榜单数据
             drama_list = self._parse_drama_list(router_data, max_count)
+            
+            # 尝试从详情页补充 series_intro（红果部分剧集在详情页有真实剧情简介）
+            for idx, drama in enumerate(drama_list):
+                series_id = drama.get("series_id", "")
+                if not series_id:
+                    continue
+                # 首页已提供且非空时不再请求详情页
+                if drama.get("summary"):
+                    continue
+                try:
+                    detail_html = self.fetch_series_html(series_id)
+                    intro = self._parse_series_intro_from_html(detail_html, series_id)
+                    if intro:
+                        drama["summary"] = intro
+                        logger.info(f"[{idx+1}] {drama.get('title', '')} 详情页补充简介 {len(intro)} 字")
+                    # 小延迟，避免请求过快
+                    if idx < len(drama_list) - 1:
+                        time.sleep(0.3)
+                except Exception as e:
+                    logger.warning(f"补充详情页简介失败 {drama.get('title', '')}: {e}")
             
             logger.info(f"成功解析 {len(drama_list)} 条短剧数据")
             return drama_list
@@ -134,13 +154,15 @@ class HongguoCrawler:
                 if not isinstance(item, dict):
                     continue
                 
+                series_id = item.get("series_id", "")
                 drama = {
                     "rank": i + 1,
-                    "series_id": item.get("series_id", ""),
+                    "series_id": series_id,
                     "title": item.get("series_name", ""),
                     "cover": item.get("series_cover", ""),
                     "tags": item.get("tags", []),
                     "episodes": item.get("episode_right_text", ""),
+                    "summary": item.get("series_intro", ""),
                     "platform": "红果",
                     "source": "hongguo_direct",
                     # 详情字段（需要后续补充）
@@ -156,6 +178,26 @@ class HongguoCrawler:
         except Exception as e:
             logger.error(f"解析榜单数据失败: {e}", exc_info=True)
             return []
+
+    def _parse_series_intro_from_html(self, html: str, series_id: str) -> str:
+        """从详情页 HTML 中提取当前剧的 series_intro"""
+        if not html or not series_id:
+            return ""
+        try:
+            # 查找包含当前 series_id 的 JSON 对象附近的 series_intro
+            pattern = rf'"series_id":"{series_id}"[^}}]*"series_intro":"([^"]*)"'
+            m = re.search(pattern, html)
+            if m:
+                return m.group(1)
+
+            # 兜底：全局搜索第一个非空的 series_intro（可能是当前剧）
+            for m in re.finditer(r'"series_intro":"([^"]*)"', html):
+                intro = m.group(1)
+                if intro and len(intro) > 10:
+                    return intro
+        except Exception as e:
+            logger.warning(f"解析详情页 series_intro 失败: {e}")
+        return ""
     
     def fetch_series_html(self, series_id: str) -> str:
         """获取详情页 HTML（供供应链提取使用）"""

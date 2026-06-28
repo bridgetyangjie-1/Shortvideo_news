@@ -51,6 +51,107 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 .time-badge { font-size: 11px; color: #64748b; }
 .live-tag { padding: 4px 10px; background: rgba(34, 197, 94, 0.2); border-radius: 16px; font-size: 11px; color: #4ade80; font-weight: 600; }
 
+/* 顶部频道栏目 */
+.channel-tabs { display: flex; gap: 8px; margin-bottom: 16px; padding: 6px; background: rgba(22, 25, 37, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
+.channel-tab { padding: 8px 18px; font-size: 13px; font-weight: 600; color: #94a3b8; background: transparent; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.channel-tab:hover { color: #e2e8f0; }
+.channel-tab.active { color: #f8fafc; background: rgba(99, 102, 241, 0.22); border: 1px solid rgba(99, 102, 241, 0.35); box-shadow: 0 2px 10px rgba(99, 102, 241, 0.12); }
+.channel-content { display: none; animation: fadeIn 0.25s ease; }
+.channel-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 热门内容页 */
+.hot-layout { display: flex; gap: 16px; align-items: flex-start; }
+.hot-sidebar { width: 220px; flex-shrink: 0; background: rgba(22, 25, 37, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px; position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; }
+.hot-sidebar-header { font-size: 13px; font-weight: 700; color: #f8fafc; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.hot-sidebar-header i { color: #a78bfa; }
+.hot-mobile-week-select { display: none; margin-bottom: 12px; }
+.hot-mobile-week-select select { width: 100%; padding: 8px 10px; background: rgba(30, 34, 48, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #e2e8f0; font-size: 12px; }
+.hot-week-list { display: flex; flex-direction: column; gap: 6px; }
+.hot-week-item { width: 100%; text-align: left; padding: 10px 12px; background: rgba(255,255,255,0.03); border: 1px solid transparent; border-radius: 10px; color: #94a3b8; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.hot-week-item:hover { background: rgba(255,255,255,0.06); color: #e2e8f0; }
+.hot-week-item.active { background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.35); color: #a78bfa; font-weight: 600; box-shadow: 0 0 12px rgba(99, 102, 241, 0.12); }
+.hot-sidebar-footer { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; color: #64748b; display: flex; align-items: center; gap: 6px; }
+.hot-sidebar-footer i { font-size: 10px; }
+
+.hot-main { flex: 1; min-width: 0; }
+.hot-header { margin-bottom: 16px; }
+.hot-week-label { font-size: 13px; color: #94a3b8; font-weight: 500; }
+.hot-filter-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.hot-filter-tab { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: rgba(30, 34, 48, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; color: #94a3b8; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.hot-filter-tab:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }
+.hot-filter-tab.active { color: #f8fafc; border-color: transparent; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+.hot-filter-tab.active[data-filter="all"] { background: linear-gradient(135deg, rgba(129,140,248,0.9), rgba(96,165,250,0.9)); }
+.hot-filter-tab.active[data-filter="hongguo"] { background: linear-gradient(135deg, rgba(251,113,133,0.9), rgba(244,63,94,0.85)); box-shadow: 0 2px 14px rgba(244,63,94,0.25); }
+.hot-filter-tab.active[data-filter="jjwxc"] { background: linear-gradient(135deg, rgba(52,211,153,0.9), rgba(16,185,129,0.85)); box-shadow: 0 2px 14px rgba(16,185,129,0.25); }
+.hot-filter-tab.active[data-filter="fanqie"] { background: linear-gradient(135deg, rgba(251,191,36,0.9), rgba(245,158,11,0.85)); box-shadow: 0 2px 14px rgba(245,158,11,0.25); }
+.hot-filter-dot { width: 8px; height: 8px; border-radius: 50%; }
+.hot-filter-dot.hongguo { background: linear-gradient(135deg, #fb7185, #f43f5e); }
+.hot-filter-dot.jjwxc { background: linear-gradient(135deg, #34d399, #10b981); }
+.hot-filter-dot.fanqie { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+.hot-stats { font-size: 12px; color: #64748b; margin-bottom: 14px; }
+.hot-card-list { display: flex; flex-direction: column; gap: 14px; }
+.hot-card { display: flex; gap: 16px; padding: 18px; background: rgba(22, 25, 37, 0.55); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; transition: all 0.25s ease; position: relative; overflow: hidden; }
+.hot-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; opacity: 0; transition: opacity 0.25s; }
+.hot-card.hongguo::before { background: linear-gradient(180deg, #fb7185, #f43f5e); opacity: 1; }
+.hot-card.jjwxc::before { background: linear-gradient(180deg, #34d399, #10b981); opacity: 1; }
+.hot-card.fanqie::before { background: linear-gradient(180deg, #fbbf24, #f59e0b); opacity: 1; }
+.hot-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.1); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+.hot-card-cover-wrap { position: relative; width: 120px; height: 160px; flex-shrink: 0; border-radius: 10px; overflow: hidden; background: rgba(30, 34, 48, 0.6); }
+.hot-card-cover { width: 100%; height: 100%; object-fit: cover; }
+.hot-card-cover-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; background: linear-gradient(135deg, rgba(30,34,48,0.9), rgba(30,34,48,0.5)); }
+.hot-card-cover-placeholder.hongguo { background: linear-gradient(135deg, rgba(244,63,94,0.25), rgba(30,34,48,0.6)); }
+.hot-card-cover-placeholder.jjwxc { background: linear-gradient(135deg, rgba(16,185,129,0.25), rgba(30,34,48,0.6)); }
+.hot-card-cover-placeholder.fanqie { background: linear-gradient(135deg, rgba(245,158,11,0.25), rgba(30,34,48,0.6)); }
+.hot-card-platform { position: absolute; top: 8px; left: 8px; padding: 3px 8px; border-radius: 5px; font-size: 10px; font-weight: 700; color: #fff; backdrop-filter: blur(8px); }
+.hot-card-platform.hongguo { background: linear-gradient(135deg, rgba(251,113,133,0.9), rgba(244,63,94,0.85)); }
+.hot-card-platform.jjwxc { background: linear-gradient(135deg, rgba(52,211,153,0.9), rgba(16,185,129,0.85)); }
+.hot-card-platform.fanqie { background: linear-gradient(135deg, rgba(251,191,36,0.9), rgba(245,158,11,0.85)); }
+.hot-card-rank { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 11px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); }
+.hot-card-content { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.hot-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.hot-card-title { font-size: 15px; font-weight: 700; color: #f8fafc; line-height: 1.4; }
+.hot-card-title a { color: inherit; text-decoration: none; }
+.hot-card-title a:hover { color: #a78bfa; }
+.hot-card-author { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+.hot-card-heat { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 5px; margin-bottom: 10px; width: fit-content; }
+.hot-card-heat.hongguo { background: rgba(244,63,94,0.12); color: #fb7185; }
+.hot-card-heat.jjwxc { background: rgba(16,185,129,0.12); color: #34d399; }
+.hot-card-heat.fanqie { background: rgba(245,158,11,0.12); color: #fbbf24; }
+.hot-card-summary { font-size: 13px; color: #cbd5e1; line-height: 1.7; margin-bottom: 12px; white-space: pre-line; }
+.hot-card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.hot-card-tag { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.hot-card-tag.hongguo { background: rgba(244,63,94,0.1); color: #fb7185; border: 1px solid rgba(244,63,94,0.18); }
+.hot-card-tag.jjwxc { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.18); }
+.hot-card-tag.fanqie { background: rgba(245,158,11,0.1); color: #fbbf24; border: 1px solid rgba(245,158,11,0.18); }
+.hot-empty { color: #64748b; font-size: 13px; padding: 40px 0; text-align: center; }
+
+@media (max-width: 1100px) {
+  .hot-sidebar { width: 180px; }
+}
+@media (max-width: 840px) {
+  .hot-layout { flex-direction: column; }
+  .hot-sidebar { width: 100%; position: static; max-height: none; }
+  .hot-week-list { display: none; }
+  .hot-mobile-week-select { display: block; }
+  .hot-sidebar-footer { display: none; }
+  .hot-card-cover-wrap { width: 100px; height: 133px; }
+}
+@media (max-width: 640px) {
+  .channel-tabs { overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  .channel-tabs::-webkit-scrollbar { display: none; }
+  .channel-tab { flex-shrink: 0; }
+  .hot-filter-tabs { overflow-x: auto; white-space: nowrap; flex-wrap: nowrap; scrollbar-width: none; padding-bottom: 4px; }
+  .hot-filter-tabs::-webkit-scrollbar { display: none; }
+  .hot-filter-tab { flex-shrink: 0; }
+  .hot-card { flex-direction: column; gap: 12px; }
+  .hot-card-cover-wrap { width: 100%; height: 180px; }
+  .hot-card-header { flex-direction: column; gap: 6px; }
+  .hot-card-summary { font-size: 12px; }
+}
+
+
 /* 基础卡片样式 */
 .glass-card { background: rgba(22, 25, 37, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 16px; margin-bottom: 16px; transition: all 0.3s; }
 .glass-card:hover { border-color: rgba(129, 140, 248, 0.4); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
@@ -657,6 +758,15 @@ body.emotion-mobile-locked { overflow: hidden; }
     </div>
   </div>
 
+  <!-- 顶部频道栏目 -->
+  <div class="channel-tabs" id="channel-tabs">
+    <button class="channel-tab active" data-channel="news" onclick="switchChannelTab('news')">📰 短剧行业新闻</button>
+    <button class="channel-tab" data-channel="hot" onclick="switchChannelTab('hot')">🔥 热门内容</button>
+  </div>
+
+  <!-- 频道：短剧行业新闻 -->
+  <div id="channel-news" class="channel-content active">
+
   <!-- 数据来源说明 -->
   <div class="source-legend">
     <div class="source-legend-item"><span class="source-tag tier1">📊 Tier1</span> 红果直爬（排名、剧集、标签）</div>
@@ -816,7 +926,68 @@ body.emotion-mobile-locked { overflow: hidden; }
     </div>
   </div>
   
-</div>
+  </div><!-- /channel-news -->
+  
+  <!-- 频道：热门内容 -->
+  <div id="channel-hot" class="channel-content">
+    <div class="hot-layout">
+      <!-- 左侧历史导航 -->
+      <aside class="hot-sidebar">
+        <div class="hot-sidebar-header">
+          <i class="fas fa-calendar-alt"></i> 历史周次
+        </div>
+        <div class="hot-mobile-week-select">
+          <select id="hot-mobile-week-select">
+            <option value="">选择周次</option>
+          </select>
+        </div>
+        <div class="hot-week-list" id="hot-week-list">
+          <!-- JS 填充 -->
+        </div>
+        <div class="hot-sidebar-footer">
+          <i class="fas fa-sync-alt"></i> 每周一更新
+        </div>
+      </aside>
+      
+      <!-- 右侧主内容 -->
+      <main class="hot-main">
+        <div class="hot-header">
+          <div>
+            <div class="section-title" style="margin-bottom:4px;">
+              <i class="fas fa-fire" style="color:#f472b6;"></i> 热门内容
+            </div>
+            <div class="hot-week-label" id="hot-week-label">--</div>
+          </div>
+        </div>
+        
+        <!-- 平台筛选 Tab -->
+        <div class="hot-filter-tabs" id="hot-filter-tabs">
+          <button class="hot-filter-tab active" data-filter="all">
+            <span class="hot-filter-dot" style="background:linear-gradient(135deg,#a78bfa,#60a5fa);"></span> 全部
+          </button>
+          <button class="hot-filter-tab" data-filter="hongguo">
+            <span class="hot-filter-dot hongguo"></span> 红果短剧
+          </button>
+          <button class="hot-filter-tab" data-filter="jjwxc">
+            <span class="hot-filter-dot jjwxc"></span> 晋江小说
+          </button>
+          <button class="hot-filter-tab" data-filter="fanqie">
+            <span class="hot-filter-dot fanqie"></span> 番茄小说
+          </button>
+        </div>
+        
+        <!-- 统计条 -->
+        <div class="hot-stats" id="hot-stats"></div>
+        
+        <!-- 卡片列表 -->
+        <div class="hot-card-list" id="hot-card-list">
+          <!-- JS 填充 -->
+        </div>
+      </main>
+    </div>
+  </div><!-- /channel-hot -->
+  
+</div><!-- /container -->
 
 <script>
 // ==========================================
@@ -1519,6 +1690,23 @@ function escapeAttribute(value) {
     return escapeHtml(value).replace(/`/g, '&#96;');
 }
 
+function switchChannelTab(channelName) {
+    const tabs = document.getElementById('channel-tabs');
+    if (tabs) {
+        tabs.querySelectorAll('.channel-tab').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.channel === channelName);
+        });
+    }
+    document.querySelectorAll('.channel-content').forEach(content => {
+        content.classList.toggle('active', content.id === `channel-${channelName}`);
+    });
+    // 切换到热门内容时，若图表已初始化需要 resize
+    if (channelName === 'hot' && window.emotionWordcloudChartInstance) {
+        setTimeout(() => window.emotionWordcloudChartInstance.resize(), 50);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 function switchEmotionTab(tabName) {
     const cockpit = document.getElementById('emotion-cockpit');
     if (!cockpit) return;
@@ -2171,7 +2359,229 @@ async function renderDashboard(dateParam = null) {
             }
         });
     }
+
+    // 渲染热门内容频道
+    renderHotContent(data);
 }
+
+// 热门内容频道状态
+window.hotContentState = {
+    data: null,
+    currentFilter: 'all',
+    currentDate: null,
+    index: { weeks: [] }
+};
+
+async function loadHotContent(dataDate = null) {
+    const state = window.hotContentState;
+    state.currentDate = dataDate;
+
+    const url = dataDate
+        ? `./data/hot_content/weekly/${dataDate}.json`
+        : './data/hot_content/latest.json';
+
+    try {
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+        }
+        state.data = await res.json();
+    } catch (e) {
+        console.warn('热门内容数据加载失败:', e);
+        state.data = null;
+    }
+
+    // 同时加载索引
+    try {
+        const indexRes = await fetch('./data/hot_content/index.json');
+        if (indexRes.ok) {
+            state.index = await indexRes.json();
+        }
+    } catch (e) {
+        console.warn('热门内容索引加载失败:', e);
+    }
+
+    renderHotSidebar();
+    renderHotHeader();
+    renderHotCards();
+}
+
+function renderHotSidebar() {
+    const state = window.hotContentState;
+    const listEl = document.getElementById('hot-week-list');
+    const mobileSelect = document.getElementById('hot-mobile-week-select');
+    if (!listEl || !mobileSelect) return;
+
+    const weeks = state.index.weeks || [];
+    const currentDate = state.currentDate || (state.data ? state.data.data_date : null);
+
+    // 桌面侧边栏
+    if (weeks.length === 0) {
+        listEl.innerHTML = '<div class="hot-empty" style="padding:20px 0; font-size:11px;">暂无历史数据</div>';
+    } else {
+        listEl.innerHTML = weeks.map(w => `
+            <button class="hot-week-item ${w.data_date === currentDate ? 'active' : ''}"
+                    onclick="switchHotWeek('${w.data_date}')"
+                    data-date="${w.data_date}">
+                ${escapeHtml(w.week_label)}
+            </button>
+        `).join('');
+    }
+
+    // 移动端下拉
+    mobileSelect.innerHTML = [
+        '<option value="">选择周次</option>',
+        ...weeks.map(w => `<option value="${w.data_date}" ${w.data_date === currentDate ? 'selected' : ''}>${escapeHtml(w.week_label)}</option>`)
+    ].join('');
+    mobileSelect.onchange = (e) => {
+        if (e.target.value) switchHotWeek(e.target.value);
+    };
+}
+
+function renderHotHeader() {
+    const state = window.hotContentState;
+    const labelEl = document.getElementById('hot-week-label');
+    const statsEl = document.getElementById('hot-stats');
+    if (!labelEl) return;
+
+    if (!state.data) {
+        labelEl.innerText = '数据加载失败';
+        if (statsEl) statsEl.innerText = '';
+        return;
+    }
+
+    labelEl.innerText = state.data.week_label || state.data.data_date || '--';
+    if (statsEl) {
+        const total = state.data.total_items || 0;
+        const counts = (state.data.sections || []).map(s => `${s.platform} ${s.item_count} 部`).join(' · ');
+        statsEl.innerHTML = `<i class="fas fa-layer-group"></i> 本周共 ${total} 部 · ${escapeHtml(counts)}`;
+    }
+}
+
+function renderHotCards() {
+    const state = window.hotContentState;
+    const container = document.getElementById('hot-card-list');
+    if (!container) return;
+
+    if (!state.data) {
+        container.innerHTML = '<div class="hot-empty"><i class="fas fa-inbox" style="display:block; font-size:32px; margin-bottom:12px; opacity:0.3;"></i>本周热门内容筹备中，敬请期待…</div>';
+        return;
+    }
+
+    const sections = state.data.sections || [];
+    const filter = state.currentFilter;
+
+    // 按平台分组排序：红果 -> 晋江 -> 番茄
+    const platformOrder = ['hongguo', 'jjwxc', 'fanqie'];
+    let items = [];
+
+    if (filter === 'all') {
+        platformOrder.forEach(key => {
+            const section = sections.find(s => s.platform_key === key);
+            if (section) {
+                items.push(...section.items.map(item => ({ ...item, platform_key: key, platform: section.platform })));
+            }
+        });
+    } else {
+        const section = sections.find(s => s.platform_key === filter);
+        if (section) {
+            items = section.items.map(item => ({ ...item, platform_key: filter, platform: section.platform }));
+        }
+    }
+
+    if (items.length === 0) {
+        container.innerHTML = '<div class="hot-empty">该平台本周暂无数据</div>';
+        return;
+    }
+
+    container.innerHTML = items.map(item => renderHotCard(item)).join('');
+}
+
+function renderHotCard(item) {
+    const key = item.platform_key || 'hongguo';
+    const platformLabels = {
+        hongguo: '🎬 红果短剧',
+        jjwxc: '📚 晋江小说',
+        fanqie: '🍅 番茄小说'
+    };
+    const platformIcon = {
+        hongguo: '🎬',
+        jjwxc: '📚',
+        fanqie: '🍅'
+    };
+
+    const title = escapeHtml(item.title || '未知作品');
+    const author = item.author ? escapeHtml(item.author) : '';
+    const heatText = escapeHtml(item.heat_text || '');
+    const summary = escapeHtml(item.summary || '暂无简介');
+    const originalUrl = item.original_url || '';
+
+    // 封面
+    let coverHtml = '';
+    if (item.cover_url) {
+        coverHtml = `<img class="hot-card-cover" src="${escapeAttribute(item.cover_url)}" alt="${title}" loading="lazy" onerror="this.style.display='none'; this.parentNode.querySelector('.hot-card-cover-placeholder').style.display='flex';">`;
+    }
+    const placeholderIcon = platformIcon[key] || '📖';
+
+    // 标签
+    const tags = Array.isArray(item.tags) ? item.tags : [];
+    const tagsHtml = tags.slice(0, 5).map(tag =>
+        `<span class="hot-card-tag ${key}">${escapeHtml(tag)}</span>`
+    ).join('');
+
+    const titleHtml = originalUrl
+        ? `<a href="${escapeAttribute(originalUrl)}" target="_blank" rel="noopener noreferrer">${title}</a>`
+        : title;
+
+    return `
+    <div class="hot-card ${key}">
+        <div class="hot-card-cover-wrap">
+            ${coverHtml}
+            <div class="hot-card-cover-placeholder ${key}" style="display:${item.cover_url ? 'none' : 'flex'};">
+                <span>${placeholderIcon}</span>
+            </div>
+            <div class="hot-card-platform ${key}">${platformLabels[key]}</div>
+            <div class="hot-card-rank">${item.rank || '-'}</div>
+        </div>
+        <div class="hot-card-content">
+            <div class="hot-card-header">
+                <div class="hot-card-title">${titleHtml}</div>
+            </div>
+            ${author ? `<div class="hot-card-author"><i class="fas fa-user-edit"></i> ${author}</div>` : ''}
+            ${heatText ? `<div class="hot-card-heat ${key}"><i class="fas fa-fire"></i> ${heatText}</div>` : ''}
+            <div class="hot-card-summary">${summary}</div>
+            ${tagsHtml ? `<div class="hot-card-tags">${tagsHtml}</div>` : ''}
+        </div>
+    </div>`;
+}
+
+function switchHotFilter(platform) {
+    window.hotContentState.currentFilter = platform;
+
+    // 更新 tab 样式
+    document.querySelectorAll('.hot-filter-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === platform);
+    });
+
+    renderHotCards();
+}
+
+function switchHotWeek(dataDate) {
+    loadHotContent(dataDate);
+}
+
+function renderHotContent(mainData) {
+    // 热门内容频道独立加载自己的 JSON
+    loadHotContent();
+}
+
+// 绑定 filter tab 事件（只需要绑定一次）
+document.addEventListener('click', (e) => {
+    const tab = e.target.closest('.hot-filter-tab');
+    if (tab && tab.dataset.filter) {
+        switchHotFilter(tab.dataset.filter);
+    }
+});
 
 loadHistoryDates();
 renderDashboard();

@@ -40,6 +40,10 @@ assets/image.png
 *.log
 logs/
 
+# 临时文件/目录
+tmp/
+temp/
+
 # 归档文件
 *.iso
 *.dmg
