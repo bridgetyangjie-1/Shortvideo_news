@@ -4,10 +4,14 @@
 2. 用 DeepSeek/本地规则生成 200 字摘要和标签
 3. 输出到 assets/data/hot_content/
 """
+import gzip
 import json
 import logging
+import re
 import sys
+import urllib.request
 from pathlib import Path
+from urllib.parse import urlparse
 
 # 将 src 加入路径
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -30,6 +34,116 @@ def load_index(hot_content_dir: Path) -> dict:
         with open(index_file, "r", encoding="utf-8") as f:
             return json.load(f)
     return {"weeks": []}
+
+
+def _safe_filename(title: str, max_len: int = 40) -> str:
+    """把标题转换成安全的文件名"""
+    title = re.sub(r"[^\w\u4e00-\u9fff\-]", "_", title)
+    title = re.sub(r"_+", "_", title).strip("_")
+    if len(title) > max_len:
+        title = title[:max_len]
+    return title or "cover"
+
+
+def _guess_ext(content_type: str, url: str) -> str:
+    """根据 Content-Type 或 URL 推断图片扩展名"""
+    if content_type:
+        ct = content_type.lower()
+        if "png" in ct:
+            return ".png"
+        if "jpeg" in ct or "jpg" in ct:
+            return ".jpg"
+        if "webp" in ct:
+            return ".webp"
+        if "gif" in ct:
+            return ".gif"
+    # 从 URL 推断
+    path = urlparse(url).path.lower()
+    for ext in [".png", ".jpg", ".jpeg", ".webp", ".gif"]:
+        if path.endswith(ext):
+            return ".png" if ext == ".jpeg" else ext
+    return ".jpg"
+
+
+def _download_cover(cover_url: str, platform_key: str, rank: int, title: str, covers_dir: Path, timeout: int = 20) -> str:
+    """
+    下载封面图到本地 covers 目录，返回相对路径（相对于 assets/index.html）。
+    下载失败则返回原始 URL。
+    """
+    if not cover_url:
+        return ""
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        ),
+        "Accept": "image/webp,image/apng,image/*,*/*;q=0.8",
+    }
+    # 晋江图片需要 Referer
+    if "jjwxc" in cover_url:
+        headers["Referer"] = "https://www.jjwxc.net/"
+
+    try:
+        req = urllib.request.Request(cover_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            data = response.read()
+            content_type = response.headers.get("Content-Type", "")
+            if not data or response.status != 200:
+                return cover_url
+
+        # 晋江图片服务器可能返回 gzip 压缩的图片，需要解压
+        if data[:2] == b"\x1f\x8b":
+            try:
+                data = gzip.decompress(data)
+                logger.info(f"封面数据已 gzip 解压: {len(data)} bytes")
+            except Exception as e:
+                logger.warning(f"gzip 解压失败: {e}")
+
+        # 根据实际文件魔数校正扩展名
+        ext = _guess_ext(content_type, cover_url)
+        if data[:8] == b"\x89PNG\r\n\x1a\n":
+            ext = ".png"
+        elif data[:2] == b"\xff\xd8":
+            ext = ".jpg"
+        elif data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+            ext = ".webp"
+
+        safe_title = _safe_filename(title)
+        filename = f"{platform_key}_{rank:02d}_{safe_title}{ext}"
+        cover_path = covers_dir / filename
+        with open(cover_path, "wb") as f:
+            f.write(data)
+
+        logger.info(f"封面已下载: {filename} ({len(data)} bytes)")
+        # 相对路径：相对于 assets/index.html
+        return f"./data/hot_content/covers/{filename}"
+    except Exception as e:
+        logger.warning(f"封面下载失败，保留原 URL: {cover_url}, 错误: {e}")
+        return cover_url
+
+
+def download_covers(final_data: dict, hot_content_dir: Path) -> dict:
+    """遍历数据并下载所有封面图到本地"""
+    covers_dir = hot_content_dir / "covers"
+    covers_dir.mkdir(exist_ok=True)
+
+    for section in final_data.get("sections", []):
+        platform_key = section.get("platform_key", "unknown")
+        for item in section.get("items", []):
+            cover_url = item.get("cover_url", "")
+            if not cover_url or cover_url.startswith("./data/"):
+                continue
+            local_url = _download_cover(
+                cover_url,
+                platform_key,
+                item.get("rank", 0),
+                item.get("title", ""),
+                covers_dir,
+            )
+            item["cover_url"] = local_url
+
+    return final_data
 
 
 def save_index(hot_content_dir: Path, data_date: str, week_label: str):
@@ -82,10 +196,14 @@ def main():
         "sections": analyzed_sections,
     }
 
-    # 3. 输出到 assets/data/hot_content/
-    logger.info("== 步骤 3/3: 保存最终 JSON ==")
+    # 3. 准备输出目录并下载封面图到本地（避免外链防盗链，如晋江）
+    logger.info("== 步骤 3/4: 下载封面图到本地 ==")
     hot_content_dir = PROJECT_ROOT / "assets" / "data" / "hot_content"
     hot_content_dir.mkdir(parents=True, exist_ok=True)
+    final_data = download_covers(final_data, hot_content_dir)
+
+    # 4. 输出到 assets/data/hot_content/
+    logger.info("== 步骤 4/4: 保存最终 JSON ==")
     weekly_dir = hot_content_dir / "weekly"
     weekly_dir.mkdir(exist_ok=True)
 
