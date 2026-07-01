@@ -1,0 +1,16 @@
+{
+  "data_month": "2026-07",
+  "dashboard": {
+    "report_month": "2026-06",
+    "kpis": [],
+    "rankings": {
+      "ai_drama": [],
+      "ai_comic": []
+    },
+    "trends": [],
+    "news": [],
+    "data_source": "DataEye 月报 + Kimi 搜索",
+    "update_frequency": "monthly"
+  },
+  "updated_at": "2026-07-01T14:01:53.718000"
+}
