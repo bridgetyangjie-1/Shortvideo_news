@@ -12,6 +12,7 @@ from graphs.models.emotion import EmotionalAnalysis, default_emotional_analysis
 from graphs.models.history import PlayTrend, WeeklyRankingItem, RankChange
 from graphs.models.news import DailyNews, Insight
 from graphs.models.alerts import AlertItem
+from graphs.models.ai_drama import AIDramaDashboard
 
 
 class SearchNodeInput(BaseModel):
@@ -101,6 +102,17 @@ class NewsNodeOutput(BaseModel):
     error_message: str = Field(default="", description="错误信息")
 
 
+class AIDramaNodeInput(BaseModel):
+    """AI 短剧/漫剧看板节点输入"""
+    data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
+
+
+class AIDramaNodeOutput(BaseModel):
+    """AI 短剧/漫剧看板节点输出"""
+    ai_drama_dashboard: AIDramaDashboard = Field(default_factory=AIDramaDashboard, description="AI 短剧/漫剧看板")
+    error_message: str = Field(default="", description="错误信息")
+
+
 class PushNodeInput(BaseModel):
     """数据推送节点输入"""
     success: bool = Field(default=True, description="是否通过质量门禁")
@@ -124,6 +136,7 @@ class PushNodeInput(BaseModel):
     alert_count: int = Field(default=0, description="告警数量")
     quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
     quality_score: float = Field(default=0.0, description="数据质量分数")
+    ai_drama_dashboard: AIDramaDashboard = Field(default_factory=AIDramaDashboard, description="AI 短剧/漫剧看板")
     error_message: str = Field(default="", description="错误信息")
 
 
@@ -149,6 +162,7 @@ class PushNodeOutput(BaseModel):
     alert_count: int = Field(default=0, description="告警数量")
     quality_report: Dict[str, Any] = Field(default_factory=dict, description="质量门禁详细报告")
     quality_score: float = Field(default=0.0, description="数据质量分数")
+    ai_drama_dashboard: AIDramaDashboard = Field(default_factory=AIDramaDashboard, description="AI 短剧/漫剧看板")
     error_message: str = Field(default="", description="错误信息")
     storage_url: str = Field(default="", description="对象存储URL（用于GitHub同步）")
     storage_key: str = Field(default="", description="对象存储Key（持久化存储）")

@@ -34,6 +34,7 @@ from graphs.models.history import (
 )
 from graphs.models.news import Insight, Innovation, DailyNews
 from graphs.models.alerts import AlertItem
+from graphs.models.ai_drama import AIDramaDashboard
 from graphs.models.node_io import (
     SearchNodeInput,
     SearchNodeOutput,
@@ -49,6 +50,8 @@ from graphs.models.node_io import (
     InsightsNodeOutput,
     NewsNodeInput,
     NewsNodeOutput,
+    AIDramaNodeInput,
+    AIDramaNodeOutput,
     PushNodeInput,
     PushNodeOutput,
     ShouldPushInput,
@@ -92,6 +95,7 @@ class GlobalState(BaseModel):
     quality_score: float = Field(default=0.0, description="数据质量分数 (0-100)")
     alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")
     alert_count: int = Field(default=0, description="告警数量")
+    ai_drama_dashboard: AIDramaDashboard = Field(default_factory=AIDramaDashboard, description="AI 短剧/漫剧看板")
     error_message: Annotated[str, operator.add] = Field(default="", description="错误信息")
 
 
@@ -136,4 +140,5 @@ class GraphOutput(BaseModel):
     quality_score: float = Field(default=0.0, description="数据质量分数")
     alerts: List[AlertItem] = Field(default_factory=list, description="异常监测告警列表")
     alert_count: int = Field(default=0, description="告警数量")
+    ai_drama_dashboard: AIDramaDashboard = Field(default_factory=AIDramaDashboard, description="AI 短剧/漫剧看板")
     error_message: str = Field(default="", description="错误信息")

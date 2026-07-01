@@ -762,6 +762,7 @@ body.emotion-mobile-locked { overflow: hidden; }
   <div class="channel-tabs" id="channel-tabs">
     <button class="channel-tab active" data-channel="news" onclick="switchChannelTab('news')">📰 短剧行业新闻</button>
     <button class="channel-tab" data-channel="hot" onclick="switchChannelTab('hot')">🔥 热门内容</button>
+    <button class="channel-tab" data-channel="ai" onclick="switchChannelTab('ai')">🤖 AI 短剧/漫剧</button>
   </div>
 
   <!-- 频道：短剧行业新闻 -->
@@ -986,6 +987,56 @@ body.emotion-mobile-locked { overflow: hidden; }
       </main>
     </div>
   </div><!-- /channel-hot -->
+
+  <!-- 频道：AI 短剧/漫剧看板 -->
+  <div id="channel-ai" class="channel-content">
+
+    <div class="source-legend">
+      <div class="source-legend-item"><span class="source-tag tier2">🔍 月报</span> DataEye AI 短剧/漫剧月报（thepaper.cn）</div>
+      <div class="source-legend-item"><span class="source-tag tier2">🔍 搜补</span> Kimi 联网搜索补充 TOP4-5 与行业快讯</div>
+      <div class="source-legend-item"><span class="source-tag tier3">🤖 推理</span> 结构化提取与趋势摘要</div>
+    </div>
+
+    <div class="glass-card" style="margin-bottom: 16px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+        <div class="section-title" style="margin: 0;"><i class="fas fa-robot" style="color:#a78bfa;"></i> 🤖 AI 短剧/漫剧看板</div>
+        <div id="ai-report-month" style="font-size: 12px; color: #94a3b8;">--</div>
+      </div>
+    </div>
+
+    <!-- AI KPI 卡片 -->
+    <div class="kpi-grid" id="ai-kpi-grid">
+      <div class="kpi-card"><div class="kpi-icon">👥</div><div class="kpi-value" id="ai-kpi-0">--</div><div class="kpi-label" id="ai-kpi-label-0">--</div></div>
+      <div class="kpi-card"><div class="kpi-icon">📈</div><div class="kpi-value gradient" id="ai-kpi-1">--</div><div class="kpi-label" id="ai-kpi-label-1">--</div></div>
+      <div class="kpi-card"><div class="kpi-icon">🎬</div><div class="kpi-value" id="ai-kpi-2">--</div><div class="kpi-label" id="ai-kpi-label-2">--</div></div>
+      <div class="kpi-card"><div class="kpi-icon">🖼️</div><div class="kpi-value yellow" id="ai-kpi-3">--</div><div class="kpi-label" id="ai-kpi-label-3">--</div></div>
+    </div>
+
+    <!-- AI 榜单：AI 短剧 + AI 漫剧 -->
+    <div class="main-grid">
+      <div class="glass-card">
+        <div class="section-title"><i class="fas fa-user-astronaut" style="color:#60a5fa;"></i> AI 仿真人短剧 TOP5 <span class="source-tag tier2">🔍 月报</span></div>
+        <div id="ai-drama-rankings"></div>
+      </div>
+      <div class="glass-card">
+        <div class="section-title"><i class="fas fa-book-open" style="color:#f472b6;"></i> AI 漫剧 TOP5 <span class="source-tag tier2">🔍 月报</span></div>
+        <div id="ai-comic-rankings"></div>
+      </div>
+    </div>
+
+    <!-- 趋势洞察 -->
+    <div class="glass-card">
+      <div class="section-title"><i class="fas fa-binoculars" style="color:#34d399;"></i> 趋势洞察 <span class="source-tag tier3">🤖 推理</span></div>
+      <div id="ai-trends-container"></div>
+    </div>
+
+    <!-- AI 行业快讯 -->
+    <div class="glass-card news-section">
+      <div class="section-title"><i class="fas fa-newspaper" style="color:#4ade80;"></i> AI 短剧/漫剧快讯 <span class="source-tag tier2">🔍 搜补</span></div>
+      <div class="news-grid" id="ai-news-container"></div>
+    </div>
+
+  </div><!-- /channel-ai -->
   
 </div><!-- /container -->
 
@@ -1169,6 +1220,42 @@ const fallbackData = {
         "daily": [
             { "date": "2026-06-12", "total_views": 64000 }
         ]
+    },
+    "ai_drama_dashboard": {
+        "report_month": "2026-04",
+        "kpis": [
+            { "label": "AI 短剧月活", "value": "1.52", "unit": "亿", "trend": "up", "period": "环比", "note": "独立 AI 短剧 APP 月活" },
+            { "label": "AI 短剧市场规模", "value": "38", "unit": "亿", "trend": "up", "period": "同比", "note": "2026 年 Q1 估算" },
+            { "label": "AI 漫剧月活", "value": "0.89", "unit": "亿", "trend": "up", "period": "环比", "note": "AIGC/3D/2D 漫剧合计" },
+            { "label": "AI 短剧渗透率", "value": "12.5", "unit": "%", "trend": "up", "period": "环比", "note": "占整体短剧用户" }
+        ],
+        "rankings": {
+            "ai_drama": [
+                { "rank": 1, "title": "AI 重生之我在霸总短剧里当保姆", "platform": "红果", "category": "AI 仿真人", "heat": "9800 万", "is_new": false },
+                { "rank": 2, "title": "AI 闪婚后傅先生马甲藏不住了", "platform": "抖音", "category": "AI 仿真人", "heat": "8600 万", "is_new": false },
+                { "rank": 3, "title": "AI 我在八零年代当后妈", "platform": "红果", "category": "AI 仿真人", "heat": "7200 万", "is_new": true },
+                { "rank": 4, "title": "AI 裴总每天都想父凭子贵", "platform": "快手", "category": "AI 仿真人", "heat": "6500 万", "is_new": false },
+                { "rank": 5, "title": "AI 离婚后她带六宝惊艳全球", "platform": "红果", "category": "AI 仿真人", "heat": "5400 万", "is_new": true }
+            ],
+            "ai_comic": [
+                { "rank": 1, "title": "AI 斩神之凡尘神域", "platform": "腾讯动漫", "category": "AIGC 漫剧", "heat": "6200 万", "is_new": false },
+                { "rank": 2, "title": "AI 斗破苍穹短剧版", "platform": "快看", "category": "3D AI 漫剧", "heat": "5800 万", "is_new": false },
+                { "rank": 3, "title": "AI 一人之下短剧版", "platform": "B站", "category": "AIGC 漫剧", "heat": "4900 万", "is_new": true },
+                { "rank": 4, "title": "AI 完美世界短剧版", "platform": "腾讯动漫", "category": "3D AI 漫剧", "heat": "4200 万", "is_new": false },
+                { "rank": 5, "title": "AI 狐妖小红娘短剧版", "platform": "快看", "category": "2D AI 漫剧", "heat": "3600 万", "is_new": true }
+            ]
+        },
+        "trends": [
+            { "title": "AI 仿真人剧抢占下沉市场", "summary": "AI 仿真人短剧以低成本、高产能优势快速覆盖三四线城市，月活环比增长超过 20%。" },
+            { "title": "3D AI 漫剧成为男频新入口", "summary": "玄幻、修仙 IP 通过 3D AI 漫剧形式二次开发，男性用户占比提升至 45%。" },
+            { "title": "平台加码 AI 短剧分账", "summary": "红果、抖音推出 AI 短剧专项激励，单部最高补贴 300 万元，吸引大量 MCN 入局。" }
+        ],
+        "news": [
+            { "title": "DataEye 发布 4 月 AI 短剧月报", "source": "DataEye / 澎湃新闻", "date": "2026-05-06", "url": "https://www.thepaper.cn" },
+            { "title": "红果上线 AI 短剧独立频道", "source": "36氪", "date": "2026-04-28", "url": "https://36kr.com" }
+        ],
+        "data_source": "DataEye 月报 + Kimi 搜索",
+        "update_frequency": "monthly"
     }
 };
 
@@ -2362,6 +2449,99 @@ async function renderDashboard(dateParam = null) {
 
     // 渲染热门内容频道
     renderHotContent(data);
+
+    // 渲染 AI 短剧/漫剧看板
+    renderAIDashboard(data.ai_drama_dashboard);
+}
+
+function renderAIDashboard(dashboard) {
+    const reportMonthEl = document.getElementById('ai-report-month');
+    if (reportMonthEl) {
+        const hasData = dashboard && (dashboard.kpis?.length || dashboard.rankings?.ai_drama?.length || dashboard.rankings?.ai_comic?.length);
+        reportMonthEl.innerHTML = hasData
+            ? `报告月份：<span style="color:#e0e7ff;">${escapeHtml(dashboard.report_month || '--')}</span> <span class="source-tag tier2">${escapeHtml(formatFrequencyLabel(dashboard.update_frequency))}</span>`
+            : '暂无月度报告数据';
+    }
+
+    // KPI 卡片
+    const kpis = (dashboard?.kpis || []).slice(0, 4);
+    for (let i = 0; i < 4; i++) {
+        const kpi = kpis[i] || {};
+        const valueEl = document.getElementById(`ai-kpi-${i}`);
+        const labelEl = document.getElementById(`ai-kpi-label-${i}`);
+        if (valueEl) {
+            const unit = kpi.unit ? `<span style="font-size: 14px; color: #94a3b8;">${escapeHtml(kpi.unit)}</span>` : '';
+            const trendIcon = kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→';
+            const trendColor = kpi.trend === 'up' ? '#34d399' : kpi.trend === 'down' ? '#fb7185' : '#94a3b8';
+            valueEl.innerHTML = `${escapeHtml(kpi.value || '--')} ${unit}<span style="font-size: 13px; margin-left: 6px; color:${trendColor};">${trendIcon}</span>`;
+        }
+        if (labelEl) labelEl.innerText = kpi.label || '--';
+    }
+
+    // 榜单
+    renderAIRankings('ai-drama-rankings', dashboard?.rankings?.ai_drama || []);
+    renderAIRankings('ai-comic-rankings', dashboard?.rankings?.ai_comic || []);
+
+    // 趋势洞察
+    const trendsContainer = document.getElementById('ai-trends-container');
+    if (trendsContainer) {
+        const trends = (dashboard?.trends || []).slice(0, 5);
+        if (trends.length === 0) {
+            trendsContainer.innerHTML = '<div style="color:#64748b; font-size:12px; padding:12px 0;">暂无趋势洞察</div>';
+        } else {
+            trendsContainer.innerHTML = trends.map((t, idx) => `
+                <div class="insight-item" style="margin-bottom: 10px;">
+                    <div class="insight-item-title">${idx + 1}. ${escapeHtml(t.title || '趋势洞察')}</div>
+                    <div class="insight-item-desc">${escapeHtml(t.summary || '')}</div>
+                </div>`).join('');
+        }
+    }
+
+    // 快讯
+    const newsContainer = document.getElementById('ai-news-container');
+    if (newsContainer) {
+        const newsList = (dashboard?.news || []).slice(0, 6);
+        if (newsList.length === 0) {
+            newsContainer.innerHTML = '<div style="grid-column: 1 / -1; color:#64748b; font-size:12px; padding:12px 0;">暂无 AI 短剧/漫剧快讯</div>';
+        } else {
+            newsContainer.innerHTML = newsList.map(n => {
+                const linkHtml = n.url ? `<a class="news-link" href="${escapeAttribute(n.url)}" target="_blank" rel="noopener noreferrer">原文链接 -&gt;</a>` : '';
+                return `
+                    <div class="news-item">
+                        <div class="news-header">
+                            <span class="news-type data">AI</span>
+                            <span class="news-title">${escapeHtml(n.title || '行业快讯')}</span>
+                        </div>
+                        <div class="news-content" style="font-size: 11px; color: #94a3b8; margin-top: 4px;">${escapeHtml(n.source || '')} · ${escapeHtml(n.date || '')}</div>
+                        ${linkHtml}
+                    </div>`;
+            }).join('');
+        }
+    }
+}
+
+function renderAIRankings(containerId, rankings) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (!rankings || rankings.length === 0) {
+        container.innerHTML = '<div style="color:#64748b; font-size:12px; padding:12px 0;">暂无榜单数据</div>';
+        return;
+    }
+    container.innerHTML = rankings.slice(0, 5).map(r => {
+        const rankStyle = r.rank <= 3 ? 'background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff;' : '';
+        const newBadge = r.is_new ? '<span style="margin-left: 6px; font-size: 10px; padding: 1px 5px; background: rgba(52, 211, 153, 0.15); color: #34d399; border-radius: 4px;">新剧</span>' : '';
+        return `
+            <div class="ranking-item" style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <span class="ranking-rank" style="flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-right: 10px; ${rankStyle}">${r.rank}</span>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 13px; color: #e0e7ff; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(r.title || '--')}${newBadge}</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">${escapeHtml(r.platform || '')} · ${escapeHtml(r.category || '')}</div>
+                </div>
+                <div style="text-align: right; flex-shrink: 0; margin-left: 8px;">
+                    <div style="font-size: 12px; color: #fbbf24; font-weight: 600;">${escapeHtml(r.heat || '--')}</div>
+                </div>
+            </div>`;
+    }).join('');
 }
 
 // 热门内容频道状态

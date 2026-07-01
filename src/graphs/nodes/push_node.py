@@ -31,6 +31,7 @@ from graphs.state import (
     PlayTrend,
     OverviewStats,
     AlertItem,
+    AIDramaDashboard,
 )
 
 # 初始化日志
@@ -352,6 +353,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
             alert_count=state.alert_count or 0,
             quality_report=state.quality_report or {},
             quality_score=state.quality_score or 0.0,
+            ai_drama_dashboard=state.ai_drama_dashboard,
             error_message=(state.error_message or "") + error_message + "\n",
         )
 
@@ -389,6 +391,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
             alert_count=state.alert_count or 0,
             quality_report=state.quality_report or {},
             quality_score=0.0,
+            ai_drama_dashboard=state.ai_drama_dashboard,
             error_message=(state.error_message or "") + error_message + "\n"
         )
     
@@ -462,6 +465,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "alert_count": state.alert_count or 0,
         "quality_report": state.quality_report or {},
         "weekly_base": weekly_base_info,
+        "ai_drama_dashboard": state.ai_drama_dashboard.model_dump() if state.ai_drama_dashboard else {},
         "error_message": state.error_message or ""
     }
     
@@ -496,6 +500,7 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         "alert_count": state.alert_count or 0,
         "quality_report": state.quality_report or {},
         "weekly_base": weekly_base_info,
+        "ai_drama_dashboard": state.ai_drama_dashboard.model_dump() if state.ai_drama_dashboard else {},
         "error_message": state.error_message or ""
     }
     
@@ -575,5 +580,6 @@ def push_node(state: PushNodeInput, config: RunnableConfig, runtime: Runtime[Con
         alert_count=state.alert_count or 0,
         quality_report=state.quality_report or {},
         quality_score=state.quality_score or 60.0,
+        ai_drama_dashboard=state.ai_drama_dashboard,
         error_message=(state.error_message or "") + (("\n".join(error_messages) + "\n") if error_messages else "")
     )

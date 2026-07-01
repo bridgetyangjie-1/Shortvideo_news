@@ -24,6 +24,7 @@ from graphs.nodes.genre_distribution_node import genre_distribution_node
 from graphs.nodes.emotion_analysis_node import emotion_analysis_node
 from graphs.nodes.insights_node import insights_node
 from graphs.nodes.news_node import news_node
+from graphs.nodes.ai_drama_node import ai_drama_node
 from graphs.nodes.history_data_node import history_data_node
 from graphs.nodes.quality_gate_node import quality_gate_node
 from graphs.nodes.alert_node import alert_node
@@ -86,6 +87,13 @@ def create_graph():
         "news_node",
         news_node,
         metadata={"type": "agent", "llm_cfg": "config/news_llm_cfg.json"}
+    )
+
+    # 2.1 AI 短剧/漫剧看板节点（月度，与 news_node 并行）
+    builder.add_node(
+        "ai_drama_node",
+        ai_drama_node,
+        metadata={"type": "agent", "llm_cfg": "config/ai_drama_llm_cfg.json"}
     )
     
     # 3. 初步处理节点（大模型）
@@ -157,11 +165,13 @@ def create_graph():
     # 设置入口点
     builder.set_entry_point("search_node")
     
-    # 主流程边：search → news（并行） + process
+    # 主流程边：search → news（并行） + process + ai_drama_node
     builder.add_edge("search_node", "news_node")
     builder.add_edge("search_node", "process_node")
+    builder.add_edge("search_node", "ai_drama_node")
     
     # 汇聚：news + process → enrich
+
     builder.add_edge(["news_node", "process_node"], "enrich_node")
     
     # 主流程
@@ -196,6 +206,9 @@ def create_graph():
     
     # 异常监测后推送
     builder.add_edge("alert_node", "push_node")
+
+    # AI 看板独立分支汇入 push_node，不阻塞主流程
+    builder.add_edge("ai_drama_node", "push_node")
     
     # 结束
     builder.add_edge("push_node", END)

@@ -8,7 +8,7 @@
 这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取短剧工程周榜（基于红果官方周榜）为主、红果推荐页为辅，补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
 
 - **项目名称**：`shortvideo-news`
-- **当前版本**：`v1.12.0`
+- **当前版本**：`v1.14.0`
 - **在线地址**：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - **数据入口**：`assets/data/latest.json`（TOP20 展示）、`assets/data/latest_full.json`（Full100 归档）、`assets/data/weekly/YYYY-MM-DD.json`（周榜归档，每周一）
 - **GitHub Actions 入口**：`src/run_github.py`
@@ -23,6 +23,7 @@
 - 题材分布与热门标签
 - 观众画像
 - 行业宏观数据（APP 月活、AI 短剧渗透率、剧集总量等）
+- 🤖 AI 短剧/漫剧看板（月度 KPI、AI 仿真人剧 TOP5、AI 漫剧 TOP5、趋势洞察、行业快讯）
 
 ## 2. 技术栈
 
@@ -77,9 +78,10 @@
 │   │   │   ├── emotion.py               # 情绪分析
 │   │   │   ├── history.py               # 历史与趋势
 │   │   │   ├── news.py                  # 洞察与快讯
+│   │   │   ├── ai_drama.py              # AI 短剧/漫剧看板模型
 │   │   │   └── node_io.py               # 各节点 Input/Output
 │   │   ├── ranking_quality.py           # TOP20 榜单数量质量门禁
-│   │   └── nodes/                       # 11 个处理节点
+│   │   └── nodes/                       # 12 个处理节点
 │   │       └── enrich/                  # enrich_node 子模块（缓存/爬虫/搜索/JSON推理解耦）
 │   ├── tools/                           # 爬虫与 API 客户端
 │   ├── storage/                         # 数据库/S3/内存存储抽象
@@ -150,7 +152,8 @@ uv sync
 ```
 search_node
     ├──→ news_node ──┐
-    └──→ process_node─┘
+    ├──→ process_node─┘
+    └──→ ai_drama_node
               ↓
         enrich_node
               ↓
@@ -178,7 +181,7 @@ search_node
      END
 ```
 
-- `news_node` 与 `process_node` 在 `search_node` 后并行。
+- `news_node` 与 `process_node` 在 `search_node` 后并行；`ai_drama_node` 与两者并行，独立汇入 `push_node`。
 - `industry_node` 与 `audience_profile_node` 在 `actor_ranking_node` 后并行。
 - `emotion_analysis_node` 与 `insights_node` 在 `genre_distribution_node` 后并行。
 - `push_node` 前新增 `quality_gate_node`：校验榜单数量、字段完整性、演员榜、快讯来源、行业数据、API 错误，失败或质量分低于 60 分时直接结束工作流，不覆盖 `latest.json`。
@@ -199,6 +202,7 @@ search_node
 | `emotion_analysis_node` | `emotion_analysis_node.py` | 从 `config/emotion_rules.json` 加载情绪维度规则，基于当日榜单规则化统计情绪维度；DeepSeek 提炼总览、TOP3 情绪剧目与行动建议；失败或兜底时基于实际统计数据动态生成文案 | 是（DeepSeek） |
 | `insights_node` | `insights_node.py` | 周更：周一 Kimi 搜索行业事件 → DeepSeek 生成商业洞察并缓存；周二至周日直接读缓存 | 是（Kimi+DeepSeek，每周最多 1 次） |
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
+| `ai_drama_node` | `ai_drama_node.py` | 月度 DataEye AI 短剧/漫剧月报 + Kimi 搜索补充，输出 KPI、AI 仿真人剧 TOP5、AI 漫剧 TOP5、趋势洞察、行业快讯；月度缓存，平日直接读取 | 是（Kimi，每月最多 1 次） |
 | `history_data_node` | `history_data_node.py` | 生成周榜热度趋势（近8周）、周榜历史、排名变化 | 否 |
 | `quality_gate_node` | `quality_gate_node.py` | 统一质量门禁：校验榜单/演员/快讯/行业数据/API 错误 | 否 |
 | `alert_node` | `alert_node.py` | 异常监测：基于质量报告与业务规则自动生成 Alerts | 否 |
@@ -215,6 +219,7 @@ search_node
 | `TagNormalizer` | `tag_normalizer.py` | 标签同义词映射、题材分类（female/male/neutral） |
 | `MoonshotClient` | `moonshot_api.py` | Kimi 客户端：chat、search、JSON 提取、429 退避、API 预算熔断 |
 | `DeepSeekClient` | `deepseek_api.py` | DeepSeek 客户端：chat 接口 |
+| `AIDramaCache` | `ai_drama_cache.py` | AI 短剧/漫剧看板月度缓存 |
 
 ### 6.3 `src/storage/` 存储层
 
@@ -236,7 +241,8 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 
 1. **search_node**：爬取短剧工程周榜 TOP50（或首页 TOP10）作为主数据源；抓取红果官网 100 条推荐页作为辅助；尝试 DataEye 30 条交叉验证；再用 Kimi 搜索 1 次行业宏观数据。
 2. **news_node**：并行运行，Kimi 搜索 3 组新闻 → DeepSeek 生成 ≤6 条快讯。
-3. **process_node**：优先解析 `duanjugongcheng_ranking` 中的短剧工程周榜，转换为标准榜单（`weekly_index` 作为 `heat`/`views_num`）；用红果推荐页回填 `series_id`、`cover`、`tags`、`episodes`；短剧工程不可用时降级使用红果推荐页；均不可用时用 Kimi 从搜索结果提取。
+3. **ai_drama_node**：与 `news_node`/`process_node` 并行，月度运行。月初/缓存缺失时使用 Kimi 联网搜索 DataEye AI 短剧/漫剧月报（thepaper.cn）提取 KPI、TOP5 榜单、趋势洞察与快讯；平日读取 `data/ai_drama_cache.json` 缓存。仅收录真正的 AI 仿真人剧、AIGC/3D/2D AI 漫剧，排除普通沙雕漫。
+4. **process_node**：优先解析 `duanjugongcheng_ranking` 中的短剧工程周榜，转换为标准榜单（`weekly_index` 作为 `heat`/`views_num`）；用红果推荐页回填 `series_id`、`cover`、`tags`、`episodes`；短剧工程不可用时降级使用红果推荐页；均不可用时用 Kimi 从搜索结果提取。
 4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整榜单 JSON。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；男女频不足 10 人时，仅在周一调用 DeepSeek 推理补充，平日保留榜单提取结果以节省 token。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
@@ -281,6 +287,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 | `config/actor_ranking_llm_cfg.json` | `deepseek-chat` |
 | `config/enrich_llm_cfg.json` | `deepseek-chat` |
 | `config/industry_llm_cfg.json` | `moonshot-v1-32k` |
+| `config/ai_drama_llm_cfg.json` | `moonshot-v1-32k` |
 
 ### 8.3 前端
 
@@ -376,6 +383,7 @@ python src/utils/config_validator.py
 | `alert_count` | `int` | 告警数量 |
 | `quality_report` | `Dict[str, Any]` | 质量门禁 8 项检查详情 |
 | `weekly_base` | `Dict[str, Any]` | 周榜基准信息：本周 TOP1 剧名、热度、题材、数据说明 |
+| `ai_drama_dashboard` | `AIDramaDashboard` | 🤖 AI 短剧/漫剧看板：月度 KPI、AI 剧/漫剧 TOP5、趋势洞察、行业快讯；含 `data_source`/`update_frequency` |
 
 ## 11. 部署流程
 
@@ -538,6 +546,7 @@ export PYTHONPATH="$PWD/src"
 | 2026-06-14 | **v1.10.6 热门标签维度均衡**：`genre_distribution_node` 从“全局 TOP20 后分类”改为“按题材/爽点/人设/情感关系/时代背景独立取 TOP N”，保证每个维度都有多个标签；关系型标签（先婚后爱/闪婚/离婚/复婚）归入「情感关系」，扩展人设/情感关系词库；前端热门标签改为 2 列紧凑网格 |
 | 2026-06-14 | **v1.10.6 情绪驾驶舱二合一**：`assets/index.html` 将「洞察」与「热力」两个 Tab 合并为「洞察」Tab（含今日洞察、关键词、情绪热力 TOP8、环比趋势），保留「建议」Tab；桌面端洞察 Tab 内采用 2 列网格（热力图 + 趋势），移动端自动堆叠 |
 | 2026-06-16 | **v1.10.7 飞书机器人推送**：新增 `src/tools/feishu_pusher.py`，每日工作流完成后自动推送完整版交互式日报卡片；支持手动触发测试与质量门禁失败告警；GitHub Actions 通过 `FEISHU_WEBHOOK` secret 注入 |
+| 2026-06-28 | **v1.14.0 AI 短剧/漫剧看板**：新增 `🤖 AI 短剧/漫剧` 第三频道；新增 `src/graphs/nodes/ai_drama_node.py`、`src/graphs/models/ai_drama.py`、`config/ai_drama_llm_cfg.json`、`src/tools/ai_drama_cache.py`；月度 DataEye 月报 + Kimi 搜索补充，输出 KPI、AI 仿真人剧 TOP5、AI 漫剧 TOP5、趋势洞察、行业快讯；前端 `assets/index.html` 新增频道 Tab 与渲染逻辑；`latest.json`/`latest_full.json` 新增 `ai_drama_dashboard` 字段 |
 | 2026-06-20 | **v1.10.8 数据源重构（短剧工程周榜）**：红果网页端首页仅为推荐列表、DataEye API 不可用，改以 `duanjugongcheng.com` 短剧工程周榜为主数据源，红果推荐页仅作元数据补充；新增 `tools/duanjugongcheng_crawler.py`，`search_node` 与 `process_node` 优先处理短剧工程数据 |
 | 2026-06-20 | **v1.10.8 周榜基准与归档**：`push_node.py` 在周一将短剧工程周榜归档为 `assets/data/weekly/YYYY-MM-DD.json`，并在 `latest.json`/`latest_full.json` 中输出 `weekly_base` 字段；前端榜单区域新增「🏆 周榜坐标」基准条，展示本周 TOP1 剧名、热度与题材 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |

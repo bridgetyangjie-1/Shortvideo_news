@@ -256,6 +256,15 @@ def _build_empty_industry() -> IndustryData:
     )
 
 
+def _has_valid_industry_data(industry: IndustryData) -> bool:
+    """判断行业数据是否包含质量门禁要求的关键字段"""
+    if not industry:
+        return False
+    return _is_meaningful_text(getattr(industry, "app_mau", "")) and _is_meaningful_text(
+        getattr(industry, "drama_count", "")
+    )
+
+
 def _build_empty_platform() -> PlatformData:
     """构建空的平台数据"""
     return PlatformData(
@@ -284,11 +293,17 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
             platform_dict.setdefault("update_frequency", "monthly")
             industry = IndustryData(**industry_dict)
             platform = PlatformData(**platform_dict)
-            return IndustryNodeOutput(
-                industry=industry,
-                platform=platform,
-                success=True,
-                error_message="",
+            if _has_valid_industry_data(industry):
+                return IndustryNodeOutput(
+                    industry=industry,
+                    platform=platform,
+                    success=True,
+                    error_message="",
+                )
+            logger.warning(
+                "industry_node: 本月缓存关键字段缺失（app_mau=%s, drama_count=%s），重新搜索",
+                getattr(industry, "app_mau", ""),
+                getattr(industry, "drama_count", ""),
             )
 
         # 2. 统计榜单中的 AI/女男频比例（作为参考，不强制覆盖搜索数据）
@@ -371,12 +386,15 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
             update_frequency="monthly",
         )
 
-        # 6. 保存月度缓存
-        save_cache(
-            industry=industry.model_dump(),
-            platform=platform.model_dump(),
-            today=data_date,
-        )
+        # 6. 保存月度缓存（仅当关键字段有效时才缓存，避免把空结果锁死一个月）
+        if _has_valid_industry_data(industry):
+            save_cache(
+                industry=industry.model_dump(),
+                platform=platform.model_dump(),
+                today=data_date,
+            )
+        else:
+            logger.warning("industry_node: 搜索返回的行业数据关键字段缺失，不写入月度缓存")
 
         return IndustryNodeOutput(
             industry=industry,
