@@ -1,8 +1,8 @@
 {
-  "data_month": "2026-06",
-  "report_date": "2026-06-01",
+  "data_month": "2026-07",
+  "report_date": "2026-07-01",
   "source_url": "https://www.example.com/report",
-  "source_title": "2026年6月国内短剧行业观众画像/用户研究报告估算",
+  "source_title": "2026年7月国内短剧行业观众画像/用户研究报告",
   "profile": {
     "gender": {
       "female": 70,
@@ -109,9 +109,9 @@
         "desc": "热衷新题材和黑马剧，易流失"
       }
     ],
-    "source_title": "2026年6月国内短剧行业观众画像/用户研究报告估算",
+    "source_title": "2026年7月国内短剧行业观众画像/用户研究报告",
     "source_url": "https://www.example.com/report",
-    "report_date": "2026-06-01"
+    "report_date": "2026-07-01"
   },
-  "updated_at": "2026-06-24T14:02:29.100791"
+  "updated_at": "2026-07-01T05:32:03.746752"
 }
