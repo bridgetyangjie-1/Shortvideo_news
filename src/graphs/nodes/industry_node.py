@@ -285,16 +285,116 @@ def _build_empty_platform() -> PlatformData:
     )
 
 
+def _get_previous_month_date(date_str: str) -> str:
+    """返回 date_str 所在月份的上个月第一天，格式 YYYY-MM-DD"""
+    try:
+        dt = datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        dt = datetime.now()
+    year, month = dt.year, dt.month
+    if month == 1:
+        year -= 1
+        month = 12
+    else:
+        month -= 1
+    return f"{year}-{month:02d}-01"
+
+
+def _extract_industry_and_platform(
+    data: Dict[str, Any],
+    data_date: str,
+    ai_count: int,
+    female_count: int,
+    male_count: int,
+    ranking_total: int,
+    source_note_prefix: str = "",
+) -> tuple[IndustryData, PlatformData]:
+    """将 Kimi 返回的原始数据解析为 IndustryData + PlatformData"""
+    source_title = str(data.get("source_title", "") or "Kimi 搜索行业报告").strip()
+    source_note = f"{source_note_prefix}{source_title}".strip("；")
+
+    ai_ratio = _safe_ratio(data.get("ai_ratio"), 0)
+    female_ratio = _safe_ratio(data.get("female_ratio"), 0)
+    male_ratio = _safe_ratio(data.get("male_ratio"), 0)
+
+    # 如果搜索未返回性别比例，可用榜单统计作为参考，但标注来源
+    if ("female_ratio" not in data or data.get("female_ratio") in (None, "")) and ranking_total > 0:
+        female_ratio = int(female_count / ranking_total * 100)
+        male_ratio = int(male_count / ranking_total * 100)
+        source_note = f"{source_note}；性别比例来自当日榜单统计"
+
+    industry = IndustryData(
+        user_scale=_safe_text(_first_present(data, ("user_scale", "userScale")), ""),
+        market_size=_safe_text(_first_present(data, ("market_size", "marketSize")), ""),
+        drama_count=_safe_text(_first_present(data, ("drama_count", "total_dramas", "drama_total")), ""),
+        billion_dramas=_safe_int(_first_present(data, ("billion_dramas", "billionDramaCount")), 0),
+        ai_ratio=ai_ratio,
+        female_ratio=female_ratio,
+        male_ratio=male_ratio,
+        app_mau=_safe_text(_first_present(data, ("app_mau", "appMau")), ""),
+        app_mau_yoy=_safe_text(_first_present(data, ("app_mau_yoy", "appMauYoy")), ""),
+        data_source=source_note,
+        update_frequency="monthly",
+    )
+
+    apps = _parse_platform_apps(data)
+    mini_programs = data.get("mini_programs", [])
+    if not isinstance(mini_programs, list):
+        mini_programs = []
+
+    platform = PlatformData(
+        apps=apps,
+        mini_programs=mini_programs,
+        data_source=source_note,
+        update_frequency="monthly",
+    )
+
+    return industry, platform
+
+
+def _build_fallback_industry(
+    ai_count: int,
+    female_count: int,
+    male_count: int,
+    ranking_total: int,
+) -> IndustryData:
+    """使用榜单统计构建兜底行业数据"""
+    fallback_female_ratio = int(female_count / ranking_total * 100) if ranking_total > 0 else 0
+    fallback_male_ratio = int(male_count / ranking_total * 100) if ranking_total > 0 else 0
+    fallback_ai_ratio = int(ai_count / ranking_total * 100) if ranking_total > 0 else 0
+    return IndustryData(
+        user_scale="",
+        market_size="",
+        drama_count="暂无公开月报数据",
+        billion_dramas=0,
+        ai_ratio=fallback_ai_ratio,
+        female_ratio=fallback_female_ratio,
+        male_ratio=fallback_male_ratio,
+        app_mau="暂无公开月报数据",
+        app_mau_yoy="",
+        data_source="连续两月未获取到公开行业月报；性别/AI占比来自当日榜单统计",
+        update_frequency="monthly",
+    )
+
+
+def _has_valid_search_data(data: Dict[str, Any]) -> bool:
+    """判断搜索返回的数据是否包含关键字段"""
+    return (
+        _is_meaningful_text(data.get("app_mau"))
+        and _is_meaningful_text(data.get("drama_count"))
+    )
+
+
 def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> IndustryNodeOutput:
     """
     title: 行业数据获取
-    desc: 使用 Kimi 联网搜索获取最新的行业宏观数据；以月为粒度缓存，缺失时留空
-    integrations: Moonshot API（每月最多 1-2 次）
+    desc: 使用 Kimi 联网搜索获取最新的行业宏观数据；当月数据缺失时回退到上月；仍缺失时用榜单统计兜底
+    integrations: Moonshot API（每月最多 2-3 次）
     """
     try:
         data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
 
-        # 1. 尝试读取月度缓存
+        # 1. 尝试读取当月月度缓存
         cache = load_cache(today=data_date)
         if cache:
             industry_dict = cache.get("industry", {}) or {}
@@ -322,56 +422,103 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
         male_count = sum(1 for r in state.enriched_rankings if r.category == "male")
         ranking_total = len(state.enriched_rankings)
 
-        # 3. 读取配置并搜索
+        # 3. 读取配置
         cfg = _load_llm_cfg(config)
         client = MoonshotClient()
 
+        # 4. 先搜索当月数据
         try:
             data = _search_industry_data(client, data_date, cfg)
         except Exception as e:
             if is_api_budget_error(e):
                 raise
-            logger.error("industry_node: 行业数据搜索失败: %s", e)
-            return IndustryNodeOutput(
-                industry=_build_empty_industry(),
-                platform=_build_empty_platform(),
-                success=True,
-                error_message=f"industry_node: 行业数据搜索失败: {e}\n",
-            )
+            logger.error("industry_node: 当月行业数据搜索失败: %s", e)
+            data = {}
 
-        # 4. 解析行业数据
-        # 方向 A：如果搜索返回的数据缺少关键字段（app_mau / drama_count），
-        # 使用榜单统计兜底并标注来源，避免月初/月报未发布时 quality_gate 失败无法发布。
-        has_valid_key_data = (
-            _is_meaningful_text(data.get("app_mau"))
-            and _is_meaningful_text(data.get("drama_count"))
-        )
-        if not has_valid_key_data:
-            logger.warning(
-                "industry_node: Kimi 搜索未返回有效行业数据，使用榜单统计兜底"
+        # 5. 当月数据有效：直接解析使用
+        if _has_valid_search_data(data):
+            industry, platform = _extract_industry_and_platform(
+                data, data_date, ai_count, female_count, male_count, ranking_total
             )
-            fallback_female_ratio = int(female_count / ranking_total * 100) if ranking_total > 0 else 0
-            fallback_male_ratio = int(male_count / ranking_total * 100) if ranking_total > 0 else 0
-            fallback_ai_ratio = int(ai_count / ranking_total * 100) if ranking_total > 0 else 0
-            industry = IndustryData(
-                user_scale="",
-                market_size="",
-                drama_count="暂无公开月报数据",
-                billion_dramas=0,
-                ai_ratio=fallback_ai_ratio,
-                female_ratio=fallback_female_ratio,
-                male_ratio=fallback_male_ratio,
-                app_mau="暂无公开月报数据",
-                app_mau_yoy="",
-                data_source="当月公开行业月报未发布；性别/AI占比来自当日榜单统计",
-                update_frequency="monthly",
+            save_cache(
+                industry=industry.model_dump(),
+                platform=platform.model_dump(),
+                today=data_date,
             )
             return IndustryNodeOutput(
                 industry=industry,
-                platform=_build_empty_platform(),
+                platform=platform,
                 success=True,
-                error_message="industry_node: Kimi 搜索未返回有效行业数据，已使用榜单统计兜底\n",
+                error_message="",
             )
+
+        # 6. 当月数据无效：尝试回退到上个月
+        logger.warning("industry_node: 当月行业数据关键字段缺失，尝试回退到上月")
+        last_month_date = _get_previous_month_date(data_date)
+
+        last_month_cache = load_cache(today=last_month_date)
+        if last_month_cache:
+            industry_dict = last_month_cache.get("industry", {}) or {}
+            platform_dict = last_month_cache.get("platform", {}) or {}
+            industry_dict.setdefault("update_frequency", "monthly")
+            platform_dict.setdefault("update_frequency", "monthly")
+            industry = IndustryData(**industry_dict)
+            platform = PlatformData(**platform_dict)
+            if _has_valid_industry_data(industry):
+                logger.info("industry_node: 使用上月缓存行业数据")
+                # 保存到当月缓存，避免后续每日重复搜索
+                save_cache(
+                    industry=industry.model_dump(),
+                    platform=platform.model_dump(),
+                    today=data_date,
+                )
+                return IndustryNodeOutput(
+                    industry=industry,
+                    platform=platform,
+                    success=True,
+                    error_message="",
+                )
+
+        try:
+            last_month_data = _search_industry_data(client, last_month_date, cfg)
+        except Exception as e:
+            if is_api_budget_error(e):
+                raise
+            logger.error("industry_node: 上月行业数据搜索失败: %s", e)
+            last_month_data = {}
+
+        if _has_valid_search_data(last_month_data):
+            logger.info("industry_node: 使用上月搜索结果作为当月数据")
+            industry, platform = _extract_industry_and_platform(
+                last_month_data,
+                data_date,
+                ai_count,
+                female_count,
+                male_count,
+                ranking_total,
+                source_note_prefix="当月月报尚未发布，使用上月月报；",
+            )
+            save_cache(
+                industry=industry.model_dump(),
+                platform=platform.model_dump(),
+                today=data_date,
+            )
+            return IndustryNodeOutput(
+                industry=industry,
+                platform=platform,
+                success=True,
+                error_message="",
+            )
+
+        # 7. 当月和上月都无效：使用榜单统计兜底
+        logger.warning("industry_node: 连续两月行业数据均缺失，使用榜单统计兜底")
+        industry = _build_fallback_industry(ai_count, female_count, male_count, ranking_total)
+        return IndustryNodeOutput(
+            industry=industry,
+            platform=_build_empty_platform(),
+            success=True,
+            error_message="industry_node: 当月和上月行业数据均缺失，已使用榜单统计兜底\n",
+        )
 
         source_title = str(data.get("source_title", "") or "Kimi 搜索行业报告").strip()
         # data_source 是“来源说明”，不应把完整 URL 拼进来（尤其企查查等搜索 URL 非常长，
