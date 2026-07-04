@@ -49,6 +49,21 @@ def load_cache(today: Optional[str] = None) -> Optional[Dict[str, Any]]:
         )
         return None
 
+    # 如果缓存的核心字段全部为空，视为无效缓存，触发重新搜索
+    rankings = dashboard.get("rankings") or {}
+    has_kpis = bool(dashboard.get("kpis"))
+    has_rankings = bool(
+        (rankings.get("ai_drama") or []) or (rankings.get("ai_comic") or [])
+    )
+    has_trends = bool(dashboard.get("trends"))
+    has_news = bool(dashboard.get("news"))
+    if not any([has_kpis, has_rankings, has_trends, has_news]):
+        logger.warning(
+            "ai_drama_cache: 命中本月缓存 %s，但核心字段均为空，将重新搜索",
+            data_month,
+        )
+        return None
+
     logger.info(
         "ai_drama_cache: 命中本月缓存 %s，来源: %s",
         data_month,

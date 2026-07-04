@@ -92,6 +92,16 @@ _PLACEHOLDER_VALUES = {
 }
 
 
+def _is_meaningful_text(value: Any) -> bool:
+    """判断文本字段是否为有效值（非空且非占位符）"""
+    if value is None:
+        return False
+    if not isinstance(value, str):
+        value = str(value)
+    stripped = value.strip()
+    return bool(stripped) and stripped not in _PLACEHOLDER_VALUES
+
+
 def _safe_text(value: Any, default: str) -> str:
     if value is None:
         return default

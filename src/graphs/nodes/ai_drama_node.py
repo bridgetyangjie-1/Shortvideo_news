@@ -179,16 +179,45 @@ def _normalize_news(raw_news: Any) -> List[Dict[str, Any]]:
     return news
 
 
+def _is_dashboard_empty(dashboard: AIDramaDashboard) -> bool:
+    """判断看板是否所有核心字段均为空"""
+    if not dashboard:
+        return True
+    rankings = dashboard.rankings or {}
+    has_kpis = bool(dashboard.kpis)
+    has_rankings = bool(
+        (rankings.get("ai_drama") or []) or (rankings.get("ai_comic") or [])
+    )
+    has_trends = bool(dashboard.trends)
+    has_news = bool(dashboard.news)
+    return not any([has_kpis, has_rankings, has_trends, has_news])
+
+
 def _build_dashboard(raw: Dict[str, Any], report_month: str) -> AIDramaDashboard:
     """将原始搜索结果转换为规范模型"""
     dashboard_data = raw.get("dashboard", raw)
     if not isinstance(dashboard_data, dict):
         dashboard_data = raw
 
+    logger.info(
+        "ai_drama_node: 原始数据顶层 keys=%s, dashboard keys=%s",
+        list(raw.keys()),
+        list(dashboard_data.keys()) if isinstance(dashboard_data, dict) else [],
+    )
+
     kpis = _normalize_kpis(dashboard_data.get("kpis", dashboard_data.get("KPI", [])))
     rankings = _normalize_rankings(dashboard_data.get("rankings", dashboard_data.get("榜单", {})))
     trends = _normalize_trends(dashboard_data.get("trends", dashboard_data.get("趋势", [])))
     news = _normalize_news(dashboard_data.get("news", dashboard_data.get("快讯", [])))
+
+    logger.info(
+        "ai_drama_node: 规范化后 kpis=%d, ai_drama=%d, ai_comic=%d, trends=%d, news=%d",
+        len(kpis),
+        len(rankings.get("ai_drama", [])),
+        len(rankings.get("ai_comic", [])),
+        len(trends),
+        len(news),
+    )
 
     # 回退：如果 rankings 未分层但有 items 数组，按 category 自动分流
     if not rankings["ai_drama"] and not rankings["ai_comic"]:
@@ -319,6 +348,20 @@ def ai_drama_node(state: AIDramaNodeInput, config: RunnableConfig, runtime: Runt
 
         # 4. 规范化并保存缓存
         dashboard = _build_dashboard(raw_data, report_month)
+
+        if _is_dashboard_empty(dashboard):
+            logger.warning(
+                "ai_drama_node: Kimi 返回的数据解析后核心字段均为空，不写入月度缓存，避免锁死为空"
+            )
+            return AIDramaNodeOutput(
+                ai_drama_dashboard=AIDramaDashboard(
+                    report_month=report_month,
+                    data_source="DataEye 月报 + Kimi 搜索（解析结果为空）",
+                    update_frequency="monthly",
+                ),
+                error_message="ai_drama_node: Kimi 返回的数据解析后核心字段均为空",
+            )
+
         try:
             save_cache(dashboard.model_dump(), today=data_date)
         except Exception as e:

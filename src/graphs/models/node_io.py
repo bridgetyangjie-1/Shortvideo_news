@@ -185,6 +185,7 @@ class QualityGateInput(BaseModel):
         description="核心情绪与动机拆解",
     )
     play_trend: PlayTrend = Field(default_factory=PlayTrend, description="播放量趋势")
+    ai_drama_dashboard: AIDramaDashboard = Field(default_factory=AIDramaDashboard, description="AI 短剧/漫剧看板")
     quality_score: float = Field(default=0.0, description="当前数据质量分数")
     error_message: str = Field(default="", description="上游错误信息")
 

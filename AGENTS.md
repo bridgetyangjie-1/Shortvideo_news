@@ -168,23 +168,23 @@ search_node
               ↓
             insights_node
               ↓
-        history_data_node
-              ↓
-        quality_gate_node
-              ↓
-      should_push_data
-        /          \
- alert_node        END
-      ↓
-   push_node
-      ↓
-     END
+        history_data_node ──┐
+                            ├→ quality_gate_node
+        ai_drama_node ──────┘
+                            ↓
+                      should_push_data
+                        /          \
+                 alert_node        END
+                      ↓
+                   push_node
+                      ↓
+                     END
 ```
 
-- `news_node` 与 `process_node` 在 `search_node` 后并行；`ai_drama_node` 与两者并行，独立汇入 `push_node`。
+- `news_node` 与 `process_node` 在 `search_node` 后并行；`ai_drama_node` 与两者并行，但**不再直接汇入 `push_node`**，而是与 `history_data_node` 一起汇入 `quality_gate_node`，避免 `push_node` 在主流程完成前被提前触发。
 - `industry_node` 与 `audience_profile_node` 在 `actor_ranking_node` 后并行。
 - `emotion_analysis_node` 与 `insights_node` 在 `genre_distribution_node` 后并行。
-- `push_node` 前新增 `quality_gate_node`：校验榜单数量、字段完整性、演员榜、快讯来源、行业数据、API 错误，失败或质量分低于 60 分时直接结束工作流，不覆盖 `latest.json`。
+- `push_node` 前为 `quality_gate_node`：校验榜单数量、字段完整性、演员榜、快讯来源、行业数据、API 错误，失败或质量分低于 60 分时直接结束工作流，不覆盖 `latest.json`。
 
 ## 6. 代码组织
 

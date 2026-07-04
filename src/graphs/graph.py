@@ -191,8 +191,10 @@ def create_graph():
     # 汇聚：历史数据
     builder.add_edge(["emotion_analysis_node", "insights_node"], "history_data_node")
     
-    # 质量门禁
-    builder.add_edge("history_data_node", "quality_gate_node")
+    # 质量门禁：历史数据与 AI 看板汇聚后统一校验
+    # 注意：ai_drama_node 不能直接连 push_node，否则 push_node 会在主流程完成前被触发，
+    # 导致保存空数据。必须等主流程和 AI 看板都完成后统一由 quality_gate_node 决定推送。
+    builder.add_edge(["history_data_node", "ai_drama_node"], "quality_gate_node")
     
     # 根据质量门禁结果决定是否推送
     builder.add_conditional_edges(
@@ -206,9 +208,6 @@ def create_graph():
     
     # 异常监测后推送
     builder.add_edge("alert_node", "push_node")
-
-    # AI 看板独立分支汇入 push_node，不阻塞主流程
-    builder.add_edge("ai_drama_node", "push_node")
     
     # 结束
     builder.add_edge("push_node", END)
