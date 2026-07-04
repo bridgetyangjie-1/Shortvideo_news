@@ -340,13 +340,13 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
             )
 
         # 4. 解析行业数据
-        # 方向 A：如果搜索返回空数据，使用榜单统计兜底并标注来源，
-        # 避免月初/月报未发布时因行业数据为空导致 quality_gate 失败无法发布。
-        has_any_data = any(
-            data.get(k) not in (None, "")
-            for k in ("user_scale", "market_size", "drama_count", "app_mau", "ai_ratio")
+        # 方向 A：如果搜索返回的数据缺少关键字段（app_mau / drama_count），
+        # 使用榜单统计兜底并标注来源，避免月初/月报未发布时 quality_gate 失败无法发布。
+        has_valid_key_data = (
+            _is_meaningful_text(data.get("app_mau"))
+            and _is_meaningful_text(data.get("drama_count"))
         )
-        if not has_any_data:
+        if not has_valid_key_data:
             logger.warning(
                 "industry_node: Kimi 搜索未返回有效行业数据，使用榜单统计兜底"
             )

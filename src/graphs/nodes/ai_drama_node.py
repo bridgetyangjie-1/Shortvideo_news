@@ -331,7 +331,9 @@ def ai_drama_node(state: AIDramaNodeInput, config: RunnableConfig, runtime: Runt
                 )
 
         # 2. 读取配置
+        logger.info("ai_drama_node: 开始读取 LLM 配置")
         cfg = _load_llm_cfg(config)
+        logger.info("ai_drama_node: LLM 配置读取完成, model=%s", cfg.get("config", {}).get("model", "默认"))
         try:
             dt = datetime.strptime(report_month, "%Y-%m")
             year, month = dt.year, dt.month
@@ -340,8 +342,11 @@ def ai_drama_node(state: AIDramaNodeInput, config: RunnableConfig, runtime: Runt
             year, month = now.year, now.month
 
         # 3. 调用 Kimi 搜索
+        logger.info("ai_drama_node: 开始初始化 MoonshotClient")
         client = MoonshotClient()
+        logger.info("ai_drama_node: 开始调用 _search_ai_drama_data, year=%s, month=%s", year, month)
         raw_data = _search_ai_drama_data(client, year, month, cfg)
+        logger.info("ai_drama_node: _search_ai_drama_data 返回, raw_data 为空=%s", not raw_data)
 
         if not raw_data:
             logger.warning("ai_drama_node: 未获取到 AI 短剧/漫剧数据，返回空看板")
