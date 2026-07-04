@@ -294,7 +294,13 @@ def _search_ai_drama_data(client: MoonshotClient, year: int, month: int, cfg: Di
             expected_type=dict,
         )
         if not isinstance(data, dict):
+            logger.warning("ai_drama_node: Kimi 返回非 dict 数据: %s", type(data))
             return {}
+        logger.info(
+            "ai_drama_node: Kimi 搜索返回原始数据 keys=%s, 长度=%d",
+            list(data.keys()),
+            len(json.dumps(data, ensure_ascii=True)),
+        )
         return data
     except Exception as e:
         logger.warning("ai_drama_node: Kimi 搜索失败: %s", e)
@@ -309,10 +315,12 @@ def ai_drama_node(state: AIDramaNodeInput, config: RunnableConfig, runtime: Runt
     """
     data_date = state.data_date or datetime.now().strftime("%Y-%m-%d")
     report_month = _resolve_report_month(data_date)
+    logger.info("ai_drama_node: 开始执行, data_date=%s, report_month=%s", data_date, report_month)
 
     try:
         # 1. 尝试读取月度缓存
         cache = load_cache(today=data_date)
+        logger.info("ai_drama_node: 缓存加载结果=%s", "命中" if cache else "未命中/无效")
         if cache:
             dashboard = cache.get("dashboard", {})
             # 缓存的 report_month 与目标月份不一致时重新搜索

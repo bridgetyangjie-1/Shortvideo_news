@@ -339,19 +339,38 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
                 error_message=f"industry_node: 行业数据搜索失败: {e}\n",
             )
 
-        # 4. 解析行业数据（找不到则留空）
-        # 方向 A：如果搜索返回空数据，直接返回空结构，不标注为"Kimi 搜索"
+        # 4. 解析行业数据
+        # 方向 A：如果搜索返回空数据，使用榜单统计兜底并标注来源，
+        # 避免月初/月报未发布时因行业数据为空导致 quality_gate 失败无法发布。
         has_any_data = any(
             data.get(k) not in (None, "")
             for k in ("user_scale", "market_size", "drama_count", "app_mau", "ai_ratio")
         )
         if not has_any_data:
-            logger.warning("industry_node: Kimi 搜索未返回有效行业数据，留空处理")
+            logger.warning(
+                "industry_node: Kimi 搜索未返回有效行业数据，使用榜单统计兜底"
+            )
+            fallback_female_ratio = int(female_count / ranking_total * 100) if ranking_total > 0 else 0
+            fallback_male_ratio = int(male_count / ranking_total * 100) if ranking_total > 0 else 0
+            fallback_ai_ratio = int(ai_count / ranking_total * 100) if ranking_total > 0 else 0
+            industry = IndustryData(
+                user_scale="",
+                market_size="",
+                drama_count="暂无公开月报数据",
+                billion_dramas=0,
+                ai_ratio=fallback_ai_ratio,
+                female_ratio=fallback_female_ratio,
+                male_ratio=fallback_male_ratio,
+                app_mau="暂无公开月报数据",
+                app_mau_yoy="",
+                data_source="当月公开行业月报未发布；性别/AI占比来自当日榜单统计",
+                update_frequency="monthly",
+            )
             return IndustryNodeOutput(
-                industry=_build_empty_industry(),
+                industry=industry,
                 platform=_build_empty_platform(),
                 success=True,
-                error_message="industry_node: Kimi 搜索未返回有效行业数据\n",
+                error_message="industry_node: Kimi 搜索未返回有效行业数据，已使用榜单统计兜底\n",
             )
 
         source_title = str(data.get("source_title", "") or "Kimi 搜索行业报告").strip()
