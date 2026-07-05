@@ -11,12 +11,24 @@ import time
 from typing import Any, Dict, List, Optional, Type
 
 from openai import OpenAI
+from functools import lru_cache
 
 logger = logging.getLogger(__name__)
 
 API_BUDGET_EXCEEDED_MESSAGE = "API 调用次数过多，已熔断"
 MAX_API_CALLS_PER_CLIENT = 30
 MAX_WEB_SEARCH_ROUNDS = 3
+
+
+@lru_cache(maxsize=8)
+def _get_openai_client(api_key: str, base_url: str) -> OpenAI:
+    """缓存 OpenAI 客户端实例，避免并发/重复初始化导致阻塞。"""
+    logger.info("moonshot_api: 创建 OpenAI 客户端, base_url=%s", base_url)
+    return OpenAI(
+        api_key=api_key or "missing-moonshot-api-key",
+        base_url=base_url,
+        max_retries=0,
+    )
 
 
 def is_api_budget_error(exc: Exception) -> bool:
@@ -37,13 +49,9 @@ class MoonshotClient:
         if not self.api_key:
             logger.warning("MOONSHOT_API_KEY 未设置，请检查环境变量")
         
-        self.client = OpenAI(
-            api_key=self.api_key or "missing-moonshot-api-key",
-            # 国内 Moonshot/Kimi 控制台常用 .cn 域名；可用 MOONSHOT_BASE_URL 覆盖到 .ai 或私有网关。
-            base_url=os.getenv("MOONSHOT_BASE_URL") or "https://api.moonshot.cn/v1",
-            # 禁用 SDK 隐式重试，所有调用预算由本类的显式熔断器控制。
-            max_retries=0,
-        )
+        base_url = os.getenv("MOONSHOT_BASE_URL") or "https://api.moonshot.cn/v1"
+        # 使用缓存的 OpenAI 客户端，避免多个节点并发初始化时阻塞。
+        self.client = _get_openai_client(self.api_key, base_url)
         self.model = os.getenv("MOONSHOT_MODEL", "moonshot-v1-32k")
         self.search_model = os.getenv("MOONSHOT_SEARCH_MODEL", self.model)
         self.api_call_count = 0

@@ -137,8 +137,12 @@ def _load_llm_cfg(config: RunnableConfig) -> Dict[str, Any]:
     return {}
 
 
-def _build_search_prompts(date_str: str, cfg: Dict[str, Any]) -> tuple[str, str]:
-    """构建 AI 渗透率和行业宏观数据搜索 prompt"""
+def _build_search_prompts(date_str: str, cfg: Dict[str, Any], generic: bool = False) -> tuple[str, str]:
+    """构建 AI 渗透率和行业宏观数据搜索 prompt
+
+    Args:
+        generic: 为 True 时不限定具体年月，搜索最新/最近公布的行业数据。
+    """
     try:
         dt = datetime.strptime(date_str, "%Y-%m-%d")
         year, month = dt.year, dt.month
@@ -152,7 +156,8 @@ def _build_search_prompts(date_str: str, cfg: Dict[str, Any]) -> tuple[str, str]
     )
     up_template = cfg.get("up", "")
 
-    ai_query = f"""请联网搜索 {year}年{month}月 短剧行业AI短剧占比最新数据。
+    if generic:
+        ai_query = """请联网搜索 国内短剧行业AI短剧占比 最新公开数据。
 请返回JSON格式，包含以下字段：
 - ai_ratio: AI短剧占比百分比，如25
 - ai_drama_count: AI短剧数量（可选）
@@ -160,7 +165,24 @@ def _build_search_prompts(date_str: str, cfg: Dict[str, Any]) -> tuple[str, str]
 
 如果找不到确切数据，请返回空字符串或省略字段，不要编造具体数字。"""
 
-    macro_query = f"""请联网搜索 {year}年{month}月 国内短剧行业宏观数据，包括：
+        macro_query = """请联网搜索 国内短剧行业 最新宏观数据，包括：
+1. APP月活用户数（红果、抖音等）
+2. 短剧数量（总剧目数）
+3. 亿元播放量短剧数量
+4. 主要平台的月活用户数和同比增长
+5. 用户规模、市场规模
+
+请返回JSON格式。如果某字段找不到，请使用空字符串或省略字段，不要编造具体数字。"""
+    else:
+        ai_query = f"""请联网搜索 {year}年{month}月 短剧行业AI短剧占比最新数据。
+请返回JSON格式，包含以下字段：
+- ai_ratio: AI短剧占比百分比，如25
+- ai_drama_count: AI短剧数量（可选）
+- ai_trend: 趋势，值为"上升"、"持平"或"下降"（可选）
+
+如果找不到确切数据，请返回空字符串或省略字段，不要编造具体数字。"""
+
+        macro_query = f"""请联网搜索 {year}年{month}月 国内短剧行业宏观数据，包括：
 1. APP月活用户数（红果、抖音等）
 2. 短剧数量（总剧目数）
 3. 亿元播放量短剧数量
@@ -169,7 +191,7 @@ def _build_search_prompts(date_str: str, cfg: Dict[str, Any]) -> tuple[str, str]
 
 请返回JSON格式。如果某字段找不到，请使用空字符串或省略字段，不要编造具体数字。"""
 
-    if up_template:
+    if up_template and not generic:
         try:
             macro_query = Template(up_template).render(year=year, month=month, date=date_str)
         except Exception as e:
@@ -178,9 +200,11 @@ def _build_search_prompts(date_str: str, cfg: Dict[str, Any]) -> tuple[str, str]
     return sp, ai_query, macro_query
 
 
-def _search_industry_data(client: MoonshotClient, date_str: str, cfg: Dict[str, Any]) -> Dict[str, Any]:
+def _search_industry_data(
+    client: MoonshotClient, date_str: str, cfg: Dict[str, Any], generic: bool = False
+) -> Dict[str, Any]:
     """使用 Kimi 搜索行业宏观数据"""
-    sp, ai_query, macro_query = _build_search_prompts(date_str, cfg)
+    sp, ai_query, macro_query = _build_search_prompts(date_str, cfg, generic=generic)
     config_model = cfg.get("config", {})
     temperature = float(config_model.get("temperature", 0.2))
     max_tokens = int(config_model.get("max_completion_tokens", 3000) or 3000)
@@ -510,14 +534,47 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
                 error_message="",
             )
 
-        # 7. 当月和上月都无效：使用榜单统计兜底
-        logger.warning("industry_node: 连续两月行业数据均缺失，使用榜单统计兜底")
+        # 7. 当月和上月都无效：尝试不限定年月的通用搜索
+        logger.warning("industry_node: 连续两月行业数据均缺失，尝试不限定年月的通用搜索")
+        try:
+            generic_data = _search_industry_data(client, data_date, cfg, generic=True)
+        except Exception as e:
+            if is_api_budget_error(e):
+                raise
+            logger.error("industry_node: 通用行业数据搜索失败: %s", e)
+            generic_data = {}
+
+        if _has_valid_search_data(generic_data):
+            logger.info("industry_node: 使用通用搜索结果作为当月数据")
+            industry, platform = _extract_industry_and_platform(
+                generic_data,
+                data_date,
+                ai_count,
+                female_count,
+                male_count,
+                ranking_total,
+                source_note_prefix="当月/上月月报未发布，使用最新公开行业数据；",
+            )
+            save_cache(
+                industry=industry.model_dump(),
+                platform=platform.model_dump(),
+                today=data_date,
+            )
+            return IndustryNodeOutput(
+                industry=industry,
+                platform=platform,
+                success=True,
+                error_message="",
+            )
+
+        # 8. 所有搜索均无效：使用榜单统计兜底
+        logger.warning("industry_node: 所有搜索均未获取到有效行业数据，使用榜单统计兜底")
         industry = _build_fallback_industry(ai_count, female_count, male_count, ranking_total)
         return IndustryNodeOutput(
             industry=industry,
             platform=_build_empty_platform(),
             success=True,
-            error_message="industry_node: 当月和上月行业数据均缺失，已使用榜单统计兜底\n",
+            error_message="industry_node: 当月、上月及通用搜索均未获取到有效行业数据，已使用榜单统计兜底\n",
         )
 
         source_title = str(data.get("source_title", "") or "Kimi 搜索行业报告").strip()
