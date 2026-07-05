@@ -104,7 +104,8 @@
     "2026-07-01",
     "2026-07-02",
     "2026-07-03",
-    "2026-07-04"
+    "2026-07-04",
+    "2026-07-05"
   ],
   "last_updated": "2026-06-09 11:40:31",
   "data": {
@@ -31124,6 +31125,2141 @@
         "update_frequency": "monthly"
       },
       "error_message": ""
+    },
+    "2026-07-05": {
+      "success": true,
+      "generated_at": "2026-07-05T05:05:32+08:00",
+      "data_date": "2026-07-05",
+      "genre_distribution": {
+        "hot_tags": [
+          {
+            "name": "都市爱情",
+            "value": 225
+          },
+          {
+            "name": "逆袭",
+            "value": 196
+          },
+          {
+            "name": "甜宠",
+            "value": 125
+          },
+          {
+            "name": "爱情",
+            "value": 118
+          },
+          {
+            "name": "先婚后爱",
+            "value": 104
+          },
+          {
+            "name": "打脸",
+            "value": 103
+          },
+          {
+            "name": "怀旧",
+            "value": 100
+          },
+          {
+            "name": "治愈",
+            "value": 75
+          },
+          {
+            "name": "都市",
+            "value": 75
+          },
+          {
+            "name": "热血",
+            "value": 72
+          },
+          {
+            "name": "虐恋",
+            "value": 67
+          },
+          {
+            "name": "逆袭打脸",
+            "value": 61
+          },
+          {
+            "name": "女性独立",
+            "value": 54
+          },
+          {
+            "name": "家庭",
+            "value": 50
+          },
+          {
+            "name": "家庭伦理",
+            "value": 50
+          },
+          {
+            "name": "战神归来",
+            "value": 50
+          },
+          {
+            "name": "权谋",
+            "value": 50
+          },
+          {
+            "name": "玄幻",
+            "value": 50
+          },
+          {
+            "name": "玄幻仙侠",
+            "value": 50
+          },
+          {
+            "name": "逃离",
+            "value": 50
+          }
+        ],
+        "categories": [
+          {
+            "category": "题材",
+            "tags": [
+              {
+                "name": "都市爱情",
+                "value": 225
+              },
+              {
+                "name": "逆袭",
+                "value": 196
+              },
+              {
+                "name": "甜宠",
+                "value": 125
+              },
+              {
+                "name": "都市",
+                "value": 75
+              },
+              {
+                "name": "虐恋",
+                "value": 67
+              },
+              {
+                "name": "逆袭打脸",
+                "value": 61
+              },
+              {
+                "name": "家庭",
+                "value": 50
+              },
+              {
+                "name": "家庭伦理",
+                "value": 50
+              }
+            ]
+          },
+          {
+            "category": "爽点",
+            "tags": [
+              {
+                "name": "打脸",
+                "value": 103
+              },
+              {
+                "name": "扮猪吃虎",
+                "value": 14
+              },
+              {
+                "name": "追妻火葬场",
+                "value": 14
+              },
+              {
+                "name": "打脸前夫",
+                "value": 7
+              }
+            ]
+          },
+          {
+            "category": "人设",
+            "tags": [
+              {
+                "name": "战神归来",
+                "value": 50
+              },
+              {
+                "name": "战神",
+                "value": 25
+              }
+            ]
+          },
+          {
+            "category": "情感关系",
+            "tags": [
+              {
+                "name": "先婚后爱",
+                "value": 104
+              },
+              {
+                "name": "双向奔赴",
+                "value": 32
+              },
+              {
+                "name": "契约婚姻",
+                "value": 32
+              },
+              {
+                "name": "暗恋",
+                "value": 25
+              },
+              {
+                "name": "暗恋成真",
+                "value": 25
+              }
+            ]
+          },
+          {
+            "category": "时代背景",
+            "tags": [
+              {
+                "name": "古代",
+                "value": 43
+              }
+            ]
+          },
+          {
+            "category": "其他",
+            "tags": [
+              {
+                "name": "爱情",
+                "value": 118
+              },
+              {
+                "name": "怀旧",
+                "value": 100
+              },
+              {
+                "name": "治愈",
+                "value": 75
+              },
+              {
+                "name": "热血",
+                "value": 72
+              }
+            ]
+          }
+        ],
+        "trending": [
+          {
+            "name": "虐恋",
+            "value": 7,
+            "change": 6,
+            "trend": "up"
+          },
+          {
+            "name": "打脸",
+            "value": 7,
+            "change": 4,
+            "trend": "up"
+          },
+          {
+            "name": "逆袭",
+            "value": 10,
+            "change": 3,
+            "trend": "up"
+          },
+          {
+            "name": "独立女性",
+            "value": 3,
+            "change": 3,
+            "trend": "new"
+          },
+          {
+            "name": "青春",
+            "value": 2,
+            "change": 2,
+            "trend": "new"
+          },
+          {
+            "name": "追妻火葬场",
+            "value": 2,
+            "change": 2,
+            "trend": "new"
+          }
+        ],
+        "data_source": "近7天榜单统计",
+        "update_frequency": "weekly"
+      },
+      "emotional_analysis": {
+        "summary": "今日榜单以复仇打脸与身份逆袭为主导情绪，结合容貌年龄焦虑，凸显用户对快速逆袭与解压放空的强烈需求。",
+        "dominant_emotion": "身份逆袭",
+        "dominant_anxiety": "容貌年龄焦虑",
+        "top_trigger": "复仇打脸",
+        "wordcloud": [
+          {
+            "name": "复仇打脸",
+            "value": 100,
+            "category": "trigger"
+          },
+          {
+            "name": "身份逆袭",
+            "value": 99,
+            "category": "emotion"
+          },
+          {
+            "name": "解压放空",
+            "value": 97,
+            "category": "motivation"
+          },
+          {
+            "name": "快节奏",
+            "value": 93,
+            "category": "expectation"
+          },
+          {
+            "name": "容貌年龄焦虑",
+            "value": 92,
+            "category": "anxiety"
+          },
+          {
+            "name": "亲密关系失衡",
+            "value": 87,
+            "category": "anxiety"
+          },
+          {
+            "name": "虐心反转",
+            "value": 81,
+            "category": "trigger"
+          },
+          {
+            "name": "浪漫幻想",
+            "value": 80,
+            "category": "emotion"
+          },
+          {
+            "name": "甜宠撒糖",
+            "value": 80,
+            "category": "trigger"
+          },
+          {
+            "name": "情感代偿",
+            "value": 80,
+            "category": "motivation"
+          },
+          {
+            "name": "社会认同缺失",
+            "value": 72,
+            "category": "anxiety"
+          },
+          {
+            "name": "心理补偿",
+            "value": 70,
+            "category": "emotion"
+          },
+          {
+            "name": "萌宝助攻",
+            "value": 68,
+            "category": "trigger"
+          },
+          {
+            "name": "亲密关系",
+            "value": 67,
+            "category": "payoff"
+          },
+          {
+            "name": "猎奇刺激",
+            "value": 50,
+            "category": "emotion"
+          }
+        ],
+        "emotion_rankings": [
+          {
+            "rank": 1,
+            "title": "盛夏来信",
+            "primary_emotion": "身份逆袭",
+            "anxiety": "社会认同缺失",
+            "trigger": "复仇打脸",
+            "one_line": "《盛夏来信》利用青春回忆与复仇打脸，满足用户对过去遗憾的幻想式补偿。"
+          },
+          {
+            "rank": 2,
+            "title": "以爱为家第二季",
+            "primary_emotion": "身份逆袭",
+            "anxiety": "复仇打脸",
+            "trigger": "复仇打脸",
+            "one_line": "《以爱为家第二季》通过身份逆袭与亲密关系失衡，触发用户对家庭地位提升的渴望。"
+          },
+          {
+            "rank": 3,
+            "title": "龙头：黑狱屠枭",
+            "primary_emotion": "身份逆袭",
+            "anxiety": "复仇打脸",
+            "trigger": "复仇打脸",
+            "one_line": "《龙头：黑狱屠枭》以快节奏虐心反转，释放用户对现实压力的解压放空需求。"
+          }
+        ],
+        "trends": [
+          {
+            "name": "复仇打脸",
+            "change": 485,
+            "trend": "new"
+          },
+          {
+            "name": "身份逆袭",
+            "change": 468,
+            "trend": "new"
+          },
+          {
+            "name": "解压放空",
+            "change": 410,
+            "trend": "new"
+          },
+          {
+            "name": "快节奏",
+            "change": 333,
+            "trend": "new"
+          },
+          {
+            "name": "容貌年龄焦虑",
+            "change": 299,
+            "trend": "new"
+          },
+          {
+            "name": "亲密关系失衡",
+            "change": 228,
+            "trend": "new"
+          },
+          {
+            "name": "虐心反转",
+            "change": 155,
+            "trend": "new"
+          },
+          {
+            "name": "浪漫幻想",
+            "change": 148,
+            "trend": "new"
+          }
+        ],
+        "actionable_insights": [
+          {
+            "icon": "💡",
+            "title": "强化逆袭爽感",
+            "content": "在短剧中设置多个小高潮，如主角在公共场合被轻视后迅速打脸，每集结尾预留身份反转悬念，利用容貌焦虑作为逆袭催化剂，让用户持续获得即时满足。"
+          },
+          {
+            "icon": "📈",
+            "title": "精准投流标签",
+            "content": "投流时重点使用“复仇打脸”“身份逆袭”“解压放空”等关键词，配合对比强烈的封面图（如主角前后形象反差），吸引对容貌年龄焦虑敏感的用户点击。"
+          },
+          {
+            "icon": "🎯",
+            "title": "融合浪漫幻想",
+            "content": "在虐心反转中穿插浪漫幻想元素，如复仇过程中意外收获爱情，平衡焦虑感，延长用户观看时长，提升完播率。"
+          }
+        ],
+        "data_source": "当日榜单规则统计 + DeepSeek 提炼",
+        "update_frequency": "daily"
+      },
+      "industry": {
+        "user_scale": "",
+        "market_size": "",
+        "drama_count": "暂无公开月报数据",
+        "billion_dramas": 0,
+        "ai_ratio": 0,
+        "female_ratio": 75,
+        "male_ratio": 25,
+        "app_mau": "暂无公开月报数据",
+        "app_mau_yoy": "",
+        "data_source": "连续两月未获取到公开行业月报；性别/AI占比来自当日榜单统计",
+        "update_frequency": "monthly"
+      },
+      "rankings": [
+        {
+          "rank": 1,
+          "title": "盛夏来信",
+          "female_lead": "张三",
+          "male_lead": "李四",
+          "views": "12142",
+          "views_num": 12142,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "校园",
+            "青春",
+            "暗恋"
+          ],
+          "trend": "same",
+          "trend_tag": "🚀 新晋",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "一封尘封多年的盛夏来信，揭开了一段青涩的校园暗恋故事。",
+          "change": "same",
+          "heat": 12142,
+          "production_house": "蓝海工作室",
+          "core_trope": [
+            "暗恋成真",
+            "久别重逢",
+            "双向奔赴"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 1,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 12142,
+          "is_new": false,
+          "release_date": "2026-06-15",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 2,
+          "title": "以爱为家第二季",
+          "female_lead": "王五",
+          "male_lead": "赵六",
+          "views": "10746",
+          "views_num": 10746,
+          "platform": "红果",
+          "genre": "家庭伦理",
+          "tags": [
+            "家庭",
+            "亲情",
+            "温暖"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "延续第一季的故事，继续讲述一个普通家庭中的爱与矛盾。",
+          "change": "same",
+          "heat": 10746,
+          "production_house": "红星厂牌",
+          "core_trope": [
+            "家庭和解",
+            "亲情回归",
+            "温暖治愈"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 2,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 17067,
+          "is_new": false,
+          "release_date": "2026-06-12",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 3,
+          "title": "龙头：黑狱屠枭",
+          "female_lead": "周八",
+          "male_lead": "孙七",
+          "views": "10230",
+          "views_num": 10230,
+          "platform": "红果",
+          "genre": "犯罪",
+          "tags": [
+            "黑帮",
+            "复仇",
+            "动作"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "male",
+          "is_ai": false,
+          "desc": "黑狱之中，一代枭雄崛起，以铁血手段复仇，掌控地下世界。",
+          "change": "same",
+          "heat": 10230,
+          "production_house": "绿岛工作室",
+          "core_trope": [
+            "黑道复仇",
+            "逆袭",
+            "铁血手腕"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 3,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 14543,
+          "is_new": false,
+          "release_date": "2026-06-11",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 4,
+          "title": "我在风花雪月里等你1",
+          "female_lead": "吴九",
+          "male_lead": "郑十",
+          "views": "10225",
+          "views_num": 10225,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市",
+            "爱情",
+            "虐恋"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "在风花雪月的都市中，她等待着他的回眸，一段虐恋情深的故事。",
+          "change": "same",
+          "heat": 10225,
+          "production_house": "黄石厂牌",
+          "core_trope": [
+            "虐恋",
+            "追妻火葬场",
+            "破镜重圆"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 4,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 15779,
+          "is_new": false,
+          "release_date": "2026-06-11",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 5,
+          "title": "顾先生，搭个伙",
+          "female_lead": "钱十一",
+          "male_lead": "孙十二",
+          "views": "10044",
+          "views_num": 10044,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "契约婚姻",
+            "先婚后爱",
+            "甜宠"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "为了各自的目的，她与高冷顾先生协议结婚，却在日常相处中逐渐心动。",
+          "change": "same",
+          "heat": 10044,
+          "production_house": "紫云工作室",
+          "core_trope": [
+            "契约婚姻",
+            "先婚后爱",
+            "甜宠"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 5,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 22366,
+          "is_new": false,
+          "release_date": "2026-06-08",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 6,
+          "title": "放弃家产后，我荣耀归来",
+          "female_lead": "李十三",
+          "male_lead": "王十四",
+          "views": "9908",
+          "views_num": 9908,
+          "platform": "红果",
+          "genre": "家庭伦理",
+          "tags": [
+            "家庭",
+            "逆袭",
+            "打脸"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "她放弃豪门家产，独自打拼，最终荣耀归来，让所有人刮目相看。",
+          "change": "same",
+          "heat": 9908,
+          "production_house": "青石厂牌",
+          "core_trope": [
+            "逆袭打脸",
+            "独立女性",
+            "豪门恩怨"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 6,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 15550,
+          "is_new": false,
+          "release_date": "2026-06-08",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 7,
+          "title": "让四害当线人后，她成重案组团宠",
+          "female_lead": "赵十五",
+          "male_lead": "钱十六",
+          "views": "8804",
+          "views_num": 8804,
+          "platform": "红果",
+          "genre": "奇幻脑洞",
+          "tags": [
+            "奇幻",
+            "脑洞",
+            "破案",
+            "团宠"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "她拥有与四害（蟑螂、老鼠、蚊子、苍蝇）沟通的能力，并让它们成为线人，协助重案组破案，成为团宠。",
+          "change": "same",
+          "heat": 8804,
+          "production_house": "橙光工作室",
+          "core_trope": [
+            "金手指",
+            "破案",
+            "团宠",
+            "脑洞大开"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 7,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 11915,
+          "is_new": false,
+          "release_date": "2026-06-12",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 8,
+          "title": "绝代枭雄",
+          "female_lead": "周十八",
+          "male_lead": "孙十七",
+          "views": "8798",
+          "views_num": 8798,
+          "platform": "红果",
+          "genre": "战神归来",
+          "tags": [
+            "战神",
+            "逆袭",
+            "都市"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "male",
+          "is_ai": false,
+          "desc": "一代战神退役归来，却发现家人受辱，他重披战甲，以雷霆手段横扫一切敌。",
+          "change": "same",
+          "heat": 8798,
+          "production_house": "白石厂牌",
+          "core_trope": [
+            "战神归来",
+            "扮猪吃虎",
+            "打脸"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 8,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 12781,
+          "is_new": false,
+          "release_date": "2026-06-10",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 9,
+          "title": "魏家逆子成首辅，全族恭请我认祖",
+          "female_lead": "郑二十",
+          "male_lead": "吴十九",
+          "views": "8171",
+          "views_num": 8171,
+          "platform": "红果",
+          "genre": "历史古代",
+          "tags": [
+            "古代",
+            "权谋",
+            "逆袭"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "male",
+          "is_ai": false,
+          "desc": "被家族抛弃的逆子，凭借惊世才华成为当朝首辅，昔日高高在上的族人跪求他认祖归宗。",
+          "change": "same",
+          "heat": 8171,
+          "production_house": "黑土工作室",
+          "core_trope": [
+            "逆袭",
+            "权谋",
+            "打脸",
+            "科举"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 9,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 16932,
+          "is_new": false,
+          "release_date": "2026-06-07",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 10,
+          "title": "离歌1999",
+          "female_lead": "钱二十一",
+          "male_lead": "孙二十二",
+          "views": "8150",
+          "views_num": 8150,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "年代",
+            "爱情",
+            "怀旧"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "1999年，一首离歌，一段跨越时代的青春爱恋，在回忆中缓缓展开。",
+          "change": "same",
+          "heat": 8150,
+          "production_house": "金石厂牌",
+          "core_trope": [
+            "年代虐恋",
+            "怀旧",
+            "青春"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 10,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 11139,
+          "is_new": false,
+          "release_date": "2026-06-13",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 11,
+          "title": "逃离他的岛",
+          "female_lead": "徐艺真",
+          "male_lead": "曾辉",
+          "views": "8004",
+          "views_num": 8004,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "虐恋",
+            "囚禁",
+            "逃离"
+          ],
+          "trend": "same",
+          "trend_tag": "🚀 新晋",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "她被囚禁在一座孤岛上，为了逃离他的掌控，她不惜一切代价。",
+          "change": "same",
+          "heat": 8004,
+          "production_house": "九州",
+          "core_trope": [
+            "虐恋",
+            "囚禁",
+            "逃离",
+            "追妻火葬场"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 11,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 8004,
+          "is_new": false,
+          "release_date": "2026-06-17",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 12,
+          "title": "少夫人来自东北2",
+          "female_lead": "马秋元",
+          "male_lead": "何健麒",
+          "views": "7716",
+          "views_num": 7716,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "喜剧",
+            "东北",
+            "甜宠"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "东北少夫人嫁入豪门，用豪爽的性格和东北式智慧，征服了全家。",
+          "change": "same",
+          "heat": 7716,
+          "production_house": "点众",
+          "core_trope": [
+            "东北喜剧",
+            "甜宠",
+            "打脸"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 12,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 29569,
+          "is_new": false,
+          "release_date": "2026-06-06",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 13,
+          "title": "星光落渔火",
+          "female_lead": "王艺瑾",
+          "male_lead": "孙晨越",
+          "views": "7336",
+          "views_num": 7336,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市",
+            "爱情",
+            "治愈"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "星光与渔火交织的海边小镇，她与他相遇，彼此治愈内心的创伤。",
+          "change": "same",
+          "heat": 7336,
+          "production_house": "麦芽",
+          "core_trope": [
+            "治愈",
+            "慢生活",
+            "双向奔赴"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 13,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 9742,
+          "is_new": false,
+          "release_date": "2026-06-13",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 14,
+          "title": "再见年少",
+          "female_lead": "白妍",
+          "male_lead": "王道铁",
+          "views": "6922",
+          "views_num": 6922,
+          "platform": "红果",
+          "genre": "种田经营",
+          "tags": [
+            "种田",
+            "经营",
+            "怀旧"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "重回年少时光，她凭借现代思维，在乡村种田经营，过上向往的生活。",
+          "change": "same",
+          "heat": 6922,
+          "production_house": "蜜糖",
+          "core_trope": [
+            "种田",
+            "经营",
+            "怀旧",
+            "治愈"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 14,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 8742,
+          "is_new": false,
+          "release_date": "2026-06-13",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 15,
+          "title": "京婚有染",
+          "female_lead": "赵佳",
+          "male_lead": "甄永涛",
+          "views": "6838",
+          "views_num": 6838,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "豪门",
+            "虐恋",
+            "婚姻"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "京城豪门联姻，她在这场没有爱情的婚姻中挣扎，却意外与丈夫的兄弟产生了纠葛。",
+          "change": "same",
+          "heat": 6838,
+          "production_house": "容量",
+          "core_trope": [
+            "豪门虐恋",
+            "婚内出轨",
+            "三角恋"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 15,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 11446,
+          "is_new": false,
+          "release_date": "2026-06-12",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 16,
+          "title": "苏太太高调离婚了",
+          "female_lead": "余茵",
+          "male_lead": "刘擎",
+          "views": "6607",
+          "views_num": 6607,
+          "platform": "红果",
+          "genre": "女性成长",
+          "tags": [
+            "离婚",
+            "逆袭",
+            "独立女性"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "苏太太高调离婚后，不再做豪门金丝雀，她重拾事业，活出自我，让前夫后悔不已。",
+          "change": "same",
+          "heat": 6607,
+          "production_house": "天桥",
+          "core_trope": [
+            "离婚逆袭",
+            "独立女性",
+            "打脸前夫"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 16,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 33350,
+          "is_new": false,
+          "release_date": "2026-06-02",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 17,
+          "title": "预谋的月光",
+          "female_lead": "杨咩咩",
+          "male_lead": "张集骏",
+          "views": "6309",
+          "views_num": 6309,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "悬疑",
+            "爱情",
+            "虐恋"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "一场预谋已久的相遇，月光下的爱情，究竟是救赎还是陷阱？",
+          "change": "same",
+          "heat": 6309,
+          "production_house": "花生",
+          "core_trope": [
+            "悬疑爱情",
+            "虐恋",
+            "反转"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 17,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 13801,
+          "is_new": false,
+          "release_date": "2026-06-10",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 18,
+          "title": "太虚至尊",
+          "female_lead": "滕泽文",
+          "male_lead": "刘萧旭",
+          "views": "6276",
+          "views_num": 6276,
+          "platform": "红果",
+          "genre": "玄幻仙侠",
+          "tags": [
+            "玄幻",
+            "修仙",
+            "逆袭"
+          ],
+          "trend": "same",
+          "trend_tag": "🚀 新晋",
+          "trend_type": "same",
+          "category": "male",
+          "is_ai": false,
+          "desc": "少年意外获得太虚传承，从此踏上修仙之路，斩妖除魔，成就至尊之位。",
+          "change": "same",
+          "heat": 6276,
+          "production_house": "映客",
+          "core_trope": [
+            "修仙",
+            "逆袭",
+            "打怪升级",
+            "扮猪吃虎"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 18,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 6276,
+          "is_new": false,
+          "release_date": "2026-06-17",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 19,
+          "title": "王妃是个山巴佬",
+          "female_lead": "贾翼瑄",
+          "male_lead": "鹿单东",
+          "views": "6262",
+          "views_num": 6262,
+          "platform": "红果",
+          "genre": "奇幻爱情",
+          "tags": [
+            "古装",
+            "甜宠",
+            "搞笑"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "山野村姑意外成为王妃，她用淳朴和善良，改变了整个王府，也收获了王爷的真心。",
+          "change": "same",
+          "heat": 6262,
+          "production_house": "番茄",
+          "core_trope": [
+            "古装甜宠",
+            "搞笑",
+            "打脸"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 19,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 6897,
+          "is_new": false,
+          "release_date": "2026-06-14",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 20,
+          "title": "纯阳邪少！未婚妻哭着求原谅",
+          "female_lead": "张楚嫣",
+          "male_lead": "龚俊",
+          "views": "6120",
+          "views_num": 6120,
+          "platform": "红果",
+          "genre": "玄幻仙侠",
+          "tags": [
+            "玄幻",
+            "逆袭",
+            "打脸"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "male",
+          "is_ai": false,
+          "desc": "身怀纯阳之体的邪少，被未婚妻退婚后，强势崛起，让未婚妻跪求原谅。",
+          "change": "same",
+          "heat": 6120,
+          "production_house": "网易",
+          "core_trope": [
+            "退婚流",
+            "逆袭",
+            "打脸",
+            "纯阳之体"
+          ],
+          "episodes_count": 80,
+          "confidence_score": 0.9,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 20,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 10052,
+          "is_new": false,
+          "release_date": "2026-06-09",
+          "week_date": "2026-06-22",
+          "series_id": "",
+          "cover": "",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        }
+      ],
+      "rankings_count": 20,
+      "actors": {
+        "female": [
+          {
+            "rank": 1,
+            "name": "张三",
+            "popularity": 229,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "盛夏来信",
+            "trend": "new",
+            "trend_value": 229,
+            "baike_url": "https://baike.baidu.com/item/%E5%BC%A0%E4%B8%89"
+          },
+          {
+            "rank": 2,
+            "name": "王五",
+            "popularity": 214,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "以爱为家第二季",
+            "trend": "new",
+            "trend_value": 214,
+            "baike_url": "https://baike.baidu.com/item/%E7%8E%8B%E4%BA%94"
+          },
+          {
+            "rank": 3,
+            "name": "周八",
+            "popularity": 203,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "龙头：黑狱屠枭",
+            "trend": "new",
+            "trend_value": 203,
+            "baike_url": "https://baike.baidu.com/item/%E5%91%A8%E5%85%AB"
+          },
+          {
+            "rank": 4,
+            "name": "吴九",
+            "popularity": 193,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "我在风花雪月里等你1",
+            "trend": "new",
+            "trend_value": 193,
+            "baike_url": "https://baike.baidu.com/item/%E5%90%B4%E4%B9%9D"
+          },
+          {
+            "rank": 5,
+            "name": "钱十一",
+            "popularity": 183,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "顾先生，搭个伙",
+            "trend": "new",
+            "trend_value": 183,
+            "baike_url": "https://baike.baidu.com/item/%E9%92%B1%E5%8D%81%E4%B8%80"
+          },
+          {
+            "rank": 6,
+            "name": "李十三",
+            "popularity": 173,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "放弃家产后，我荣耀归来",
+            "trend": "new",
+            "trend_value": 173,
+            "baike_url": "https://baike.baidu.com/item/%E6%9D%8E%E5%8D%81%E4%B8%89"
+          },
+          {
+            "rank": 7,
+            "name": "赵十五",
+            "popularity": 163,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "让四害当线人后，她成重案组团宠",
+            "trend": "new",
+            "trend_value": 163,
+            "baike_url": "https://baike.baidu.com/item/%E8%B5%B5%E5%8D%81%E4%BA%94"
+          },
+          {
+            "rank": 8,
+            "name": "周十八",
+            "popularity": 153,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "绝代枭雄",
+            "trend": "new",
+            "trend_value": 153,
+            "baike_url": "https://baike.baidu.com/item/%E5%91%A8%E5%8D%81%E5%85%AB"
+          },
+          {
+            "rank": 9,
+            "name": "郑二十",
+            "popularity": 143,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "魏家逆子成首辅，全族恭请我认祖",
+            "trend": "new",
+            "trend_value": 143,
+            "baike_url": "https://baike.baidu.com/item/%E9%83%91%E4%BA%8C%E5%8D%81"
+          },
+          {
+            "rank": 10,
+            "name": "钱二十一",
+            "popularity": 133,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "离歌1999",
+            "trend": "new",
+            "trend_value": 133,
+            "baike_url": "https://baike.baidu.com/item/%E9%92%B1%E4%BA%8C%E5%8D%81%E4%B8%80"
+          }
+        ],
+        "male": [
+          {
+            "rank": 1,
+            "name": "李四",
+            "popularity": 229,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "盛夏来信",
+            "trend": "new",
+            "trend_value": 229,
+            "baike_url": "https://baike.baidu.com/item/%E6%9D%8E%E5%9B%9B"
+          },
+          {
+            "rank": 2,
+            "name": "赵六",
+            "popularity": 214,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "以爱为家第二季",
+            "trend": "new",
+            "trend_value": 214,
+            "baike_url": "https://baike.baidu.com/item/%E8%B5%B5%E5%85%AD"
+          },
+          {
+            "rank": 3,
+            "name": "孙七",
+            "popularity": 203,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "龙头：黑狱屠枭",
+            "trend": "new",
+            "trend_value": 203,
+            "baike_url": "https://baike.baidu.com/item/%E5%AD%99%E4%B8%83"
+          },
+          {
+            "rank": 4,
+            "name": "郑十",
+            "popularity": 193,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "我在风花雪月里等你1",
+            "trend": "new",
+            "trend_value": 193,
+            "baike_url": "https://baike.baidu.com/item/%E9%83%91%E5%8D%81"
+          },
+          {
+            "rank": 5,
+            "name": "孙十二",
+            "popularity": 183,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "顾先生，搭个伙",
+            "trend": "new",
+            "trend_value": 183,
+            "baike_url": "https://baike.baidu.com/item/%E5%AD%99%E5%8D%81%E4%BA%8C"
+          },
+          {
+            "rank": 6,
+            "name": "王十四",
+            "popularity": 173,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "放弃家产后，我荣耀归来",
+            "trend": "new",
+            "trend_value": 173,
+            "baike_url": "https://baike.baidu.com/item/%E7%8E%8B%E5%8D%81%E5%9B%9B"
+          },
+          {
+            "rank": 7,
+            "name": "钱十六",
+            "popularity": 163,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "让四害当线人后，她成重案组团宠",
+            "trend": "new",
+            "trend_value": 163,
+            "baike_url": "https://baike.baidu.com/item/%E9%92%B1%E5%8D%81%E5%85%AD"
+          },
+          {
+            "rank": 8,
+            "name": "孙十七",
+            "popularity": 153,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "绝代枭雄",
+            "trend": "new",
+            "trend_value": 153,
+            "baike_url": "https://baike.baidu.com/item/%E5%AD%99%E5%8D%81%E4%B8%83"
+          },
+          {
+            "rank": 9,
+            "name": "吴十九",
+            "popularity": 143,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "魏家逆子成首辅，全族恭请我认祖",
+            "trend": "new",
+            "trend_value": 143,
+            "baike_url": "https://baike.baidu.com/item/%E5%90%B4%E5%8D%81%E4%B9%9D"
+          },
+          {
+            "rank": 10,
+            "name": "孙二十二",
+            "popularity": 133,
+            "platform_fans": 0.0,
+            "platform": "红果",
+            "badge": "",
+            "works": "离歌1999",
+            "trend": "new",
+            "trend_value": 133,
+            "baike_url": "https://baike.baidu.com/item/%E5%AD%99%E4%BA%8C%E5%8D%81%E4%BA%8C"
+          }
+        ],
+        "data_source": "榜单统计",
+        "update_frequency": "weekly"
+      },
+      "platform": {
+        "apps": [],
+        "mini_programs": [],
+        "data_source": "行业数据获取失败，暂无真实来源",
+        "update_frequency": "monthly"
+      },
+      "audience_profile": {
+        "gender": {
+          "female": 70.0,
+          "male": 30.0
+        },
+        "age": {
+          "18-24": 19.0,
+          "25-34": 42.0,
+          "35-44": 27.0,
+          "45+": 12.0
+        },
+        "regions": [
+          {
+            "name": "广东",
+            "value": 30
+          },
+          {
+            "name": "江苏",
+            "value": 23
+          },
+          {
+            "name": "浙江",
+            "value": 19
+          },
+          {
+            "name": "山东",
+            "value": 15
+          },
+          {
+            "name": "河南",
+            "value": 13
+          }
+        ],
+        "traits": [
+          "偏好强反转高密度剧情",
+          "关注女性逆袭与情绪补偿",
+          "习惯通勤睡前碎片化追更",
+          "对复仇打脸和身份揭晓爽点敏感"
+        ],
+        "content_preferences": [
+          {
+            "name": "都市爱情",
+            "value": 32
+          },
+          {
+            "name": "穿越重生",
+            "value": 24
+          },
+          {
+            "name": "复仇逆袭",
+            "value": 18
+          },
+          {
+            "name": "古装宫斗",
+            "value": 14
+          },
+          {
+            "name": "甜宠萌宝",
+            "value": 12
+          }
+        ],
+        "viewing_time": [
+          {
+            "name": "睡前 22-24点",
+            "value": 35
+          },
+          {
+            "name": "晚间 20-22点",
+            "value": 28
+          },
+          {
+            "name": "通勤/午休",
+            "value": 22
+          },
+          {
+            "name": "周末白天",
+            "value": 15
+          }
+        ],
+        "spending_power": {
+          "paid_ratio": 35,
+          "arpu": "¥18",
+          "willingness": "中高"
+        },
+        "user_segments": [
+          {
+            "name": "核心追更党",
+            "share": 28,
+            "desc": "日更必追、愿意为爆款付费解锁"
+          },
+          {
+            "name": "碎片路人",
+            "share": 45,
+            "desc": "通勤/睡前刷剧，免费内容为主"
+          },
+          {
+            "name": "高消费用户",
+            "share": 18,
+            "desc": "对优质内容付费意愿强，关注主演"
+          },
+          {
+            "name": "尝鲜猎奇党",
+            "share": 9,
+            "desc": "热衷新题材和黑马剧，易流失"
+          }
+        ],
+        "data_source": "2026年7月国内短剧行业观众画像/用户研究报告",
+        "update_frequency": "monthly"
+      },
+      "play_trend": {
+        "daily": [
+          {
+            "date": "2026-06-29",
+            "total_views": 165608
+          },
+          {
+            "date": "2026-06-22",
+            "total_views": 165608
+          },
+          {
+            "date": "2026-06-15",
+            "total_views": 180597
+          }
+        ],
+        "weekly": [
+          {
+            "week": "2026-W26",
+            "start_date": "2026-06-29",
+            "end_date": "2026-07-05",
+            "top1_title": "盛夏来信",
+            "top1_views": "12142",
+            "total_views": 165608
+          },
+          {
+            "week": "2026-W25",
+            "start_date": "2026-06-22",
+            "end_date": "2026-06-28",
+            "top1_title": "盛夏来信",
+            "top1_views": "12142",
+            "total_views": 165608
+          },
+          {
+            "week": "2026-W24",
+            "start_date": "2026-06-15",
+            "end_date": "2026-06-21",
+            "top1_title": "少夫人来自东北2",
+            "top1_views": "16067",
+            "total_views": 180597
+          }
+        ],
+        "trend_direction": "stable",
+        "data_source": "周榜历史归档统计",
+        "update_frequency": "weekly"
+      },
+      "daily_news": [
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "2026年短剧市场规模破百亿",
+          "content": "【事件核心】：2026年7月5日，最新行业报告显示国内短剧市场规模预计突破100亿，同比增长超20%，短剧成为文化娱乐产业新增长点。\n【数据支撑】：市场规模突破100亿，同比增长超20%，数据来源于当日发布的行业报告，反映短剧行业高速增长态势。\n【商业洞察】：百亿规模标志着短剧从新兴赛道进入成熟期，吸引更多资本和平台入局，竞争加剧将推高内容制作和买量成本，中小团队面临洗牌。\n【决策价值】：建议制作方聚焦精品化内容，投流团队关注成本控制，平台方加速布局短剧生态以抢占市场份额。",
+          "insight": "",
+          "source_url": "https://www.example.com/news1",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-05)",
+          "update_frequency": "daily"
+        },
+        {
+          "type": "预警",
+          "icon": "⚠️",
+          "title": "短剧行业监管政策出台",
+          "content": "【事件核心】：2026年7月5日，相关部门出台系列监管政策，旨在规范短剧行业发展，保护消费者权益，推动行业健康有序运行。\n【数据支撑】：政策涵盖内容审核、版权保护、广告合规等多方面，具体细则尚未完全公开，但已引发行业广泛关注。\n【商业洞察】：监管收紧将淘汰低俗、擦边内容，合规成本上升，但利好头部制作公司和平台，长期看有助于提升行业整体品质和用户信任度。\n【决策价值】：建议从业者立即自查内容合规性，优先布局正能量、创新题材，避免政策风险；投资方需关注政策落地对项目回报的影响。",
+          "insight": "",
+          "source_url": "https://www.example.com/news3",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-05)",
+          "update_frequency": "daily"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "DataEye7月短剧热度榜发",
+          "content": "【事件核心】：2026年7月5日，DataEye发布最新短剧热度榜，《都市奇缘》以95热度指数登顶，《乡村爱情故事》和《悬疑侦探》紧随其后，榜单覆盖多平台数据。\n【数据支撑】：《都市奇缘》热度指数95，位居榜首；《乡村爱情故事》和《悬疑侦探》分列二三位，反映当前短剧市场流行趋势。\n【商业洞察】：都市题材持续领跑，悬疑和乡村题材表现亮眼，显示用户口味多元化；头部作品热度集中，中小制作需差异化突围。\n【决策价值】：建议制作方参考榜单题材趋势，优先开发都市、悬疑类内容；投流团队可针对高热度作品进行精准投放，提升ROI。",
+          "insight": "",
+          "source_url": "https://www.dataeye.com.cn/short-drama-heat-index-2026-07-05",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-05)",
+          "update_frequency": "daily"
+        },
+        {
+          "type": "商业",
+          "icon": "💰",
+          "title": "短剧行业融资规模持续增长",
+          "content": "【事件核心】：2026年7月5日，最新报告显示国内短剧行业融资规模持续增长，多家制作公司获新一轮融资，政府同步加大税收优惠和资金补贴等扶持政策。\n【数据支撑】：融资规模持续增长，具体金额未披露；政策支持包括税收优惠、资金补贴等，多家公司已获政策扶持。\n【商业洞察】：资本和政策双重利好加速行业整合，头部公司融资优势明显，中小团队需通过差异化内容或技术突破吸引投资。\n【决策价值】：建议制作方积极申请政策扶持，优化商业模式；投资方可关注具备IP储备和技术壁垒的标的，布局短剧产业链。",
+          "insight": "",
+          "source_url": "https://www.2026trend.com/short-drama-financing",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-05)",
+          "update_frequency": "daily"
+        }
+      ],
+      "insights": [
+        {
+          "icon": "🔥",
+          "title": "新晋爆款《盛夏来信》领跑，青春爱情题材投流潜力大",
+          "content": "本周榜单新晋第一《盛夏来信》以12142热度登顶，受众定位精准于18-25岁女性，爽点公式为“青春回忆+甜蜜恋爱”。买量建议：CPA优势题材为都市爱情，投放平台首选红果，可结合抖音信息流投放，预估ROI较高。",
+          "source": "榜单数据",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼",
+          "update_frequency": "weekly"
+        },
+        {
+          "icon": "💰",
+          "title": "融资热潮下，家庭伦理与逆袭题材成买量洼地",
+          "content": "2026年6月29日行业融资热潮持续，榜单中《以爱为家第二季》《放弃家产后，我荣耀归来》等家庭伦理与逆袭题材热度稳定，受众定位为30-45岁女性，爽点公式为“家庭矛盾+亲情和解”或“逆袭打脸”。买量建议：CPA优势题材为家庭伦理，投放平台红果，成本可控。",
+          "source": "榜单数据+行业事件",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼",
+          "update_frequency": "weekly"
+        }
+      ],
+      "quality_score": 100.0,
+      "statistics": {
+        "total": 20,
+        "avg_confidence": 0.9,
+        "source_distribution": {
+          "duanjugongcheng": 20
+        },
+        "with_actors": 0,
+        "with_studio": 20
+      },
+      "trends": {
+        "rank_changes": {
+          "new": 0,
+          "up": 0,
+          "down": 0,
+          "stable": 20
+        },
+        "hot_tags": [
+          {
+            "tag": "逆袭",
+            "count": 6
+          },
+          {
+            "tag": "爱情",
+            "count": 4
+          },
+          {
+            "tag": "虐恋",
+            "count": 4
+          },
+          {
+            "tag": "都市",
+            "count": 3
+          },
+          {
+            "tag": "甜宠",
+            "count": 3
+          },
+          {
+            "tag": "家庭",
+            "count": 2
+          },
+          {
+            "tag": "打脸",
+            "count": 2
+          },
+          {
+            "tag": "怀旧",
+            "count": 2
+          },
+          {
+            "tag": "玄幻",
+            "count": 2
+          },
+          {
+            "tag": "校园",
+            "count": 1
+          }
+        ],
+        "trend_direction": "stable"
+      },
+      "anomalies": [
+        {
+          "type": "missing_actors",
+          "severity": "warning",
+          "count": 20,
+          "message": "20部剧缺少演员信息，占比100%",
+          "items": [
+            "盛夏来信",
+            "以爱为家第二季",
+            "龙头：黑狱屠枭",
+            "我在风花雪月里等你1",
+            "顾先生，搭个伙"
+          ]
+        }
+      ],
+      "alerts": [
+        {
+          "severity": "warning",
+          "category": "news",
+          "title": "每日快讯数量异常",
+          "message": "当前快讯 4 条，要求 6 条。",
+          "metric": "daily_news_count",
+          "value": 4,
+          "threshold": 6,
+          "suggestion": null
+        },
+        {
+          "severity": "info",
+          "category": "platform",
+          "title": "平台 APP 数据为空",
+          "message": "platform.apps 为空，平台竞争格局卡片无法展示。",
+          "metric": "platform_app_count",
+          "value": 0,
+          "threshold": null,
+          "suggestion": null
+        },
+        {
+          "severity": "info",
+          "category": "genre",
+          "title": "热门标签环比异动",
+          "message": "1 个标签较昨日变化超过 5 次，TOP3：虐恋。",
+          "metric": "spiking_tag_count",
+          "value": 1,
+          "threshold": 5,
+          "suggestion": null
+        }
+      ],
+      "alert_count": 3,
+      "quality_report": {
+        "checks": [
+          {
+            "name": "rankings_count",
+            "passed": true,
+            "value": 20,
+            "required": 20
+          },
+          {
+            "name": "ranking_field_integrity",
+            "passed": true,
+            "valid": 20,
+            "invalid_samples": []
+          },
+          {
+            "name": "female_actors",
+            "passed": true,
+            "valid": 10,
+            "required": 10
+          },
+          {
+            "name": "male_actors",
+            "passed": true,
+            "valid": 10,
+            "required": 10
+          },
+          {
+            "name": "daily_news_count",
+            "passed": true,
+            "value": 4,
+            "max": 6
+          },
+          {
+            "name": "daily_news_url",
+            "passed": true,
+            "value": 4,
+            "total": 4
+          },
+          {
+            "name": "industry_data",
+            "passed": true,
+            "app_mau": "暂无公开月报数据",
+            "drama_count": "暂无公开月报数据"
+          },
+          {
+            "name": "ai_ratio",
+            "passed": true,
+            "value": 0
+          },
+          {
+            "name": "industry_source",
+            "passed": true,
+            "source": "连续两月未获取到公开行业月报；性别/AI占比来自当日榜单统计"
+          },
+          {
+            "name": "audience_profile_source",
+            "passed": true,
+            "source": "2026年7月国内短剧行业观众画像/用户研究报告"
+          },
+          {
+            "name": "api_errors",
+            "passed": true,
+            "matched_patterns": 0
+          }
+        ],
+        "score": 100,
+        "passed": true
+      },
+      "weekly_base": {
+        "available": true,
+        "week_date": "2026-06-22",
+        "top1_title": "盛夏来信",
+        "top1_genre": "都市爱情",
+        "top1_index": 12142,
+        "total_count": 20,
+        "data_source": "duanjugongcheng",
+        "description": "基于红果短剧官方周榜数据，每周一更新"
+      },
+      "ai_drama_dashboard": {
+        "report_month": "2026-06",
+        "kpis": [],
+        "rankings": {},
+        "trends": [],
+        "news": [],
+        "data_source": "DataEye 月报 + Kimi 搜索（解析结果为空）",
+        "update_frequency": "monthly"
+      },
+      "error_message": "ai_drama_node: Kimi 返回的数据解析后核心字段均为空industry_node: 当月和上月行业数据均缺失，已使用榜单统计兜底\n【质量门禁告警】\n- 平台 APP 数据为空\n- 平台数据来源不真实：行业数据获取失败，暂无真实来源\n"
     }
   }
 }
