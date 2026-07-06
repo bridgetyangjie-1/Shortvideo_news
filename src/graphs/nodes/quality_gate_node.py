@@ -35,13 +35,21 @@ API_ERROR_PATTERNS = [
 
 BLACKLISTED_ACTOR_NAMES = {"未知", "待定", "未识别", "unknown", "none", "n/a"}
 
-# 被视为不真实/失败的数据来源说明
+# 被视为不真实/失败的数据来源说明（避免过于宽泛的「失败」误伤）
 UNREALIABLE_SOURCE_PATTERNS = [
     re.compile(r"获取失败"),
     re.compile(r"暂无真实来源"),
     re.compile(r"本地规则估算"),
-    re.compile(r"失败"),
+    re.compile(r"行业数据获取失败"),
+    re.compile(r"连续两月未获取"),
 ]
+
+# 硬性门禁：未通过则拒绝发布
+HARD_BLOCK_CHECKS = {
+    "rankings_count",
+    "ranking_field_integrity",
+    "api_errors",
+}
 
 # 行业数据中的占位/无效值，遇到时视为缺失
 _PLACEHOLDER_VALUES = {
@@ -152,9 +160,9 @@ def quality_gate_node(
         "required": REQUIRED_MALE_ACTORS,
     })
     if not female_ok:
-        errors.append(f"女频演员有效数量不足：{female_valid}/{REQUIRED_FEMALE_ACTORS}")
+        warnings.append(f"女频演员有效数量不足：{female_valid}/{REQUIRED_FEMALE_ACTORS}")
     if not male_ok:
-        errors.append(f"男频演员有效数量不足：{male_valid}/{REQUIRED_MALE_ACTORS}")
+        warnings.append(f"男频演员有效数量不足：{male_valid}/{REQUIRED_MALE_ACTORS}")
 
     # 4. 每日快讯（0-6条均可，但每条必须有真实 URL）
     news_count = len(daily_news)
@@ -178,9 +186,9 @@ def quality_gate_node(
         "total": news_count,
     })
     if not news_count_ok:
-        errors.append(f"快讯数量异常：当前 {news_count} 条，超过上限 {MAX_DAILY_NEWS_COUNT}")
+        warnings.append(f"快讯数量异常：当前 {news_count} 条，超过上限 {MAX_DAILY_NEWS_COUNT}")
     if news_count > 0 and not news_url_ok:
-        errors.append(f"快讯 source_url 不完整：{news_with_url}/{news_count}")
+        warnings.append(f"快讯 source_url 不完整：{news_with_url}/{news_count}")
 
     # 5. 行业数据来源真实性（方向 A：缺失/失败时不发布）
     app_mau = getattr(industry, "app_mau", "") or ""
@@ -209,11 +217,11 @@ def quality_gate_node(
         "source": industry_source,
     })
     if not industry_has_data:
-        errors.append("行业宏观数据缺失 app_mau 或 drama_count")
+        warnings.append("行业宏观数据缺失 app_mau 或 drama_count")
     if not ratio_ok:
-        errors.append(f"AI短剧占比异常：{ai_ratio}%")
+        warnings.append(f"AI短剧占比异常：{ai_ratio}%")
     if not industry_source_ok:
-        errors.append(f"行业数据来源不真实：{industry_source}")
+        warnings.append(f"行业数据来源不真实：{industry_source}")
 
     # 6. 平台数据（可选，仅告警）
     platform_apps = getattr(platform, "apps", []) or []
@@ -234,7 +242,7 @@ def quality_gate_node(
         "source": audience_source,
     })
     if has_audience_data and not audience_source_ok:
-        errors.append(f"观众画像数据来源不真实：{audience_source}")
+        warnings.append(f"观众画像数据来源不真实：{audience_source}")
 
     # 8. API 错误检测
     upstream_error = state.error_message or ""
@@ -249,19 +257,47 @@ def quality_gate_node(
     if not api_error_ok:
         errors.append("上游节点存在 API 鉴权、限流或解析失败错误，禁止推送")
 
-    # 9. 计算质量分
+    # 8.1 AI 短剧看板（软性告警，不阻断发布）
+    ai_dashboard = state.ai_drama_dashboard
+    ai_rankings = {}
+    if ai_dashboard is not None:
+        ai_rankings = getattr(ai_dashboard, "rankings", None) or {}
+        if not isinstance(ai_rankings, dict):
+            ai_rankings = {}
+    ai_has_data = bool(
+        (getattr(ai_dashboard, "kpis", None) or [])
+        or (ai_rankings.get("ai_drama") or [])
+        or (ai_rankings.get("ai_comic") or [])
+        or (getattr(ai_dashboard, "trends", None) or [])
+        or (getattr(ai_dashboard, "news", None) or [])
+    )
+    report["checks"].append({
+        "name": "ai_drama_dashboard",
+        "passed": ai_has_data,
+        "has_data": ai_has_data,
+    })
+    if not ai_has_data:
+        warnings.append("AI 短剧/漫剧看板核心数据为空")
+
+    # 9. 计算质量分与发布模式
     check_results = [c["passed"] for c in report["checks"]]
     passed_checks = sum(check_results)
     total_checks = len(check_results)
     base_score = int((passed_checks / total_checks) * 100) if total_checks else 0
 
-    # 硬性失败项直接封顶
+    # 硬性失败项直接封顶；软性告警仅扣分
     if errors:
         final_score = min(base_score, 59)
+        publish_mode = "blocked"
+    elif warnings:
+        final_score = max(min(base_score, 95), 60)
+        publish_mode = "degraded"
     else:
         final_score = max(base_score, state.quality_score or 0)
+        publish_mode = "full"
 
     report["score"] = final_score
+    report["publish_mode"] = publish_mode
     report["passed"] = len(errors) == 0 and final_score >= MIN_QUALITY_SCORE
 
     error_message = ""
@@ -269,6 +305,8 @@ def quality_gate_node(
         error_message += "【质量门禁未通过】\n" + "\n".join(f"- {e}" for e in errors) + "\n"
     if warnings:
         error_message += "【质量门禁告警】\n" + "\n".join(f"- {w}" for w in warnings) + "\n"
+    if publish_mode == "degraded":
+        error_message += "【发布模式】降级发布：榜单已更新，部分次要模块数据不完整\n"
 
     success = report["passed"]
 

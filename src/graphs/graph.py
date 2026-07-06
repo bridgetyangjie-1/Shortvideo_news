@@ -28,6 +28,7 @@ from graphs.nodes.ai_drama_node import ai_drama_node
 from graphs.nodes.history_data_node import history_data_node
 from graphs.nodes.quality_gate_node import quality_gate_node
 from graphs.nodes.alert_node import alert_node
+from graphs.nodes.gate_fail_node import gate_fail_node
 from graphs.nodes.push_node import push_node
 
 
@@ -154,10 +155,13 @@ def create_graph():
     # 10. 数据质量门禁节点（新增）
     builder.add_node("quality_gate_node", quality_gate_node)
     
-    # 11. 异常监测节点
+    # 11. 质量门禁失败通知节点（不推送，仅告警）
+    builder.add_node("gate_fail_node", gate_fail_node)
+
+    # 12. 异常监测节点
     builder.add_node("alert_node", alert_node)
     
-    # 12. 数据推送节点
+    # 13. 数据推送节点
     builder.add_node("push_node", push_node)
     
     # ==================== 设置边 ====================
@@ -202,9 +206,11 @@ def create_graph():
         should_push_data,
         {
             "生成告警": "alert_node",
-            "跳过推送": END,
+            "跳过推送": "gate_fail_node",
         },
     )
+
+    builder.add_edge("gate_fail_node", END)
     
     # 异常监测后推送
     builder.add_edge("alert_node", "push_node")

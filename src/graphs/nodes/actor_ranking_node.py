@@ -309,9 +309,14 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         female_count = len(actors_dict.get("female", []))
         male_count = len(actors_dict.get("male", []))
 
-        # 为了节省 token：DeepSeek 补充仅在每周一触发；平日榜单提取不足时保留现有结果
-        if weekly_cache.is_refresh_day(state.data_date) and (female_count < 10 or male_count < 10):
-            logger.warning(f"周一刷新：榜单演员不足（女{female_count}男{male_count}），使用DeepSeek推理补充")
+        # 为了节省 token：周一完整刷新；平日不足时仍允许轻量 DeepSeek 补充，避免演员榜空导致体验下降
+        if female_count < 10 or male_count < 10:
+            if weekly_cache.is_refresh_day(state.data_date):
+                logger.warning(f"周一刷新：榜单演员不足（女{female_count}男{male_count}），使用DeepSeek推理补充")
+            else:
+                logger.warning(
+                    f"平日兜底：榜单演员不足（女{female_count}男{male_count}），使用DeepSeek轻量补充"
+                )
 
             # 读取配置文件
             cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), config["metadata"]["llm_cfg"])
@@ -359,10 +364,6 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
                         logger.info("✅ DeepSeek推理补充演员成功")
             except Exception as e:
                 logger.warning(f"DeepSeek推理补充失败: {e}，使用原始提取结果")
-        elif female_count < 10 or male_count < 10:
-            logger.info(
-                f"非周一：榜单演员不足（女{female_count}男{male_count}），跳过DeepSeek补充以节省token"
-            )
         else:
             logger.info(f"✅ 从榜单提取演员成功：女频{female_count}人，男频{male_count}人")
         
