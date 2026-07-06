@@ -33,6 +33,7 @@ from graphs.nodes.enrich.metadata_fetcher import HongguoDetailFetcher
 from graphs.nodes.enrich.actor_resolver import ActorResolver
 from graphs.nodes.enrich.json_refiner import JsonRefiner
 from graphs.nodes.enrich.fallback import fill_unknown_actors
+from tools.actor_name_utils import sanitize_ranking_actors
 
 
 def _backfill_basic_fields(
@@ -179,7 +180,10 @@ def enrich_node(
         # 第三步：用原始红果数据回填 DeepSeek 可能丢失的可信字段（series_id/cover/厂牌等）
         rankings_data = _backfill_basic_fields(rankings_data, basic_rankings_list)
 
-        # 第四步：兜底填充演员
+        # 第四步：兜底填充演员（过滤占位名）
+        for item in rankings_data:
+            if isinstance(item, dict):
+                sanitize_ranking_actors(item)
         rankings_data = fill_unknown_actors(rankings_data)
 
         # 第五步：榜单数量补齐

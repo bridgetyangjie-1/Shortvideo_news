@@ -16,6 +16,7 @@ from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 from tools.deepseek_api import DeepSeekClient
 from tools import weekly_cache
+from tools.actor_name_utils import is_placeholder_actor_name, sanitize_actor_name
 
 # Fallback for test_run environment
 try:
@@ -131,7 +132,10 @@ def _extract_actors_from_rankings(rankings_data: List[Dict[str, Any]]) -> Dict[s
     def _is_valid_name(name: Any) -> bool:
         if not name:
             return False
-        return str(name).strip().lower() not in {n.lower() for n in INVALID_NAMES}
+        text = str(name).strip()
+        if text.lower() in {n.lower() for n in INVALID_NAMES}:
+            return False
+        return not is_placeholder_actor_name(text)
 
     female_scores: Dict[str, Dict[str, Any]] = {}
     male_scores: Dict[str, Dict[str, Any]] = {}
@@ -227,22 +231,30 @@ def _ensure_top10(parsed_list: List[Dict[str, Any]], source_list: List[Dict[str,
     if not isinstance(source_list, list):
         source_list = []
 
-    seen = {a.get("name") for a in parsed_list if a.get("name")}
-    merged = list(parsed_list)
-    for item in source_list:
-        name = item.get("name")
+    seen: set[str] = set()
+    merged: List[Dict[str, Any]] = []
+    for item in parsed_list:
+        name = sanitize_actor_name(item.get("name"))
         if name and name not in seen:
-            merged.append(item)
+            merged.append({**item, "name": name})
+            seen.add(name)
+    for item in source_list:
+        name = sanitize_actor_name(item.get("name"))
+        if name and name not in seen:
+            merged.append({**item, "name": name})
             seen.add(name)
         if len(merged) >= 10:
             break
 
-    # 统一字段并重新编号
+    # 统一字段并重新编号，过滤占位名
     result = []
-    for rank, item in enumerate(merged[:10], 1):
+    for item in merged[:10]:
+        name = sanitize_actor_name(item.get("name", ""))
+        if not name:
+            continue
         result.append({
-            "rank": rank,
-            "name": item.get("name", ""),
+            "rank": len(result) + 1,
+            "name": name,
             "popularity": item.get("popularity", 0),
             "platform_fans": item.get("platform_fans", 0.0),
             "platform": item.get("platform", "红果"),

@@ -32,6 +32,58 @@ def _week_start(date_obj: datetime) -> datetime:
     return date_obj - timedelta(days=date_obj.weekday())
 
 
+def _load_previous_rankings_map(
+    data_date: str,
+    workspace: str,
+) -> tuple[Dict[str, int], str]:
+    """
+    加载用于排名对比的基准榜单。
+
+    周一新周榜发布时，昨日日归档与本周剧单差异过大，改为与上周一周榜归档对比；
+    其余日期仍与昨日日归档对比。
+    """
+    date_obj = datetime.strptime(data_date, "%Y-%m-%d")
+    previous_rankings: Dict[str, int] = {}
+    source = ""
+
+    if date_obj.weekday() == 0:
+        prev_monday = (date_obj - timedelta(days=7)).strftime("%Y-%m-%d")
+        weekly_file = os.path.join(workspace, "assets", "data", "weekly", f"{prev_monday}.json")
+        if os.path.exists(weekly_file):
+            try:
+                with open(weekly_file, "r", encoding="utf-8") as f:
+                    weekly_data = json.load(f)
+                for i, item in enumerate(weekly_data.get("rankings", [])[:20]):
+                    title = item.get("title", "")
+                    if title:
+                        previous_rankings[title] = i + 1
+                source = f"上周周榜 {prev_monday}"
+                logger.info(
+                    "排名对比基准: 周一使用上周周榜 %s，共 %d 条",
+                    prev_monday,
+                    len(previous_rankings),
+                )
+            except Exception as exc:
+                logger.warning("读取上周周榜失败: %s", exc)
+
+    if not previous_rankings:
+        yesterday_date = (date_obj - timedelta(days=1)).strftime("%Y-%m-%d")
+        yesterday_file = os.path.join(workspace, "assets", "data", "history", f"{yesterday_date}.json")
+        if os.path.exists(yesterday_file):
+            try:
+                with open(yesterday_file, "r", encoding="utf-8") as f:
+                    yesterday_data = json.load(f)
+                for i, item in enumerate(yesterday_data.get("rankings", [])[:20]):
+                    title = item.get("title", "")
+                    if title:
+                        previous_rankings[title] = i + 1
+                source = f"昨日归档 {yesterday_date}"
+            except Exception as exc:
+                logger.warning("读取昨日榜单失败: %s", exc)
+
+    return previous_rankings, source
+
+
 def _derive_daily_from_weekly(weekly_records: List[Dict[str, Any]], limit: int = 8) -> List[Dict[str, Any]]:
     """从周榜记录派生趋势点：每个点代表一周，日期为周一，数值为当周总热度"""
     daily = []
@@ -175,27 +227,17 @@ def history_data_node(
     # ========== 4. 计算排名变化 ==========
     rank_changes: List[RankChange] = []
 
-    yesterday_date = (datetime.strptime(data_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
-    yesterday_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", "."), "assets", "data", "history", f"{yesterday_date}.json")
-
-    yesterday_rankings: Dict[str, int] = {}
-    if os.path.exists(yesterday_file):
-        try:
-            with open(yesterday_file, "r", encoding="utf-8") as f:
-                yesterday_data = json.load(f)
-                for i, item in enumerate(yesterday_data.get("rankings", [])[:20]):
-                    title = item.get("title", "")
-                    if title:
-                        yesterday_rankings[title] = i + 1
-        except Exception as e:
-            error_messages.append(f"history_data_node: 读取昨日榜单失败: {e}")
+    workspace = os.getenv("COZE_WORKSPACE_PATH", ".")
+    previous_rankings, compare_source = _load_previous_rankings_map(data_date, workspace)
+    if not previous_rankings:
+        error_messages.append("history_data_node: 未找到可用于排名对比的历史/周榜归档")
 
     for i, r in enumerate(rankings[:20]):
         title = r.title if hasattr(r, "title") else ""
         current_rank = i + 1
 
-        if title in yesterday_rankings:
-            prev_rank = yesterday_rankings[title]
+        if title in previous_rankings:
+            prev_rank = previous_rankings[title]
             if current_rank < prev_rank:
                 change_type = "up"
                 change_value = prev_rank - current_rank
@@ -212,10 +254,13 @@ def history_data_node(
         rank_changes.append(RankChange(
             title=title,
             current_rank=current_rank,
-            previous_rank=yesterday_rankings.get(title),
+            previous_rank=previous_rankings.get(title),
             change_type=change_type,
             change_value=change_value,
         ))
+
+    if compare_source:
+        logger.info("排名变化对比基准: %s", compare_source)
 
     new_count = sum(1 for rc in rank_changes if rc.change_type == "new")
     up_count = sum(1 for rc in rank_changes if rc.change_type == "up")
