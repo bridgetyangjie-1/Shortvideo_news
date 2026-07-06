@@ -1,6 +1,10 @@
 {
   "daily_play_trend": [
     {
+      "date": "2026-07-06",
+      "total_views": 165608
+    },
+    {
       "date": "2026-06-29",
       "total_views": 165608
     },
@@ -14,6 +18,14 @@
     }
   ],
   "weekly_rankings": [
+    {
+      "week": "2026-W27",
+      "start_date": "2026-07-06",
+      "end_date": "2026-07-12",
+      "top1_title": "盛夏来信",
+      "top1_views": "12142",
+      "total_views": 165608
+    },
     {
       "week": "2026-W26",
       "start_date": "2026-06-29",
@@ -39,5 +51,5 @@
       "total_views": 180597
     }
   ],
-  "last_updated": "2026-07-05 05:16:08"
+  "last_updated": "2026-07-06 05:24:19"
 }
