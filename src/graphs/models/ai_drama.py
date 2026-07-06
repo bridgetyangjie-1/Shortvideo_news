@@ -20,15 +20,23 @@ class AIDramaRankingItem(BaseModel):
     rank: int = Field(default=0, description="排名 1-5")
     title: str = Field(default="", description="剧目名称")
     platform: str = Field(default="", description="主要播放平台")
-    category: str = Field(default="", description="AI仿真人剧/AIGC漫剧/3D AI漫剧/2D AI漫剧")
+    category: str = Field(default="", description="AI仿真人剧 / 3D AI漫剧 / 2D AI漫剧 / AIGC漫剧")
     heat: str = Field(default="", description="热度或月活/观看指标")
     is_new: bool = Field(default=False, description="是否本月新剧")
+    plot: str = Field(default="", description="30-60 字剧情简介")
+    tags: List[str] = Field(default_factory=list, description="题材/风格标签，最多 4 个")
+    studio: str = Field(default="", description="制作方/工作室/版权方")
+    url: str = Field(default="", description="平台搜索页或报道原文链接")
+    episodes: str = Field(default="", description="集数")
+    release_date: str = Field(default="", description="上线日期 YYYY-MM-DD")
 
 
 class AIDramaTrend(BaseModel):
     """AI 短剧/漫剧趋势洞察"""
     title: str = Field(default="", description="趋势标题")
     summary: str = Field(default="", description="50-100 字摘要")
+    source: str = Field(default="", description="来源媒体")
+    source_url: str = Field(default="", description="原文链接")
 
 
 class AIDramaNews(BaseModel):
@@ -37,6 +45,7 @@ class AIDramaNews(BaseModel):
     source: str = Field(default="", description="来源媒体")
     date: str = Field(default="", description="发布日期 YYYY-MM-DD")
     url: str = Field(default="", description="原文链接")
+    summary: str = Field(default="", description="100 字左右摘要/缩写")
 
 
 class AIDramaDashboard(BaseModel):

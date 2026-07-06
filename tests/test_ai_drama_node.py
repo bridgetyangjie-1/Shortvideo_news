@@ -9,9 +9,11 @@ from graphs.nodes.ai_drama_node import (
     _normalize_kpis,
     _normalize_rankings,
     _normalize_news,
+    _normalize_trends,
     _build_dashboard,
     _has_meaningful_dashboard,
     _unwrap_dashboard_payload,
+    REPORT_PUBLISH_DAY,
 )
 from graphs.models.ai_drama import AIDramaDashboard
 from tools.ai_drama_fetcher import (
@@ -22,11 +24,17 @@ from tools.ai_drama_fetcher import (
 
 
 class TestResolveReportMonth(unittest.TestCase):
-    def test_normal_month(self):
+    def test_normal_month_after_publish_day(self):
+        # 28 号 >= 18 号，取上个月
         self.assertEqual(_resolve_report_month("2026-06-28"), "2026-05")
 
+    def test_normal_month_before_publish_day(self):
+        # 6 号 < 18 号，最新完整月报为上上个月
+        self.assertEqual(_resolve_report_month("2026-06-06"), "2026-04")
+
     def test_january_rolls_to_previous_year(self):
-        self.assertEqual(_resolve_report_month("2026-01-15"), "2025-12")
+        # 1 月 10 号 < 18 号，回退两个月到上年 11 月
+        self.assertEqual(_resolve_report_month("2026-01-15"), "2025-11")
 
 
 class TestNormalizeKPIs(unittest.TestCase):
@@ -73,6 +81,55 @@ class TestNormalizeRankings(unittest.TestCase):
         self.assertEqual(result["ai_drama"][0]["title"], "换亲成宠")
         self.assertEqual(result["ai_comic"][0]["title"], "聚宝仙盆")
 
+    def test_extracts_new_fields(self):
+        raw = {
+            "ai_drama": [
+                {
+                    "rank": 1,
+                    "title": "换亲成宠",
+                    "platform": "抖音",
+                    "category": "AI仿真人剧",
+                    "heat": "8.7亿",
+                    "plot": "换亲嫁入豪门逆袭成宠",
+                    "tags": ["逆袭", "乡村", "换亲"],
+                    "studio": "麦芽",
+                    "url": "https://example.com/1",
+                }
+            ]
+        }
+        result = _normalize_rankings(raw)
+        item = result["ai_drama"][0]
+        self.assertEqual(item["plot"], "换亲嫁入豪门逆袭成宠")
+        self.assertEqual(item["tags"], ["逆袭", "乡村", "换亲"])
+        self.assertEqual(item["studio"], "麦芽")
+        self.assertEqual(item["url"], "https://example.com/1")
+
+    def test_truncates_long_plot_and_tags(self):
+        raw = {
+            "ai_drama": [
+                {
+                    "rank": 1,
+                    "title": "A",
+                    "plot": "x" * 200,
+                    "tags": ["1", "2", "3", "4", "5"],
+                }
+            ]
+        }
+        result = _normalize_rankings(raw)
+        item = result["ai_drama"][0]
+        self.assertTrue(item["plot"].endswith("..."))
+        self.assertEqual(len(item["tags"]), 4)
+
+
+class TestNormalizeTrends(unittest.TestCase):
+    def test_extracts_source_url(self):
+        raw = [
+            {"title": "3D漫升温", "summary": "3D漫占比提升", "source": "DataEye", "source_url": "https://thepaper.cn/1"}
+        ]
+        result = _normalize_trends(raw)
+        self.assertEqual(result[0]["source"], "DataEye")
+        self.assertEqual(result[0]["source_url"], "https://thepaper.cn/1")
+
 
 class TestNormalizeNews(unittest.TestCase):
     def test_allows_missing_url(self):
@@ -82,6 +139,13 @@ class TestNormalizeNews(unittest.TestCase):
         ]
         result = _normalize_news(raw)
         self.assertEqual(len(result), 2)
+
+    def test_extracts_summary(self):
+        raw = [
+            {"title": "出海", "source": "A", "date": "2026-05-01", "url": "https://x.com", "summary": "AI短剧出海增长快"}
+        ]
+        result = _normalize_news(raw)
+        self.assertEqual(result[0]["summary"], "AI短剧出海增长快")
 
 
 class TestBuildDashboard(unittest.TestCase):
@@ -125,6 +189,21 @@ class TestAIDramaFetcher(unittest.TestCase):
         data = regex_extract_dashboard(articles, "2026-04")
         self.assertGreaterEqual(len(data.get("kpis", [])), 2)
         self.assertTrue(data.get("rankings", {}).get("ai_drama") or data.get("news"))
+
+    def test_regex_extracts_top_from_may_report(self):
+        text = (
+            "5月抖音端原生百强榜中，麦芽的《换亲成宠》登顶；"
+            "宇瀚忠毅制作的《从此朵朵花开》第二，版权方为新漫跳动；"
+            "西垚数字制作的《离婚后，我与苏大小姐闪婚了》第三。"
+            "5月红果AI剧/漫剧百强榜中，陈柯文化的《聚宝仙盆之杂灵根才是真BOSS第四季》第一，最高热度达8044W；"
+            "《山海藏墟，无眼窥天》第三，最高热度达6975万。"
+        )
+        data = regex_extract_dashboard([{"title": "5月月报", "url": "https://x", "text": text}], "2026-05")
+        ai_drama = data.get("rankings", {}).get("ai_drama", [])
+        ai_comic = data.get("rankings", {}).get("ai_comic", [])
+        titles = [i["title"] for i in ai_drama + ai_comic]
+        self.assertIn("换亲成宠", titles)
+        self.assertIn("聚宝仙盆之杂灵根才是真BOSS第四季", titles)
 
 
 class TestUnwrapDashboardPayload(unittest.TestCase):

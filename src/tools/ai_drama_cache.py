@@ -22,6 +22,34 @@ def _ensure_cache_dir() -> None:
     os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
 
 
+def _is_valid_cache(cache: Dict[str, Any]) -> bool:
+    """判断缓存是否足够完整，避免用只有 1 条榜单的残缺结果长期占位。"""
+    dashboard = cache.get("dashboard") or {}
+    if not isinstance(dashboard, dict):
+        return False
+
+    rankings = dashboard.get("rankings") or {}
+    ai_drama_list = rankings.get("ai_drama") or []
+    ai_comic_list = rankings.get("ai_comic") or []
+    has_kpis = bool(dashboard.get("kpis"))
+    has_ai_drama = len(ai_drama_list) >= 3
+    has_ai_comic = len(ai_comic_list) >= 3
+    has_trends = bool(dashboard.get("trends"))
+    has_news = bool(dashboard.get("news"))
+
+    # 基本条件：至少要有一些核心内容
+    if not any([has_kpis, has_ai_drama, has_ai_comic, has_trends, has_news]):
+        return False
+
+    # 榜单完整性：要求两个榜单都至少有 3 条，或某一榜单满 5 条且趋势不空
+    if not (has_ai_drama and has_ai_comic) and not (
+        (len(ai_drama_list) >= 5 or len(ai_comic_list) >= 5) and has_trends
+    ):
+        return False
+
+    return True
+
+
 def load_cache(today: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """加载本月有效的 AI 短剧/漫剧看板缓存。"""
     _ensure_cache_dir()
@@ -49,27 +77,9 @@ def load_cache(today: Optional[str] = None) -> Optional[Dict[str, Any]]:
         )
         return None
 
-    # 如果缓存的核心字段全部为空，或仅有漫剧榜无仿真人剧榜，视为无效缓存
-    rankings = dashboard.get("rankings") or {}
-    ai_drama_list = rankings.get("ai_drama") or []
-    ai_comic_list = rankings.get("ai_comic") or []
-    has_kpis = bool(dashboard.get("kpis"))
-    has_ai_drama = len(ai_drama_list) >= 3
-    has_ai_comic = len(ai_comic_list) >= 3
-    has_trends = bool(dashboard.get("trends"))
-    has_news = bool(dashboard.get("news"))
-
-    if not any([has_kpis, has_ai_drama, has_ai_comic, has_trends, has_news]):
+    if not _is_valid_cache(cache):
         logger.warning(
-            "ai_drama_cache: 命中本月缓存 %s，但核心字段均为空，将重新搜索",
-            data_month,
-        )
-        return None
-
-    # 仅有漫剧榜、缺少仿真人剧榜且 KPI 不足时，视为不完整缓存（常见于沿用上月月报）
-    if has_ai_comic and not has_ai_drama and len(dashboard.get("kpis") or []) < 2:
-        logger.warning(
-            "ai_drama_cache: 缓存 %s 仅含漫剧榜且 KPI 不足，将重新抓取",
+            "ai_drama_cache: 命中本月缓存 %s，但核心数据不完整，将重新搜索",
             data_month,
         )
         return None

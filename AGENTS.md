@@ -202,7 +202,7 @@ search_node
 | `emotion_analysis_node` | `emotion_analysis_node.py` | 从 `config/emotion_rules.json` 加载情绪维度规则，基于当日榜单规则化统计情绪维度；DeepSeek 提炼总览、TOP3 情绪剧目与行动建议；失败或兜底时基于实际统计数据动态生成文案 | 是（DeepSeek） |
 | `insights_node` | `insights_node.py` | 周更：周一 Kimi 搜索行业事件 → DeepSeek 生成商业洞察并缓存；周二至周日直接读缓存 | 是（Kimi+DeepSeek，每周最多 1 次） |
 | `news_node` | `news_node.py` | Kimi 搜索 3 组新闻 → DeepSeek 生成最多 6 条快讯 | 是（Kimi+DeepSeek） |
-| `ai_drama_node` | `ai_drama_node.py` | 月度 DataEye AI 短剧/漫剧月报 + Kimi 搜索补充，输出 KPI、AI 仿真人剧 TOP5、AI 漫剧 TOP5、趋势洞察、行业快讯；月度缓存，平日直接读取 | 是（Kimi，每月最多 1 次） |
+| `ai_drama_node` | `ai_drama_node.py` | 月度 DataEye AI 短剧/漫剧月报/百强榜 + 独立行业报道：优先直爬 thepaper 多篇报告，按发布节奏自动回退月份，输出 KPI、AI 仿真人剧 TOP5、AI 漫剧 TOP5（含剧情简介/标签/制作方/链接）、带来源引用的趋势洞察、带摘要的行业快讯；月度缓存，平日直接读取 | 是（Kimi/DeepSeek，每月最多 1 次） |
 | `history_data_node` | `history_data_node.py` | 生成周榜热度趋势（近8周）、周榜历史、排名变化 | 否 |
 | `quality_gate_node` | `quality_gate_node.py` | 统一质量门禁：校验榜单/演员/快讯/行业数据/API 错误 | 否 |
 | `alert_node` | `alert_node.py` | 异常监测：基于质量报告与业务规则自动生成 Alerts | 否 |
@@ -242,7 +242,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 
 1. **search_node**：爬取短剧工程周榜 TOP50（或首页 TOP10）作为主数据源；抓取红果官网 100 条推荐页作为辅助；尝试 DataEye 30 条交叉验证；再用 Kimi 搜索 1 次行业宏观数据。
 2. **news_node**：并行运行，Kimi 搜索 3 组新闻 → DeepSeek 生成 ≤6 条快讯。
-3. **ai_drama_node**：与 `news_node`/`process_node` 并行，月度运行。月初/缓存缺失时使用 Kimi 联网搜索 DataEye AI 短剧/漫剧月报（thepaper.cn）提取 KPI、TOP5 榜单、趋势洞察与快讯；平日读取 `data/ai_drama_cache.json` 缓存。仅收录真正的 AI 仿真人剧、AIGC/3D/2D AI 漫剧，排除普通沙雕漫。
+3. **ai_drama_node**：与 `news_node`/`process_node` 并行，月度运行。月初/缓存缺失时按发布节奏（默认次月 18 日前后）选择最近完整报告月，直爬 thepaper 上 DataEye AI 短剧/漫剧月报/百强榜（`config/ai_drama_articles.json`）及独立行业报道，经 DeepSeek 抽取 KPI、TOP5 榜单（含 `plot`/`tags`/`studio`/`url`）、带 `source`/`source_url` 的趋势洞察、带 `summary` 的行业快讯；平日读取 `data/ai_drama_cache.json` 缓存。仅收录真正的 AI 仿真人剧、AIGC/3D/2D AI 漫剧，排除普通沙雕漫。
 4. **process_node**：优先解析 `duanjugongcheng_ranking` 中的短剧工程周榜，转换为标准榜单（`weekly_index` 作为 `heat`/`views_num`）；用红果推荐页回填 `series_id`、`cover`、`tags`、`episodes`；短剧工程不可用时降级使用红果推荐页；均不可用时用 Kimi 从搜索结果提取。
 4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整榜单 JSON。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；男女频不足 10 人时，仅在周一调用 DeepSeek 推理补充，平日保留榜单提取结果以节省 token。
@@ -384,7 +384,7 @@ python src/utils/config_validator.py
 | `alert_count` | `int` | 告警数量 |
 | `quality_report` | `Dict[str, Any]` | 质量门禁 8 项检查详情 |
 | `weekly_base` | `Dict[str, Any]` | 周榜基准信息：本周 TOP1 剧名、热度、题材、数据说明 |
-| `ai_drama_dashboard` | `AIDramaDashboard` | 🤖 AI 短剧/漫剧看板：月度 KPI、AI 剧/漫剧 TOP5、趋势洞察、行业快讯；含 `data_source`/`update_frequency` |
+| `ai_drama_dashboard` | `AIDramaDashboard` | 🤖 AI 短剧/漫剧看板：月度 KPI、AI 剧/漫剧 TOP5（含 `plot`/`tags`/`studio`/`url`）、带来源的趋势洞察、带 `summary` 的行业快讯；含 `data_source`/`update_frequency` |
 
 ## 11. 部署流程
 
@@ -520,7 +520,7 @@ export PYTHONPATH="$PWD/src"
 
 | 日期 | 改动 |
 |------|------|
-| 2026-06-12 | **v1.9.0 第二阶段优化**：本地缓存 + 多源验证 + 排名趋势 |
+| 2026-07-06 | **v1.15.0 AI 短剧/漫剧看板升级**：`config/ai_drama_articles.json` 补充 thepaper 5 月月报/百强榜与行业报道；`ai_drama_node` 增加发布滞后回退，直爬多篇文章并抽取 `plot`/`tags`/`studio`/`url` 等榜单字段；趋势洞察附 `source`/`source_url`，快讯带 `summary`；缓存校验要求榜单 ≥3 条；前端榜单展示剧情、标签、制作方、可点击标题 |
 | 2026-06-12 | 新增 `tools/cache_db.py`：本地 SQLite 缓存，7 天内有效，避免重复搜索 |
 | 2026-06-12 | 新增 `tools/tag_normalizer.py`：标签标准化与题材分类 |
 | 2026-06-12 | 新增 `tools/dataeye_crawler.py`：DataEye 榜单爬取，交叉验证红果数据 |

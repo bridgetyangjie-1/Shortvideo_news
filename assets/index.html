@@ -2489,11 +2489,20 @@ function renderAIDashboard(dashboard) {
         if (trends.length === 0) {
             trendsContainer.innerHTML = '<div style="color:#64748b; font-size:12px; padding:12px 0;">暂无趋势洞察</div>';
         } else {
-            trendsContainer.innerHTML = trends.map((t, idx) => `
+            trendsContainer.innerHTML = trends.map((t, idx) => {
+                const sourceHtml = (t.source || t.source_url) ? `
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;">
+                        来源：${t.source_url
+                            ? `<a href="${escapeAttribute(t.source_url)}" target="_blank" rel="noopener noreferrer" style="color:#93c5fd;text-decoration:none;">${escapeHtml(t.source || '澎湃新闻')}</a>`
+                            : escapeHtml(t.source || '澎湃新闻')}
+                    </div>` : '';
+                return `
                 <div class="insight-item" style="margin-bottom: 10px;">
                     <div class="insight-item-title">${idx + 1}. ${escapeHtml(t.title || '趋势洞察')}</div>
                     <div class="insight-item-desc">${escapeHtml(t.summary || '')}</div>
-                </div>`).join('');
+                    ${sourceHtml}
+                </div>`;
+            }).join('');
         }
     }
 
@@ -2505,14 +2514,19 @@ function renderAIDashboard(dashboard) {
             newsContainer.innerHTML = '<div style="grid-column: 1 / -1; color:#64748b; font-size:12px; padding:12px 0;">暂无 AI 短剧/漫剧快讯</div>';
         } else {
             newsContainer.innerHTML = newsList.map(n => {
+                const isComic = (n.title || '').toLowerCase().includes('漫') || (n.summary || '').toLowerCase().includes('漫');
+                const typeClass = isComic ? 'commercial' : 'data';
+                const typeLabel = isComic ? '漫剧' : 'AI短剧';
                 const linkHtml = n.url ? `<a class="news-link" href="${escapeAttribute(n.url)}" target="_blank" rel="noopener noreferrer">原文链接 -&gt;</a>` : '';
+                const summaryHtml = n.summary ? `<div class="news-content" style="font-size: 12px; color: #cbd5e1; margin-top: 6px; line-height: 1.5;">${escapeHtml(n.summary)}</div>` : '';
                 return `
                     <div class="news-item">
                         <div class="news-header">
-                            <span class="news-type data">AI</span>
+                            <span class="news-type ${typeClass}">${typeLabel}</span>
                             <span class="news-title">${escapeHtml(n.title || '行业快讯')}</span>
                         </div>
                         <div class="news-content" style="font-size: 11px; color: #94a3b8; margin-top: 4px;">${escapeHtml(n.source || '')} · ${escapeHtml(n.date || '')}</div>
+                        ${summaryHtml}
                         ${linkHtml}
                     </div>`;
             }).join('');
@@ -2530,12 +2544,26 @@ function renderAIRankings(containerId, rankings) {
     container.innerHTML = rankings.slice(0, 5).map(r => {
         const rankStyle = r.rank <= 3 ? 'background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff;' : '';
         const newBadge = r.is_new ? '<span style="margin-left: 6px; font-size: 10px; padding: 1px 5px; background: rgba(52, 211, 153, 0.15); color: #34d399; border-radius: 4px;">新剧</span>' : '';
+        const titleHtml = r.url
+            ? `<a href="${escapeAttribute(r.url)}" target="_blank" rel="noopener noreferrer" style="color:#e0e7ff;text-decoration:none;" title="${escapeAttribute(r.title)}">${escapeHtml(r.title || '--')}</a>`
+            : escapeHtml(r.title || '--');
+        const tagsHtml = (r.tags || []).slice(0, 4).map(t =>
+            `<span style="display:inline-block;font-size:10px;padding:1px 5px;margin:2px 4px 0 0;background:rgba(96,165,250,0.12);color:#93c5fd;border-radius:4px;">${escapeHtml(t)}</span>`
+        ).join('');
+        const plotHtml = r.plot
+            ? `<div style="font-size:11px;color:#94a3b8;margin-top:3px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(r.plot)}</div>`
+            : '';
+        const studioHtml = r.studio
+            ? `<span style="font-size:10px;color:#cbd5e1;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:4px;">${escapeHtml(r.studio)}</span>`
+            : '';
         return `
-            <div class="ranking-item" style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">
-                <span class="ranking-rank" style="flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-right: 10px; ${rankStyle}">${r.rank}</span>
+            <div class="ranking-item" style="display: flex; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <span class="ranking-rank" style="flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-right: 10px; margin-top: 2px; ${rankStyle}">${r.rank}</span>
                 <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 13px; color: #e0e7ff; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(r.title || '--')}${newBadge}</div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">${escapeHtml(r.platform || '')} · ${escapeHtml(r.category || '')}</div>
+                    <div style="font-size: 13px; color: #e0e7ff; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${titleHtml}${newBadge}</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">${escapeHtml(r.platform || '')} · ${escapeHtml(r.category || '')}${studioHtml ? ' · ' + studioHtml : ''}</div>
+                    ${plotHtml}
+                    <div style="margin-top: 3px;">${tagsHtml}</div>
                 </div>
                 <div style="text-align: right; flex-shrink: 0; margin-left: 8px;">
                     <div style="font-size: 12px; color: #fbbf24; font-weight: 600;">${escapeHtml(r.heat || '--')}</div>

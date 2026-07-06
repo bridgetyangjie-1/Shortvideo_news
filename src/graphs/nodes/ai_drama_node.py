@@ -25,6 +25,7 @@ from tools.ai_drama_fetcher import (
     combine_articles_text,
     extract_thepaper_ids,
     fetch_articles_by_ids,
+    fetch_related_news_articles,
     fetch_report_articles,
     regex_extract_dashboard,
 )
@@ -60,16 +61,28 @@ def _load_llm_cfg(config: RunnableConfig) -> Dict[str, Any]:
     return {}
 
 
+# DataEye 月报/百强榜通常在次月 18 日前后发布，若当前日期早于发布日，
+# 最新完整月报为上上个月；否则为上个月。
+REPORT_PUBLISH_DAY = 18
+
+
 def _resolve_report_month(data_date: str) -> str:
-    """月报通常为次月发布上月数据，因此 report_month 取 data_date 的上个月。"""
+    """根据 DataEye 月报发布节奏，返回当前最可能有完整报告的上月/上上月。"""
     try:
         dt = datetime.strptime(data_date, "%Y-%m-%d")
     except ValueError:
         dt = datetime.now()
-    year, month = dt.year, dt.month
-    if month == 1:
-        return f"{year - 1}-12"
-    return f"{year}-{month - 1:02d}"
+    year, month, day = dt.year, dt.month, dt.day
+    # 早于发布日：回退两个月；否则回退一个月
+    offset = -2 if day < REPORT_PUBLISH_DAY else -1
+    month += offset
+    while month <= 0:
+        month += 12
+        year -= 1
+    while month > 12:
+        month -= 12
+        year += 1
+    return f"{year}-{month:02d}"
 
 
 def _shift_report_month(report_month: str, offset: int = -1) -> str:
@@ -154,6 +167,25 @@ def _normalize_kpis(raw_kpis: List[Any]) -> List[Dict[str, Any]]:
     return kpis
 
 
+def _normalize_tags(raw_tags: Any) -> List[str]:
+    if isinstance(raw_tags, str):
+        tags = [t.strip() for t in re.split(r"[,，、/\\|]", raw_tags) if t.strip()]
+    elif isinstance(raw_tags, list):
+        tags = [str(t).strip() for t in raw_tags if str(t).strip()]
+    else:
+        tags = []
+    # 去重并截断到 4 个
+    seen: set = set()
+    unique: List[str] = []
+    for t in tags:
+        if t and t not in seen:
+            seen.add(t)
+            unique.append(t)
+            if len(unique) >= 4:
+                break
+    return unique
+
+
 def _normalize_rankings(raw_rankings: Any) -> Dict[str, List[Dict[str, Any]]]:
     rankings: Dict[str, List[Dict[str, Any]]] = {"ai_drama": [], "ai_comic": []}
     if not isinstance(raw_rankings, dict):
@@ -181,15 +213,20 @@ def _normalize_rankings(raw_rankings: Any) -> Dict[str, List[Dict[str, Any]]]:
     for items, key in ((drama_list, "ai_drama"), (comic_list, "ai_comic")):
         if not isinstance(items, list):
             continue
-        for idx, item in enumerate(items[:5], start=1):
+        seen_titles: set = set()
+        for idx, item in enumerate(items[:6], start=1):
             if not isinstance(item, dict):
                 continue
             title = _safe_text(item.get("title", item.get("剧名", "")), "")
-            if not title:
+            if not title or title in seen_titles:
                 continue
+            seen_titles.add(title)
             category = _safe_text(item.get("category", item.get("类型", "")), "")
             if key == "ai_comic" and not category:
                 category = "AIGC 漫剧"
+            plot = _safe_text(item.get("plot", item.get("剧情", item.get("简介", ""))), "")
+            if plot and len(plot) > 120:
+                plot = plot[:117] + "..."
             rankings[key].append(
                 {
                     "rank": _safe_rank(item.get("rank", idx)) or idx,
@@ -198,6 +235,12 @@ def _normalize_rankings(raw_rankings: Any) -> Dict[str, List[Dict[str, Any]]]:
                     "category": category,
                     "heat": _safe_text(item.get("heat", item.get("热度", "")), ""),
                     "is_new": bool(item.get("is_new", item.get("新剧", False))),
+                    "plot": plot,
+                    "tags": _normalize_tags(item.get("tags", item.get("标签", []))),
+                    "studio": _safe_text(item.get("studio", item.get("制作方", item.get("工作室", ""))), ""),
+                    "url": _safe_text(item.get("url", item.get("链接", "")), ""),
+                    "episodes": _safe_text(item.get("episodes", item.get("集数", "")), ""),
+                    "release_date": _safe_text(item.get("release_date", item.get("上线日期", "")), ""),
                 }
             )
     return rankings
@@ -212,7 +255,14 @@ def _normalize_trends(raw_trends: Any) -> List[Dict[str, Any]]:
             title = _safe_text(item.get("title", item.get("标题", "")), "")
             summary = _safe_text(item.get("summary", item.get("摘要", "")), "")
             if title or summary:
-                trends.append({"title": title, "summary": summary})
+                trends.append(
+                    {
+                        "title": title,
+                        "summary": summary,
+                        "source": _safe_text(item.get("source", item.get("来源", "")), ""),
+                        "source_url": _safe_text(item.get("source_url", item.get("url", "")), ""),
+                    }
+                )
     return trends
 
 
@@ -220,20 +270,26 @@ def _normalize_news(raw_news: Any) -> List[Dict[str, Any]]:
     news: List[Dict[str, Any]] = []
     if not isinstance(raw_news, list):
         return news
-    for item in raw_news[:5]:
+    seen_titles: set = set()
+    for item in raw_news[:6]:
         if isinstance(item, dict):
             url = _safe_text(item.get("url", item.get("链接", "")), "")
             title = _safe_text(item.get("title", item.get("标题", "")), "")
-            if not title:
+            if not title or title in seen_titles:
                 continue
+            seen_titles.add(title)
             if url and not url.startswith(("http://", "https://")):
                 continue
+            summary = _safe_text(item.get("summary", item.get("摘要", "")), "")
+            if summary and len(summary) > 180:
+                summary = summary[:177] + "..."
             news.append(
                 {
                     "title": title,
                     "source": _safe_text(item.get("source", item.get("来源", "")), ""),
                     "date": _safe_text(item.get("date", item.get("日期", "")), ""),
                     "url": url,
+                    "summary": summary,
                 }
             )
     return news
@@ -317,7 +373,8 @@ def _extract_dashboard_from_articles(
 
     year, month = report_month.split("-")
     article_text = combine_articles_text(articles)
-    source_note = "澎湃新闻 DataEye 月报直爬 + DeepSeek 抽取"
+    source_note = "澎湃新闻 DataEye 月报/行业报道直爬 + DeepSeek 抽取"
+    first_url = next((a.get("url", "") for a in articles if a.get("url", "")), "")
 
     extract_template = cfg.get("extract_up", "")
     sp = cfg.get("sp", "")
@@ -348,6 +405,7 @@ def _extract_dashboard_from_articles(
         data = _parse_llm_json(raw)
         dashboard = _build_dashboard(data, report_month, data_source=source_note)
         if _has_meaningful_dashboard(dashboard):
+            _patch_source_urls(dashboard, first_url)
             return dashboard
     except Exception as exc:
         logger.warning("ai_drama_node: DeepSeek 抽取 thepaper 原文失败: %s", exc)
@@ -357,8 +415,25 @@ def _extract_dashboard_from_articles(
         dashboard = _build_dashboard(regex_data, report_month, data_source=regex_data.get("data_source", source_note))
         if _has_meaningful_dashboard(dashboard):
             logger.info("ai_drama_node: 使用规则抽取 thepaper 原文成功")
+            _patch_source_urls(dashboard, first_url)
             return dashboard
     return None
+
+
+def _patch_source_urls(dashboard: AIDramaDashboard, fallback_url: str) -> None:
+    """为趋势/快讯补全来源链接，避免前端只有标题没有出处。"""
+    if not fallback_url:
+        return
+    for trend in dashboard.trends:
+        if not trend.source_url:
+            trend.source_url = fallback_url
+        if not trend.source:
+            trend.source = "澎湃新闻 / DataEye"
+    for news in dashboard.news:
+        if not news.url:
+            news.url = fallback_url
+        if not news.source:
+            news.source = "澎湃新闻"
 
 
 def _discover_thepaper_articles(
@@ -469,8 +544,16 @@ def _try_fetch_dashboard(
     if not articles and allow_kimi_discovery:
         articles = _discover_thepaper_articles(client, year, month)
 
-    if articles:
-        dashboard = _extract_dashboard_from_articles(articles, report_month, cfg)
+    # 把用作快讯来源的独立行业报道一起喂给抽取模块，提升 news/trends 的丰富度
+    try:
+        news_articles = fetch_related_news_articles()
+    except Exception as exc:
+        logger.warning("ai_drama_node: 抓取 AI 短剧相关报道失败: %s", exc)
+        news_articles = []
+    all_articles = articles + news_articles
+
+    if all_articles:
+        dashboard = _extract_dashboard_from_articles(all_articles, report_month, cfg)
         if dashboard:
             return dashboard, ""
 
