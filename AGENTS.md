@@ -220,6 +220,7 @@ search_node
 | `MoonshotClient` | `moonshot_api.py` | Kimi 客户端：chat、search、JSON 提取、429 退避、API 预算熔断 |
 | `DeepSeekClient` | `deepseek_api.py` | DeepSeek 客户端：chat 接口 |
 | `AIDramaCache` | `ai_drama_cache.py` | AI 短剧/漫剧看板月度缓存 |
+| `AIDramaFetcher` | `ai_drama_fetcher.py` | 澎湃新闻 DataEye 月报直爬 + 规则抽取 |
 
 ### 6.3 `src/storage/` 存储层
 
@@ -546,7 +547,7 @@ export PYTHONPATH="$PWD/src"
 | 2026-06-14 | **v1.10.6 热门标签维度均衡**：`genre_distribution_node` 从“全局 TOP20 后分类”改为“按题材/爽点/人设/情感关系/时代背景独立取 TOP N”，保证每个维度都有多个标签；关系型标签（先婚后爱/闪婚/离婚/复婚）归入「情感关系」，扩展人设/情感关系词库；前端热门标签改为 2 列紧凑网格 |
 | 2026-06-14 | **v1.10.6 情绪驾驶舱二合一**：`assets/index.html` 将「洞察」与「热力」两个 Tab 合并为「洞察」Tab（含今日洞察、关键词、情绪热力 TOP8、环比趋势），保留「建议」Tab；桌面端洞察 Tab 内采用 2 列网格（热力图 + 趋势），移动端自动堆叠 |
 | 2026-06-16 | **v1.10.7 飞书机器人推送**：新增 `src/tools/feishu_pusher.py`，每日工作流完成后自动推送完整版交互式日报卡片；支持手动触发测试与质量门禁失败告警；GitHub Actions 通过 `FEISHU_WEBHOOK` secret 注入 |
-| 2026-06-28 | **v1.14.0 AI 短剧/漫剧看板**：新增 `🤖 AI 短剧/漫剧` 第三频道；新增 `src/graphs/nodes/ai_drama_node.py`、`src/graphs/models/ai_drama.py`、`config/ai_drama_llm_cfg.json`、`src/tools/ai_drama_cache.py`；月度 DataEye 月报 + Kimi 搜索补充，输出 KPI、AI 仿真人剧 TOP5、AI 漫剧 TOP5、趋势洞察、行业快讯；前端 `assets/index.html` 新增频道 Tab 与渲染逻辑；`latest.json`/`latest_full.json` 新增 `ai_drama_dashboard` 字段 |
+| 2026-07-06 | **v1.14.1 AI 短剧数据渠道修复**：新增 `tools/ai_drama_fetcher.py` 直爬澎湃新闻 DataEye 月报；`ai_drama_node` 增加 thepaper 直爬 → DeepSeek 抽取 → 规则兜底 → 上月回退 → carry-forward 多层策略；`config/ai_drama_articles.json` 维护文章 ID；热门内容频道接入 GitHub Actions 每周一自动生成 |
 | 2026-06-20 | **v1.10.8 数据源重构（短剧工程周榜）**：红果网页端首页仅为推荐列表、DataEye API 不可用，改以 `duanjugongcheng.com` 短剧工程周榜为主数据源，红果推荐页仅作元数据补充；新增 `tools/duanjugongcheng_crawler.py`，`search_node` 与 `process_node` 优先处理短剧工程数据 |
 | 2026-06-20 | **v1.10.8 周榜基准与归档**：`push_node.py` 在周一将短剧工程周榜归档为 `assets/data/weekly/YYYY-MM-DD.json`，并在 `latest.json`/`latest_full.json` 中输出 `weekly_base` 字段；前端榜单区域新增「🏆 周榜坐标」基准条，展示本周 TOP1 剧名、热度与题材 |
 | 2026-06-12 | **v1.8.1 API 调用优化**：Kimi 调用从 20+ 次降到 6 次以内 |

@@ -225,18 +225,23 @@ class MoonshotClient:
         system_prompt: Optional[str] = None,
         temperature: float = 0.2,
         max_tokens: int = 3000,
-        expected_type: Optional[Type[Any]] = dict
+        expected_type: Optional[Type[Any]] = dict,
+        allow_unknown: bool = True,
     ) -> Any:
         """
         联网搜索并解析 JSON。
 
         解析失败时强制 logger.error 输出 Kimi raw_text，调用方应捕获异常并写入 error_message。
         """
+        if allow_unknown:
+            missing_field_hint = '如果某字段找不到，请使用"未知"或合理的空数组，不要编造具体事实。'
+        else:
+            missing_field_hint = "如果某字段找不到，请使用空字符串或空数组，不要填「未知」，不要编造具体事实。"
         prompt = f"""请联网搜索并提取以下信息，最后只输出 JSON，不要省略字段。
 
 查询：{query}
 
-如果某字段找不到，请使用"未知"或合理的空数组，不要编造具体事实。"""
+{missing_field_hint}"""
         try:
             raw_text = self._chat_with_web_search(
                 messages=[
