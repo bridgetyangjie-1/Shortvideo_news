@@ -1,0 +1,228 @@
+{
+  "success": true,
+  "generated_at": "2026-07-06T10:25:17+08:00",
+  "week_date": "2026-07-06",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "我靠听物成团宠",
+      "genre": "奇幻脑洞",
+      "weekly_index": 13662,
+      "total_index": 15990,
+      "release_date": "2026-06-27",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 2,
+      "title": "上司！上瘾！商总一眼心动了",
+      "genre": "都市爱情",
+      "weekly_index": 12524,
+      "total_index": 21864,
+      "release_date": "2026-06-25",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 3,
+      "title": "肆零肆：山茶花会开",
+      "genre": "都市爱情",
+      "weekly_index": 11016,
+      "total_index": 13035,
+      "release_date": "2026-06-28",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 4,
+      "title": "从纨绔到镇北侯我统领天下",
+      "genre": "古风权谋",
+      "weekly_index": 10348,
+      "total_index": 11496,
+      "release_date": "2026-06-28",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 5,
+      "title": "重生70，打猎养娃宠前妻",
+      "genre": "种田经营",
+      "weekly_index": 9873,
+      "total_index": 11101,
+      "release_date": "2026-06-27",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 6,
+      "title": "糟糕！大馋丫头心声藏不住啦",
+      "genre": "奇幻爱情",
+      "weekly_index": 9649,
+      "total_index": 19083,
+      "release_date": "2026-06-23",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 7,
+      "title": "天命照骨",
+      "genre": "都市玄幻",
+      "weekly_index": 9295,
+      "total_index": 10861,
+      "release_date": "2026-06-27",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 8,
+      "title": "这个外卖员不好惹",
+      "genre": "都市日常",
+      "weekly_index": 9106,
+      "total_index": 12388,
+      "release_date": "2026-06-25",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 9,
+      "title": "她替三代人讨债",
+      "genre": "女性成长",
+      "weekly_index": 9062,
+      "total_index": 13348,
+      "release_date": "2026-06-25",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 10,
+      "title": "朝思暮时",
+      "genre": "都市爱情",
+      "weekly_index": 8913,
+      "total_index": 26955,
+      "release_date": "2026-06-21",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 11,
+      "title": "慢慢认识你",
+      "genre": "都市爱情",
+      "weekly_index": 8067,
+      "total_index": 8067,
+      "release_date": "2026-06-29",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 12,
+      "title": "婚宴悔亲，我转身收回一切",
+      "genre": "女性成长",
+      "weekly_index": 7781,
+      "total_index": 9052,
+      "release_date": "2026-06-26",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 13,
+      "title": "嫁给盛先生",
+      "genre": "都市爱情",
+      "weekly_index": 7682,
+      "total_index": 14578,
+      "release_date": "2026-06-22",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 14,
+      "title": "刺骨春夜",
+      "genre": "青春",
+      "weekly_index": 7374,
+      "total_index": 17205,
+      "release_date": "2026-06-23",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 15,
+      "title": "屠龙：策",
+      "genre": "古风权谋",
+      "weekly_index": 7336,
+      "total_index": 10046,
+      "release_date": "2026-06-26",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 16,
+      "title": "薄荷夜",
+      "genre": "都市爱情",
+      "weekly_index": 7262,
+      "total_index": 7262,
+      "release_date": "2026-06-29",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 17,
+      "title": "双世为凰",
+      "genre": "女性成长",
+      "weekly_index": 7144,
+      "total_index": 12324,
+      "release_date": "2026-06-24",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 18,
+      "title": "摄政王的医品狂妃",
+      "genre": "宫斗宅斗",
+      "weekly_index": 7101,
+      "total_index": 8641,
+      "release_date": "2026-06-27",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 19,
+      "title": "半熟烟火",
+      "genre": "都市爱情",
+      "weekly_index": 6852,
+      "total_index": 9181,
+      "release_date": "2026-06-27",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    },
+    {
+      "rank": 20,
+      "title": "零五逆袭",
+      "genre": "家庭伦理",
+      "weekly_index": 6797,
+      "total_index": 14587,
+      "release_date": "2026-06-19",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-06"
+    }
+  ],
+  "rankings_count": 20
+}
