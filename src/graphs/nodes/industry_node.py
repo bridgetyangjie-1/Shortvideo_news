@@ -25,7 +25,7 @@ except ImportError:
     def is_api_budget_error(exc: Exception) -> bool:
         return str(exc) == "API \u8c03\u7528\u6b21\u6570\u8fc7\u591a\uff0c\u5df2\u718f\u65ad"
 
-from tools.industry_cache import load_cache, save_cache
+from tools.industry_cache import load_cache, save_cache, load_seed
 from graphs.state import (
     IndustryNodeInput,
     IndustryNodeOutput,
@@ -567,7 +567,29 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
                 error_message="",
             )
 
-        # 8. 所有搜索均无效：使用榜单统计兜底
+        # 8. 所有搜索均无效：尝试种子数据，再使用榜单统计兜底
+        seed = load_seed()
+        if seed:
+            industry_dict = seed.get("industry", {}) or {}
+            platform_dict = seed.get("platform", {}) or {}
+            industry_dict.setdefault("update_frequency", "monthly")
+            platform_dict.setdefault("update_frequency", "monthly")
+            industry = IndustryData(**industry_dict)
+            platform = PlatformData(**platform_dict)
+            if _has_valid_industry_data(industry):
+                logger.info("industry_node: 使用 config/industry_seed.json 种子数据")
+                save_cache(
+                    industry=industry.model_dump(),
+                    platform=platform.model_dump(),
+                    today=data_date,
+                )
+                return IndustryNodeOutput(
+                    industry=industry,
+                    platform=platform,
+                    success=True,
+                    error_message="industry_node: Kimi 搜索未获取有效数据，已使用行业种子数据\n",
+                )
+
         logger.warning("industry_node: 所有搜索均未获取到有效行业数据，使用榜单统计兜底")
         industry = _build_fallback_industry(ai_count, female_count, male_count, ranking_total)
         return IndustryNodeOutput(

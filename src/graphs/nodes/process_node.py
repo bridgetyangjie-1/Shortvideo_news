@@ -7,7 +7,7 @@ import json
 import re
 import logging
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
@@ -173,6 +173,39 @@ def _parse_episodes(episodes_str: str) -> int:
     return 80
 
 
+def _normalize_title_key(title: str) -> str:
+    """剧名归一化：去空白与常见标点，便于模糊匹配。"""
+    if not title:
+        return ""
+    text = str(title).strip().lower()
+    for ch in (" ", "　", "·", "•", ":", "：", "!", "！", "?", "？", "-", "—", "_"):
+        text = text.replace(ch, "")
+    return text
+
+
+def _find_hongguo_metadata(
+    title: str,
+    metadata_index: Dict[str, Dict[str, Any]],
+    normalized_index: Dict[str, Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    """精确匹配 → 归一化匹配 → 子串包含匹配。"""
+    if not title:
+        return None
+    meta = metadata_index.get(title) or metadata_index.get(title.replace(" ", ""))
+    if meta:
+        return meta
+    norm = _normalize_title_key(title)
+    if norm and norm in normalized_index:
+        return normalized_index[norm]
+    if norm:
+        for key, item in normalized_index.items():
+            if not key:
+                continue
+            if norm in key or key in norm:
+                return item
+    return None
+
+
 def _backfill_hongguo_metadata(
     rankings: List[Dict[str, Any]],
     hongguo_data: List[Dict[str, Any]]
@@ -180,20 +213,26 @@ def _backfill_hongguo_metadata(
     """用红果推荐页数据补充短剧工程榜单的 series_id/cover/tags/episodes"""
     if not hongguo_data:
         return rankings
-    
+
     metadata_index: Dict[str, Dict[str, Any]] = {}
+    normalized_index: Dict[str, Dict[str, Any]] = {}
     for item in hongguo_data:
         title = item.get("title", "").strip()
         if title:
             metadata_index[title] = item
             metadata_index[title.replace(" ", "")] = item
-    
+            norm = _normalize_title_key(title)
+            if norm and norm not in normalized_index:
+                normalized_index[norm] = item
+
+    backfilled = 0
     for item in rankings:
         title = item.get("title", "").strip()
-        meta = metadata_index.get(title) or metadata_index.get(title.replace(" ", ""))
+        meta = _find_hongguo_metadata(title, metadata_index, normalized_index)
         if not meta:
             continue
-        
+        backfilled += 1
+
         if not item.get("series_id"):
             item["series_id"] = meta.get("series_id", "")
         if not item.get("cover"):
@@ -204,7 +243,9 @@ def _backfill_hongguo_metadata(
             item["production_house"] = meta.get("studio", "")
         if item.get("episodes_count", 80) == 80:
             item["episodes_count"] = _parse_episodes(meta.get("episodes", ""))
-    
+
+    if backfilled:
+        logger.info("红果元数据回填: %d/%d 条匹配成功", backfilled, len(rankings))
     return rankings
 
 

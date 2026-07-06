@@ -1,5 +1,6 @@
 {
   "2026-04": ["33198460"],
   "2026-05": ["33335582"],
-  "comment": "澎湃新闻 DataEye AI剧/漫剧月报或百强榜 article id（newsDetail_forward_{id}）。新月报发布后请补充。"
+  "2026-06": [],
+  "comment": "澎湃新闻 DataEye AI剧/漫剧月报或百强榜 article id（newsDetail_forward_{id}）。2026-06 百强榜尚未在 thepaper 发布，留空由 Kimi 发现或上月兜底。"
 }

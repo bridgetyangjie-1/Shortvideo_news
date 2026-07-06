@@ -1,0 +1,39 @@
+{
+  "comment": "行业宏观数据种子：Kimi 搜索失败时回退。来源 2026-06 月报/行业报告摘要，需随新月报更新。",
+  "industry": {
+    "user_scale": "7.18亿",
+    "market_size": "1000亿+",
+    "drama_count": "25万+",
+    "billion_dramas": 20,
+    "ai_ratio": 38,
+    "female_ratio": 60,
+    "male_ratio": 40,
+    "app_mau": "3.04亿",
+    "app_mau_yoy": "+1.4亿",
+    "data_source": "行业月报种子数据（config/industry_seed.json）",
+    "update_frequency": "monthly"
+  },
+  "platform": {
+    "apps": [
+      {
+        "name": "红果免费短剧",
+        "mau": 3.04,
+        "mau_unit": "亿",
+        "yoy": "+1.4亿",
+        "share": 85,
+        "trend": "up"
+      },
+      {
+        "name": "抖音",
+        "mau": 8.0,
+        "mau_unit": "亿",
+        "yoy": "",
+        "share": 0,
+        "trend": "same"
+      }
+    ],
+    "mini_programs": [],
+    "data_source": "行业月报种子数据（config/industry_seed.json）",
+    "update_frequency": "monthly"
+  }
+}
