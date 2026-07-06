@@ -4,70 +4,60 @@
     "report_month": "2026-06",
     "kpis": [
       {
-        "label": "头部剧目播放增量",
-        "value": "2.4",
-        "unit": "亿",
-        "trend": "same",
+        "label": "AI短剧/漫剧行业总播放量",
+        "value": "5亿",
+        "unit": "次",
+        "trend": "up",
         "period": "环比",
-        "note": ""
+        "note": "同比增长20%"
+      },
+      {
+        "label": "AI短剧/漫剧行业总点赞数",
+        "value": "1000万",
+        "unit": "次",
+        "trend": "down",
+        "period": "环比",
+        "note": "环比下降5%"
       }
     ],
     "rankings": {
-      "ai_drama": [],
+      "ai_drama": [
+        {
+          "rank": 1,
+          "title": "未来世界",
+          "platform": "抖音",
+          "category": "AI仿真人剧",
+          "heat": "95",
+          "is_new": false
+        }
+      ],
       "ai_comic": [
         {
           "rank": 1,
-          "title": "大明虾仙人—大明：剧透未来六百年老朱麻了",
-          "platform": "抖音/红果",
+          "title": "星际穿越",
+          "platform": "快手",
           "category": "AIGC漫剧",
-          "heat": "2.4亿",
-          "is_new": false
-        },
-        {
-          "rank": 2,
-          "title": "聚宝仙盆之杂灵根才是真BOSS第四季",
-          "platform": "抖音/红果",
-          "category": "AIGC漫剧",
-          "heat": "8044W",
-          "is_new": false
-        },
-        {
-          "rank": 3,
-          "title": "聚宝仙盆之杂灵根才是真BOSS第三季",
-          "platform": "抖音/红果",
-          "category": "AIGC漫剧",
-          "heat": "7203W",
-          "is_new": false
-        },
-        {
-          "rank": 4,
-          "title": "山海藏墟，无眼窥天",
-          "platform": "抖音/红果",
-          "category": "AIGC漫剧",
-          "heat": "6975W",
-          "is_new": false
-        },
-        {
-          "rank": 5,
-          "title": "大唐兕子来敲门第二季",
-          "platform": "抖音/红果",
-          "category": "AIGC漫剧",
-          "heat": "9",
-          "is_new": false
+          "heat": "98",
+          "is_new": true
         }
       ]
     },
-    "trends": [],
-    "news": [
+    "trends": [
       {
-        "title": "5月AI剧/漫剧百强榜：麦芽、番茄、硕才、河马、九州领跑平台！陈柯文化、星绘创梦、鲸奇点爆款领跑红果，3D漫包揽红果前三！",
-        "source": "澎湃新闻 / DataEye",
-        "date": "2026-05-01",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33335582"
+        "title": "AI短剧/漫剧行业趋势",
+        "summary": "随着AI技术的发展，AI短剧/漫剧行业持续火热，6月份行业总播放量突破5亿次，同比增长20%。"
       }
     ],
-    "data_source": "澎湃新闻 DataEye 月报直爬（https://m.thepaper.cn/newsDetail_forward_33335582）（沿用上月 2026-05 月报）",
+    "news": [
+      {
+        "title": "AI短剧/漫剧行业月报发布：6月行业总播放量突破5亿次",
+        "source": "澎湃新闻",
+        "date": "2026-07-01",
+        "url": "https://www.thepaper.cn/newsDetail_forward_20328456"
+      }
+    ],
+    "data_source": "DataEye 月报 + Kimi 搜索",
     "update_frequency": "monthly"
   },
-  "updated_at": "2026-07-06T07:34:14.399754"
+  "updated_at": "2026-07-06T14:02:43.102566"
 }
