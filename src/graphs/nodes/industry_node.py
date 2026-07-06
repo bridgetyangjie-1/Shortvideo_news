@@ -599,65 +599,6 @@ def industry_node(state: IndustryNodeInput, config: RunnableConfig, runtime: Run
             error_message="industry_node: 当月、上月及通用搜索均未获取到有效行业数据，已使用榜单统计兜底\n",
         )
 
-        source_title = str(data.get("source_title", "") or "Kimi 搜索行业报告").strip()
-        # data_source 是“来源说明”，不应把完整 URL 拼进来（尤其企查查等搜索 URL 非常长，
-        # 会撑破前端 KPI 卡片布局）。URL 如需展示可单独放到 source_url，但当前模型未启用。
-        source_note = source_title
-
-        ai_ratio = _safe_ratio(data.get("ai_ratio"), 0)
-        female_ratio = _safe_ratio(data.get("female_ratio"), 0)
-        male_ratio = _safe_ratio(data.get("male_ratio"), 0)
-
-        # 如果搜索未返回性别比例，可用榜单统计作为参考，但标注来源
-        if ("female_ratio" not in data or data.get("female_ratio") in (None, "")) and ranking_total > 0:
-            female_ratio = int(female_count / ranking_total * 100)
-            male_ratio = int(male_count / ranking_total * 100)
-            source_note = f"{source_note}；性别比例来自当日榜单统计"
-
-        industry = IndustryData(
-            user_scale=_safe_text(_first_present(data, ("user_scale", "userScale")), ""),
-            market_size=_safe_text(_first_present(data, ("market_size", "marketSize")), ""),
-            drama_count=_safe_text(_first_present(data, ("drama_count", "total_dramas", "drama_total")), ""),
-            billion_dramas=_safe_int(_first_present(data, ("billion_dramas", "billionDramaCount")), 0),
-            ai_ratio=ai_ratio,
-            female_ratio=female_ratio,
-            male_ratio=male_ratio,
-            app_mau=_safe_text(_first_present(data, ("app_mau", "appMau")), ""),
-            app_mau_yoy=_safe_text(_first_present(data, ("app_mau_yoy", "appMauYoy")), ""),
-            data_source=source_note,
-            update_frequency="monthly",
-        )
-
-        # 5. 解析平台数据
-        apps = _parse_platform_apps(data)
-        mini_programs = data.get("mini_programs", [])
-        if not isinstance(mini_programs, list):
-            mini_programs = []
-
-        platform = PlatformData(
-            apps=apps,
-            mini_programs=mini_programs,
-            data_source=source_note,
-            update_frequency="monthly",
-        )
-
-        # 6. 保存月度缓存（仅当关键字段有效时才缓存，避免把空结果锁死一个月）
-        if _has_valid_industry_data(industry):
-            save_cache(
-                industry=industry.model_dump(),
-                platform=platform.model_dump(),
-                today=data_date,
-            )
-        else:
-            logger.warning("industry_node: 搜索返回的行业数据关键字段缺失，不写入月度缓存")
-
-        return IndustryNodeOutput(
-            industry=industry,
-            platform=platform,
-            success=True,
-            error_message="",
-        )
-
     except Exception as e:
         if is_api_budget_error(e):
             raise
