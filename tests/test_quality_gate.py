@@ -99,7 +99,7 @@ class QualityGateNodeTest(unittest.TestCase):
         self.assertLess(result.quality_score, 60)
         self.assertIn("榜单数量不足", result.error_message)
 
-    def test_fails_when_actors_missing(self) -> None:
+    def test_degraded_when_actors_missing(self) -> None:
         rankings = [_make_ranking(f"剧{i}", i) for i in range(1, 21)]
         actors = ActorsData(
             female=[_make_actor("未知", i) for i in range(1, 11)],
@@ -115,11 +115,11 @@ class QualityGateNodeTest(unittest.TestCase):
         )
         result = _run_gate(state)
 
-        self.assertFalse(result.success)
+        self.assertTrue(result.success)
+        self.assertEqual(result.quality_report.get("publish_mode"), "degraded")
         self.assertIn("女频演员", result.error_message)
-        self.assertIn("男频演员", result.error_message)
 
-    def test_fails_when_daily_news_missing_url(self) -> None:
+    def test_degraded_when_daily_news_missing_url(self) -> None:
         rankings = [_make_ranking(f"剧{i}", i) for i in range(1, 21)]
         actors = ActorsData(
             female=[_make_actor(f"女演员{i}", i) for i in range(1, 11)],
@@ -135,7 +135,8 @@ class QualityGateNodeTest(unittest.TestCase):
         )
         result = _run_gate(state)
 
-        self.assertFalse(result.success)
+        self.assertTrue(result.success)
+        self.assertEqual(result.quality_report.get("publish_mode"), "degraded")
         self.assertIn("快讯", result.error_message)
 
     def test_fails_when_upstream_has_api_error(self) -> None:
@@ -159,7 +160,7 @@ class QualityGateNodeTest(unittest.TestCase):
         self.assertIn("API", result.error_message)
 
 
-    def test_fails_when_industry_source_unreliable(self) -> None:
+    def test_degraded_when_industry_source_unreliable(self) -> None:
         rankings = [_make_ranking(f"剧{i}", i) for i in range(1, 21)]
         actors = ActorsData(
             female=[_make_actor(f"女演员{i}", i) for i in range(1, 11)],
@@ -179,7 +180,8 @@ class QualityGateNodeTest(unittest.TestCase):
         )
         result = _run_gate(state)
 
-        self.assertFalse(result.success)
+        self.assertTrue(result.success)
+        self.assertEqual(result.quality_report.get("publish_mode"), "degraded")
         self.assertIn("行业数据来源不真实", result.error_message)
 
 
