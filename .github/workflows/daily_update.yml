@@ -39,10 +39,26 @@ jobs:
           MOONSHOT_BASE_URL: ${{ secrets.MOONSHOT_BASE_URL }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          COZE_WORKSPACE_PATH: ${{ github.workspace }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           export PYTHONPATH="${GITHUB_WORKSPACE}/src"
           uv run python src/run_github.py
+
+      - name: Generate hot content (weekly, Monday UTC)
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          COZE_WORKSPACE_PATH: ${{ github.workspace }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          export PYTHONPATH="${GITHUB_WORKSPACE}/src"
+          DOW=$(date -u +%u)
+          if [ "$DOW" = "1" ]; then
+            echo "Monday UTC: generating hot content channel data..."
+            uv run python scripts/generate_hot_content.py
+          else
+            echo "Skip hot content generation (UTC weekday=$DOW, only runs on Monday)"
+          fi
 
       - name: Commit and push if changed
         run: |
