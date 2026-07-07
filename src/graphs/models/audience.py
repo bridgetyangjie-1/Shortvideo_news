@@ -61,3 +61,15 @@ class AudienceProfile(BaseModel):
         default="monthly",
         description="更新频率：monthly/weekly/daily",
     )
+    weekly_signals: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="本周榜单信号：基于 TOP20 加权统计的性别/题材/AI/新剧等实时指标",
+    )
+    weekly_trends: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="周度趋势：与昨日/上周榜单信号对比的环比变化",
+    )
+    analyst_insights: List[str] = Field(
+        default_factory=list,
+        description="分析师洞察：对比行业基准与本周榜单的可执行结论",
+    )

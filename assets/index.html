@@ -469,13 +469,31 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
 
 /* 核心观众画像 */
 .audience-section { margin-top: 4px; }
+.audience-insights { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 12px; padding: 10px 12px; background: rgba(244, 114, 182, 0.06); border: 1px solid rgba(244, 114, 182, 0.15); border-radius: 10px; }
+.audience-insight-item { font-size: 12px; color: #e2e8f0; line-height: 1.5; padding-left: 14px; position: relative; }
+.audience-insight-item::before { content: '▸'; position: absolute; left: 0; color: #f472b6; font-weight: 700; }
+.audience-layer-label { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
 .audience-dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
 .audience-col { display: flex; flex-direction: column; gap: 12px; }
 .audience-charts { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; }
 .audience-chart { width: 140px; height: 150px; background: rgba(15, 23, 42, 0.36); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; flex: 1; min-width: 120px; }
 .audience-bar-chart { width: 100%; height: 150px; background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; }
-.audience-traits { display: flex; flex-wrap: wrap; gap: 8px; }
+.audience-traits { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .audience-trait { padding: 6px 10px; background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.22); border-radius: 8px; font-size: 11px; color: #f472b6; line-height: 1.4; }
+
+.audience-signals-panel { background: rgba(15, 23, 42, 0.36); border: 1px solid rgba(96, 165, 250, 0.15); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.signal-metric { display: flex; justify-content: space-between; align-items: center; }
+.signal-metric-label { font-size: 11px; color: #94a3b8; }
+.signal-metric-value { font-size: 18px; font-weight: 800; color: #f8fafc; }
+.signal-metric-value.female { color: #f472b6; }
+.signal-metric-value.male { color: #60a5fa; }
+.signal-trend-badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+.signal-trend-badge.up { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+.signal-trend-badge.down { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+.signal-trend-badge.same { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+.signal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.signal-tag { font-size: 10px; padding: 3px 8px; border-radius: 6px; background: rgba(167, 139, 250, 0.12); color: #c4b5fd; border: 1px solid rgba(167, 139, 250, 0.2); }
+.signal-compare-note { font-size: 10px; color: #64748b; margin-top: 2px; }
 
 .audience-segments { display: flex; flex-direction: column; gap: 8px; }
 .segment-item { display: flex; flex-direction: column; gap: 4px; }
@@ -899,25 +917,30 @@ body.emotion-mobile-locked { overflow: hidden; }
 
   <!-- 核心观众画像 -->
   <div class="glass-card audience-section">
-    <div class="section-title" id="audience-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像 <span class="source-tag tier2">🔍 Kimi搜补+规则</span></div>
+    <div class="section-title" id="audience-title"><i class="fas fa-user-tag" style="color:#f472b6;"></i> 核心观众画像</div>
+    <div id="audience-insights" class="audience-insights"></div>
     <div class="audience-dashboard">
-      <div class="audience-col">
+      <div class="audience-col audience-col-signals">
+        <div class="audience-layer-label"><span class="source-tag tier1">📊 周更</span> 本周榜单信号 <span class="signal-compare-note">（TOP20 排名加权）</span></div>
+        <div id="weekly-signals-panel" class="audience-signals-panel"></div>
+        <div id="weeklyGenreChart" class="audience-bar-chart"></div>
+      </div>
+      <div class="audience-col audience-col-baseline">
+        <div class="audience-layer-label"><span class="source-tag tier2">🔍 月更</span> 行业基准画像</div>
         <div class="audience-charts">
           <div id="genderChart" class="audience-chart"></div>
           <div id="ageChart" class="audience-chart"></div>
         </div>
-        <div id="audience-traits-container" class="audience-traits"></div>
-      </div>
-      <div class="audience-col">
         <div id="regionChart" class="audience-bar-chart"></div>
-        <div id="contentChart" class="audience-bar-chart"></div>
       </div>
       <div class="audience-col">
+        <div class="audience-layer-label"><span class="source-tag tier2">🔍 月更</span> 行为与分层</div>
         <div id="viewingTimeChart" class="audience-bar-chart"></div>
         <div id="segments-container" class="audience-segments"></div>
         <div id="spending-container" class="audience-spending"></div>
       </div>
     </div>
+    <div id="audience-traits-container" class="audience-traits"></div>
   </div>
   
   <div class="glass-card">
@@ -1148,6 +1171,21 @@ const fallbackData = {
             { "name": "碎片路人", "share": 45, "desc": "通勤/睡前刷剧，免费内容为主" },
             { "name": "高消费用户", "share": 18, "desc": "对优质内容付费意愿强，关注主演" },
             { "name": "尝鲜猎奇党", "share": 9, "desc": "热衷新题材和黑马剧，易流失" }
+        ],
+        "weekly_signals": {
+            "female_ratio": 85, "male_ratio": 15, "ai_ratio": 5, "new_drama_ratio": 20,
+            "top_genres": [{ "name": "都市爱情", "share": 36 }, { "name": "复仇逆袭", "share": 22 }],
+            "top_tags": [{ "name": "甜宠", "share": 18 }, { "name": "逆袭", "share": 15 }],
+            "ranking_count": 20, "basis": "TOP20排名加权"
+        },
+        "weekly_trends": {
+            "compared_to": "2026-07-06", "female_ratio_delta": 5, "female_ratio_trend": "up",
+            "ai_ratio_delta": 0, "new_drama_ratio_delta": 3, "genre_shift": "都市爱情升温4pp"
+        },
+        "analyst_insights": [
+            "本周爆款女频浓度 85%，高于行业基准 78%（差 7pp），内容策略极致女频",
+            "较 2026-07-06 女频占比 ↑5pp",
+            "题材领跑：都市爱情（权重 36%），都市爱情升温4pp"
         ]
     },
     "emotional_analysis": {
@@ -1479,13 +1517,126 @@ function normalizeAudienceProfile(profile) {
     };
 }
 
-function renderAudienceProfile(rawProfile) {
+function formatTrendBadge(delta, trend) {
+    if (!delta && trend === 'same') return '';
+    const cls = trend || (delta > 0 ? 'up' : delta < 0 ? 'down' : 'same');
+    const arrow = cls === 'up' ? '↑' : cls === 'down' ? '↓' : '→';
+    const text = delta ? `${arrow}${Math.abs(delta)}pp` : arrow;
+    return `<span class="signal-trend-badge ${cls}">${text}</span>`;
+}
+
+function computeWeeklySignalsFromRankings(rankings) {
+    if (!Array.isArray(rankings) || !rankings.length) return {};
+    let totalWeight = 0, femaleWeight = 0, maleWeight = 0, aiWeight = 0, newWeight = 0;
+    const genreMap = {}, tagMap = {};
+    rankings.forEach(r => {
+        const rank = r.rank || 20;
+        const w = Math.max(1, 21 - rank);
+        totalWeight += w;
+        const cat = (r.category || '').toLowerCase();
+        if (cat === 'female') femaleWeight += w;
+        else if (cat === 'male') maleWeight += w;
+        else { femaleWeight += w * 0.55; maleWeight += w * 0.45; }
+        if (r.is_ai) aiWeight += w;
+        if (r.is_new) newWeight += w;
+        const genre = (r.genre || '').trim();
+        if (genre) genreMap[genre] = (genreMap[genre] || 0) + w;
+        const tags = [...(r.tags || []), ...(Array.isArray(r.core_trope) ? r.core_trope : [])];
+        tags.forEach(t => { if (t) tagMap[t] = (tagMap[t] || 0) + w; });
+    });
+    if (!totalWeight) return {};
+    const topN = (map, n) => Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, n)
+        .map(([name, count]) => ({ name, share: Math.round(count / totalWeight * 100) }));
+    const femaleRatio = Math.round(femaleWeight / totalWeight * 100);
+    return {
+        female_ratio: femaleRatio,
+        male_ratio: 100 - femaleRatio,
+        ai_ratio: Math.round(aiWeight / totalWeight * 100),
+        new_drama_ratio: Math.round(newWeight / totalWeight * 100),
+        top_genres: topN(genreMap, 5),
+        top_tags: topN(tagMap, 5),
+        ranking_count: rankings.length,
+        basis: 'TOP20排名加权'
+    };
+}
+
+function buildClientInsights(profile, signals, trends) {
+    const insights = [];
+    const baselineFemale = profile.gender.female;
+    const gap = signals.female_ratio - baselineFemale;
+    if (baselineFemale > 0 && Math.abs(gap) >= 8) {
+        insights.push(`本周爆款女频浓度 ${signals.female_ratio}%，${gap > 0 ? '高于' : '低于'}行业基准 ${baselineFemale}%（差 ${Math.abs(gap)}pp）`);
+    } else if (baselineFemale > 0) {
+        insights.push(`本周榜单女频占比 ${signals.female_ratio}%，与行业基准 ${baselineFemale}% 基本吻合`);
+    } else {
+        insights.push(`本周榜单女频占比 ${signals.female_ratio}%`);
+    }
+    if (signals.top_genres && signals.top_genres[0]) {
+        insights.push(`题材领跑：${signals.top_genres[0].name}（权重 ${signals.top_genres[0].share}%）`);
+    }
+    if (signals.new_drama_ratio >= 20) {
+        insights.push(`新剧占比 ${signals.new_drama_ratio}%，黑马频出`);
+    }
+    return insights.slice(0, 4);
+}
+
+function renderAudienceProfile(rawProfile, rankings) {
     const profile = normalizeAudienceProfile(rawProfile);
+    const signals = (rawProfile && rawProfile.weekly_signals && rawProfile.weekly_signals.female_ratio != null)
+        ? rawProfile.weekly_signals
+        : computeWeeklySignalsFromRankings(rankings);
+    const trends = (rawProfile && rawProfile.weekly_trends) || {};
+    const insights = (rawProfile && rawProfile.analyst_insights && rawProfile.analyst_insights.length)
+        ? rawProfile.analyst_insights
+        : (signals.female_ratio != null ? buildClientInsights(profile, signals, trends) : []);
 
     const showPlaceholder = (el, text = '--') => {
         if (!el) return;
         el.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;font-size:13px;">${text}</div>`;
     };
+
+    // 分析师洞察
+    const insightsEl = document.getElementById('audience-insights');
+    if (insightsEl) {
+        if (insights.length) {
+            insightsEl.innerHTML = insights.map(t => `<div class="audience-insight-item">${escapeHtml(t)}</div>`).join('');
+            insightsEl.style.display = 'flex';
+        } else {
+            insightsEl.style.display = 'none';
+        }
+    }
+
+    // 本周榜单信号面板
+    const signalsPanel = document.getElementById('weekly-signals-panel');
+    if (signalsPanel) {
+        const hasSignals = signals.female_ratio != null;
+        if (hasSignals) {
+            const femaleDelta = trends.female_ratio_delta || 0;
+            const femaleTrend = trends.female_ratio_trend || 'same';
+            const aiRatio = signals.ai_ratio || 0;
+            const newRatio = signals.new_drama_ratio || 0;
+            const baselineFemale = profile.gender.female;
+            const gap = signals.female_ratio - baselineFemale;
+            signalsPanel.innerHTML = `
+                <div class="signal-metric">
+                    <span class="signal-metric-label">女频浓度</span>
+                    <span><span class="signal-metric-value female">${signals.female_ratio}%</span>${formatTrendBadge(femaleDelta, femaleTrend)}</span>
+                </div>
+                <div class="signal-metric">
+                    <span class="signal-metric-label">男频浓度</span>
+                    <span class="signal-metric-value male">${signals.male_ratio || (100 - signals.female_ratio)}%</span>
+                </div>
+                <div class="signal-compare-note">vs 行业基准女频 ${baselineFemale}%（${gap >= 0 ? '+' : ''}${gap}pp）</div>
+                <div class="signal-tags">
+                    ${aiRatio > 0 ? `<span class="signal-tag">AI剧 ${aiRatio}%${trends.ai_ratio_delta ? formatTrendBadge(trends.ai_ratio_delta, trends.ai_ratio_trend) : ''}</span>` : ''}
+                    <span class="signal-tag">新剧 ${newRatio}%${trends.new_drama_ratio_delta ? formatTrendBadge(trends.new_drama_ratio_delta, trends.new_drama_ratio_trend) : ''}</span>
+                    ${(signals.top_tags || []).slice(0, 3).map(t => `<span class="signal-tag">${escapeHtml(t.name)} ${t.share}%</span>`).join('')}
+                </div>
+            `;
+        } else {
+            signalsPanel.innerHTML = '<div style="color:#64748b;font-size:12px;text-align:center;padding:16px 0;">待榜单数据就绪</div>';
+        }
+    }
 
     // 特征标签
     const traitsContainer = document.getElementById('audience-traits-container');
@@ -1532,7 +1683,7 @@ function renderAudienceProfile(rawProfile) {
         return;
     }
 
-    const chartIds = ['genderChart', 'ageChart', 'regionChart', 'contentChart', 'viewingTimeChart'];
+    const chartIds = ['genderChart', 'ageChart', 'regionChart', 'weeklyGenreChart', 'viewingTimeChart'];
     chartIds.forEach(id => {
         const key = id + 'Instance';
         if (window[key]) window[key].dispose();
@@ -1541,7 +1692,7 @@ function renderAudienceProfile(rawProfile) {
     const genderEl = document.getElementById('genderChart');
     const ageEl = document.getElementById('ageChart');
     const regionEl = document.getElementById('regionChart');
-    const contentEl = document.getElementById('contentChart');
+    const weeklyGenreEl = document.getElementById('weeklyGenreChart');
     const viewingEl = document.getElementById('viewingTimeChart');
 
     const commonGrid = { left: 10, right: 16, top: 28, bottom: 10 };
@@ -1550,10 +1701,10 @@ function renderAudienceProfile(rawProfile) {
     const hasGender = profile.gender.female > 0 || profile.gender.male > 0;
     const hasAge = Object.values(profile.age).some(v => v > 0);
     const hasRegions = profile.regions.length > 0;
-    const hasContent = profile.content_preferences.length > 0;
+    const hasWeeklyGenres = (signals.top_genres || []).length > 0;
     const hasViewing = profile.viewing_time.length > 0;
 
-    // 性别
+    // 行业基准 - 性别
     if (genderEl) {
         if (hasGender) {
             const female = profile.gender.female;
@@ -1561,7 +1712,7 @@ function renderAudienceProfile(rawProfile) {
             window.genderChartInstance = echarts.init(genderEl, 'dark');
             window.genderChartInstance.setOption({
                 backgroundColor: 'transparent',
-                title: { text: `${female}%`, subtext: '女性占比', left: 'center', top: '36%', textStyle: { color: '#f472b6', fontSize: 16, fontWeight: 800 }, subtextStyle: { color: '#94a3b8', fontSize: 10 } },
+                title: { text: `${female}%`, subtext: '女性(基准)', left: 'center', top: '36%', textStyle: { color: '#f472b6', fontSize: 16, fontWeight: 800 }, subtextStyle: { color: '#94a3b8', fontSize: 9 } },
                 tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
                 series: [{
                     name: '性别分布', type: 'pie', radius: ['58%', '78%'], center: ['50%', '50%'],
@@ -1577,7 +1728,7 @@ function renderAudienceProfile(rawProfile) {
         }
     }
 
-    // 年龄
+    // 行业基准 - 年龄
     if (ageEl) {
         if (hasAge) {
             const ageKeys = ["18-24", "25-34", "35-44", "45+"];
@@ -1599,7 +1750,7 @@ function renderAudienceProfile(rawProfile) {
         }
     }
 
-    // 地域 TOP5 横向条形
+    // 行业基准 - 地域
     if (regionEl) {
         if (hasRegions) {
             window.regionChartInstance = echarts.init(regionEl, 'dark');
@@ -1621,26 +1772,27 @@ function renderAudienceProfile(rawProfile) {
         }
     }
 
-    // 题材偏好
-    if (contentEl) {
-        if (hasContent) {
-            window.contentChartInstance = echarts.init(contentEl, 'dark');
-            window.contentChartInstance.setOption({
+    // 本周信号 - 题材分布（来自榜单，每日变化）
+    if (weeklyGenreEl) {
+        if (hasWeeklyGenres) {
+            const genres = signals.top_genres;
+            window.weeklyGenreChartInstance = echarts.init(weeklyGenreEl, 'dark');
+            window.weeklyGenreChartInstance.setOption({
                 backgroundColor: 'transparent',
-                title: { text: '题材偏好', left: 0, top: 0, textStyle: { color: '#f8fafc', fontSize: 12, fontWeight: 700 } },
+                title: { text: '本周题材权重', left: 0, top: 0, textStyle: { color: '#f8fafc', fontSize: 12, fontWeight: 700 } },
                 grid: { ...commonGrid, left: 4, right: 4, top: 26, bottom: 20 },
                 tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
                 series: [{
-                    name: '题材偏好', type: 'pie', radius: ['42%', '62%'], center: ['50%', '55%'],
+                    name: '题材权重', type: 'pie', radius: ['42%', '62%'], center: ['50%', '55%'],
                     label: { color: '#cbd5e1', fontSize: 9 },
-                    data: profile.content_preferences.map((item, idx) => ({
-                        value: item.value, name: item.name,
-                        itemStyle: { color: ['#f472b6', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#fb7185'][idx % 6] }
+                    data: genres.map((item, idx) => ({
+                        value: item.share, name: item.name,
+                        itemStyle: { color: ['#60a5fa', '#34d399', '#fbbf24', '#f472b6', '#a78bfa'][idx % 5] }
                     }))
                 }]
             });
         } else {
-            showPlaceholder(contentEl);
+            showPlaceholder(weeklyGenreEl, '待榜单信号');
         }
     }
 
@@ -2410,7 +2562,7 @@ async function renderDashboard(dateParam = null) {
     renderHotTags(data.genre_distribution);
 
     // 观众画像
-    renderAudienceProfile(data.audience_profile);
+    renderAudienceProfile(data.audience_profile, data.rankings);
 
     // 核心情绪与动机拆解
     renderEmotionChart(data.emotional_analysis);

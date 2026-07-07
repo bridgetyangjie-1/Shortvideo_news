@@ -1,17 +1,20 @@
 """
-受众画像节点 - 月度行业报告基准 + 周度榜单微调
+受众画像节点 - 月度行业报告基准 + 周度榜单信号
 
 核心策略：
 1. 观众画像基于真实行业报告，报告发布周期为月度，因此以自然月为粒度缓存。
 2. 每月/缓存缺失时，使用 Kimi 联网搜索最新行业报告并解析完整画像。
-3. 每周根据当周榜单题材（男频/女频占比、年龄向标签）对基准画像做小幅修正。
-4. 搜索失败或解析异常时，降级为本地规则推理画像。
+3. 每日从 TOP20 榜单加权统计「本周信号」：性别/题材/AI/新剧等实时指标。
+4. 与昨日历史归档对比生成环比趋势与分析师洞察，让板块有动态分析价值。
+5. 搜索失败或解析异常时，降级为本地规则推理画像。
 """
 import json
 import logging
 import os
 import re
-from datetime import datetime
+from collections import Counter
+from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from jinja2 import Template
@@ -626,6 +629,247 @@ def _adjust_profile_by_rankings(
     return profile
 
 
+# ==================== 周度榜单信号与趋势分析 ====================
+
+def _rank_weight(rank: Any) -> float:
+    """排名越靠前权重越高（TOP1=20, TOP20=1）"""
+    try:
+        r = int(rank)
+    except (TypeError, ValueError):
+        r = 20
+    return float(max(1, 21 - r))
+
+
+def _compute_weekly_signals(enriched_rankings: List[Any]) -> Dict[str, Any]:
+    """
+    从当日 TOP20 榜单加权统计本周观众信号。
+    这些指标每日变化，是板块「有意义」的核心数据来源。
+    """
+    if not enriched_rankings:
+        return {}
+
+    total_weight = 0.0
+    female_weight = 0.0
+    male_weight = 0.0
+    ai_weight = 0.0
+    new_weight = 0.0
+    genre_counter: Counter = Counter()
+    tag_counter: Counter = Counter()
+
+    for drama in enriched_rankings:
+        d = _drama_to_dict(drama)
+        w = _rank_weight(d.get("rank", 20))
+        total_weight += w
+
+        category = str(d.get("category", "")).lower()
+        if category == "female":
+            female_weight += w
+        elif category == "male":
+            male_weight += w
+        else:
+            # 未标注时按题材规则推断
+            inferred = _infer_profile([drama])
+            female_weight += w * inferred["gender"]["female"] / 100
+            male_weight += w * inferred["gender"]["male"] / 100
+
+        if d.get("is_ai"):
+            ai_weight += w
+        if d.get("is_new"):
+            new_weight += w
+
+        genre = str(d.get("genre", "")).strip()
+        if genre:
+            genre_counter[genre] += w
+
+        for tag in _collect_tags(d):
+            tag_counter[tag] += w
+
+    if total_weight <= 0:
+        return {}
+
+    female_ratio = round(female_weight / total_weight * 100)
+    male_ratio = 100 - female_ratio
+    ai_ratio = round(ai_weight / total_weight * 100)
+    new_ratio = round(new_weight / total_weight * 100)
+
+    top_genres = [
+        {"name": name, "share": round(count / total_weight * 100)}
+        for name, count in genre_counter.most_common(5)
+    ]
+    top_tags = [
+        {"name": name, "share": round(count / total_weight * 100)}
+        for name, count in tag_counter.most_common(5)
+    ]
+
+    return {
+        "female_ratio": female_ratio,
+        "male_ratio": male_ratio,
+        "ai_ratio": ai_ratio,
+        "new_drama_ratio": new_ratio,
+        "top_genres": top_genres,
+        "top_tags": top_tags,
+        "ranking_count": len(enriched_rankings),
+        "basis": "TOP20排名加权",
+    }
+
+
+def _history_dir() -> Path:
+    workspace = os.getenv("COZE_WORKSPACE_PATH", os.getcwd())
+    return Path(workspace) / "assets" / "data" / "history"
+
+
+def _load_previous_weekly_signals(data_date: str, lookback_days: int = 7) -> Optional[Dict[str, Any]]:
+    """从历史归档加载最近一次有效的 weekly_signals，用于环比对比。"""
+    try:
+        current = datetime.strptime(data_date, "%Y-%m-%d")
+    except ValueError:
+        return None
+
+    history_path = _history_dir()
+    if not history_path.exists():
+        return None
+
+    for offset in range(1, lookback_days + 1):
+        prev_date = (current - timedelta(days=offset)).strftime("%Y-%m-%d")
+        file_path = history_path / f"{prev_date}.json"
+        if not file_path.exists():
+            continue
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            signals = (data.get("audience_profile") or {}).get("weekly_signals") or {}
+            if signals.get("female_ratio") is not None:
+                return {"date": prev_date, "signals": signals}
+        except (json.JSONDecodeError, OSError):
+            continue
+    return None
+
+
+def _compute_weekly_trends(
+    current: Dict[str, Any], previous: Optional[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """计算本周信号相对昨日的环比变化。"""
+    if not current or not previous:
+        return {}
+
+    prev_signals = previous.get("signals", {})
+    prev_date = previous.get("date", "")
+
+    def _delta(key: str) -> int:
+        cur = current.get(key, 0)
+        prev = prev_signals.get(key, 0)
+        if not isinstance(cur, (int, float)) or not isinstance(prev, (int, float)):
+            return 0
+        return int(round(cur - prev))
+
+    def _trend(delta: int) -> str:
+        if delta > 1:
+            return "up"
+        if delta < -1:
+            return "down"
+        return "same"
+
+    female_delta = _delta("female_ratio")
+    ai_delta = _delta("ai_ratio")
+    new_delta = _delta("new_drama_ratio")
+
+    # 题材轮动：找 share 变化最大的题材
+    genre_shift = ""
+    cur_genres = {g["name"]: g["share"] for g in current.get("top_genres", [])}
+    prev_genres = {g["name"]: g["share"] for g in prev_signals.get("top_genres", [])}
+    if cur_genres and prev_genres:
+        shifts = []
+        for name, share in cur_genres.items():
+            prev_share = prev_genres.get(name, 0)
+            shifts.append((name, share - prev_share))
+        for name, prev_share in prev_genres.items():
+            if name not in cur_genres:
+                shifts.append((name, -prev_share))
+        if shifts:
+            best = max(shifts, key=lambda x: abs(x[1]))
+            if abs(best[1]) >= 2:
+                direction = "升温" if best[1] > 0 else "降温"
+                genre_shift = f"{best[0]}{direction}{abs(best[1])}pp"
+
+    return {
+        "compared_to": prev_date,
+        "female_ratio_delta": female_delta,
+        "female_ratio_trend": _trend(female_delta),
+        "ai_ratio_delta": ai_delta,
+        "ai_ratio_trend": _trend(ai_delta),
+        "new_drama_ratio_delta": new_delta,
+        "new_drama_ratio_trend": _trend(new_delta),
+        "genre_shift": genre_shift,
+    }
+
+
+def _generate_analyst_insights(
+    baseline: Dict[str, Any],
+    signals: Dict[str, Any],
+    trends: Dict[str, Any],
+) -> List[str]:
+    """
+    基于行业基准 vs 本周榜单信号，生成 2-4 条可执行分析师洞察。
+    纯规则推理，不消耗 API token。
+    """
+    if not signals:
+        return ["暂无榜单信号，待 TOP20 数据就绪后生成周度分析。"]
+
+    insights: List[str] = []
+    female_signal = signals.get("female_ratio", 0)
+    female_baseline = baseline.get("gender", {}).get("female", 0)
+    female_delta = trends.get("female_ratio_delta", 0)
+
+    # 1. 性别浓度 vs 行业基准
+    if female_baseline > 0:
+        gap = female_signal - female_baseline
+        if abs(gap) >= 8:
+            direction = "高于" if gap > 0 else "低于"
+            insights.append(
+                f"本周爆款女频浓度 {female_signal}%，{direction}行业基准 {female_baseline}% "
+                f"（差 {abs(gap)}pp），内容策略{'极致女频' if gap > 0 else '男频渗透'}"
+            )
+        else:
+            insights.append(
+                f"本周爆款女频占比 {female_signal}%，与行业基准 {female_baseline}% 基本吻合"
+            )
+    else:
+        insights.append(f"本周榜单女频占比 {female_signal}%")
+
+    # 2. 环比变化
+    if female_delta != 0 and trends.get("compared_to"):
+        arrow = "↑" if female_delta > 0 else "↓"
+        insights.append(
+            f"较 {trends['compared_to']} 女频占比 {arrow}{abs(female_delta)}pp"
+        )
+
+    # 3. 题材轮动
+    top_genres = signals.get("top_genres", [])
+    if top_genres:
+        leader = top_genres[0]
+        genre_line = f"题材领跑：{leader['name']}（权重 {leader['share']}%）"
+        if trends.get("genre_shift"):
+            genre_line += f"，{trends['genre_shift']}"
+        insights.append(genre_line)
+
+    # 4. 新剧/AI 信号
+    new_ratio = signals.get("new_drama_ratio", 0)
+    ai_ratio = signals.get("ai_ratio", 0)
+    extras = []
+    if new_ratio >= 20:
+        extras.append(f"新剧占比 {new_ratio}%，黑马频出")
+    elif new_ratio <= 5:
+        extras.append(f"新剧占比仅 {new_ratio}%，老剧续航力强")
+    if ai_ratio >= 15:
+        extras.append(f"AI 剧占 {ai_ratio}%，高于行业均值")
+    elif ai_ratio > 0:
+        extras.append(f"AI 剧占 {ai_ratio}%")
+    if extras:
+        insights.append("；".join(extras))
+
+    return insights[:4]
+
+
 # ==================== 节点主函数 ====================
 
 def audience_profile_node(
@@ -688,6 +932,12 @@ def audience_profile_node(
         # 周度微调：基于当周榜单题材对基准做小幅修正
         profile = _adjust_profile_by_rankings(profile, enriched_rankings)
 
+        # 周度榜单信号 + 趋势 + 分析师洞察
+        weekly_signals = _compute_weekly_signals(enriched_rankings)
+        previous = _load_previous_weekly_signals(data_date)
+        weekly_trends = _compute_weekly_trends(weekly_signals, previous)
+        analyst_insights = _generate_analyst_insights(profile, weekly_signals, weekly_trends)
+
         # data_source 是“来源说明”，不应把完整 URL 拼进来（尤其搜索 URL 非常长，
         # 会撑破前端卡片布局）。URL 如需展示可单独放到 source_url，但当前模型未启用。
         data_source = profile.get("source_title", "") or "本地规则估算"
@@ -703,6 +953,9 @@ def audience_profile_node(
             user_segments=profile.get("user_segments", []),
             data_source=data_source,
             update_frequency="monthly",
+            weekly_signals=weekly_signals,
+            weekly_trends=weekly_trends,
+            analyst_insights=analyst_insights,
         )
 
         logger.info(
@@ -729,6 +982,9 @@ def audience_profile_node(
                 user_segments=empty_profile["user_segments"],
                 data_source="受众画像分析失败，暂无真实来源",
                 update_frequency="monthly",
+                weekly_signals={},
+                weekly_trends={},
+                analyst_insights=[],
             ),
             error_message=f"受众画像分析失败: {e}\n",
         )
