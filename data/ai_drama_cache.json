@@ -1,63 +1,222 @@
 {
   "data_month": "2026-07",
   "dashboard": {
-    "report_month": "2026-06",
+    "report_month": "2026-05",
     "kpis": [
       {
-        "label": "AI短剧/漫剧行业总播放量",
-        "value": "5亿",
-        "unit": "次",
+        "label": "抖音端原生百强榜播放增量总额",
+        "value": "326.9",
+        "unit": "亿",
         "trend": "up",
         "period": "环比",
-        "note": "同比增长20%"
+        "note": "5月抖音端原生百强榜播放增量共计326.9亿"
       },
       {
-        "label": "AI短剧/漫剧行业总点赞数",
-        "value": "1000万",
-        "unit": "次",
+        "label": "抖音端原生新剧数",
+        "value": "3.95",
+        "unit": "万部",
         "trend": "down",
         "period": "环比",
-        "note": "环比下降5%"
+        "note": "5月抖音原生端单月新增AI剧/漫剧约3.95万部，较4月4.41万部下滑约10%"
+      },
+      {
+        "label": "抖音端原生新剧播放增量",
+        "value": "1400",
+        "unit": "亿",
+        "trend": "up",
+        "period": "环比",
+        "note": "5月新剧贡献超1400亿播放增量，较4月1300亿略微增加"
+      },
+      {
+        "label": "红果AI剧漫剧每月上榜剧峰值热度总计",
+        "value": "146.39",
+        "unit": "亿",
+        "trend": "up",
+        "period": "环比",
+        "note": "5月红果AI剧漫剧每月上榜剧峰值热度总计146.39亿，较4月117.38亿增长24.7%"
+      },
+      {
+        "label": "红果AI剧漫剧上榜门槛",
+        "value": "5100",
+        "unit": "万",
+        "trend": "up",
+        "period": "环比",
+        "note": "5月红果TOP100漫剧上榜门槛提升至5100万"
+      },
+      {
+        "label": "海外AI剧/漫剧市场规模预估",
+        "value": "6.5",
+        "unit": "亿美元",
+        "trend": "up",
+        "period": "同比",
+        "note": "2026年海外AI剧/漫剧市场规模预计达6.5亿美元，较2025年1亿美元增长6倍"
       }
     ],
     "rankings": {
       "ai_drama": [
         {
           "rank": 1,
-          "title": "未来世界",
+          "title": "换亲成宠",
           "platform": "抖音",
           "category": "AI仿真人剧",
-          "heat": "95",
-          "is_new": false
+          "heat": "8.7亿播放增量",
+          "is_new": false,
+          "plot": "以换亲为强设定，围绕情感冲突展开的逆袭故事。",
+          "tags": [
+            "换亲",
+            "逆袭",
+            "情感冲突"
+          ],
+          "studio": "麦芽",
+          "url": "https://www.google.com/search?q=换亲成宠+抖音",
+          "episodes": "",
+          "release_date": ""
+        },
+        {
+          "rank": 2,
+          "title": "从此朵朵花开",
+          "platform": "抖音",
+          "category": "AI仿真人剧",
+          "heat": "8.1亿播放增量",
+          "is_new": false,
+          "plot": "以情感救赎为主线，讲述主角成长与治愈的故事。",
+          "tags": [
+            "情感救赎",
+            "成长"
+          ],
+          "studio": "宇瀚忠毅",
+          "url": "https://www.google.com/search?q=从此朵朵花开+抖音",
+          "episodes": "",
+          "release_date": ""
+        },
+        {
+          "rank": 3,
+          "title": "离婚后，我与苏大小姐闪婚了",
+          "platform": "抖音",
+          "category": "AI仿真人剧",
+          "heat": "",
+          "is_new": false,
+          "plot": "离婚后主角与苏大小姐闪婚，开启逆袭人生。",
+          "tags": [
+            "离婚",
+            "闪婚",
+            "逆袭"
+          ],
+          "studio": "西垚数字",
+          "url": "https://www.google.com/search?q=离婚后，我与苏大小姐闪婚了+抖音",
+          "episodes": "",
+          "release_date": ""
         }
       ],
       "ai_comic": [
         {
           "rank": 1,
-          "title": "星际穿越",
-          "platform": "快手",
-          "category": "AIGC漫剧",
-          "heat": "98",
-          "is_new": true
+          "title": "聚宝仙盆之杂灵根才是真BOSS第四季",
+          "platform": "红果",
+          "category": "3D AI漫剧",
+          "heat": "8044万",
+          "is_new": true,
+          "plot": "杂灵根主角凭借聚宝仙盆逆袭，在修仙世界中成为真正BOSS。",
+          "tags": [
+            "玄幻修仙",
+            "灵根",
+            "逆袭",
+            "系列化"
+          ],
+          "studio": "陈柯文化",
+          "url": "https://www.google.com/search?q=聚宝仙盆之杂灵根才是真BOSS第四季+红果",
+          "episodes": "第四季",
+          "release_date": "2026-05-31"
+        },
+        {
+          "rank": 2,
+          "title": "聚宝仙盆之杂灵根才是真BOSS第三季",
+          "platform": "红果",
+          "category": "3D AI漫剧",
+          "heat": "7203万",
+          "is_new": false,
+          "plot": "杂灵根主角凭借聚宝仙盆逆袭，在修仙世界中成为真正BOSS。",
+          "tags": [
+            "玄幻修仙",
+            "灵根",
+            "逆袭",
+            "系列化"
+          ],
+          "studio": "陈柯文化",
+          "url": "https://www.google.com/search?q=聚宝仙盆之杂灵根才是真BOSS第三季+红果",
+          "episodes": "第三季",
+          "release_date": "2026-05-11"
+        },
+        {
+          "rank": 3,
+          "title": "山海藏墟，无眼窥天",
+          "platform": "红果",
+          "category": "3D AI漫剧",
+          "heat": "6975万",
+          "is_new": true,
+          "plot": "在神秘山海世界中，主角以无眼之姿窥探天机，展开奇幻冒险。",
+          "tags": [
+            "玄幻修仙",
+            "异界",
+            "奇幻"
+          ],
+          "studio": "",
+          "url": "https://www.google.com/search?q=山海藏墟，无眼窥天+红果",
+          "episodes": "",
+          "release_date": "2026-05-25"
         }
       ]
     },
     "trends": [
       {
-        "title": "AI短剧/漫剧行业趋势",
-        "summary": "随着AI技术的发展，AI短剧/漫剧行业持续火热，6月份行业总播放量突破5亿次，同比增长20%。"
+        "title": "行业从量增转向质优",
+        "summary": "DataEye研究院认为，AI剧/漫剧正在经历从量增到质优的转型阵痛，平台审核收紧与用户审美提升驱动行业从粗放扩张转向精品化运营，竞争维度从产量竞争转向质量竞争。",
+        "source": "澎湃新闻",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33398028"
+      },
+      {
+        "title": "3D漫成为第二增长曲线",
+        "summary": "DataEye研究院指出，3D漫在红果平台包揽TOP3，凭借视觉冲击力和IP属性快速升温，有望成为AI剧市场的第二增长曲线，尤其在玄幻仙侠等视觉驱动型题材中具有不可替代优势。",
+        "source": "澎湃新闻",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33398028"
+      },
+      {
+        "title": "免费化趋势明显",
+        "summary": "DataEye研究院认为，AI剧漫剧走向免费化，红果免费短剧的内容热度和用户活跃度同步提升，以广告解锁的免费模式正在快速崛起，冲击付费看AI剧漫剧的逻辑。",
+        "source": "澎湃新闻",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33398028"
+      },
+      {
+        "title": "IP系列化长尾效应显现",
+        "summary": "DataEye研究院认为，IP系列化的市场长尾效果逐渐显现，漫剧/AI剧不需要真人演员档期和实地拍摄，制作工业化程度更高，创作者可快速依托原有IP世界观持续产出续作，迭代效率优势突出。",
+        "source": "澎湃新闻",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33398028"
+      },
+      {
+        "title": "AI短剧出海加速增长",
+        "summary": "DataEye研究院数据显示，2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从2%增长至16%，增长率达700%，海外AI剧/漫剧市场规模预计2026年达6.5亿美元，用户接受度较高。",
+        "source": "澎湃新闻",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33102397"
       }
     ],
     "news": [
       {
-        "title": "AI短剧/漫剧行业月报发布：6月行业总播放量突破5亿次",
+        "title": "短剧头部玩家集体押注AI短剧出海",
         "source": "澎湃新闻",
-        "date": "2026-07-01",
-        "url": "https://www.thepaper.cn/newsDetail_forward_20328456"
+        "date": "2026-05-01",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
+        "summary": "报道指出，中国AI创作者凭借成本仅3000元的短剧《波斯复仇记》在海外平台YourChannel实现72小时GMV达50万美元。昆仑万维、山海星辰、中文在线等头部公司重点发力海外，AI短剧制作周期从25-40天压缩至7-10天，成本降低70%-80%。2026年Q1海外短剧百强榜中AI短剧占比从7%蹿升至38%，AI出海短剧站在技术和市场双重风口上。"
+      },
+      {
+        "title": "2026Q1报告：海外AI剧/漫剧数量增长700%",
+        "source": "澎湃新闻",
+        "date": "2026-04-01",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
+        "summary": "DataEye发布2026年Q1海外AI剧/漫剧数据报告，预估2026年市场规模达6.5亿美元，较2025年增长6倍。海外活跃用户超1.5亿，55%用户愿为AI参与制作的短剧付费。Q1海外短剧素材榜TOP100中AI剧/漫剧占比从2%增至16%，增长率达700%。NetShort领跑热投APP，占比50%。"
       }
     ],
-    "data_source": "DataEye 月报 + Kimi 搜索",
+    "data_source": "澎湃新闻 DataEye 月报/行业报道直爬 + DeepSeek 抽取",
     "update_frequency": "monthly"
   },
-  "updated_at": "2026-07-06T14:02:43.102566"
+  "updated_at": "2026-07-07T05:02:11.802797"
 }
