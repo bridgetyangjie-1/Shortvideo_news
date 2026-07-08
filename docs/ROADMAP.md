@@ -1,6 +1,6 @@
 # 短剧行业数据看板 - 改进路线图
 
-当前基线：v1.14.4，Kimi/Moonshot 负责联网搜索，DeepSeek 负责 JSON 推理，GitHub Actions 定时生成静态看板数据。
+当前基线：v1.14.5，Kimi/Moonshot 负责联网搜索，DeepSeek 负责 JSON 推理，GitHub Actions 定时生成静态看板数据。
 
 ## 近期 CR
 
