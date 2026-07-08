@@ -45,6 +45,49 @@ _PLACEHOLDER_STUDIO = frozenset({
     "", "未知", "待补充", "待定", "独立厂牌", "待核实", "n/a", "none", "null",
 })
 
+# 传统影视一线明星：不应出现在短剧周榜主演字段或演员热力榜
+MAINSTREAM_ACTOR_BLOCKLIST = frozenset({
+    "周迅", "赵丽颖", "杨幂", "孙俪", "刘涛", "张子枫", "马丽", "刘亦菲", "迪丽热巴", "杨紫",
+    "唐嫣", "刘诗诗", "杨颖", "范冰冰", "李冰冰", "汤唯", "章子怡", "巩俐",
+    "孙红雷", "胡歌", "邓超", "陈建斌", "王宝强", "吴磊", "陈坤", "黄晓明", "易烊千玺", "王俊凯",
+    "肖战", "王一博", "李易峰", "陈道明", "张嘉益", "雷佳音", "靳东", "朱亚文", "黄轩", "吴京",
+    "张译", "段奕宏", "郭京飞", "于和伟", "张若昀", "任嘉伦", "成毅", "许凯",
+})
+
+# LLM 常用泛化中文姓名（非短剧专属演员）
+GENERIC_ACTOR_NAMES = frozenset({
+    "张伟", "王强", "李强", "陈刚", "赵丽", "刘梅", "李晓彤", "王芳", "李娜", "张敏",
+    "王磊", "李静", "张丽", "王敏", "李军", "张磊", "王静", "李娟", "张军", "王涛",
+})
+
+
+def is_mainstream_celebrity(name: Any) -> bool:
+    """判断是否为传统影视明星（非短剧生态演员）。"""
+    text = str(name or "").strip()
+    return bool(text) and text in MAINSTREAM_ACTOR_BLOCKLIST
+
+
+def is_unreliable_actor_name(name: Any) -> bool:
+    """演员名是否不可信：占位/幻觉/一线明星/泛化假名。"""
+    text = str(name or "").strip()
+    if not text:
+        return True
+    if is_hallucinated_actor_name(text):
+        return True
+    if is_mainstream_celebrity(text):
+        return True
+    if text in GENERIC_ACTOR_NAMES:
+        return True
+    return False
+
+
+def sanitize_actor_field(name: Any) -> str:
+    """不可信演员名清洗为空字符串。"""
+    text = str(name or "").strip()
+    if is_unreliable_actor_name(text):
+        return ""
+    return text
+
 
 def is_hallucinated_actor_name(name: Any) -> bool:
     """判断是否为 LLM 编造的编号式演员名或占位名。"""
@@ -122,9 +165,9 @@ def compute_ranking_confidence(item: dict) -> float:
         score += 0.02
     female = item.get("female_lead", "")
     male = item.get("male_lead", "")
-    if female and not is_hallucinated_actor_name(female):
+    if female and not is_unreliable_actor_name(female):
         score += 0.04
-    if male and not is_hallucinated_actor_name(male):
+    if male and not is_unreliable_actor_name(male):
         score += 0.04
     studio = item.get("production_house", "")
     if studio and not is_suspicious_studio_name(studio):
@@ -144,7 +187,7 @@ def count_ranking_hallucinations(rankings: list) -> dict[str, int]:
         female = getattr(r, "female_lead", "") if not isinstance(r, dict) else r.get("female_lead", "")
         male = getattr(r, "male_lead", "") if not isinstance(r, dict) else r.get("male_lead", "")
         studio = getattr(r, "production_house", "") if not isinstance(r, dict) else r.get("production_house", "")
-        if is_hallucinated_actor_name(female) or is_hallucinated_actor_name(male):
+        if (female and is_unreliable_actor_name(female)) or (male and is_unreliable_actor_name(male)):
             actor_hits += 1
         if is_suspicious_studio_name(studio):
             studio_hits += 1

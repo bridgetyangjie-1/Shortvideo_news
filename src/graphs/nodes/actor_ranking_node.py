@@ -4,20 +4,15 @@
 """
 import os
 import json
-import re
 import logging
 import math
 from datetime import datetime, timedelta
 from urllib.parse import quote
 from typing import Dict, Any, List
-from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
-from tools.deepseek_api import DeepSeekClient
-from tools import weekly_cache
-from tools.actor_name_utils import is_placeholder_actor_name, sanitize_actor_name
-from utils.data_quality import is_hallucinated_actor_name
+from utils.data_quality import is_unreliable_actor_name
 
 # Fallback for test_run environment
 try:
@@ -136,7 +131,7 @@ def _extract_actors_from_rankings(rankings_data: List[Dict[str, Any]]) -> Dict[s
         text = str(name).strip()
         if text.lower() in {n.lower() for n in INVALID_NAMES}:
             return False
-        return not is_placeholder_actor_name(text) and not is_hallucinated_actor_name(text)
+        return not is_unreliable_actor_name(text)
 
     female_scores: Dict[str, Dict[str, Any]] = {}
     male_scores: Dict[str, Dict[str, Any]] = {}
@@ -222,57 +217,11 @@ def _extract_actors_from_rankings(rankings_data: List[Dict[str, Any]]) -> Dict[s
     }
 
 
-def _ensure_top10(parsed_list: List[Dict[str, Any]], source_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """
-    将 DeepSeek 返回的演员榜补齐到 10 人，避免返回数量不足。
-    优先使用 parsed_list，缺失部分从 source_list（本地提取结果）补充，去重。
-    """
-    if not isinstance(parsed_list, list):
-        parsed_list = []
-    if not isinstance(source_list, list):
-        source_list = []
-
-    seen: set[str] = set()
-    merged: List[Dict[str, Any]] = []
-    for item in parsed_list:
-        name = sanitize_actor_name(item.get("name"))
-        if name and name not in seen:
-            merged.append({**item, "name": name})
-            seen.add(name)
-    for item in source_list:
-        name = sanitize_actor_name(item.get("name"))
-        if name and name not in seen:
-            merged.append({**item, "name": name})
-            seen.add(name)
-        if len(merged) >= 10:
-            break
-
-    # 统一字段并重新编号，过滤占位名
-    result = []
-    for item in merged[:10]:
-        name = sanitize_actor_name(item.get("name", ""))
-        if not name:
-            continue
-        result.append({
-            "rank": len(result) + 1,
-            "name": name,
-            "popularity": item.get("popularity", 0),
-            "platform_fans": item.get("platform_fans", 0.0),
-            "platform": item.get("platform", "红果"),
-            "badge": item.get("badge", ""),
-            "works": item.get("works", ""),
-            "trend": item.get("trend", "same"),
-            "trend_value": item.get("trend_value", 0),
-            "baike_url": item.get("baike_url", ""),
-        })
-    return result
-
-
 def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, runtime: Runtime[Context]) -> ActorRankingNodeOutput:
     """
     title: 演员榜单生成
     desc: 从榜单数据中提取演员统计生成演员榜（女频TOP10、男频TOP10），无需Kimi搜索
-    integrations: DeepSeek API（仅在数据不足时推理补充）
+    integrations: 无外部 API（仅从榜单主演字段统计）
     """
     ctx = runtime.context
     
@@ -322,61 +271,14 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         female_count = len(actors_dict.get("female", []))
         male_count = len(actors_dict.get("male", []))
 
-        # 为了节省 token：周一完整刷新；平日不足时仍允许轻量 DeepSeek 补充，避免演员榜空导致体验下降
+        # 演员不足时仅使用榜单提取结果，禁止 DeepSeek 编造名单外演员。
+        # 历史问题：旧 prompt 要求「严禁填未知、从常见名单猜测」，导致周迅/赵丽颖等一线明星误入榜。
         if female_count < 10 or male_count < 10:
-            if weekly_cache.is_refresh_day(state.data_date):
-                logger.warning(f"周一刷新：榜单演员不足（女{female_count}男{male_count}），使用DeepSeek推理补充")
-            else:
-                logger.warning(
-                    f"平日兜底：榜单演员不足（女{female_count}男{male_count}），使用DeepSeek轻量补充"
-                )
-
-            # 读取配置文件
-            cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH", ""), config["metadata"]["llm_cfg"])
-            with open(cfg_file, "r", encoding="utf-8") as fd:
-                _cfg = json.load(fd)
-
-            sp = _cfg.get("sp", "")
-            up = _cfg.get("up", "")
-            temperature = _cfg.get("config", {}).get("temperature", 0.3)
-
-            # 渲染用户提示词
-            from datetime import datetime
-            current_date = datetime.now().strftime("%Y-%m-%d")
-            up_tpl = Template(up)
-            user_prompt = up_tpl.render({
-                "date": current_date,
-                "rankings": json.dumps(rankings_data, ensure_ascii=False, indent=2)
-            })
-
-            # 只用DeepSeek推理（1次调用）
-            ds_client = DeepSeekClient()
-            messages = [
-                {"role": "system", "content": sp},
-                {"role": "user", "content": user_prompt}
-            ]
-
-            try:
-                actors_response = ds_client.chat(
-                    messages=messages,
-                    temperature=temperature,
-                    max_tokens=4000
-                )
-
-                # 解析JSON并补齐到 TOP10
-                json_match = re.search(r'\{[\s\S]*\}', actors_response)
-                if json_match:
-                    parsed = json.loads(json_match.group())
-                    if isinstance(parsed, dict):
-                        actors_dict = {
-                            "female": _ensure_top10(parsed.get("female", []), extracted_actors.get("female", [])),
-                            "male": _ensure_top10(parsed.get("male", []), extracted_actors.get("male", [])),
-                        }
-                        # 为补充后的演员重新计算趋势/百科链接
-                        actors_dict = _compute_actor_trends(actors_dict, yesterday_actors)
-                        logger.info("✅ DeepSeek推理补充演员成功")
-            except Exception as e:
-                logger.warning(f"DeepSeek推理补充失败: {e}，使用原始提取结果")
+            logger.warning(
+                "榜单可信演员不足（女%d/男%d），仅展示提取结果，不调用 DeepSeek 凑数",
+                female_count,
+                male_count,
+            )
         else:
             logger.info(f"✅ 从榜单提取演员成功：女频{female_count}人，男频{male_count}人")
         
@@ -416,7 +318,7 @@ def actor_ranking_node(state: ActorRankingNodeInput, config: RunnableConfig, run
         actors = ActorsData(
             female=female_actors,
             male=male_actors,
-            data_source="榜单统计",
+            data_source="榜单主演统计（仅统计榜单内演员，不推理补全）",
             update_frequency="weekly",
         )
         

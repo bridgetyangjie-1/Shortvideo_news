@@ -5,8 +5,11 @@ from utils.data_quality import (
     count_ranking_hallucinations,
     extract_insight_from_content,
     is_hallucinated_actor_name,
+    is_mainstream_celebrity,
     is_suspicious_studio_name,
     is_trusted_news_url,
+    is_unreliable_actor_name,
+    sanitize_actor_field,
     sanitize_production_house,
 )
 from tools.actor_name_utils import is_placeholder_actor_name
@@ -24,6 +27,31 @@ class TestHallucinatedActorNames(unittest.TestCase):
     def test_placeholder_via_utils(self):
         self.assertTrue(is_placeholder_actor_name("张三"))
         self.assertTrue(is_placeholder_actor_name("待核实"))
+
+
+class TestMainstreamActorFilter(unittest.TestCase):
+    def test_mainstream_celebrities_blocked(self):
+        for name in ("周迅", "赵丽颖", "杨幂", "胡歌", "孙红雷", "邓超"):
+            self.assertTrue(is_mainstream_celebrity(name), name)
+            self.assertTrue(is_unreliable_actor_name(name), name)
+            self.assertEqual(sanitize_actor_field(name), "")
+
+    def test_short_drama_actors_allowed(self):
+        for name in ("徐艺真", "曾辉", "王道铁", "何健麒", "马秋元"):
+            self.assertFalse(is_mainstream_celebrity(name), name)
+            self.assertFalse(is_unreliable_actor_name(name), name)
+
+    def test_generic_names_blocked(self):
+        for name in ("张伟", "王强", "赵丽"):
+            self.assertTrue(is_unreliable_actor_name(name), name)
+
+    def test_hallucination_count_includes_mainstream(self):
+        rankings = [
+            {"title": "剧A", "female_lead": "周迅", "male_lead": "", "production_house": "九州"},
+            {"title": "剧B", "female_lead": "徐艺真", "male_lead": "", "production_house": "九州"},
+        ]
+        stats = count_ranking_hallucinations(rankings)
+        self.assertEqual(stats["actor_hits"], 1)
 
 
 class TestSuspiciousStudios(unittest.TestCase):

@@ -34,7 +34,7 @@ from graphs.nodes.enrich.actor_resolver import ActorResolver
 from graphs.nodes.enrich.json_refiner import JsonRefiner
 from graphs.nodes.enrich.fallback import fill_unknown_actors
 from tools.actor_name_utils import sanitize_ranking_actors
-from utils.data_quality import sanitize_production_house, is_hallucinated_actor_name, compute_ranking_confidence
+from utils.data_quality import sanitize_production_house, is_hallucinated_actor_name, sanitize_actor_field, compute_ranking_confidence
 
 
 def _backfill_basic_fields(
@@ -198,6 +198,8 @@ def enrich_node(
                     item["female_lead"] = ""
                 if is_hallucinated_actor_name(item.get("male_lead")):
                     item["male_lead"] = ""
+                item["female_lead"] = sanitize_actor_field(item.get("female_lead"))
+                item["male_lead"] = sanitize_actor_field(item.get("male_lead"))
                 weekly_heat = item.get("weekly_heat_index") or item.get("weekly_index") or item.get("views_num") or 0
                 item["weekly_heat_index"] = int(weekly_heat or 0)
                 if item["weekly_heat_index"] and not item.get("views_num"):
@@ -238,8 +240,8 @@ def enrich_node(
                 DramaRanking(
                     rank=item.get("rank", 0),
                     title=item.get("title", ""),
-                    female_lead=item.get("female_lead", ""),
-                    male_lead=item.get("male_lead", ""),
+                    female_lead=sanitize_actor_field(item.get("female_lead", "")),
+                    male_lead=sanitize_actor_field(item.get("male_lead", "")),
                     views=item.get("views", ""),
                     views_num=item.get("views_num", 0),
                     weekly_heat_index=item.get("weekly_heat_index", item.get("views_num", 0)),

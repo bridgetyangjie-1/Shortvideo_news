@@ -16,7 +16,7 @@ from graphs.state import QualityGateInput, QualityGateOutput
 from tools.actor_name_utils import is_placeholder_actor_name
 from utils.data_quality import (
     count_ranking_hallucinations,
-    is_hallucinated_actor_name,
+    is_unreliable_actor_name,
     is_suspicious_studio_name,
     is_trusted_news_url,
 )
@@ -153,7 +153,7 @@ def quality_gate_node(
         female = getattr(r, "female_lead", "") or ""
         male = getattr(r, "male_lead", "") or ""
         studio = getattr(r, "production_house", "") or ""
-        if is_hallucinated_actor_name(female) or is_hallucinated_actor_name(male):
+        if (female and is_unreliable_actor_name(female)) or (male and is_unreliable_actor_name(male)):
             hallucination_samples.append(f"{title}({female}/{male})")
         elif is_suspicious_studio_name(studio):
             hallucination_samples.append(f"{title}[{studio}]")
@@ -186,7 +186,7 @@ def quality_gate_node(
         name = getattr(actor, "name", "") or ""
         if not name or name.lower() in BLACKLISTED_ACTOR_NAMES:
             return False
-        if is_placeholder_actor_name(name) or is_hallucinated_actor_name(name):
+        if is_placeholder_actor_name(name) or is_unreliable_actor_name(name):
             return False
         return True
 

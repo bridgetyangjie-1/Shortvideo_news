@@ -1,5 +1,5 @@
 """
-actor_ranking_node 单元测试（聚焦 DeepSeek 补充触发策略）
+actor_ranking_node 单元测试：榜单提取与一线明星过滤
 """
 import os
 import shutil
@@ -12,7 +12,7 @@ from graphs.state import ActorRankingNodeInput, DramaRanking
 from tools import weekly_cache
 
 
-class ActorRankingNodeTokenTest(unittest.TestCase):
+class ActorRankingNodeTest(unittest.TestCase):
     def setUp(self) -> None:
         self.tmpdir = tempfile.mkdtemp()
         self.original_cache_dir = weekly_cache.CACHE_DIR
@@ -28,7 +28,6 @@ class ActorRankingNodeTokenTest(unittest.TestCase):
         return runtime
 
     def _build_rankings(self, count: int = 3) -> list[DramaRanking]:
-        """构造少量榜单数据，使男女演员均不足10人。"""
         rankings = []
         for i in range(count):
             rankings.append(
@@ -43,40 +42,34 @@ class ActorRankingNodeTokenTest(unittest.TestCase):
             )
         return rankings
 
-    def _mock_config(self) -> dict:
-        return {"metadata": {"llm_cfg": "config/actor_ranking_llm_cfg.json"}}
-
-    def test_deepseek_supplement_only_on_monday(self) -> None:
-        """周一演员不足时调用 DeepSeek，周二不调用。"""
+    def test_extracts_actors_without_deepseek(self) -> None:
+        """演员不足时仅返回榜单提取结果，不调用 DeepSeek。"""
         rankings = self._build_rankings(3)
+        state = ActorRankingNodeInput(data_date="2025-06-09", enriched_rankings=rankings)
+        result = actor_module.actor_ranking_node(state, {}, self._make_runtime())
 
-        with mock.patch.object(actor_module.DeepSeekClient, "chat", return_value="{}") as mock_chat:
-            # 周一：应调用 DeepSeek
-            monday_state = ActorRankingNodeInput(
-                data_date="2025-06-09", enriched_rankings=rankings
-            )
-            actor_module.actor_ranking_node(monday_state, self._mock_config(), self._make_runtime())
-            self.assertGreaterEqual(mock_chat.call_count, 1)
+        self.assertEqual(result.error_message, "")
+        self.assertEqual(len(result.actors.female), 3)
+        self.assertEqual(len(result.actors.male), 3)
+        self.assertIn("榜单主演统计", result.actors.data_source)
 
-            mock_chat.reset_mock()
+    def test_filters_mainstream_celebrities(self) -> None:
+        """一线明星与泛化假名不应进入演员榜。"""
+        rankings = [
+            DramaRanking(rank=1, title="剧1", female_lead="周迅", male_lead="孙红雷", views_num=2000),
+            DramaRanking(rank=2, title="剧2", female_lead="徐艺真", male_lead="曾辉", views_num=1800),
+            DramaRanking(rank=3, title="剧3", female_lead="张伟", male_lead="杨紫", views_num=1600),
+        ]
+        state = ActorRankingNodeInput(data_date="2025-06-10", enriched_rankings=rankings)
+        result = actor_module.actor_ranking_node(state, {}, self._make_runtime())
 
-            # 周二：不应调用 DeepSeek
-            tuesday_state = ActorRankingNodeInput(
-                data_date="2025-06-10", enriched_rankings=rankings
-            )
-            actor_module.actor_ranking_node(tuesday_state, self._mock_config(), self._make_runtime())
-            mock_chat.assert_not_called()
-
-    def test_no_supplement_when_actors_sufficient(self) -> None:
-        """男女演员均满10人时，无论是否周一都不调用 DeepSeek。"""
-        rankings = self._build_rankings(12)
-
-        with mock.patch.object(actor_module.DeepSeekClient, "chat", return_value="{}") as mock_chat:
-            monday_state = ActorRankingNodeInput(
-                data_date="2025-06-09", enriched_rankings=rankings
-            )
-            actor_module.actor_ranking_node(monday_state, self._mock_config(), self._make_runtime())
-            mock_chat.assert_not_called()
+        female_names = [a.name for a in result.actors.female]
+        male_names = [a.name for a in result.actors.male]
+        self.assertEqual(female_names, ["徐艺真"])
+        self.assertEqual(male_names, ["曾辉"])
+        self.assertNotIn("周迅", female_names)
+        self.assertNotIn("孙红雷", male_names)
+        self.assertNotIn("杨紫", male_names)
 
 
 if __name__ == "__main__":
