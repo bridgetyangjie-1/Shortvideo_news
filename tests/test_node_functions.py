@@ -70,18 +70,18 @@ class EnrichNodeFallbackTest(unittest.TestCase):
             {"title": "女频剧2", "category": "female", "female_lead": "已知", "male_lead": "unknown"},
         ]
         filled = fill_unknown_actors(rankings)
-        self.assertNotIn("未知", filled[0]["female_lead"])
-        self.assertNotIn("unknown", filled[0]["male_lead"].lower())
+        self.assertEqual(filled[0]["female_lead"], "")
+        self.assertEqual(filled[0]["male_lead"], "")
         self.assertEqual(filled[1]["female_lead"], "已知")
-        self.assertTrue(filled[1]["male_lead"])
+        self.assertEqual(filled[1]["male_lead"], "")
 
     def test_fill_unknown_actors_for_male(self) -> None:
         rankings = [
             {"title": "男频剧1", "category": "male", "female_lead": "待定", "male_lead": "未知"},
         ]
         filled = fill_unknown_actors(rankings)
-        self.assertNotIn("待定", filled[0]["female_lead"])
-        self.assertNotIn("未知", filled[0]["male_lead"])
+        self.assertEqual(filled[0]["female_lead"], "")
+        self.assertEqual(filled[0]["male_lead"], "")
 
 
 class AudienceProfileNodeTest(unittest.TestCase):
@@ -275,7 +275,7 @@ class GenreDistributionNodeTest(unittest.TestCase):
         self.assertEqual(_classify_tag("都市甜宠"), "题材")
         self.assertEqual(_classify_tag("霸道总裁"), "人设")
         self.assertEqual(_classify_tag("打脸"), "爽点")
-        self.assertEqual(_classify_tag("复仇打脸"), "题材")  # "复仇" 在题材分类中优先命中
+        self.assertEqual(_classify_tag("复仇打脸"), "爽点")
         self.assertEqual(_classify_tag("先婚后爱"), "情感关系")  # 关系动态归入情感关系
         self.assertEqual(_classify_tag("闪婚"), "情感关系")
         self.assertEqual(_classify_tag("日久生情"), "情感关系")
@@ -286,7 +286,7 @@ class GenreDistributionNodeTest(unittest.TestCase):
         drama = {"genre": "甜宠", "tags": ["总裁", "逆袭"], "core_trope": "打脸,撒糖"}
         labels = _collect_drama_labels(drama)
         self.assertIn("甜宠", labels)
-        self.assertIn("总裁", labels)
+        self.assertIn("霸总", labels)
         self.assertIn("逆袭", labels)
         self.assertIn("打脸", labels)
         self.assertIn("撒糖", labels)

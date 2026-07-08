@@ -25,13 +25,13 @@ class TestActorNameUtils(unittest.TestCase):
 
 
 class TestEnrichFallback(unittest.TestCase):
-    def test_fill_replaces_placeholder_names(self):
+    def test_fill_clears_placeholder_names(self):
         rankings = [
             {"title": "剧A", "category": "female", "female_lead": "张三", "male_lead": "李四"},
         ]
         filled = fill_unknown_actors(rankings)
-        self.assertNotEqual(filled[0]["female_lead"], "张三")
-        self.assertNotEqual(filled[0]["male_lead"], "李四")
+        self.assertEqual(filled[0]["female_lead"], "")
+        self.assertEqual(filled[0]["male_lead"], "")
 
 
 class TestProcessNodeFuzzyMatch(unittest.TestCase):

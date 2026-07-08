@@ -45,6 +45,12 @@ class TrendingTag(BaseModel):
     trend: str = Field(default="same", description="趋势：up/down/new/same")
 
 
+class GenderTagSplit(BaseModel):
+    """按男女频拆分的热门标签"""
+    female: List[TagItem] = Field(default_factory=list, description="女频热门标签 TOP8")
+    male: List[TagItem] = Field(default_factory=list, description="男频热门标签 TOP8")
+
+
 class GenreDistribution(BaseModel):
     """近一周热门标签"""
     hot_tags: List[TagItem] = Field(
@@ -58,6 +64,10 @@ class GenreDistribution(BaseModel):
     trending: List[TrendingTag] = Field(
         default_factory=list,
         description="较昨日变化明显的标签，含 change/trend",
+    )
+    by_gender: GenderTagSplit = Field(
+        default_factory=GenderTagSplit,
+        description="按女频/男频拆分的热门标签",
     )
     data_source: str = Field(
         default="",

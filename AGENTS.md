@@ -520,6 +520,8 @@ export PYTHONPATH="$PWD/src"
 
 | 日期 | 改动 |
 |------|------|
+| 2026-07-08 | **v1.14.4 P1 分析可用性提升**：`utils/title_matcher.py` 增强红果剧名四级模糊匹配回填 `series_id`/封面/集数；`tag_normalizer` 扩展同义词，`genre_distribution_node` 爽点优先分类并输出 `by_gender` 男女频标签；`IndustryData` 新增 `market_spend` 大盘消耗 KPI；`enrich_node` 动态 `confidence_score`；前端展示质量分/置信度角标/男女频标签/月大盘消耗 |
+| 2026-07-08 | **v1.14.3 P0 数据质量止血**：新增 `utils/data_quality.py` 拦截编号式幻觉演员名与模板化厂牌；`enrich` prompt/fallback 改为无信源留空、禁止编造；`quality_gate_node` 增加 `ranking_hallucination` 硬性门禁与快讯 URL/insight 校验；`news_node` 过滤 example.com 等不可信链接并自动提取 insight；榜单新增 `weekly_heat_index` 字段，前端区分「周热度」与「累计指数」 |
 | 2026-07-07 | **v1.15.1 观众画像板块重构**：`audience_profile_node` 新增每日 TOP20 榜单信号（女频浓度/题材权重/AI新剧占比）、与昨日历史环比趋势、规则化分析师洞察；`AudienceProfile` 扩展 `weekly_signals`/`weekly_trends`/`analyst_insights`；前端双层展示「本周信号(周更)」vs「行业基准(月更)」，旧数据前端可从 rankings 兜底推算 |
 | 2026-07-06 | **v1.15.0 AI 短剧/漫剧看板升级**：`config/ai_drama_articles.json` 补充 thepaper 5 月月报/百强榜与行业报道；`ai_drama_node` 增加发布滞后回退，直爬多篇文章并抽取 `plot`/`tags`/`studio`/`url` 等榜单字段；趋势洞察附 `source`/`source_url`，快讯带 `summary`；缓存校验要求榜单 ≥3 条；前端榜单展示剧情、标签、制作方、可点击标题 |
 | 2026-06-12 | 新增 `tools/cache_db.py`：本地 SQLite 缓存，7 天内有效，避免重复搜索 |

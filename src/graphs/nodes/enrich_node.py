@@ -34,6 +34,7 @@ from graphs.nodes.enrich.actor_resolver import ActorResolver
 from graphs.nodes.enrich.json_refiner import JsonRefiner
 from graphs.nodes.enrich.fallback import fill_unknown_actors
 from tools.actor_name_utils import sanitize_ranking_actors
+from utils.data_quality import sanitize_production_house, is_hallucinated_actor_name, compute_ranking_confidence
 
 
 def _backfill_basic_fields(
@@ -79,6 +80,10 @@ def _backfill_basic_fields(
             # 高可信来源：覆盖 DeepSeek 可能丢失或改写的热度相关字段
             item["views"] = src.get("views", item.get("views", ""))
             item["views_num"] = src.get("views_num", item.get("views_num", 0))
+            item["weekly_heat_index"] = src.get(
+                "weekly_heat_index",
+                src.get("weekly_index", item.get("weekly_heat_index", 0)),
+            )
             item["heat"] = src.get("heat", item.get("heat", 0))
             item["data_source"] = src.get("data_source", item.get("data_source", "unknown"))
             item["confidence_score"] = src.get("confidence_score", item.get("confidence_score", 0.7))
@@ -105,7 +110,11 @@ def _backfill_basic_fields(
         if not item.get("cover"):
             item["cover"] = src.get("cover", "")
         if not item.get("production_house"):
-            item["production_house"] = src.get("production_house") or src.get("studio", "")
+            item["production_house"] = sanitize_production_house(
+                src.get("production_house") or src.get("studio", "")
+            )
+        else:
+            item["production_house"] = sanitize_production_house(item.get("production_house"))
         if not item.get("platform"):
             item["platform"] = src.get("platform", "红果")
         if not item.get("tags"):
@@ -180,10 +189,21 @@ def enrich_node(
         # 第三步：用原始红果数据回填 DeepSeek 可能丢失的可信字段（series_id/cover/厂牌等）
         rankings_data = _backfill_basic_fields(rankings_data, basic_rankings_list)
 
-        # 第四步：兜底填充演员（过滤占位名）
+        # 第四步：清洗演员与厂牌（无信源留空，禁止编造）
         for item in rankings_data:
             if isinstance(item, dict):
                 sanitize_ranking_actors(item)
+                item["production_house"] = sanitize_production_house(item.get("production_house"))
+                if is_hallucinated_actor_name(item.get("female_lead")):
+                    item["female_lead"] = ""
+                if is_hallucinated_actor_name(item.get("male_lead")):
+                    item["male_lead"] = ""
+                weekly_heat = item.get("weekly_heat_index") or item.get("weekly_index") or item.get("views_num") or 0
+                item["weekly_heat_index"] = int(weekly_heat or 0)
+                if item["weekly_heat_index"] and not item.get("views_num"):
+                    item["views_num"] = item["weekly_heat_index"]
+                    item["views"] = str(item["weekly_heat_index"])
+                item["confidence_score"] = compute_ranking_confidence(item)
         rankings_data = fill_unknown_actors(rankings_data)
 
         # 第五步：榜单数量补齐
@@ -218,10 +238,11 @@ def enrich_node(
                 DramaRanking(
                     rank=item.get("rank", 0),
                     title=item.get("title", ""),
-                    female_lead=item.get("female_lead", "未知"),
-                    male_lead=item.get("male_lead", "未知"),
+                    female_lead=item.get("female_lead", ""),
+                    male_lead=item.get("male_lead", ""),
                     views=item.get("views", ""),
                     views_num=item.get("views_num", 0),
+                    weekly_heat_index=item.get("weekly_heat_index", item.get("views_num", 0)),
                     platform=item.get("platform", "红果"),
                     genre=item.get("genre", ""),
                     tags=item.get("tags", []),

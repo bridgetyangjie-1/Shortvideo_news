@@ -17,6 +17,7 @@ from coze_coding_utils.runtime_ctx.context import Context
 from tools.deepseek_api import DeepSeekClient
 from tools import weekly_cache
 from tools.actor_name_utils import is_placeholder_actor_name, sanitize_actor_name
+from utils.data_quality import is_hallucinated_actor_name
 
 # Fallback for test_run environment
 try:
@@ -135,7 +136,7 @@ def _extract_actors_from_rankings(rankings_data: List[Dict[str, Any]]) -> Dict[s
         text = str(name).strip()
         if text.lower() in {n.lower() for n in INVALID_NAMES}:
             return False
-        return not is_placeholder_actor_name(text)
+        return not is_placeholder_actor_name(text) and not is_hallucinated_actor_name(text)
 
     female_scores: Dict[str, Dict[str, Any]] = {}
     male_scores: Dict[str, Dict[str, Any]] = {}

@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from graphs.models.ranking import DramaRanking, ActorRanking, ActorsData
 from graphs.models.industry import IndustryData, PlatformData, PlatformApp
 from graphs.models.audience import AudienceProfile, AgeDistribution, RegionDistribution
-from graphs.models.genre import GenreDistribution, TagItem, TagCategory, TrendingTag, GenreStats
+from graphs.models.genre import GenreDistribution, TagItem, TagCategory, TrendingTag, GenreStats, GenderTagSplit
 from graphs.models.emotion import (
     EmotionalAnalysis,
     EmotionWordCloudItem,

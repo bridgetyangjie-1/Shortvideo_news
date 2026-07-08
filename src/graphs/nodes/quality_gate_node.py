@@ -13,6 +13,13 @@ from langgraph.runtime import Runtime
 
 from coze_coding_utils.runtime_ctx.context import Context
 from graphs.state import QualityGateInput, QualityGateOutput
+from tools.actor_name_utils import is_placeholder_actor_name
+from utils.data_quality import (
+    count_ranking_hallucinations,
+    is_hallucinated_actor_name,
+    is_suspicious_studio_name,
+    is_trusted_news_url,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +40,9 @@ API_ERROR_PATTERNS = [
     re.compile(r"budget", re.I),
 ]
 
-BLACKLISTED_ACTOR_NAMES = {"未知", "待定", "未识别", "unknown", "none", "n/a"}
+BLACKLISTED_ACTOR_NAMES = {"未知", "待定", "未识别", "unknown", "none", "n/a", "待核实"}
+MAX_HALLUCINATED_ACTOR_RANKINGS = 2
+MAX_SUSPICIOUS_STUDIO_RANKINGS = 3
 
 # 被视为不真实/失败的数据来源说明（避免过于宽泛的「失败」误伤）
 UNREALIABLE_SOURCE_PATTERNS = [
@@ -49,6 +58,7 @@ HARD_BLOCK_CHECKS = {
     "rankings_count",
     "ranking_field_integrity",
     "api_errors",
+    "ranking_hallucination",
 }
 
 # 行业数据中的占位/无效值，遇到时视为缺失
@@ -133,13 +143,52 @@ def quality_gate_node(
     if not field_integrity_ok:
         errors.append(f"有效榜单字段不完整：仅 {valid_rankings}/{ranking_count} 条通过校验")
 
+    # 2.1 榜单幻觉检测（演员/厂牌）
+    hallucination_stats = count_ranking_hallucinations(rankings)
+    actor_hallucination_hits = hallucination_stats["actor_hits"]
+    studio_hallucination_hits = hallucination_stats["studio_hits"]
+    hallucination_samples: List[str] = []
+    for r in rankings:
+        title = getattr(r, "title", "") or ""
+        female = getattr(r, "female_lead", "") or ""
+        male = getattr(r, "male_lead", "") or ""
+        studio = getattr(r, "production_house", "") or ""
+        if is_hallucinated_actor_name(female) or is_hallucinated_actor_name(male):
+            hallucination_samples.append(f"{title}({female}/{male})")
+        elif is_suspicious_studio_name(studio):
+            hallucination_samples.append(f"{title}[{studio}]")
+
+    ranking_hallucination_ok = (
+        actor_hallucination_hits <= MAX_HALLUCINATED_ACTOR_RANKINGS
+        and studio_hallucination_hits <= MAX_SUSPICIOUS_STUDIO_RANKINGS
+    )
+    report["checks"].append({
+        "name": "ranking_hallucination",
+        "passed": ranking_hallucination_ok,
+        "actor_hits": actor_hallucination_hits,
+        "studio_hits": studio_hallucination_hits,
+        "max_actor_hits": MAX_HALLUCINATED_ACTOR_RANKINGS,
+        "max_studio_hits": MAX_SUSPICIOUS_STUDIO_RANKINGS,
+        "samples": hallucination_samples[:5],
+    })
+    if not ranking_hallucination_ok:
+        errors.append(
+            f"榜单存在幻觉数据：可疑演员 {actor_hallucination_hits} 部、"
+            f"可疑厂牌 {studio_hallucination_hits} 部"
+            f"（阈值 {MAX_HALLUCINATED_ACTOR_RANKINGS}/{MAX_SUSPICIOUS_STUDIO_RANKINGS}）"
+        )
+
     # 3. 演员榜单
     female_actors = getattr(actors, "female", []) or []
     male_actors = getattr(actors, "male", []) or []
 
     def _valid_actor(actor) -> bool:
         name = getattr(actor, "name", "") or ""
-        return bool(name) and name.lower() not in BLACKLISTED_ACTOR_NAMES
+        if not name or name.lower() in BLACKLISTED_ACTOR_NAMES:
+            return False
+        if is_placeholder_actor_name(name) or is_hallucinated_actor_name(name):
+            return False
+        return True
 
     female_valid = sum(1 for a in female_actors if _valid_actor(a))
     male_valid = sum(1 for a in male_actors if _valid_actor(a))
@@ -164,14 +213,24 @@ def quality_gate_node(
     if not male_ok:
         warnings.append(f"男频演员有效数量不足：{male_valid}/{REQUIRED_MALE_ACTORS}")
 
-    # 4. 每日快讯（0-6条均可，但每条必须有真实 URL）
+    # 4. 每日快讯（0-6条均可，每条须有可信 URL）
     news_count = len(daily_news)
     news_count_ok = 0 <= news_count <= MAX_DAILY_NEWS_COUNT
     news_with_url = sum(
         1 for n in daily_news
         if (getattr(n, "source_url", "") or "").startswith(("http://", "https://"))
     )
+    news_trusted_url = sum(
+        1 for n in daily_news
+        if is_trusted_news_url(getattr(n, "source_url", "") or "")
+    )
+    news_with_insight = sum(
+        1 for n in daily_news
+        if _is_meaningful_text(getattr(n, "insight", "") or "")
+    )
     news_url_ok = news_with_url == news_count and news_count > 0
+    news_trust_ok = news_trusted_url == news_count and news_count > 0
+    news_insight_ok = news_count == 0 or news_with_insight == news_count
 
     report["checks"].append({
         "name": "daily_news_count",
@@ -185,10 +244,26 @@ def quality_gate_node(
         "value": news_with_url,
         "total": news_count,
     })
+    report["checks"].append({
+        "name": "daily_news_url_trust",
+        "passed": news_trust_ok or news_count == 0,
+        "trusted": news_trusted_url,
+        "total": news_count,
+    })
+    report["checks"].append({
+        "name": "daily_news_insight",
+        "passed": news_insight_ok,
+        "with_insight": news_with_insight,
+        "total": news_count,
+    })
     if not news_count_ok:
         warnings.append(f"快讯数量异常：当前 {news_count} 条，超过上限 {MAX_DAILY_NEWS_COUNT}")
     if news_count > 0 and not news_url_ok:
         warnings.append(f"快讯 source_url 不完整：{news_with_url}/{news_count}")
+    if news_count > 0 and not news_trust_ok:
+        warnings.append(f"快讯含不可信来源 URL：{news_trusted_url}/{news_count} 条通过")
+    if news_count > 0 and not news_insight_ok:
+        warnings.append(f"快讯 insight 缺失：{news_with_insight}/{news_count}")
 
     # 5. 行业数据来源真实性（方向 A：缺失/失败时不发布）
     app_mau = getattr(industry, "app_mau", "") or ""
@@ -290,10 +365,10 @@ def quality_gate_node(
         final_score = min(base_score, 59)
         publish_mode = "blocked"
     elif warnings:
-        final_score = max(min(base_score, 95), 60)
+        final_score = max(min(base_score - len(warnings) * 5, 95), 60)
         publish_mode = "degraded"
     else:
-        final_score = max(base_score, state.quality_score or 0)
+        final_score = base_score
         publish_mode = "full"
 
     report["score"] = final_score

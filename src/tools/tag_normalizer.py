@@ -6,6 +6,7 @@ from typing import List, Dict
 # 标签同义词映射
 TAG_SYNONYMS = {
     "都市言情": "都市爱情",
+    "爱情": "都市爱情",
     "虐渣打脸": "打脸虐渣",
     "穿书": "穿越",
     "女强": "女性成长",
@@ -27,6 +28,10 @@ TAG_SYNONYMS = {
     "马甲文": "马甲",
     "总裁": "霸总",
     "豪门": "豪门世家",
+    "逆袭打脸": "打脸",
+    "奇幻脑洞": "奇幻",
+    "古风权谋": "权谋",
+    "奇幻爱情": "奇幻",
 }
 
 # 题材分类
@@ -37,15 +42,22 @@ GENRE_CATEGORIES: Dict[str, List[str]] = {
 }
 
 
+def canonicalize_tag(tag: str) -> str:
+    """单标签标准化（同义词映射 + 去空白）。"""
+    clean = str(tag or "").strip()
+    if not clean:
+        return ""
+    return TAG_SYNONYMS.get(clean, clean)
+
+
 def normalize_tags(tags: List[str]) -> List[str]:
-    """标准化标签"""
+    """标准化标签列表，合并同义词并去重。"""
     if not tags:
         return []
-    normalized = []
+    normalized: List[str] = []
     for tag in tags:
-        clean = tag.strip()
-        clean = TAG_SYNONYMS.get(clean, clean)
-        if clean not in normalized:
+        clean = canonicalize_tag(tag)
+        if clean and clean not in normalized:
             normalized.append(clean)
     return normalized
 
