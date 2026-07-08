@@ -18,6 +18,7 @@ from tools.moonshot_api import MoonshotClient
 from tools.deepseek_api import DeepSeekClient
 
 from graphs.state import NewsNodeInput, NewsNodeOutput, DailyNews
+from utils.data_quality import extract_insight_from_content, is_trusted_news_url
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -161,15 +162,22 @@ def news_node(state: NewsNodeInput, config: RunnableConfig, runtime: Runtime[Con
                     if not source_url.startswith(("http://", "https://")):
                         logger.warning(f"news_node: 丢弃缺少真实URL的快讯: {item.get('title', '')}")
                         continue
+                    if not is_trusted_news_url(source_url):
+                        logger.warning(f"news_node: 丢弃不可信URL的快讯: {item.get('title', '')} -> {source_url}")
+                        continue
                     if source_url not in combined_results:
                         logger.warning(f"news_node: 丢弃搜索结果中未出现URL的快讯: {item.get('title', '')}")
                         continue
+                    content = str(item.get("content", ""))[:600]
+                    insight = str(item.get("insight", "")).strip()[:150]
+                    if not insight:
+                        insight = extract_insight_from_content(content)
                     news_item = DailyNews(
                         type=str(item.get("type", "数据")),
                         icon=str(item.get("icon", "📊")),
                         title=str(item.get("title", ""))[:15],
-                        content=str(item.get("content", ""))[:600],
-                        insight=str(item.get("insight", ""))[:150],
+                        content=content,
+                        insight=insight,
                         source_url=source_url,
                         data_source=f"Kimi 搜索 + DeepSeek 提炼 ({date_str})",
                         update_frequency="daily",

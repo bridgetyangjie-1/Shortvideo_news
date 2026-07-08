@@ -21,8 +21,8 @@ class FallbackTest(unittest.TestCase):
     def test_fill_unknown_actors_replaces_unknown(self) -> None:
         rankings = [{"title": "A", "female_lead": "未知", "male_lead": "", "category": "female"}]
         result = fill_unknown_actors(rankings)
-        self.assertNotEqual(result[0]["female_lead"], "未知")
-        self.assertTrue(result[0]["male_lead"])
+        self.assertEqual(result[0]["female_lead"], "")
+        self.assertEqual(result[0]["male_lead"], "")
 
 
 class CacheAdapterTest(unittest.TestCase):

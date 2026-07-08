@@ -70,18 +70,18 @@ class EnrichNodeFallbackTest(unittest.TestCase):
             {"title": "女频剧2", "category": "female", "female_lead": "已知", "male_lead": "unknown"},
         ]
         filled = fill_unknown_actors(rankings)
-        self.assertNotIn("未知", filled[0]["female_lead"])
-        self.assertNotIn("unknown", filled[0]["male_lead"].lower())
+        self.assertEqual(filled[0]["female_lead"], "")
+        self.assertEqual(filled[0]["male_lead"], "")
         self.assertEqual(filled[1]["female_lead"], "已知")
-        self.assertTrue(filled[1]["male_lead"])
+        self.assertEqual(filled[1]["male_lead"], "")
 
     def test_fill_unknown_actors_for_male(self) -> None:
         rankings = [
             {"title": "男频剧1", "category": "male", "female_lead": "待定", "male_lead": "未知"},
         ]
         filled = fill_unknown_actors(rankings)
-        self.assertNotIn("待定", filled[0]["female_lead"])
-        self.assertNotIn("未知", filled[0]["male_lead"])
+        self.assertEqual(filled[0]["female_lead"], "")
+        self.assertEqual(filled[0]["male_lead"], "")
 
 
 class AudienceProfileNodeTest(unittest.TestCase):

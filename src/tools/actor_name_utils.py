@@ -39,7 +39,14 @@ def is_placeholder_actor_name(name: Any) -> bool:
     # 纯数字或带括号说明
     if re.fullmatch(r"[\d\s]+", text):
         return True
-    if re.search(r"(待填|示例|测试|placeholder)", lower):
+    if re.search(r"(待填|示例|测试|placeholder|待核实)", lower):
+        return True
+    # 姓 + 编号式幻觉名（李十三、王十四、钱二十一）
+    if re.fullmatch(
+        r"(?:张|李|王|赵|钱|孙|周|吴|郑|陈|刘|黄|杨|朱|秦|许|何|吕|施|马|白|徐|曾)"
+        r"(?:十[一二三四五六七八九]?|二十[一二三四五六七八九]?|三十|[0-9]{1,3})",
+        text,
+    ):
         return True
     return False
 

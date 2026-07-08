@@ -829,7 +829,7 @@ body.emotion-mobile-locked { overflow: hidden; }
   <!-- 两列布局 -->
   <div class="main-grid">
     <div class="glass-card">
-      <div class="section-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> 榜单 TOP20 <span class="source-tag tier1">📊 周榜坐标</span> + <span class="source-tag tier2">🔍 日榜追踪</span></div>
+      <div class="section-title"><i class="fas fa-trophy" style="color:#fbbf24;"></i> 榜单 TOP20 <span class="source-tag tier1">📊 周榜坐标</span> + <span class="source-tag tier2">🔍 排名追踪</span></div>
       <div id="weekly-base-banner"></div>
       <div id="rankings-container"></div>
     </div>
@@ -2281,7 +2281,7 @@ function renderWeeklyBase(weeklyBase) {
             <span class="weekly-base-badge">🏆 周榜坐标</span>
             <span class="weekly-base-title">${escapeHtml(wb.top1_title || '--')}</span>
             <span class="weekly-base-meta">本周 TOP1 ${weekDateLabel} · ${escapeHtml(wb.top1_genre || '--')}</span>
-            <span class="weekly-base-index">${Number(wb.top1_index || 0).toLocaleString()} 热度</span>
+            <span class="weekly-base-index">${Number(wb.top1_index || 0).toLocaleString()} 周热播指数</span>
         </div>
         <div class="weekly-base-desc">${escapeHtml(wb.description || '')}</div>
     `;
@@ -2311,7 +2311,8 @@ function renderRankings(rankings) {
             <th>集数</th>
             <th>标签</th>
             <th>厂牌</th>
-            <th>累计</th>
+            <th title="红果官方周热播指数，非播放量">周热度</th>
+            <th title="红果官方累计热播指数">累计指数</th>
             <th>趋势</th>
             <th>IP来源</th>
         </tr>
@@ -2334,6 +2335,10 @@ function renderRankings(rankings) {
             .map(t => `<span class="tag-mini">${escapeHtml(t)}</span>`).join('');
 
         const totalIndex = Number(drama.total_index) || 0;
+        const weeklyHeat = Number(drama.weekly_heat_index ?? drama.views_num ?? drama.heat) || 0;
+        const weeklyHeatHtml = weeklyHeat > 0
+            ? `<span class="weekly-heat-value" title="周热播指数（非播放量）">${weeklyHeat.toLocaleString()}</span>`
+            : '<span class="weekly-heat-value">-</span>';
         const totalIndexHtml = totalIndex > 0
             ? `<span class="total-index-value" title="累计热播指数">${totalIndex.toLocaleString()}</span>`
             : '<span class="total-index-value">-</span>';
@@ -2388,6 +2393,7 @@ function renderRankings(rankings) {
             <td class="ep-cell">${drama.episodes_count ?? '-'}</td>
             <td class="tags-cell">${tags}</td>
             <td class="studio-cell">${escapeHtml(drama.studio || drama.production_house || '-')}</td>
+            <td class="weekly-heat-cell">${weeklyHeatHtml}</td>
             <td class="total-index-cell">${totalIndexHtml}</td>
             <td class="trend-cell">${trendBadge}</td>
             <td class="ip-cell">${ipBadge}</td>
@@ -2567,7 +2573,7 @@ async function renderDashboard(dateParam = null) {
     // 核心情绪与动机拆解
     renderEmotionChart(data.emotional_analysis);
 
-    // 趋势图表（以周为粒度，基于短剧工程周榜总热度）
+    // 趋势图表（以周为粒度，基于短剧工程周榜周热播指数汇总）
     const weeklyTrend = data.play_trend?.weekly || data.play_trend?.daily || [];
     if (weeklyTrend.length) {
         const ctx = document.getElementById('trendChart').getContext('2d');
@@ -2579,7 +2585,7 @@ async function renderDashboard(dateParam = null) {
             data: {
                 labels: weeklyTrend.map(d => d.start_date || d.date).slice(0, 8).reverse(),
                 datasets: [{
-                    label: '周榜总热度',
+                    label: '周榜热播指数合计',
                     data: weeklyTrend.map(d => d.total_views).slice(0, 8).reverse(),
                     borderColor: '#818cf8',
                     backgroundColor: 'rgba(129, 140, 248, 0.1)',

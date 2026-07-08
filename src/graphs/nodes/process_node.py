@@ -70,7 +70,7 @@ def _convert_duanju_to_rankings(duanju_data: List[Dict[str, Any]]) -> List[Dict[
         weekly_index = int(item.get("weekly_index", 0) or 0)
         total_index = int(item.get("total_index", 0) or 0)
         
-        # views 使用热播指数展示
+        # 周热播指数（红果官方，非播放量）
         views_str = f"{weekly_index}" if weekly_index > 0 else "热度上榜"
         
         ranking = {
@@ -78,6 +78,7 @@ def _convert_duanju_to_rankings(duanju_data: List[Dict[str, Any]]) -> List[Dict[
             "title": item.get("title", ""),
             "views": views_str,
             "views_num": weekly_index,
+            "weekly_heat_index": weekly_index,
             "platform": item.get("platform", "红果"),
             "genre": item.get("genre", ""),
             "tags": [],  # 后续用红果数据回填

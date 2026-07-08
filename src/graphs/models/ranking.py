@@ -11,8 +11,9 @@ class DramaRanking(BaseModel):
     title: str = Field(..., description="剧名")
     female_lead: str = Field(default="", description="女演员名")
     male_lead: str = Field(default="", description="男演员名")
-    views: str = Field(default="", description="播放量（如'1.5亿'）")
-    views_num: int = Field(default=0, description="播放量数字，单位万，方便排序")
+    views: str = Field(default="", description="周热播指数展示字符串（红果官方，非播放量）")
+    views_num: int = Field(default=0, description="周热播指数数值，与 weekly_heat_index 一致")
+    weekly_heat_index: int = Field(default=0, description="周热播指数（红果官方周榜字段，非播放量）")
     platform: str = Field(default="红果", description="平台")
     genre: str = Field(default="", description="题材类型")
     tags: List[str] = Field(default=[], description="标签列表")
@@ -48,7 +49,7 @@ class DramaRanking(BaseModel):
             return ""
         return str(v).strip()
 
-    @field_validator("rank", "views_num", "heat", "episodes_count", "dataeye_rank", "dataeye_heat", "previous_rank", "total_index", mode="before")
+    @field_validator("rank", "views_num", "weekly_heat_index", "heat", "episodes_count", "dataeye_rank", "dataeye_heat", "previous_rank", "total_index", mode="before")
     @classmethod
     def _validate_non_negative_int(cls, v):
         try:

@@ -11,12 +11,16 @@ from graphs.state import (
 from graphs.nodes.quality_gate_node import quality_gate_node
 
 
-def _make_ranking(title: str, rank: int = 1) -> DramaRanking:
+def _make_ranking(title: str, rank: int = 1, female_lead: str = "", male_lead: str = "", studio: str = "") -> DramaRanking:
     return DramaRanking(
         rank=rank,
         title=title,
-        views="1000万",
+        female_lead=female_lead,
+        male_lead=male_lead,
+        production_house=studio,
+        views="1000",
         views_num=1000,
+        weekly_heat_index=1000,
         platform="红果",
         genre="都市甜宠",
         confidence_score=0.85,
@@ -27,7 +31,7 @@ def _make_actor(name: str, rank: int = 1) -> ActorRanking:
     return ActorRanking(rank=rank, name=name, popularity=100)
 
 
-def _make_news(title: str, url: str = "https://example.com/news") -> DailyNews:
+def _make_news(title: str, url: str = "https://www.thepaper.cn/news/1") -> DailyNews:
     return DailyNews(
         title=title,
         content="content",
@@ -183,6 +187,29 @@ class QualityGateNodeTest(unittest.TestCase):
         self.assertTrue(result.success)
         self.assertEqual(result.quality_report.get("publish_mode"), "degraded")
         self.assertIn("行业数据来源不真实", result.error_message)
+
+    def test_blocks_when_too_many_hallucinated_actors(self) -> None:
+        rankings = [
+            _make_ranking(f"剧{i}", i, female_lead="李十三" if i <= 3 else "徐艺真")
+            for i in range(1, 21)
+        ]
+        actors = ActorsData(
+            female=[_make_actor(f"女演员{i}", i) for i in range(1, 11)],
+            male=[_make_actor(f"男演员{i}", i) for i in range(1, 11)],
+        )
+        news = [_make_news(f"新闻{i}") for i in range(1, 4)]
+
+        state = QualityGateInput(
+            enriched_rankings=rankings,
+            actors=actors,
+            daily_news=news,
+            industry=_make_industry(),
+        )
+        result = _run_gate(state)
+
+        self.assertFalse(result.success)
+        self.assertIn("幻觉", result.error_message)
+        self.assertEqual(result.quality_report.get("publish_mode"), "blocked")
 
 
 class IndustryDataNormalizationTest(unittest.TestCase):
