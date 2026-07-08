@@ -24,10 +24,12 @@ from graphs.state import (
     GenreDistribution,
     GenreDistributionInput,
     GenreDistributionOutput,
+    GenderTagSplit,
     TagItem,
     TagCategory,
     TrendingTag,
 )
+from tools.tag_normalizer import canonicalize_tag, normalize_tags
 
 logger = logging.getLogger(__name__)
 
@@ -51,25 +53,25 @@ LABEL_SEPARATORS = ("、", "，", ",", "/", "|", "｜", "；", ";", "\n")
 # 本地标签分类体系（按优先级排序，一个标签只归入最先命中的类别）
 TAG_TAXONOMY: List[Tuple[str, List[str]]] = [
     (
-        "题材",
-        [
-            "都市", "古装", "穿越", "重生", "年代", "民国", "职场", "校园", "悬疑",
-            "玄幻", "奇幻", "仙侠", "科幻", "武侠", "历史", "宫廷", "权谋", "商战",
-            "医疗", "军旅", "家庭", "农村", "甜宠", "虐恋", "复仇", "逆袭",
-        ],
-    ),
-    (
         "爽点",
         [
             "打脸", "虐渣", "复仇", "逆袭", "马甲", "掉马", "火葬场", "追妻", "追夫",
             "带球跑", "萌宝", "身份揭晓", "实力碾压", "扮猪吃虎", "翻身", "上位", "夺回",
-            "复仇打脸",
+            "复仇打脸", "逆袭打脸",
+        ],
+    ),
+    (
+        "题材",
+        [
+            "都市", "古装", "穿越", "重生", "年代", "民国", "职场", "校园", "悬疑",
+            "玄幻", "奇幻", "仙侠", "科幻", "武侠", "历史", "宫廷", "权谋", "商战",
+            "医疗", "军旅", "家庭", "农村", "甜宠", "虐恋", "都市爱情", "古风爱情",
         ],
     ),
     (
         "情感关系",
         [
-            "甜宠", "虐恋", "先婚后爱", "闪婚", "离婚", "复婚", "替身", "暗恋",
+            "甜宠", "虐恋", "先婚后爱", "先婚厚爱", "闪婚", "离婚", "复婚", "替身", "暗恋",
             "双向奔赴", "强取豪夺", "契约婚姻", "豪门恩怨", "日久生情", "破镜重圆",
             "青梅竹马", "契约", "追爱", "错嫁", "替嫁", "禁欲", "高甜", "高虐",
         ],
@@ -148,15 +150,23 @@ def _collect_drama_labels(drama: Any) -> List[str]:
     labels: List[str] = []
     for field_name in ("genre", "tags", "core_trope"):
         labels.extend(_iter_labels(_get_field(drama, field_name, [])))
-    return labels
+    return normalize_tags(labels)
+
+
+def _drama_gender_bucket(drama: Any) -> str:
+    category = str(_get_field(drama, "category", "female") or "female").lower()
+    if category in {"male", "ai"}:
+        return "male"
+    return "female"
 
 
 def _classify_tag(tag: str) -> str:
     """按本地 taxonomy 给标签分类，未命中返回'其他'。"""
-    text = str(tag).lower()
+    canonical = canonicalize_tag(tag)
+    text = str(canonical).lower()
     for category, keywords in TAG_TAXONOMY:
         for kw in keywords:
-            if kw.lower() in text:
+            if kw.lower() == text or kw.lower() in text:
                 return category
     return "其他"
 
@@ -296,10 +306,30 @@ def genre_distribution_node(
 
         trending = sorted(trending, key=lambda t: (-abs(t.change), -t.value))[:6]
 
+        # 男女频标签分列（基于当日榜单）
+        female_counter: Counter[str] = Counter()
+        male_counter: Counter[str] = Counter()
+        for drama in rankings:
+            labels = _collect_drama_labels(drama)
+            bucket = _drama_gender_bucket(drama)
+            target = male_counter if bucket == "male" else female_counter
+            target.update(labels)
+        by_gender = GenderTagSplit(
+            female=[
+                TagItem(name=name, value=int(count))
+                for name, count in female_counter.most_common(8)
+            ],
+            male=[
+                TagItem(name=name, value=int(count))
+                for name, count in male_counter.most_common(8)
+            ],
+        )
+
         genre_distribution = GenreDistribution(
             hot_tags=hot_tags,
             categories=categories,
             trending=trending,
+            by_gender=by_gender,
             data_source="近7天榜单统计",
             update_frequency="weekly",
         )

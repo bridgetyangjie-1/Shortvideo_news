@@ -34,7 +34,7 @@ from graphs.nodes.enrich.actor_resolver import ActorResolver
 from graphs.nodes.enrich.json_refiner import JsonRefiner
 from graphs.nodes.enrich.fallback import fill_unknown_actors
 from tools.actor_name_utils import sanitize_ranking_actors
-from utils.data_quality import sanitize_production_house, is_hallucinated_actor_name
+from utils.data_quality import sanitize_production_house, is_hallucinated_actor_name, compute_ranking_confidence
 
 
 def _backfill_basic_fields(
@@ -203,6 +203,7 @@ def enrich_node(
                 if item["weekly_heat_index"] and not item.get("views_num"):
                     item["views_num"] = item["weekly_heat_index"]
                     item["views"] = str(item["weekly_heat_index"])
+                item["confidence_score"] = compute_ranking_confidence(item)
         rankings_data = fill_unknown_actors(rankings_data)
 
         # 第五步：榜单数量补齐

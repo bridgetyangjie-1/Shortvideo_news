@@ -109,6 +109,32 @@ def extract_insight_from_content(content: str) -> str:
     return normalized.strip()[:150]
 
 
+def compute_ranking_confidence(item: dict) -> float:
+    """根据数据来源与字段完整度动态计算榜单条目置信度。"""
+    if not isinstance(item, dict):
+        return 0.5
+    score = 0.55
+    if item.get("data_source") == "duanjugongcheng":
+        score = 0.82
+    if item.get("series_id"):
+        score += 0.08
+    if item.get("cover"):
+        score += 0.02
+    female = item.get("female_lead", "")
+    male = item.get("male_lead", "")
+    if female and not is_hallucinated_actor_name(female):
+        score += 0.04
+    if male and not is_hallucinated_actor_name(male):
+        score += 0.04
+    studio = item.get("production_house", "")
+    if studio and not is_suspicious_studio_name(studio):
+        score += 0.04
+    episodes = int(item.get("episodes_count", 0) or 0)
+    if episodes and episodes != 80:
+        score += 0.03
+    return round(max(0.0, min(1.0, score)), 2)
+
+
 def count_ranking_hallucinations(rankings: list) -> dict[str, int]:
     """统计榜单中的幻觉演员与可疑厂牌数量。"""
     actor_hits = 0

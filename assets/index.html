@@ -375,6 +375,31 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 
     color: #818cf8;
     font-weight: 500;
 }
+.confidence-badge {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    vertical-align: middle;
+}
+.gender-tags-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+.gender-tags-col-title {
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.gender-tags-col-title.female { color: #f472b6; }
+.gender-tags-col-title.male { color: #60a5fa; }
 
 .trend-cell {
     text-align: center;
@@ -821,7 +846,7 @@ body.emotion-mobile-locked { overflow: hidden; }
     <div class="kpi-card">
       <div class="kpi-icon">🔥</div>
       <div class="kpi-value yellow" id="kpi-hit">--</div>
-      <div class="kpi-label">破亿爆款剧</div>
+      <div class="kpi-label">月大盘消耗</div>
       <div class="kpi-source" id="kpi-hit-source"><span class="source-tag tier2">🔍 搜补</span></div>
     </div>
   </div>
@@ -2187,8 +2212,9 @@ function renderHotTags(genreDistribution) {
             ? [{ category: '热门标签', tags: gd.hot_tags }]
             : []);
     const trending = Array.isArray(gd.trending) ? gd.trending : [];
+    const byGender = gd.by_gender || {};
 
-    if (!categories.length && !trending.length) {
+    if (!categories.length && !trending.length && !(byGender.female || []).length && !(byGender.male || []).length) {
         container.innerHTML = '<div style="color:#64748b; font-size:12px; padding:12px 0;">暂无数据</div>';
         return;
     }
@@ -2234,6 +2260,24 @@ function renderHotTags(genreDistribution) {
         }
     });
 
+    const femaleTags = Array.isArray(byGender.female) ? byGender.female : [];
+    const maleTags = Array.isArray(byGender.male) ? byGender.male : [];
+    if (femaleTags.length || maleTags.length) {
+        const renderGenderPills = (tags) => tags.slice(0, 8).map(t => {
+            const name = escapeHtml(typeof t.name === 'string' ? t.name : '');
+            const value = Number.isInteger(t.value) ? t.value : parseInt(t.value, 10) || 0;
+            return `<span class="tag-pill"><span>${name}</span><span class="tag-value">${value}</span></span>`;
+        }).join('');
+        html += '<div class="tag-divider"></div><div class="gender-tags-grid">';
+        if (femaleTags.length) {
+            html += `<div><div class="gender-tags-col-title female">👩 女频标签</div><div class="hot-tags-cloud">${renderGenderPills(femaleTags)}</div></div>`;
+        }
+        if (maleTags.length) {
+            html += `<div><div class="gender-tags-col-title male">👨 男频标签</div><div class="hot-tags-cloud">${renderGenderPills(maleTags)}</div></div>`;
+        }
+        html += '</div>';
+    }
+
     // 趋势榜
     if (trending.length > 0) {
         html += '<div class="tag-trending-section"><div class="tag-category-title other"><i class="fas fa-fire"></i> 标签异动</div><div class="tag-trending-list">';
@@ -2263,6 +2307,29 @@ function renderHotTags(genreDistribution) {
 
     html += '</div>';
     container.innerHTML = html;
+}
+
+// 置信度角标：低于 0.75 时展示「待核实」
+function confidenceBadge(score) {
+    const value = Number(score);
+    if (!value || value >= 0.75) return '';
+    const pct = Math.round(value * 100);
+    return `<span class="confidence-badge" title="数据置信度 ${pct}%">待核实</span>`;
+}
+
+function buildQualityWarningText(data) {
+    const lines = [];
+    const qr = data.quality_report || {};
+    if (data.quality_score != null) {
+        lines.push(`质量分：${data.quality_score}${qr.publish_mode ? `（${qr.publish_mode}）` : ''}`);
+    }
+    if (Array.isArray(data.alerts) && data.alerts.length > 0) {
+        data.alerts.slice(0, 3).forEach(a => lines.push(`⚠ ${a.title || a.message || ''}`));
+    }
+    if (data.error_message) {
+        lines.push(data.error_message.trim());
+    }
+    return lines.filter(Boolean).join('\n');
 }
 
 // 渲染周榜基准标注
@@ -2328,8 +2395,11 @@ function renderRankings(rankings) {
         else if (rank === 3) rankClass = 'rank-bronze';
 
         const actors = drama.actors || {};
-        const femaleLead = actors.female_lead || drama.female_lead || '未知';
-        const maleLead = actors.male_lead || drama.male_lead || '未知';
+        const femaleLead = actors.female_lead || drama.female_lead || '-';
+        const maleLead = actors.male_lead || drama.male_lead || '-';
+        const confBadge = confidenceBadge(drama.confidence_score);
+        const studioName = drama.studio || drama.production_house || '-';
+        const studioBadge = (studioName === '-' || Number(drama.confidence_score || 1) < 0.75) ? confBadge : '';
 
         const tags = (drama.tags || drama.core_trope || []).slice(0, 3)
             .map(t => `<span class="tag-mini">${escapeHtml(t)}</span>`).join('');
@@ -2388,11 +2458,11 @@ function renderRankings(rankings) {
                 ${metaSub}
             </td>
             <td class="actor-cell">
-                <span class="actor-name">${escapeHtml(femaleLead)}</span> / ${escapeHtml(maleLead)}
+                <span class="actor-name">${escapeHtml(femaleLead)}</span> / ${escapeHtml(maleLead)}${confBadge}
             </td>
             <td class="ep-cell">${drama.episodes_count ?? '-'}</td>
             <td class="tags-cell">${tags}</td>
-            <td class="studio-cell">${escapeHtml(drama.studio || drama.production_house || '-')}</td>
+            <td class="studio-cell">${escapeHtml(studioName)}${studioBadge}</td>
             <td class="weekly-heat-cell">${weeklyHeatHtml}</td>
             <td class="total-index-cell">${totalIndexHtml}</td>
             <td class="trend-cell">${trendBadge}</td>
@@ -2438,9 +2508,10 @@ async function renderDashboard(dateParam = null) {
 
     // 基础指标
     if (updateTimeEl) updateTimeEl.innerText = `更新时间: ${data.data_date || '--'}`;
-    if (data.error_message) {
+    const qualityText = buildQualityWarningText(data);
+    if (qualityText) {
         qualityWarning.style.display = 'block';
-        qualityWarningContent.innerText = data.error_message;
+        qualityWarningContent.innerText = qualityText;
     } else {
         qualityWarning.style.display = 'none';
         qualityWarningContent.innerText = '';
@@ -2472,7 +2543,16 @@ async function renderDashboard(dateParam = null) {
     document.getElementById('kpi-mau').innerText = data.industry?.app_mau ?? '--';
     document.getElementById('kpi-ai').innerText = data.industry?.ai_ratio != null ? `${data.industry.ai_ratio}%` : '--';
     document.getElementById('kpi-drama').innerText = data.industry?.drama_count ?? '--';
-    document.getElementById('kpi-hit').innerText = data.industry?.billion_dramas ?? '--';
+    const marketSpend = data.industry?.market_spend;
+    const marketSpendYoy = data.industry?.market_spend_yoy;
+    const kpiHitEl = document.getElementById('kpi-hit');
+    if (kpiHitEl) {
+        if (marketSpend) {
+            kpiHitEl.innerText = marketSpendYoy ? `${marketSpend} (${marketSpendYoy})` : marketSpend;
+        } else {
+            kpiHitEl.innerText = data.industry?.billion_dramas ?? '--';
+        }
+    }
 
     // 行业快讯（精简到 60 字，三列并排）
     function newsTypeLabel(type) {

@@ -69,6 +69,17 @@ class TestRankingHallucinationCount(unittest.TestCase):
         self.assertEqual(stats["actor_hits"], 1)
         self.assertEqual(stats["studio_hits"], 1)
 
+    def test_compute_confidence_with_series_id(self):
+        from utils.data_quality import compute_ranking_confidence
+        score = compute_ranking_confidence({
+            "data_source": "duanjugongcheng",
+            "series_id": "abc",
+            "female_lead": "徐艺真",
+            "production_house": "九州",
+            "episodes_count": 92,
+        })
+        self.assertGreaterEqual(score, 0.9)
+
 
 if __name__ == "__main__":
     unittest.main()

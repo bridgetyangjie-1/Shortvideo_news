@@ -7,7 +7,7 @@ import json
 import re
 import logging
 from datetime import datetime
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
@@ -23,6 +23,7 @@ except ImportError:
 from jinja2 import Template
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from graphs.state import ProcessNodeInput, ProcessNodeOutput
+from utils.title_matcher import build_title_metadata_indexes, lookup_hongguo_metadata
 
 
 # 初始化日志
@@ -175,36 +176,24 @@ def _parse_episodes(episodes_str: str) -> int:
 
 
 def _normalize_title_key(title: str) -> str:
-    """剧名归一化：去空白与常见标点，便于模糊匹配。"""
-    if not title:
-        return ""
-    text = str(title).strip().lower()
-    for ch in (" ", "　", "·", "•", ":", "：", "!", "！", "?", "？", "-", "—", "_"):
-        text = text.replace(ch, "")
-    return text
+    """剧名归一化（兼容旧测试路径）。"""
+    from utils.title_matcher import normalize_title_for_match
+    return normalize_title_for_match(title)
 
 
 def _find_hongguo_metadata(
     title: str,
     metadata_index: Dict[str, Dict[str, Any]],
     normalized_index: Dict[str, Dict[str, Any]],
+    fuzzy_candidates: Optional[List[Tuple[str, Dict[str, Any]]]] = None,
 ) -> Optional[Dict[str, Any]]:
-    """精确匹配 → 归一化匹配 → 子串包含匹配。"""
-    if not title:
-        return None
-    meta = metadata_index.get(title) or metadata_index.get(title.replace(" ", ""))
-    if meta:
-        return meta
-    norm = _normalize_title_key(title)
-    if norm and norm in normalized_index:
-        return normalized_index[norm]
-    if norm:
-        for key, item in normalized_index.items():
-            if not key:
-                continue
-            if norm in key or key in norm:
-                return item
-    return None
+    """精确匹配 → 归一化匹配 → 子串 → 模糊相似度。"""
+    return lookup_hongguo_metadata(
+        title,
+        metadata_index,
+        normalized_index,
+        fuzzy_candidates or [],
+    )
 
 
 def _backfill_hongguo_metadata(
@@ -215,38 +204,42 @@ def _backfill_hongguo_metadata(
     if not hongguo_data:
         return rankings
 
-    metadata_index: Dict[str, Dict[str, Any]] = {}
-    normalized_index: Dict[str, Dict[str, Any]] = {}
-    for item in hongguo_data:
-        title = item.get("title", "").strip()
-        if title:
-            metadata_index[title] = item
-            metadata_index[title.replace(" ", "")] = item
-            norm = _normalize_title_key(title)
-            if norm and norm not in normalized_index:
-                normalized_index[norm] = item
+    metadata_index, normalized_index, fuzzy_candidates = build_title_metadata_indexes(hongguo_data)
 
     backfilled = 0
+    series_id_hits = 0
     for item in rankings:
         title = item.get("title", "").strip()
-        meta = _find_hongguo_metadata(title, metadata_index, normalized_index)
+        meta = _find_hongguo_metadata(title, metadata_index, normalized_index, fuzzy_candidates)
         if not meta:
             continue
         backfilled += 1
 
-        if not item.get("series_id"):
+        if not item.get("series_id") and meta.get("series_id"):
             item["series_id"] = meta.get("series_id", "")
-        if not item.get("cover"):
+            series_id_hits += 1
+        if not item.get("cover") and meta.get("cover"):
             item["cover"] = meta.get("cover", "")
-        if not item.get("tags"):
+        if not item.get("tags") and meta.get("tags"):
             item["tags"] = list(meta.get("tags", []))
-        if not item.get("production_house"):
+        if not item.get("production_house") and meta.get("studio"):
             item["production_house"] = meta.get("studio", "")
-        if item.get("episodes_count", 80) == 80:
+        if not item.get("female_lead") and meta.get("female_lead"):
+            item["female_lead"] = meta.get("female_lead", "")
+        if not item.get("male_lead") and meta.get("male_lead"):
+            item["male_lead"] = meta.get("male_lead", "")
+        if item.get("episodes_count", 80) == 80 and meta.get("episodes"):
             item["episodes_count"] = _parse_episodes(meta.get("episodes", ""))
+        if not item.get("desc") and meta.get("summary"):
+            item["desc"] = meta.get("summary", "")
 
     if backfilled:
-        logger.info("红果元数据回填: %d/%d 条匹配成功", backfilled, len(rankings))
+        logger.info(
+            "红果元数据回填: %d/%d 条匹配成功，其中 series_id %d 条",
+            backfilled,
+            len(rankings),
+            series_id_hits,
+        )
     return rankings
 
 

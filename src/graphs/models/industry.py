@@ -40,6 +40,8 @@ class IndustryData(BaseModel):
     male_ratio: int = Field(default=0, description="男频占比(%)")
     app_mau: str = Field(default="", description="APP月活")
     app_mau_yoy: str = Field(default="", description="APP月活同比增长")
+    market_spend: str = Field(default="", description="微短剧月大盘消耗（如22.62亿）")
+    market_spend_yoy: str = Field(default="", description="大盘消耗环比变化（如+8%）")
     data_source: str = Field(
         default="",
         description="数据来源说明，如'Kimi 搜索行业报告'或'榜单统计'",
@@ -69,7 +71,7 @@ class IndustryData(BaseModel):
         except (TypeError, ValueError):
             return 0
 
-    @field_validator("user_scale", "market_size", "app_mau", mode="before")
+    @field_validator("user_scale", "market_size", "app_mau", "market_spend", mode="before")
     @classmethod
     def _normalize_metric(cls, v):
         if v is None:

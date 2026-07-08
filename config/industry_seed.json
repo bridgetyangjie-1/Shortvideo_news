@@ -10,7 +10,9 @@
     "male_ratio": 40,
     "app_mau": "3.04亿",
     "app_mau_yoy": "+1.4亿",
-    "data_source": "行业月报种子数据（config/industry_seed.json）",
+    "market_spend": "22.62亿",
+    "market_spend_yoy": "+8%",
+    "data_source": "DataEye 5月微短剧大盘月报（config/industry_seed.json）",
     "update_frequency": "monthly"
   },
   "platform": {

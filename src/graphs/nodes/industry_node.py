@@ -171,8 +171,9 @@ def _build_search_prompts(date_str: str, cfg: Dict[str, Any], generic: bool = Fa
 3. 亿元播放量短剧数量
 4. 主要平台的月活用户数和同比增长
 5. 用户规模、市场规模
+6. 微短剧月大盘买量消耗（如 DataEye 月报公布的亿元级消耗及环比）
 
-请返回JSON格式。如果某字段找不到，请使用空字符串或省略字段，不要编造具体数字。"""
+请返回JSON格式，包含 market_spend（月消耗金额）与 market_spend_yoy（环比变化）。如果某字段找不到，请使用空字符串或省略字段，不要编造具体数字。"""
     else:
         ai_query = f"""请联网搜索 {year}年{month}月 短剧行业AI短剧占比最新数据。
 请返回JSON格式，包含以下字段：
@@ -188,8 +189,9 @@ def _build_search_prompts(date_str: str, cfg: Dict[str, Any], generic: bool = Fa
 3. 亿元播放量短剧数量
 4. 主要平台的月活用户数和同比增长
 5. 用户规模、市场规模
+6. 微短剧月大盘买量消耗（如 DataEye 月报公布的亿元级消耗及环比）
 
-请返回JSON格式。如果某字段找不到，请使用空字符串或省略字段，不要编造具体数字。"""
+请返回JSON格式，包含 market_spend（月消耗金额）与 market_spend_yoy（环比变化）。如果某字段找不到，请使用空字符串或省略字段，不要编造具体数字。"""
 
     if up_template and not generic:
         try:
@@ -285,6 +287,8 @@ def _build_empty_industry() -> IndustryData:
         male_ratio=0,
         app_mau="",
         app_mau_yoy="",
+        market_spend="",
+        market_spend_yoy="",
         data_source="行业数据获取失败，暂无真实来源",
         update_frequency="monthly",
     )
@@ -357,6 +361,14 @@ def _extract_industry_and_platform(
         male_ratio=male_ratio,
         app_mau=_safe_text(_first_present(data, ("app_mau", "appMau")), ""),
         app_mau_yoy=_safe_text(_first_present(data, ("app_mau_yoy", "appMauYoy")), ""),
+        market_spend=_safe_text(
+            _first_present(data, ("market_spend", "monthly_spend", "ad_spend", "大盘消耗")),
+            "",
+        ),
+        market_spend_yoy=_safe_text(
+            _first_present(data, ("market_spend_yoy", "spend_yoy", "spend_mom")),
+            "",
+        ),
         data_source=source_note,
         update_frequency="monthly",
     )
@@ -396,6 +408,8 @@ def _build_fallback_industry(
         male_ratio=fallback_male_ratio,
         app_mau="暂无公开月报数据",
         app_mau_yoy="",
+        market_spend="",
+        market_spend_yoy="",
         data_source="连续两月未获取到公开行业月报；性别/AI占比来自当日榜单统计",
         update_frequency="monthly",
     )
