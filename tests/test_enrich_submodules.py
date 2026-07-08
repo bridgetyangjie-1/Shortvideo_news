@@ -49,6 +49,19 @@ class MetadataFetcherTest(unittest.TestCase):
         self.assertIn("女主", context)
         self.assertIn("点众", context)
 
+    def test_parse_cast_from_html(self) -> None:
+        from graphs.nodes.enrich.metadata_fetcher import parse_cast_from_html, assign_leads_from_cast
+
+        html = (
+            ">张子烨</div><div class=\"cast\">饰 林南</div>"
+            "<div>张星禾</div><div class=\"cast\">饰 卢苗苗</div>"
+        )
+        pairs = parse_cast_from_html(html)
+        self.assertEqual(len(pairs), 2)
+        leads = assign_leads_from_cast(pairs)
+        self.assertEqual(leads["male_lead"], "张子烨")
+        self.assertEqual(leads["female_lead"], "张星禾")
+
 
 class ActorResolverTest(unittest.TestCase):
     def test_resolve_with_cache_hit(self) -> None:

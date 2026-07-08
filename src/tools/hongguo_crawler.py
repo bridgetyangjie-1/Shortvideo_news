@@ -33,7 +33,7 @@ class HongguoCrawler:
         self.timeout = timeout
         self.headers = DEFAULT_HEADERS.copy()
     
-    def fetch_homepage_list(self, max_count: int = 100) -> List[Dict[str, Any]]:
+    def fetch_homepage_list(self, max_count: int = 100, *, enrich_intro: bool = True) -> List[Dict[str, Any]]:
         """
         抓取红果官网首页榜单数据，并尝试从详情页补充剧情简介。
         
@@ -65,24 +65,25 @@ class HongguoCrawler:
             drama_list = self._parse_drama_list(router_data, max_count)
             
             # 尝试从详情页补充 series_intro（红果部分剧集在详情页有真实剧情简介）
-            for idx, drama in enumerate(drama_list):
-                series_id = drama.get("series_id", "")
-                if not series_id:
-                    continue
-                # 首页已提供且非空时不再请求详情页
-                if drama.get("summary"):
-                    continue
-                try:
-                    detail_html = self.fetch_series_html(series_id)
-                    intro = self._parse_series_intro_from_html(detail_html, series_id)
-                    if intro:
-                        drama["summary"] = intro
-                        logger.info(f"[{idx+1}] {drama.get('title', '')} 详情页补充简介 {len(intro)} 字")
-                    # 小延迟，避免请求过快
-                    if idx < len(drama_list) - 1:
-                        time.sleep(0.3)
-                except Exception as e:
-                    logger.warning(f"补充详情页简介失败 {drama.get('title', '')}: {e}")
+            if enrich_intro:
+                for idx, drama in enumerate(drama_list):
+                    series_id = drama.get("series_id", "")
+                    if not series_id:
+                        continue
+                    # 首页已提供且非空时不再请求详情页
+                    if drama.get("summary"):
+                        continue
+                    try:
+                        detail_html = self.fetch_series_html(series_id)
+                        intro = self._parse_series_intro_from_html(detail_html, series_id)
+                        if intro:
+                            drama["summary"] = intro
+                            logger.info(f"[{idx+1}] {drama.get('title', '')} 详情页补充简介 {len(intro)} 字")
+                        # 小延迟，避免请求过快
+                        if idx < len(drama_list) - 1:
+                            time.sleep(0.3)
+                    except Exception as e:
+                        logger.warning(f"补充详情页简介失败 {drama.get('title', '')}: {e}")
             
             logger.info(f"成功解析 {len(drama_list)} 条短剧数据")
             return drama_list

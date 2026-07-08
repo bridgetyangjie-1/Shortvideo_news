@@ -24,6 +24,7 @@ from langgraph.runtime import Runtime
 
 from tools.moonshot_api import MoonshotClient
 from tools.deepseek_api import DeepSeekClient
+from tools.hongguo_crawler import HongguoCrawler
 
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from graphs.state import EnrichNodeInput, EnrichNodeOutput, DramaRanking
@@ -168,15 +169,20 @@ def enrich_node(
                 error_message=error_message + "\n",
             )
 
-        # 第一步：解析演员/元数据
+        # 第一步：加载红果推荐 catalog（仅索引，不拉详情）用于 series_id 回填
+        hongguo_catalog = HongguoCrawler().fetch_homepage_list(120, enrich_intro=False)
+
+        # 第二步：解析演员/元数据
         resolver = ActorResolver(
             cache=DramaCache(),
             fetcher=HongguoDetailFetcher(),
             searcher=_build_searcher(kimi_client),
+            hongguo_catalog=hongguo_catalog,
         )
         search_context, _missing_dramas, stats = resolver.resolve(basic_rankings_list)
+        logger.info("enrich 演员解析统计: %s", stats)
 
-        # 第二步：DeepSeek 推理生成完整榜单 JSON
+        # 第三步：DeepSeek 推理生成完整榜单 JSON
         json_refiner = JsonRefiner(ds_client)
         rankings_data = json_refiner.refine(
             basic_rankings=basic_rankings_list,
