@@ -197,7 +197,7 @@ search_node
 | `enrich_node` | `enrich_node.py` | 本地缓存 → 红果详情页爬虫 → Kimi 批量补充 → DeepSeek 生成完整 JSON | 是（DeepSeek/Kimi） |
 | `actor_ranking_node` | `actor_ranking_node.py` | 从 enriched_rankings 统计演员频次，生成女频/男频 TOP10；DeepSeek 补充仅在周一触发 | 否（统计）/ 周一 DeepSeek 兜底 |
 | `industry_node` | `industry_node.py` | 搜索行业宏观数据，输出 IndustryData + PlatformData | 是（Kimi） |
-| `audience_profile_node` | `audience_profile_node.py` | 月度行业报告基准（Kimi 搜索）+ 当周榜单题材微调，输出完整 AudienceProfile；搜索失败时降级为本地规则 | 是（Kimi，每月最多 1 次） |
+| `audience_profile_node` | `audience_profile_node.py` | 月度行业报告基准（Kimi 搜索）+ 每日 TOP20 榜单信号/环比趋势/分析师洞察；搜索失败时降级为本地规则 | 是（Kimi，每月最多 1 次） |
 | `genre_distribution_node` | `genre_distribution_node.py` | 近7天榜单加权聚合标签频次，按题材/人设/爽点/情感/时代分类，并计算标签环比趋势 | 否 |
 | `emotion_analysis_node` | `emotion_analysis_node.py` | 从 `config/emotion_rules.json` 加载情绪维度规则，基于当日榜单规则化统计情绪维度；DeepSeek 提炼总览、TOP3 情绪剧目与行动建议；失败或兜底时基于实际统计数据动态生成文案 | 是（DeepSeek） |
 | `insights_node` | `insights_node.py` | 周更：周一 Kimi 搜索行业事件 → DeepSeek 生成商业洞察并缓存；周二至周日直接读缓存 | 是（Kimi+DeepSeek，每周最多 1 次） |
@@ -247,7 +247,7 @@ Coze Coding 平台兼容层，仅在 `src/main.py` 场景使用：
 4. **enrich_node**：对前 20 条，先查 SQLite 缓存，再爬红果详情页，Kimi 批量搜索补充，最后 DeepSeek 生成完整榜单 JSON。
 5. **actor_ranking_node**：从 enriched_rankings 统计演员出现频次，生成女频/男频 TOP10；男女频不足 10 人时，仅在周一调用 DeepSeek 推理补充，平日保留榜单提取结果以节省 token。
 6. **industry_node**：用 Kimi 搜索行业宏观数据，结合榜单 AI/女男频比例，输出 IndustryData。
-7. **audience_profile_node**：以自然月为粒度缓存行业报告画像。月初/缓存缺失时，使用 Kimi 联网搜索最新短剧观众画像报告并解析完整画像（性别、年龄、地域、特征、题材偏好、观看时段、付费能力、用户分层）；每周根据当周榜单男频/女频占比及题材标签对基准做小幅修正；搜索失败或解析异常时降级为本地规则推理。日常运行直接读取缓存，不重复调用 API。
+7. **audience_profile_node**：以自然月为粒度缓存行业报告画像（性别/年龄/地域/付费/分层等基准）。月初/缓存缺失时 Kimi 搜索权威报告；每日从 TOP20 榜单加权统计「本周信号」（女频浓度、题材权重、AI/新剧占比），与昨日历史归档对比生成环比趋势与分析师洞察；前端双层展示「本周信号(周更)」vs「行业基准(月更)」。
 8. **genre_distribution_node**：读取近7天历史榜单加权聚合标签（今日权重最高），按本地 taxonomy 分为题材/人设/爽点/情感关系/时代背景等类别，并计算较昨日的 `trending` 趋势。
 9. **emotion_analysis_node**：从 `config/emotion_rules.json` 加载情绪维度规则（可按月审视更新），基于 `enriched_rankings` 的题材/标签映射到情绪、焦虑、触发点等维度并加权统计；调用 DeepSeek 生成总览摘要、TOP3 情绪剧目、行动建议与环比趋势；DeepSeek 失败或兜底时，summary 与 actionable_insights 基于当日实际统计数据动态生成，避免固定文案。
 10. **insights_node**：周更节点。周一使用 Kimi 搜索行业事件 → DeepSeek 生成商业洞察并写入 `tools/weekly_cache.py` 周缓存；周二至周日命中缓存时直接返回，不重复调用 API。缓存缺失时（如首次运行）会兜底生成。
@@ -379,7 +379,7 @@ python src/utils/config_validator.py
 | `genre_distribution` | `GenreDistribution` | 题材分布、标签热度、分类标签、标签趋势；含 `data_source`/`update_frequency` |
 | `actors` | `ActorRanking` | 女频/男频演员榜 |
 | `industry` | `IndustryData` | APP 月活、AI 短剧渗透率、剧集总量等；含 `data_source`/`update_frequency` |
-| `audience_profile` | `AudienceProfile` | 性别、年龄、地域、题材偏好、观看时段、付费能力、用户分层；含 `data_source`/`update_frequency` |
+| `audience_profile` | `AudienceProfile` | 性别、年龄、地域、题材偏好、观看时段、付费能力、用户分层；含 `weekly_signals`/`weekly_trends`/`analyst_insights`；含 `data_source`/`update_frequency` |
 | `alerts` | `List[AlertItem]` | 自动异常监测告警列表 |
 | `alert_count` | `int` | 告警数量 |
 | `quality_report` | `Dict[str, Any]` | 质量门禁 8 项检查详情 |
@@ -520,6 +520,7 @@ export PYTHONPATH="$PWD/src"
 
 | 日期 | 改动 |
 |------|------|
+| 2026-07-07 | **v1.15.1 观众画像板块重构**：`audience_profile_node` 新增每日 TOP20 榜单信号（女频浓度/题材权重/AI新剧占比）、与昨日历史环比趋势、规则化分析师洞察；`AudienceProfile` 扩展 `weekly_signals`/`weekly_trends`/`analyst_insights`；前端双层展示「本周信号(周更)」vs「行业基准(月更)」，旧数据前端可从 rankings 兜底推算 |
 | 2026-07-06 | **v1.15.0 AI 短剧/漫剧看板升级**：`config/ai_drama_articles.json` 补充 thepaper 5 月月报/百强榜与行业报道；`ai_drama_node` 增加发布滞后回退，直爬多篇文章并抽取 `plot`/`tags`/`studio`/`url` 等榜单字段；趋势洞察附 `source`/`source_url`，快讯带 `summary`；缓存校验要求榜单 ≥3 条；前端榜单展示剧情、标签、制作方、可点击标题 |
 | 2026-06-12 | 新增 `tools/cache_db.py`：本地 SQLite 缓存，7 天内有效，避免重复搜索 |
 | 2026-06-12 | 新增 `tools/tag_normalizer.py`：标签标准化与题材分类 |

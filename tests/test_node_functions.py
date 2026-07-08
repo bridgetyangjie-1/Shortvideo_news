@@ -15,6 +15,9 @@ from graphs.nodes.audience_profile_node import (
     _validate_profile,
     _parse_profile,
     _adjust_profile_by_rankings,
+    _compute_weekly_signals,
+    _compute_weekly_trends,
+    _generate_analyst_insights,
     _safe_percent_dict,
     _safe_named_list,
     _safe_segments,
@@ -186,6 +189,40 @@ class AudienceProfileNodeTest(unittest.TestCase):
         result = _safe_spending({"paid_ratio": "45%", "arpu": "¥25", "willingness": "高"})
         self.assertEqual(result["paid_ratio"], 45)
         self.assertEqual(result["arpu"], "¥25")
+
+    def test_compute_weekly_signals_from_rankings(self) -> None:
+        rankings = [
+            DramaRanking(rank=1, title="甜宠剧", category="female", genre="都市爱情", tags=["甜宠"]),
+            DramaRanking(rank=2, title="霸总剧", category="female", genre="都市爱情", tags=["霸总"]),
+            DramaRanking(rank=3, title="战神", category="male", genre="战神归来", tags=["战神"]),
+        ]
+        signals = _compute_weekly_signals(rankings)
+        self.assertGreater(signals["female_ratio"], signals["male_ratio"])
+        self.assertEqual(signals["female_ratio"] + signals["male_ratio"], 100)
+        self.assertGreater(len(signals["top_genres"]), 0)
+        self.assertEqual(signals["top_genres"][0]["name"], "都市爱情")
+
+    def test_compute_weekly_trends_detects_female_shift(self) -> None:
+        current = {"female_ratio": 75, "male_ratio": 25, "ai_ratio": 10, "new_drama_ratio": 15,
+                   "top_genres": [{"name": "都市爱情", "share": 40}]}
+        previous = {"date": "2026-07-06", "signals": {
+            "female_ratio": 70, "male_ratio": 30, "ai_ratio": 8, "new_drama_ratio": 10,
+            "top_genres": [{"name": "都市爱情", "share": 32}]
+        }}
+        trends = _compute_weekly_trends(current, previous)
+        self.assertEqual(trends["female_ratio_delta"], 5)
+        self.assertEqual(trends["female_ratio_trend"], "up")
+        self.assertEqual(trends["compared_to"], "2026-07-06")
+
+    def test_generate_analyst_insights_compares_baseline_and_signals(self) -> None:
+        baseline = {"gender": {"female": 70, "male": 30}}
+        signals = {"female_ratio": 90, "male_ratio": 10, "new_drama_ratio": 25, "ai_ratio": 5,
+                   "top_genres": [{"name": "都市爱情", "share": 36}]}
+        trends = {"female_ratio_delta": 5, "compared_to": "2026-07-06", "genre_shift": "都市爱情升温4pp"}
+        insights = _generate_analyst_insights(baseline, signals, trends)
+        self.assertGreaterEqual(len(insights), 2)
+        self.assertTrue(any("女频" in i for i in insights))
+        self.assertTrue(any("都市爱情" in i for i in insights))
 
 
 class AudienceProfileCacheTest(unittest.TestCase):
