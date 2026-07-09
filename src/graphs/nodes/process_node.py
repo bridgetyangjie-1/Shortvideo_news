@@ -24,6 +24,8 @@ from jinja2 import Template
 from graphs.ranking_quality import RankingCountError, ensure_top_rankings
 from graphs.state import ProcessNodeInput, ProcessNodeOutput
 from utils.title_matcher import build_title_metadata_indexes, lookup_hongguo_metadata
+from tools.duanjugongcheng_crawler import backfill_rankings_from_detail_api
+from tools.hongguo_series_search import resolve_series_id_from_catalog
 
 
 # 初始化日志
@@ -97,11 +99,12 @@ def _convert_duanju_to_rankings(duanju_data: List[Dict[str, Any]]) -> List[Dict[
             "series_id": "",
             "cover": "",
             "core_trope": [],
-            "episodes_count": 80,
+            "episodes_count": 0,
             "release_date": item.get("release_date", ""),
             "week_date": item.get("week_date", ""),
             "weekly_index": weekly_index,
             "total_index": total_index,
+            "slug": item.get("slug", ""),
             "confidence_score": 0.9,
             "data_source": "duanjugongcheng",
         }
@@ -243,6 +246,33 @@ def _backfill_hongguo_metadata(
     return rankings
 
 
+def _backfill_duanju_detail_api(rankings: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """短剧工程 slug → detail API 回填封面/标签/题材。"""
+    backfill_rankings_from_detail_api(rankings, max_fetch=20)
+    return rankings
+
+
+def _backfill_series_id_by_title(
+    rankings: List[Dict[str, Any]],
+    hongguo_data: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """按剧名在红果 catalog 中搜索 series_id（精确/高相似）。"""
+    if not hongguo_data:
+        return rankings
+    hits = 0
+    for item in rankings:
+        if item.get("series_id"):
+            continue
+        title = item.get("title", "")
+        sid = resolve_series_id_from_catalog(title, hongguo_data)
+        if sid:
+            item["series_id"] = sid
+            hits += 1
+    if hits:
+        logger.info("红果剧名搜索 series_id: %d/%d 条命中", hits, len(rankings))
+    return rankings
+
+
 def _extract_rankings_from_search(
     search_results: List[Dict[str, Any]],
     data_date: str,
@@ -358,9 +388,13 @@ def process_node(
             
             if rankings:
                 logger.info(f"✅ 成功转换 {len(rankings)} 条榜单数据")
-                
-                # 用红果数据回填元数据
+
+                # 短剧工程 detail API 回填封面/标签/题材
+                rankings = _backfill_duanju_detail_api(rankings)
+
+                # 用红果数据回填元数据（series_id/封面/标签）
                 if hongguo_data:
+                    rankings = _backfill_series_id_by_title(rankings, hongguo_data)
                     rankings = _backfill_hongguo_metadata(rankings, hongguo_data)
                 
                 # 数据质量检查

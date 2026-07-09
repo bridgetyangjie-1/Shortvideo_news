@@ -243,18 +243,19 @@ class HongguoCrawler:
         return None
 
 
-def fetch_hongguo_data(max_count: int = 100) -> List[Dict[str, Any]]:
+def fetch_hongguo_data(max_count: int = 100, *, enrich_intro: bool = False) -> List[Dict[str, Any]]:
     """
     直接爬取红果官网数据（便捷函数）
     
     Args:
         max_count: 最大抓取数量，默认100条
+        enrich_intro: 是否逐部拉详情补简介（周榜场景建议 False）
         
     Returns:
         短剧列表
     """
     crawler = HongguoCrawler()
-    return crawler.fetch_homepage_list(max_count)
+    return crawler.fetch_homepage_list(max_count, enrich_intro=enrich_intro)
 
 
 def enrich_drama_detail(

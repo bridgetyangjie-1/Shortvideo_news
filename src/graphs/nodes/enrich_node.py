@@ -35,7 +35,13 @@ from graphs.nodes.enrich.actor_resolver import ActorResolver
 from graphs.nodes.enrich.json_refiner import JsonRefiner
 from graphs.nodes.enrich.fallback import fill_unknown_actors
 from tools.actor_name_utils import sanitize_ranking_actors
-from utils.data_quality import sanitize_production_house, is_hallucinated_actor_name, sanitize_actor_field, compute_ranking_confidence
+from utils.data_quality import (
+    sanitize_production_house,
+    is_hallucinated_actor_name,
+    sanitize_actor_field,
+    compute_ranking_confidence,
+    filter_actors_by_search_context,
+)
 
 
 def _backfill_basic_fields(
@@ -170,7 +176,7 @@ def enrich_node(
             )
 
         # 第一步：加载红果推荐 catalog（仅索引，不拉详情）用于 series_id 回填
-        hongguo_catalog = HongguoCrawler().fetch_homepage_list(120, enrich_intro=False)
+        hongguo_catalog = HongguoCrawler().fetch_homepage_list(503, enrich_intro=False)
 
         # 第二步：解析演员/元数据
         resolver = ActorResolver(
@@ -194,6 +200,18 @@ def enrich_node(
 
         # 第三步：用原始红果数据回填 DeepSeek 可能丢失的可信字段（series_id/cover/厂牌等）
         rankings_data = _backfill_basic_fields(rankings_data, basic_rankings_list)
+
+        # 仅保留检索上下文中出现的演员名（无信源留空）
+        for item in rankings_data:
+            if isinstance(item, dict):
+                female, male = filter_actors_by_search_context(
+                    item.get("title", ""),
+                    item.get("female_lead", ""),
+                    item.get("male_lead", ""),
+                    search_context,
+                )
+                item["female_lead"] = female
+                item["male_lead"] = male
 
         # 第四步：清洗演员与厂牌（无信源留空，禁止编造）
         for item in rankings_data:

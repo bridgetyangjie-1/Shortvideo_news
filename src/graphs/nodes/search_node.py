@@ -142,7 +142,7 @@ def search_node(
         
         hongguo_data: List[Dict[str, Any]] = []
         try:
-            hongguo_data = fetch_hongguo_data(max_count=100)
+            hongguo_data = fetch_hongguo_data(max_count=503, enrich_intro=False)
             if hongguo_data:
                 logger.info(f"✅ 红果推荐页爬取成功，获取 {len(hongguo_data)} 条数据")
             else:

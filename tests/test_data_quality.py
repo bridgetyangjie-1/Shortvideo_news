@@ -4,8 +4,10 @@ import unittest
 from utils.data_quality import (
     count_ranking_hallucinations,
     extract_insight_from_content,
+    filter_actors_by_search_context,
     is_hallucinated_actor_name,
     is_mainstream_celebrity,
+    is_platform_name,
     is_suspicious_studio_name,
     is_trusted_news_url,
     is_unreliable_actor_name,
@@ -44,6 +46,12 @@ class TestMainstreamActorFilter(unittest.TestCase):
     def test_generic_names_blocked(self):
         for name in ("张伟", "王强", "赵丽"):
             self.assertTrue(is_unreliable_actor_name(name), name)
+
+    def test_platform_names_blocked(self):
+        for name in ("红果", "抖音", "快手"):
+            self.assertTrue(is_platform_name(name), name)
+            self.assertTrue(is_unreliable_actor_name(name), name)
+            self.assertEqual(sanitize_actor_field(name), "")
 
     def test_hallucination_count_includes_mainstream(self):
         rankings = [

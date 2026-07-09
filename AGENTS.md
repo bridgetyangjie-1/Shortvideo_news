@@ -8,7 +8,7 @@
 这是一个自动化的**短剧行业数据看板**系统。每天北京时间 9:00（UTC 1:00）由 GitHub Actions 触发，爬取短剧工程周榜（基于红果官方周榜）为主、红果推荐页为辅，补充演员与厂牌信息、生成行业快讯与洞察，最终输出静态 JSON 数据，托管在 GitHub Pages 上供前端展示。
 
 - **项目名称**：`shortvideo-news`
-- **当前版本**：`v1.14.5`
+- **当前版本**：`v1.14.6`
 - **在线地址**：https://bridgetyangjie-1.github.io/Shortvideo_news/assets/index.html
 - **数据入口**：`assets/data/latest.json`（TOP20 展示）、`assets/data/latest_full.json`（Full100 归档）、`assets/data/weekly/YYYY-MM-DD.json`（周榜归档，每周一）
 - **GitHub Actions 入口**：`src/run_github.py`
@@ -520,6 +520,7 @@ export PYTHONPATH="$PWD/src"
 
 | 日期 | 改动 |
 |------|------|
+| 2026-07-09 | **v1.14.6 演员数据源链路重构（P0/P1）**：短剧工程周榜解析 `slug` 并调 wind-vane detail API 回填封面/标签；`hongguo_series_search` 剧名搜索 `series_id`（catalog 精确匹配 + Kimi 搜 novelquickapp 链接）；`search_node` 关闭 `enrich_intro` 并拉取 503 条 catalog；`filter_actors_by_search_context` 无信源演员留空；拦截「红果」等平台名误入演员字段 |
 | 2026-07-08 | **v1.14.5 演员热力榜纠偏与红果演员数据源修复**：`metadata_fetcher` 改用 `/detail?series_id=` 解析演职员表；`actor_resolver` enrich 内红果 catalog 剧名匹配回填 `series_id`，Kimi 改为短剧垂类 query；`enrich`/`actor_ranking` prompt 禁止一线明星与泛化假名，移除演员榜 DeepSeek 凑数；`data_quality` 新增 `MAINSTREAM_ACTOR_BLOCKLIST`；详见 `docs/CR-2026-07-08.md` §7 |
 | 2026-07-08 | **v1.14.4 P1 分析可用性提升**：`utils/title_matcher.py` 增强红果剧名四级模糊匹配回填 `series_id`/封面/集数；`tag_normalizer` 扩展同义词，`genre_distribution_node` 爽点优先分类并输出 `by_gender` 男女频标签；`IndustryData` 新增 `market_spend` 大盘消耗 KPI；`enrich_node` 动态 `confidence_score`；前端展示质量分/置信度角标/男女频标签/月大盘消耗 |
 | 2026-07-08 | **v1.14.3 P0 数据质量止血**：新增 `utils/data_quality.py` 拦截编号式幻觉演员名与模板化厂牌；`enrich` prompt/fallback 改为无信源留空、禁止编造；`quality_gate_node` 增加 `ranking_hallucination` 硬性门禁与快讯 URL/insight 校验；`news_node` 过滤 example.com 等不可信链接并自动提取 insight；榜单新增 `weekly_heat_index` 字段，前端区分「周热度」与「累计指数」 |

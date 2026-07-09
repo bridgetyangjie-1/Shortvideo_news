@@ -3,9 +3,11 @@
 基于红果短剧官方周榜数据，每周一更新 TOP50。
 """
 import re
+import json
 import urllib.request
 import urllib.error
 import logging
+import time
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
 
@@ -46,7 +48,7 @@ def _has_ranking_data(html: str) -> bool:
 
 
 def _parse_table(html: str, week_date: str) -> List[Dict[str, Any]]:
-    """解析榜单表格"""
+    """解析榜单表格（含剧目 slug）"""
     rankings = []
     rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
     
@@ -67,6 +69,9 @@ def _parse_table(html: str, week_date: str) -> List[Dict[str, Any]]:
         except (ValueError, IndexError):
             continue
         
+        slug_match = re.search(r'/cn/bangdan/ju/([^"/?#]+)', row)
+        slug = slug_match.group(1) if slug_match else ""
+        
         # 短剧名称字段通常包含"新上架/上架"和日期
         raw_title = texts[2] if len(texts) > 2 else ""
         title_info = _parse_title(raw_title)
@@ -78,6 +83,7 @@ def _parse_table(html: str, week_date: str) -> List[Dict[str, Any]]:
         rankings.append({
             "rank": rank,
             "title": title_info["title"],
+            "slug": slug,
             "genre": genre,
             "weekly_index": weekly_index,
             "total_index": total_index,
@@ -220,6 +226,77 @@ def _extract_latest_week_date(html: str) -> Optional[str]:
         dates.sort(reverse=True)
         return dates[0]
     return None
+
+
+def fetch_drama_detail(slug: str) -> Optional[Dict[str, Any]]:
+    """
+    通过短剧工程 wind-vane API 获取剧目详情（封面/标签/题材等）。
+    不含演员与 series_id。
+    """
+    if not slug:
+        return None
+    url = f"{BASE_URL}/api/wind-vane/v1/drama/detail?slug={slug}"
+    try:
+        req = urllib.request.Request(
+            url,
+            headers={**DEFAULT_HEADERS, "Accept": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=15) as response:
+            data = json.loads(response.read().decode("utf-8"))
+        if not isinstance(data, dict) or not data.get("drama_name"):
+            return None
+        return {
+            "slug": slug,
+            "title": data.get("drama_name", ""),
+            "cover": data.get("cover_url", ""),
+            "genre": data.get("genre", ""),
+            "tags": list(data.get("tags") or []),
+            "online_date": data.get("online_date", ""),
+            "stats": data.get("stats") or {},
+        }
+    except Exception as exc:
+        logger.warning("短剧工程详情 API 失败 slug=%s: %s", slug, exc)
+        return None
+
+
+def backfill_rankings_from_detail_api(
+    rankings: List[Dict[str, Any]],
+    *,
+    max_fetch: int = 20,
+    sleep_seconds: float = 0.15,
+) -> Dict[str, int]:
+    """
+    用短剧工程 detail API 回填封面/标签/题材。
+    Returns: {"detail_hits": int, "slug_missing": int}
+    """
+    stats = {"detail_hits": 0, "slug_missing": 0}
+    for item in rankings[:max_fetch]:
+        slug = item.get("slug", "")
+        if not slug:
+            stats["slug_missing"] += 1
+            continue
+        detail = fetch_drama_detail(slug)
+        if not detail:
+            continue
+        stats["detail_hits"] += 1
+        if not item.get("cover") and detail.get("cover"):
+            item["cover"] = detail["cover"]
+        if not item.get("tags") and detail.get("tags"):
+            item["tags"] = detail["tags"]
+        if not item.get("genre") and detail.get("genre"):
+            item["genre"] = detail["genre"]
+        if not item.get("release_date") and detail.get("online_date"):
+            item["release_date"] = detail["online_date"]
+        if sleep_seconds > 0:
+            time.sleep(sleep_seconds)
+    if stats["detail_hits"]:
+        logger.info(
+            "短剧工程 detail API 回填: %d/%d 条（slug缺失 %d）",
+            stats["detail_hits"],
+            min(len(rankings), max_fetch),
+            stats["slug_missing"],
+        )
+    return stats
 
 
 def build_duanju_metadata_index(

@@ -61,6 +61,21 @@ GENERIC_ACTOR_NAMES = frozenset({
 })
 
 
+# 平台/渠道名：不得作为演员名
+PLATFORM_ACTOR_BLOCKLIST = frozenset({
+    "红果", "抖音", "快手", "番茄", "七猫", "优酷", "腾讯", "爱奇艺", "B站", "哔哩哔哩",
+    "芒果", "网易", "花生", "点众", "九州", "蜜糖", "麦芽", "容量", "天桥", "映客",
+    "hongguo", "douyin", "kuaishou",
+})
+
+
+def is_platform_name(name: Any) -> bool:
+    text = str(name or "").strip()
+    if not text:
+        return False
+    return text in PLATFORM_ACTOR_BLOCKLIST or text.lower() in PLATFORM_ACTOR_BLOCKLIST
+
+
 def is_mainstream_celebrity(name: Any) -> bool:
     """判断是否为传统影视明星（非短剧生态演员）。"""
     text = str(name or "").strip()
@@ -78,7 +93,35 @@ def is_unreliable_actor_name(name: Any) -> bool:
         return True
     if text in GENERIC_ACTOR_NAMES:
         return True
+    if is_platform_name(text):
+        return True
     return False
+
+
+def filter_actors_by_search_context(
+    title: str,
+    female_lead: Any,
+    male_lead: Any,
+    search_context: str,
+) -> tuple[str, str]:
+    """
+    仅保留检索上下文中明确出现的演员名。
+    标注「演员信息缺失」的剧目一律留空。
+    """
+    context = search_context or ""
+    title = str(title or "").strip()
+    female = str(female_lead or "").strip()
+    male = str(male_lead or "").strip()
+
+    if title and f"《{title}》演员信息缺失" in context:
+        return "", ""
+
+    if female and (female not in context or is_platform_name(female)):
+        female = ""
+    if male and (male not in context or is_platform_name(male)):
+        male = ""
+
+    return sanitize_actor_field(female), sanitize_actor_field(male)
 
 
 def sanitize_actor_field(name: Any) -> str:
