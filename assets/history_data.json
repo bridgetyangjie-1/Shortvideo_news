@@ -2,7 +2,7 @@
   "daily_play_trend": [
     {
       "date": "2026-07-06",
-      "total_views": 176844
+      "total_views": 176472
     },
     {
       "date": "2026-06-29",
@@ -22,9 +22,9 @@
       "week": "2026-W27",
       "start_date": "2026-07-06",
       "end_date": "2026-07-12",
-      "top1_title": "我靠听物成团宠",
-      "top1_views": "13662",
-      "total_views": 176844
+      "top1_title": "朝思暮时",
+      "top1_views": "15535",
+      "total_views": 176472
     },
     {
       "week": "2026-W26",
@@ -51,5 +51,5 @@
       "total_views": 180597
     }
   ],
-  "last_updated": "2026-07-09 05:05:17"
+  "last_updated": "2026-07-10 01:46:45"
 }
