@@ -17,7 +17,7 @@
 import os
 import json
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
@@ -133,10 +133,36 @@ def _backfill_basic_fields(
 logger = logging.getLogger(__name__)
 
 
+def _parse_hongguo_catalog_from_search(search_results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """从 search_node 结果复用红果推荐 catalog，避免 enrich 重复抓取首页。"""
+    for item in search_results or []:
+        if item.get("type") not in ("hongguo_direct", "merged_ranking", "hongguo_recommend"):
+            continue
+        raw_content = item.get("raw_content", "")
+        if not raw_content:
+            continue
+        try:
+            data = json.loads(raw_content)
+            if isinstance(data, list) and data:
+                logger.info("enrich_node: 复用 search_node 红果 catalog %d 条", len(data))
+                return data
+        except json.JSONDecodeError:
+            continue
+    return []
+
+
 def _build_searcher(client: MoonshotClient) -> callable:
-    """构造基于 Kimi 的批量搜索函数。"""
+    """构造带 API 预算感知的 Kimi 搜索函数（单次 search 约消耗 2~3 次配额）。"""
+
     def search(query: str) -> str:
+        if not client.has_search_budget(4):
+            raise Exception("API 调用次数过多，已熔断")
         return client.search(query, max_results=5)
+
+    def has_budget(min_calls: int = 4) -> bool:
+        return client.has_search_budget(min_calls)
+
+    search.has_budget = has_budget  # type: ignore[attr-defined]
     return search
 
 
@@ -175,8 +201,13 @@ def enrich_node(
                 error_message=error_message + "\n",
             )
 
-        # 第一步：加载红果推荐 catalog（仅索引，不拉详情）用于 series_id 回填
-        hongguo_catalog = HongguoCrawler().fetch_homepage_list(503, enrich_intro=False)
+        # 第一步：复用 search_node 红果 catalog；缺失时再抓取
+        hongguo_catalog = _parse_hongguo_catalog_from_search(
+            list(state.search_results) if state.search_results else []
+        )
+        if not hongguo_catalog:
+            hongguo_catalog = HongguoCrawler().fetch_homepage_list(503, enrich_intro=False)
+            logger.info("enrich_node: search_results 无 catalog，回退抓取 %d 条", len(hongguo_catalog))
 
         # 第二步：解析演员/元数据
         resolver = ActorResolver(

@@ -74,6 +74,15 @@ class MoonshotClient:
             raise Exception(API_BUDGET_EXCEEDED_MESSAGE)
         self.api_call_count += 1
 
+    @property
+    def remaining_budget(self) -> int:
+        """当前客户端剩余 API 调用配额（单次 search 通常消耗 2~3 次）。"""
+        return max(0, MAX_API_CALLS_PER_CLIENT - self.api_call_count)
+
+    def has_search_budget(self, min_calls: int = 4) -> bool:
+        """预留足够配额再发起联网搜索（避免 enrich 批量搜索中途熔断）。"""
+        return self.remaining_budget >= min_calls
+
     def _create_completion_with_backoff(self, operation_name: str, **kwargs: Any) -> Any:
         """Moonshot 请求底座：仅对 429/engine_overloaded 做有限指数退避重试。"""
         last_error: Optional[Exception] = None

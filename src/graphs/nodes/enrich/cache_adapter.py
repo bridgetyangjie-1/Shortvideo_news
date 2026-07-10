@@ -4,7 +4,7 @@
 import logging
 from typing import Any, Dict, Optional
 
-from tools.cache_db import get_drama, save_drama
+from tools.cache_db import get_drama, get_drama_by_title, save_drama
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +17,12 @@ class DramaCache:
         if not series_id:
             return None
         return get_drama(series_id)
+
+    def get_by_title(self, title: str) -> Optional[Dict[str, Any]]:
+        """按剧名查询缓存（含 series_id）。"""
+        if not title:
+            return None
+        return get_drama_by_title(title)
 
     def save(
         self,

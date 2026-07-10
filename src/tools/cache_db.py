@@ -29,8 +29,39 @@ def _ensure_db() -> None:
             data_source TEXT      -- hongguo/dataeye/kimi
         )
     """)
+    conn.execute("""
+        CREATE INDEX IF NOT EXISTS idx_drama_knowledge_title
+        ON drama_knowledge(title)
+    """)
     conn.commit()
     conn.close()
+
+
+def get_drama_by_title(title: str) -> Optional[Dict[str, Any]]:
+    """按剧名查询本地缓存（7 天内有效），用于 series_id 回填。"""
+    if not title or not str(title).strip():
+        return None
+    _ensure_db()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.execute(
+        "SELECT * FROM drama_knowledge WHERE title = ? AND last_verified >= ? ORDER BY last_verified DESC LIMIT 1",
+        (str(title).strip(), (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")),
+    )
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        return None
+    return {
+        "series_id": row[0],
+        "title": row[1],
+        "actors": json.loads(row[2]) if row[2] else {},
+        "studio": row[3] or "",
+        "release_date": row[4] or "",
+        "tags": json.loads(row[5]) if row[5] else [],
+        "first_seen": row[6],
+        "last_verified": row[7],
+        "data_source": row[8] or "",
+    }
 
 
 def get_drama(series_id: str) -> Optional[Dict[str, Any]]:

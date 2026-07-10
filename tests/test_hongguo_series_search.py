@@ -4,6 +4,8 @@ import unittest
 from tools.duanjugongcheng_crawler import _parse_table, fetch_drama_detail
 from tools.hongguo_series_search import (
     extract_series_id_from_text,
+    extract_series_id_map_from_text,
+    parse_actors_from_batch_text,
     resolve_series_id_from_catalog,
 )
 from utils.data_quality import filter_actors_by_search_context, is_platform_name, sanitize_actor_field
@@ -38,6 +40,23 @@ class TestHongguoSeriesSearch(unittest.TestCase):
             resolve_series_id_from_catalog("半熟烟火", catalog),
             "1234567890123456789",
         )
+
+    def test_batch_series_id_map(self) -> None:
+        text = (
+            "【朝思暮时】\n"
+            "链接: https://novelquickapp.com/detail?series_id=7594450347217669145\n"
+            "【我靠听物成团宠】\n"
+            "详情 https://novelquickapp.com/detail?series_id=7433340051892735038"
+        )
+        mapping = extract_series_id_map_from_text(text, ["朝思暮时", "我靠听物成团宠"])
+        self.assertEqual(mapping["朝思暮时"], "7594450347217669145")
+        self.assertEqual(mapping["我靠听物成团宠"], "7433340051892735038")
+
+    def test_batch_actor_parse(self) -> None:
+        text = "【测试剧】\n女主: 徐艺真\n男主: 曾辉\n"
+        actors = parse_actors_from_batch_text(text, ["测试剧"])
+        self.assertEqual(actors["测试剧"]["female_lead"], "徐艺真")
+        self.assertEqual(actors["测试剧"]["male_lead"], "曾辉")
 
 
 class TestActorContextFilter(unittest.TestCase):

@@ -44,6 +44,7 @@ class EnrichNodeInput(BaseModel):
     """数据补充节点输入"""
     data_date: str = Field(default="", description="数据日期 (YYYY-MM-DD)")
     basic_rankings: List[Dict[str, Any]] = Field(default=[], description="基础榜单数据")
+    search_results: List[Dict[str, Any]] = Field(default=[], description="search_node 原始结果（复用红果 catalog）")
 
 
 class EnrichNodeOutput(BaseModel):

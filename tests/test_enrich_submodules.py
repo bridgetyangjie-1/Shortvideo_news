@@ -1,6 +1,7 @@
 import json
 import unittest
 from typing import List
+from unittest.mock import MagicMock
 
 from graphs.nodes.enrich.fallback import fill_unknown_actors
 from graphs.nodes.enrich.cache_adapter import DramaCache
@@ -106,6 +107,45 @@ class ActorResolverTest(unittest.TestCase):
         context, missing, stats = resolver.resolve(rankings)
         self.assertIn("crawled:剧B", context)
         self.assertEqual(stats["crawler_hits"], 1)
+
+    def test_batch_search_uses_single_kimi_call(self) -> None:
+        class FakeCache:
+            def get(self, series_id):
+                return None
+
+            def get_by_title(self, title):
+                return None
+
+            def save(self, **kwargs):
+                pass
+
+            def format_context(self, title, record):
+                return ""
+
+        class FakeFetcher:
+            def fetch(self, series_id):
+                return None
+
+            def format_context(self, title, detail):
+                return ""
+
+        search_calls: List[str] = []
+
+        def fake_search(query: str) -> str:
+            search_calls.append(query)
+            if "series_id" in query or "detail" in query:
+                return "【剧A】\n链接: https://novelquickapp.com/detail?series_id=1234567890123456789\n"
+            return "【剧A】\n女主: 徐艺真\n男主: 曾辉\n"
+
+        fake_search.has_budget = lambda min_calls=4: True  # type: ignore[attr-defined]
+
+        resolver = ActorResolver(cache=FakeCache(), fetcher=FakeFetcher(), searcher=fake_search)
+        rankings = [{"title": "剧A", "series_id": "", "tags": []}]
+        context, missing, stats = resolver.resolve(rankings)
+        self.assertLessEqual(len(search_calls), 2)
+        self.assertIn("徐艺真", context)
+        self.assertEqual(stats["series_id_search"], 1)
+        self.assertEqual(stats["actor_search"], 1)
 
 
 class JsonRefinerTest(unittest.TestCase):
