@@ -13,12 +13,17 @@ from utils.title_matcher import normalize_title_for_match, title_match_score
 logger = logging.getLogger(__name__)
 
 _SERIES_ID_RE = re.compile(
-    r"(?:series_id[=:]\s*|detail\?series_id=)(\d{16,20})",
+    r"(?:series_id[=:\"'\s]+|detail\?series_id=|/detail/|seriesId[=:\"'\s]+)(\d{16,20})",
+    re.I,
+)
+# 兼容 hongguoduanju.com / novelquickapp.com 完整链接
+_SERIES_URL_RE = re.compile(
+    r"(?:novelquickapp\.com|hongguoduanju\.com)[^\"'\s<>]*series_id[=:](\d{16,20})",
     re.I,
 )
 
-# 剧名搜索时允许的最低相似度（高于推荐 catalog 回填阈值，但仍低于 0.82）
-_SEARCH_MIN_SCORE = 0.92
+# 剧名搜索时允许的最低相似度（周榜与推荐页标题差异大，0.88 兼顾召回）
+_SEARCH_MIN_SCORE = 0.88
 
 _ACTOR_LINE_RE = re.compile(
     r"(?:(?:女主|女主角|女主演|女演员)[:：]\s*([^\n,，；;]+))|"
@@ -31,7 +36,7 @@ def extract_series_id_from_text(text: str) -> str:
     """从搜索/API 文本中提取红果 series_id。"""
     if not text:
         return ""
-    match = _SERIES_ID_RE.search(text)
+    match = _SERIES_URL_RE.search(text) or _SERIES_ID_RE.search(text)
     return match.group(1) if match else ""
 
 
@@ -76,6 +81,22 @@ def extract_series_id_map_from_text(text: str, titles: List[str]) -> Dict[str, s
     return result
 
 
+def _clean_actor_name(raw: str) -> str:
+    text = (raw or "").strip()
+    text = re.split(r"[,，、/;；|\s]{2,}", text)[0].strip()
+    text = re.sub(r"[（(].*?[）)]", "", text).strip()
+    invalid = {
+        "", "未找到", "未知", "无", "暂无", "待定", "待补充", "n/a", "none",
+        "不详", "查无", "未公布",
+    }
+    if text.lower() in invalid or text in invalid:
+        return ""
+    # 过长多半是整句说明，不可靠
+    if len(text) > 12:
+        return ""
+    return text
+
+
 def parse_actors_from_batch_text(text: str, titles: List[str]) -> Dict[str, Dict[str, str]]:
     """从批量演员搜索结果中解析每部剧的女主/男主。"""
     if not text or not titles:
@@ -91,9 +112,9 @@ def parse_actors_from_batch_text(text: str, titles: List[str]) -> Dict[str, Dict
                 continue
             for match in _ACTOR_LINE_RE.finditer(block):
                 if match.group(1) and not female:
-                    female = match.group(1).strip()
+                    female = _clean_actor_name(match.group(1))
                 if match.group(2) and not male:
-                    male = match.group(2).strip()
+                    male = _clean_actor_name(match.group(2))
             if female or male:
                 break
         if female or male:
@@ -103,22 +124,25 @@ def parse_actors_from_batch_text(text: str, titles: List[str]) -> Dict[str, Dict
 
 def build_batch_series_id_query(titles: List[str]) -> str:
     """构造单次 Kimi 批量 series_id 搜索查询。"""
-    lines = "\n".join(f"{idx}. 《{title}》" for idx, title in enumerate(titles[:12], 1))
+    lines = "\n".join(f"{idx}. 《{title}》" for idx, title in enumerate(titles[:20], 1))
     return (
-        "请联网搜索以下红果短剧的官方详情页链接（novelquickapp.com/detail?series_id=数字）。\n"
-        "每部剧单独一段，格式：\n"
-        "【剧名】\n链接: https://novelquickapp.com/detail?series_id=...\n\n"
+        "请联网搜索以下红果短剧的官方详情页链接。\n"
+        "优先查找 novelquickapp.com 或 hongguoduanju.com 的 detail?series_id= 数字链接。\n"
+        "每部剧单独一段，必须包含完整 URL，格式：\n"
+        "【剧名】\n链接: https://novelquickapp.com/detail?series_id=19位数字\n\n"
+        "若某部剧搜不到链接，写【剧名】\n链接: 未找到\n\n"
         f"{lines}"
     )
 
 
 def build_batch_actor_query(titles: List[str]) -> str:
     """构造单次 Kimi 批量演员搜索查询。"""
-    lines = "\n".join(f"{idx}. 《{title}》" for idx, title in enumerate(titles[:12], 1))
+    lines = "\n".join(f"{idx}. 《{title}》" for idx, title in enumerate(titles[:20], 1))
     return (
         "请联网搜索以下短剧的主演信息（红果/DataEye/抖音垂类来源，不要编造影视明星）。\n"
         "每部剧单独一段，格式：\n"
         "【剧名】\n女主: xxx\n男主: xxx\n\n"
+        "若查无真实主演，写「女主: 未找到」「男主: 未找到」，禁止用一线影视明星或编号假名凑数。\n\n"
         f"{lines}"
     )
 

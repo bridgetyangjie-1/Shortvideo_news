@@ -63,12 +63,28 @@ class MetadataFetcherTest(unittest.TestCase):
         self.assertEqual(leads["male_lead"], "张子烨")
         self.assertEqual(leads["female_lead"], "张星禾")
 
+    def test_parse_cast_from_json_nickname(self) -> None:
+        from graphs.nodes.enrich.metadata_fetcher import parse_cast_from_html, assign_leads_from_cast
+
+        html = (
+            '{"nickname":"皮德胜","sub_title":"饰 李奇"},'
+            '{"nickname":"丁磊","sub_title":"饰 田淼"}'
+        )
+        pairs = parse_cast_from_html(html)
+        self.assertEqual(pairs[0][0], "皮德胜")
+        self.assertEqual(pairs[1][0], "丁磊")
+        leads = assign_leads_from_cast(pairs)
+        self.assertTrue(leads["male_lead"] or leads["female_lead"])
+
 
 class ActorResolverTest(unittest.TestCase):
     def test_resolve_with_cache_hit(self) -> None:
         class FakeCache:
             def get(self, series_id):
-                return {"actors": {"female_lead": "女主", "male_lead": "男主"}, "studio": "九州"}
+                return {"actors": {"female_lead": "徐艺真", "male_lead": "曾辉"}, "studio": "九州"}
+
+            def get_by_title(self, title):
+                return None
 
             def format_context(self, title, record):
                 return f"cached:{title}"
@@ -78,15 +94,23 @@ class ActorResolverTest(unittest.TestCase):
                 return None
 
         resolver = ActorResolver(cache=FakeCache(), fetcher=FakeFetcher(), searcher=None)
-        rankings = [{"title": "剧A", "series_id": "123", "tags": []}]
+        rankings = [{"title": "剧A", "series_id": "123", "tags": [], "female_lead": "", "male_lead": ""}]
         context, missing, stats = resolver.resolve(rankings)
         self.assertIn("cached:剧A", context)
         self.assertEqual(len(missing), 0)
         self.assertEqual(stats["cache_hits"], 1)
+        self.assertEqual(rankings[0]["female_lead"], "徐艺真")
+        self.assertEqual(rankings[0]["male_lead"], "曾辉")
+        self.assertEqual(rankings[0]["production_house"], "九州")
+        # 成功写回后不应出现缺失标记
+        self.assertNotIn("演员信息缺失", context)
 
     def test_resolve_with_crawler(self) -> None:
         class FakeCache:
             def get(self, series_id):
+                return None
+
+            def get_by_title(self, title):
                 return None
 
             def save(self, **kwargs):
@@ -97,18 +121,71 @@ class ActorResolverTest(unittest.TestCase):
 
         class FakeFetcher:
             def fetch(self, series_id):
-                return {"actors": ["女主", "男主"], "studio": "点众"}
+                return {
+                    "actors": ["徐艺真", "曾辉"],
+                    "female_lead": "徐艺真",
+                    "male_lead": "曾辉",
+                    "studio": "点众",
+                }
 
             def format_context(self, title, detail):
-                return f"crawled:{title}"
+                return f"crawled:{title}\n女主: 徐艺真\n男主: 曾辉\n"
 
         resolver = ActorResolver(cache=FakeCache(), fetcher=FakeFetcher(), searcher=None)
-        rankings = [{"title": "剧B", "series_id": "456", "tags": []}]
+        rankings = [{"title": "剧B", "series_id": "456", "tags": [], "female_lead": "", "male_lead": ""}]
         context, missing, stats = resolver.resolve(rankings)
         self.assertIn("crawled:剧B", context)
         self.assertEqual(stats["crawler_hits"], 1)
+        self.assertEqual(rankings[0]["female_lead"], "徐艺真")
+        self.assertEqual(rankings[0]["male_lead"], "曾辉")
+        self.assertEqual(len(missing), 0)
 
-    def test_batch_search_uses_single_kimi_call(self) -> None:
+    def test_batch_search_writes_leads_without_early_missing_marker(self) -> None:
+        class FakeCache:
+            def get(self, series_id):
+                return None
+
+            def get_by_title(self, title):
+                return None
+
+            def save(self, **kwargs):
+                pass
+
+            def format_context(self, title, record):
+                return ""
+
+        class FakeFetcher:
+            def fetch(self, series_id):
+                # series_id 解析后仍无详情，走演员搜索
+                return None
+
+            def format_context(self, title, detail):
+                return ""
+
+        search_calls: List[str] = []
+
+        def fake_search(query: str) -> str:
+            search_calls.append(query)
+            if "series_id" in query or "detail" in query:
+                return "【剧A】\n链接: https://novelquickapp.com/detail?series_id=1234567890123456789\n"
+            return "【剧A】\n女主: 徐艺真\n男主: 曾辉\n"
+
+        fake_search.has_budget = lambda min_calls=4: True  # type: ignore[attr-defined]
+
+        resolver = ActorResolver(cache=FakeCache(), fetcher=FakeFetcher(), searcher=fake_search)
+        rankings = [{"title": "剧A", "series_id": "", "tags": [], "female_lead": "", "male_lead": ""}]
+        context, missing, stats = resolver.resolve(rankings)
+        self.assertLessEqual(len(search_calls), 2)
+        self.assertIn("徐艺真", context)
+        self.assertEqual(stats["series_id_search"], 1)
+        self.assertEqual(stats["actor_search"], 1)
+        self.assertEqual(rankings[0]["series_id"], "1234567890123456789")
+        self.assertEqual(rankings[0]["female_lead"], "徐艺真")
+        self.assertEqual(rankings[0]["male_lead"], "曾辉")
+        self.assertEqual(len(missing), 0)
+        self.assertNotIn("演员信息缺失", context)
+
+    def test_missing_marker_only_after_all_fallbacks_fail(self) -> None:
         class FakeCache:
             def get(self, series_id):
                 return None
@@ -129,23 +206,12 @@ class ActorResolverTest(unittest.TestCase):
             def format_context(self, title, detail):
                 return ""
 
-        search_calls: List[str] = []
-
-        def fake_search(query: str) -> str:
-            search_calls.append(query)
-            if "series_id" in query or "detail" in query:
-                return "【剧A】\n链接: https://novelquickapp.com/detail?series_id=1234567890123456789\n"
-            return "【剧A】\n女主: 徐艺真\n男主: 曾辉\n"
-
-        fake_search.has_budget = lambda min_calls=4: True  # type: ignore[attr-defined]
-
-        resolver = ActorResolver(cache=FakeCache(), fetcher=FakeFetcher(), searcher=fake_search)
-        rankings = [{"title": "剧A", "series_id": "", "tags": []}]
+        resolver = ActorResolver(cache=FakeCache(), fetcher=FakeFetcher(), searcher=None)
+        rankings = [{"title": "剧C", "series_id": "", "tags": []}]
         context, missing, stats = resolver.resolve(rankings)
-        self.assertLessEqual(len(search_calls), 2)
-        self.assertIn("徐艺真", context)
-        self.assertEqual(stats["series_id_search"], 1)
-        self.assertEqual(stats["actor_search"], 1)
+        self.assertEqual(len(missing), 1)
+        self.assertIn("演员信息缺失", context)
+        self.assertEqual(stats["missing"], 1)
 
 
 class JsonRefinerTest(unittest.TestCase):

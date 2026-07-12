@@ -34,6 +34,10 @@ class TestHongguoSeriesSearch(unittest.TestCase):
         text = "详情 https://novelquickapp.com/detail?series_id=7594450347217669145 演员"
         self.assertEqual(extract_series_id_from_text(text), "7594450347217669145")
 
+    def test_extract_series_id_from_hongguoduanju_url(self) -> None:
+        text = "https://hongguoduanju.com/detail?series_id=7594450347217669145"
+        self.assertEqual(extract_series_id_from_text(text), "7594450347217669145")
+
     def test_catalog_exact_match(self) -> None:
         catalog = [{"title": "半熟烟火", "series_id": "1234567890123456789"}]
         self.assertEqual(
@@ -58,6 +62,11 @@ class TestHongguoSeriesSearch(unittest.TestCase):
         self.assertEqual(actors["测试剧"]["female_lead"], "徐艺真")
         self.assertEqual(actors["测试剧"]["male_lead"], "曾辉")
 
+    def test_batch_actor_parse_rejects_not_found(self) -> None:
+        text = "【测试剧】\n女主: 未找到\n男主: 查无\n"
+        actors = parse_actors_from_batch_text(text, ["测试剧"])
+        self.assertNotIn("测试剧", actors)
+
 
 class TestActorContextFilter(unittest.TestCase):
     def test_platform_name_blocked(self) -> None:
@@ -78,6 +87,16 @@ class TestActorContextFilter(unittest.TestCase):
         f2, m2 = filter_actors_by_search_context("测试剧", "周迅", "曾辉", ctx)
         self.assertEqual(f2, "")
         self.assertEqual(m2, "曾辉")
+
+    def test_real_context_overrides_stale_missing_marker(self) -> None:
+        ctx = (
+            "【剧目：《测试剧》演员信息缺失，禁止编造演员名】\n"
+            "【剧目：《测试剧》红果详情页数据（短剧垂类演员）】:\n"
+            "女主: 徐艺真\n男主: 曾辉\n"
+        )
+        f, m = filter_actors_by_search_context("测试剧", "徐艺真", "曾辉", ctx)
+        self.assertEqual(f, "徐艺真")
+        self.assertEqual(m, "曾辉")
 
 
 if __name__ == "__main__":

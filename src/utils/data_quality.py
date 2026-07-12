@@ -106,7 +106,9 @@ def filter_actors_by_search_context(
 ) -> tuple[str, str]:
     """
     仅保留检索上下文中明确出现的演员名。
-    标注「演员信息缺失」的剧目一律留空。
+
+    若同一剧目既有「演员信息缺失」标记又有详情页/批量搜索上下文，
+    以真实上下文为准（兼容旧逻辑里过早写入缺失标记的情况）。
     """
     context = search_context or ""
     title = str(title or "").strip()
@@ -114,7 +116,14 @@ def filter_actors_by_search_context(
     male = str(male_lead or "").strip()
 
     if title and f"《{title}》演员信息缺失" in context:
-        return "", ""
+        # 后续若已爬到详情或批量搜索结果，允许放行上下文中的真实姓名
+        has_real_context = (
+            f"《{title}》红果详情页数据" in context
+            or f"【{title}】" in context
+            or f"剧目：《{title}》" in context and "女主:" in context
+        )
+        if not has_real_context:
+            return "", ""
 
     if female and (female not in context or is_platform_name(female)):
         female = ""

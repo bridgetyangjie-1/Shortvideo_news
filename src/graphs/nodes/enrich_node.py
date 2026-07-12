@@ -122,6 +122,13 @@ def _backfill_basic_fields(
             )
         else:
             item["production_house"] = sanitize_production_house(item.get("production_house"))
+        # 主演：优先保留 resolver 爬虫/缓存写回的可信值
+        src_female = sanitize_actor_field(src.get("female_lead", ""))
+        src_male = sanitize_actor_field(src.get("male_lead", ""))
+        if src_female and not sanitize_actor_field(item.get("female_lead", "")):
+            item["female_lead"] = src_female
+        if src_male and not sanitize_actor_field(item.get("male_lead", "")):
+            item["male_lead"] = src_male
         if not item.get("platform"):
             item["platform"] = src.get("platform", "红果")
         if not item.get("tags"):
@@ -229,38 +236,64 @@ def enrich_node(
             temperature=temperature,
         )
 
-        # 第三步：用原始红果数据回填 DeepSeek 可能丢失的可信字段（series_id/cover/厂牌等）
+        # 第三步：用 resolver 写回的可信字段回填 DeepSeek 可能丢失的元数据
         rankings_data = _backfill_basic_fields(rankings_data, basic_rankings_list)
 
-        # 仅保留检索上下文中出现的演员名（无信源留空）
-        for item in rankings_data:
-            if isinstance(item, dict):
-                female, male = filter_actors_by_search_context(
-                    item.get("title", ""),
-                    item.get("female_lead", ""),
-                    item.get("male_lead", ""),
-                    search_context,
-                )
-                item["female_lead"] = female
-                item["male_lead"] = male
+        # 第四步：对「非 resolver 写回」的演员名做上下文校验；resolver 已写入的优先保留
+        basic_leads: Dict[str, Dict[str, str]] = {}
+        for raw in basic_rankings_list:
+            src = raw.model_dump() if hasattr(raw, "model_dump") else (raw if isinstance(raw, dict) else {})
+            title = (src.get("title") or "").strip()
+            if not title:
+                continue
+            basic_leads[title] = {
+                "female_lead": sanitize_actor_field(src.get("female_lead", "")),
+                "male_lead": sanitize_actor_field(src.get("male_lead", "")),
+                "series_id": str(src.get("series_id", "") or ""),
+                "production_house": sanitize_production_house(
+                    src.get("production_house") or src.get("studio", "")
+                ),
+            }
 
-        # 第四步：清洗演员与厂牌（无信源留空，禁止编造）
         for item in rankings_data:
-            if isinstance(item, dict):
-                sanitize_ranking_actors(item)
-                item["production_house"] = sanitize_production_house(item.get("production_house"))
-                if is_hallucinated_actor_name(item.get("female_lead")):
-                    item["female_lead"] = ""
-                if is_hallucinated_actor_name(item.get("male_lead")):
-                    item["male_lead"] = ""
-                item["female_lead"] = sanitize_actor_field(item.get("female_lead"))
-                item["male_lead"] = sanitize_actor_field(item.get("male_lead"))
-                weekly_heat = item.get("weekly_heat_index") or item.get("weekly_index") or item.get("views_num") or 0
-                item["weekly_heat_index"] = int(weekly_heat or 0)
-                if item["weekly_heat_index"] and not item.get("views_num"):
-                    item["views_num"] = item["weekly_heat_index"]
-                    item["views"] = str(item["weekly_heat_index"])
-                item["confidence_score"] = compute_ranking_confidence(item)
+            if not isinstance(item, dict):
+                continue
+            title = (item.get("title") or "").strip()
+            trusted = basic_leads.get(title) or {}
+
+            # 先应用 DeepSeek 输出的上下文过滤
+            female, male = filter_actors_by_search_context(
+                title,
+                item.get("female_lead", ""),
+                item.get("male_lead", ""),
+                search_context,
+            )
+            # resolver 爬虫/缓存/搜索写回的主演优先级更高
+            if trusted.get("female_lead"):
+                female = trusted["female_lead"]
+            if trusted.get("male_lead"):
+                male = trusted["male_lead"]
+            item["female_lead"] = female
+            item["male_lead"] = male
+            if trusted.get("series_id") and not item.get("series_id"):
+                item["series_id"] = trusted["series_id"]
+            if trusted.get("production_house") and not item.get("production_house"):
+                item["production_house"] = trusted["production_house"]
+
+            sanitize_ranking_actors(item)
+            item["production_house"] = sanitize_production_house(item.get("production_house"))
+            if is_hallucinated_actor_name(item.get("female_lead")):
+                item["female_lead"] = ""
+            if is_hallucinated_actor_name(item.get("male_lead")):
+                item["male_lead"] = ""
+            item["female_lead"] = sanitize_actor_field(item.get("female_lead"))
+            item["male_lead"] = sanitize_actor_field(item.get("male_lead"))
+            weekly_heat = item.get("weekly_heat_index") or item.get("weekly_index") or item.get("views_num") or 0
+            item["weekly_heat_index"] = int(weekly_heat or 0)
+            if item["weekly_heat_index"] and not item.get("views_num"):
+                item["views_num"] = item["weekly_heat_index"]
+                item["views"] = str(item["weekly_heat_index"])
+            item["confidence_score"] = compute_ranking_confidence(item)
         rankings_data = fill_unknown_actors(rankings_data)
 
         # 第五步：榜单数量补齐
