@@ -2,165 +2,73 @@
   "data_month": "2026-07",
   "dashboard": {
     "report_month": "2026-06",
-    "kpis": [
-      {
-        "label": "海外AI剧/漫剧市场规模（2025年）",
-        "value": "1",
-        "unit": "亿美元",
-        "trend": "up",
-        "period": "同比",
-        "note": "2026年预计达6.5亿美元"
-      },
-      {
-        "label": "海外AI剧/漫剧市场规模（2026年预估）",
-        "value": "6.5",
-        "unit": "亿美元",
-        "trend": "up",
-        "period": "同比",
-        "note": "较2025年增长6倍"
-      },
-      {
-        "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（1月）",
-        "value": "2",
-        "unit": "%",
-        "trend": "up",
-        "period": "环比",
-        "note": "3月增至16%"
-      },
-      {
-        "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（3月）",
-        "value": "16",
-        "unit": "%",
-        "trend": "up",
-        "period": "环比",
-        "note": "较1月增长700%"
-      },
-      {
-        "label": "用户愿意为AI参与制作短剧付费比例",
-        "value": "55",
-        "unit": "%",
-        "trend": "same",
-        "period": "环比",
-        "note": "23%付费意愿更强"
-      },
-      {
-        "label": "用户愿意为纯AI剧/漫剧付费比例",
-        "value": "49",
-        "unit": "%",
-        "trend": "same",
-        "period": "环比",
-        "note": "30%付费意愿更强"
-      }
-    ],
+    "kpis": [],
     "rankings": {
       "ai_drama": [
         {
-          "rank": 1,
+          "rank": 3,
           "title": "One Move God Mode",
-          "platform": "NetShort",
+          "platform": "抖音",
           "category": "AI仿真人剧",
-          "heat": "202.6万",
-          "is_new": true,
-          "plot": "主角为海神波塞冬之子，在希腊神话背景下打脸逆袭，场景精致，无伪人感。",
-          "tags": [
-            "西幻",
-            "逆袭",
-            "打脸",
-            "希腊神话"
-          ],
+          "heat": "",
+          "is_new": false,
+          "plot": "",
+          "tags": [],
           "studio": "",
-          "url": "https://www.google.com/search?q=One+Move+God+Mode+NetShort",
+          "url": "",
           "episodes": "",
-          "release_date": "2026-03"
+          "release_date": ""
+        },
+        {
+          "rank": 3,
+          "title": "五階獸醫：獸夫們排隊求愛",
+          "platform": "抖音",
+          "category": "AI仿真人剧",
+          "heat": "100万",
+          "is_new": false,
+          "plot": "",
+          "tags": [],
+          "studio": "位列第四位",
+          "url": "",
+          "episodes": "",
+          "release_date": ""
         }
       ],
-      "ai_comic": [
-        {
-          "rank": 1,
-          "title": "說好的乙遊戀愛呢？執事怎麼全員黑化了！",
-          "platform": "NetShort",
-          "category": "3D AI漫剧",
-          "heat": "1551.6万",
-          "is_new": true,
-          "plot": "女主穿越乙女游戏，与执事们展开恋爱故事，情感标签为核心。",
-          "tags": [
-            "乙游",
-            "穿越",
-            "情感",
-            "黑化"
-          ],
-          "studio": "",
-          "url": "https://www.google.com/search?q=說好的乙遊戀愛呢？執事怎麼全員黑化了！+NetShort",
-          "episodes": "",
-          "release_date": "2026-02"
-        }
-      ]
+      "ai_comic": []
     },
     "trends": [
       {
-        "title": "AI短剧出海爆发式增长",
-        "summary": "2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从1月2%飙升至3月16%，增长率达700%。头部公司如昆仑万维、山海星辰、中文在线纷纷布局，AI技术将制作周期压缩至7-10天，成本降低70%-80%。",
-        "source": "澎湃新闻",
-        "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
-      },
-      {
-        "title": "AI漫剧爆款率低，精品化挑战",
-        "summary": "当前AI漫剧爆款率仅0.16%，绝大多数作品淹没在内容池中。用户对同质化题材审美疲劳，行业面临精品化与规模化的矛盾。头部公司通过数据驱动、本土共创等策略探索破局。",
-        "source": "澎湃新闻",
-        "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
-      },
-      {
-        "title": "AI仿真人剧成主流形式",
-        "summary": "2026年4月AI剧/漫剧端原生热播榜百强中，AI仿真人剧占90席，播放增量超271亿次。用户更青睐接近真人短剧的观感体验，而非传统漫剧形式。",
-        "source": "澎湃新闻",
-        "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
-      },
-      {
-        "title": "头部公司差异化竞争格局",
-        "summary": "昆仑万维以自研工具SkyAnime压低成本，山海星辰通过NOVA AI实现全链路自动化，中文在线依托IP储备和全球发行体系。市场向头部集中，未来TOP5公司或占9成以上份额。",
-        "source": "澎湃新闻",
+        "title": "趋势洞察1",
+        "summary": "前2个月仅有漫剧上榜，第三个月AI仿真人剧大量涌现，多部作品位列榜单前列，潜力惊人。",
+        "source": "澎湃新闻 / DataEye",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
       }
     ],
     "news": [
       {
-        "title": "AI短剧《波斯复仇记》成本3000元，海外72小时GMV达50万美元",
+        "title": "短剧头部玩家，集体押注“AI短剧出海”",
         "source": "澎湃新闻",
-        "date": "2026-05",
+        "date": "2026-06-01",
         "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
-        "summary": "中国AI创作者制作的短剧《波斯复仇记》成本仅3000元，在海外平台YourChannel上线72小时内实现GMV 50万美元，回报率近1200倍。该剧以强烈戏剧冲突和波斯异域风格吸引用户，但行业整体爆款率仅0.16%，多数AI短剧难以盈利。"
+        "summary": ""
       },
       {
-        "title": "DataEye发布2026年Q1海外AI剧/漫剧报告：数量增长700%",
+        "title": "2026Q1报告：海外AI剧/漫剧数量增长700%！NetShort领跑，占比50%！",
         "source": "澎湃新闻",
-        "date": "2026-04",
+        "date": "2026-06-01",
         "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
-        "summary": "DataEye研究院报告显示，2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从1月2%增至3月16%，增长率700%。NetShort平台以50%上榜作品领跑，情感题材最受欢迎。用户调研显示55%愿意为AI参与制作的短剧付费。"
+        "summary": ""
       },
       {
-        "title": "万兴科技推出HappyHorse大模型，AI漫剧价格降至0.71元/秒",
+        "title": "3000块换50万美金：AI漫剧这场\"印钞机\"游戏，谁在买单？",
         "source": "澎湃新闻",
-        "date": "2026-05",
+        "date": "2026-06-01",
         "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": "万兴科技自研HappyHorse大模型，并战略投资灵漫快创和生数科技Vidu，构建全链路AI漫剧生态。5月底将720P生成价格砍至0.71元/秒，限时五折，通过价格战抢占市场，推动AI漫剧工业化生产。"
-      },
-      {
-        "title": "山海星辰NOVA AI实现全链路自动化，AI剧占比将达7成",
-        "source": "澎湃新闻",
-        "date": "2026-06",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
-        "summary": "山海星辰自研NOVA AI平台实现从剧本到成片的全链路自动化，将制作周期从25-40天压缩至7-10天，成本降低70%-80%。2026年Q1其Stardust TV与TikTok合作分成收入突破338万美元，公司计划将AI剧占比提升至7成。"
-      },
-      {
-        "title": "昆仑万维DramaWave月流水近3600万美元，推出SkyAnime工具",
-        "source": "澎湃新闻",
-        "date": "2026-06",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
-        "summary": "昆仑万维2025年短剧和AI短剧平台业务收入16.17亿元，同比增长864.92%。旗下DramaWave和FreeReels月活用户稳居海外第一，2025年12月月流水近3600万美元。公司推出自研AI短剧Agent工具SkyAnime，效率提升200%，成本下降约50%。"
+        "summary": ""
       }
     ],
-    "data_source": "澎湃新闻 DataEye 月报/行业报道直爬 + DeepSeek 抽取",
+    "data_source": "澎湃新闻 DataEye 月报直爬（https://m.thepaper.cn/newsDetail_forward_33172823, https://m.thepaper.cn/newsDetail_forward_33102397, https://m.thepaper）",
     "update_frequency": "monthly"
   },
-  "updated_at": "2026-07-18T03:57:35.041414"
+  "updated_at": "2026-07-19T04:23:50.557210"
 }
