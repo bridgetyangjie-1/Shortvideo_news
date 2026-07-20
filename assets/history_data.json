@@ -1,6 +1,10 @@
 {
   "daily_play_trend": [
     {
+      "date": "2026-07-20",
+      "total_views": 160382
+    },
+    {
       "date": "2026-07-13",
       "total_views": 160382
     },
@@ -22,6 +26,14 @@
     }
   ],
   "weekly_rankings": [
+    {
+      "week": "2026-W29",
+      "start_date": "2026-07-20",
+      "end_date": "2026-07-26",
+      "top1_title": "新婚有瘾",
+      "top1_views": "12599",
+      "total_views": 160382
+    },
     {
       "week": "2026-W28",
       "start_date": "2026-07-13",
@@ -63,5 +75,5 @@
       "total_views": 180597
     }
   ],
-  "last_updated": "2026-07-19 04:24:47"
+  "last_updated": "2026-07-20 04:40:25"
 }

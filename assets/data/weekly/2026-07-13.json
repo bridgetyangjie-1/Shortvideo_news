@@ -1,0 +1,228 @@
+{
+  "success": true,
+  "generated_at": "2026-07-20T04:40:25+08:00",
+  "week_date": "2026-07-13",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "新婚有瘾",
+      "genre": "都市爱情",
+      "weekly_index": 12599,
+      "total_index": 18517,
+      "release_date": "2026-07-03",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 2,
+      "title": "京雪未央",
+      "genre": "都市爱情",
+      "weekly_index": 11044,
+      "total_index": 14870,
+      "release_date": "2026-07-04",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 3,
+      "title": "剑归",
+      "genre": "玄幻仙侠",
+      "weekly_index": 10679,
+      "total_index": 11778,
+      "release_date": "2026-07-05",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 4,
+      "title": "大婚前薄情王爷变了心，我改嫁死对头他哭了",
+      "genre": "古风爱情",
+      "weekly_index": 10297,
+      "total_index": 11886,
+      "release_date": "2026-07-05",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 5,
+      "title": "我靠听物成团宠",
+      "genre": "奇幻脑洞",
+      "weekly_index": 9016,
+      "total_index": 25006,
+      "release_date": "2026-06-27",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 6,
+      "title": "这个乞丐神医太无敌了",
+      "genre": "都市玄幻",
+      "weekly_index": 8690,
+      "total_index": 13939,
+      "release_date": "2026-07-01",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 7,
+      "title": "穿成破产太子爷的刁蛮前女友",
+      "genre": "都市爱情",
+      "weekly_index": 8039,
+      "total_index": 8039,
+      "release_date": "2026-07-06",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 8,
+      "title": "小福星心声泄漏，我成婆家团宠",
+      "genre": "奇幻爱情",
+      "weekly_index": 7790,
+      "total_index": 11313,
+      "release_date": "2026-07-03",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 9,
+      "title": "从雇佣关系开始",
+      "genre": "都市爱情",
+      "weekly_index": 7602,
+      "total_index": 8597,
+      "release_date": "2026-07-05",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 10,
+      "title": "勇敢后妈，专治不服",
+      "genre": "都市爱情",
+      "weekly_index": 7234,
+      "total_index": 7234,
+      "release_date": "2026-07-07",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 11,
+      "title": "旺夫的我，谁也不惯",
+      "genre": "都市爱情",
+      "weekly_index": 7216,
+      "total_index": 10729,
+      "release_date": "2026-07-01",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 12,
+      "title": "与你盛夏岁岁安",
+      "genre": "都市爱情",
+      "weekly_index": 7169,
+      "total_index": 11224,
+      "release_date": "2026-07-01",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 13,
+      "title": "归来后我登临至高",
+      "genre": "都市日常",
+      "weekly_index": 7104,
+      "total_index": 12426,
+      "release_date": "2026-06-30",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 14,
+      "title": "省小钱惹大祸",
+      "genre": "女性成长",
+      "weekly_index": 7097,
+      "total_index": 9569,
+      "release_date": "2026-07-03",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 15,
+      "title": "大乾皇太子",
+      "genre": "古风权谋",
+      "weekly_index": 7017,
+      "total_index": 10110,
+      "release_date": "2026-07-03",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 16,
+      "title": "重回七零断舍离，惊艳逆袭当首富",
+      "genre": "女性成长",
+      "weekly_index": 6969,
+      "total_index": 9216,
+      "release_date": "2026-07-03",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 17,
+      "title": "冤家路不窄",
+      "genre": "都市爱情",
+      "weekly_index": 6838,
+      "total_index": 10321,
+      "release_date": "2026-07-03",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 18,
+      "title": "车里到底有什么",
+      "genre": "都市日常",
+      "weekly_index": 6271,
+      "total_index": 6530,
+      "release_date": "2026-07-05",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 19,
+      "title": "少年枭雄",
+      "genre": "都市日常",
+      "weekly_index": 5981,
+      "total_index": 6934,
+      "release_date": "2026-07-04",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    },
+    {
+      "rank": 20,
+      "title": "韦大人奉旨娶亲",
+      "genre": "奇幻脑洞",
+      "weekly_index": 5730,
+      "total_index": 8843,
+      "release_date": "2026-07-03",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-07-13"
+    }
+  ],
+  "rankings_count": 20
+}
