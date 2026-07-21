@@ -1,88 +1,88 @@
 {
   "success": true,
-  "generated_at": "2026-07-20T04:40:25+08:00",
-  "data_date": "2026-07-20",
+  "generated_at": "2026-07-21T04:18:58+08:00",
+  "data_date": "2026-07-21",
   "genre_distribution": {
     "hot_tags": [
       {
         "name": "打脸虐渣",
-        "value": 224
+        "value": 232
       },
       {
         "name": "日久生情",
-        "value": 224
+        "value": 232
       },
       {
         "name": "都市爱情",
-        "value": 224
+        "value": 232
       },
       {
         "name": "霸总",
-        "value": 224
+        "value": 232
       },
       {
         "name": "大男主",
-        "value": 196
+        "value": 203
       },
       {
         "name": "奇幻",
-        "value": 140
+        "value": 145
       },
       {
         "name": "女性成长",
-        "value": 140
+        "value": 145
       },
       {
         "name": "穿越",
-        "value": 140
+        "value": 145
       },
       {
         "name": "逆袭",
-        "value": 140
+        "value": 145
       },
       {
         "name": "都市日常",
-        "value": 84
+        "value": 87
       },
       {
         "name": "反转",
-        "value": 56
+        "value": 58
       },
       {
         "name": "古灵精怪",
-        "value": 56
+        "value": 58
       },
       {
         "name": "王爷",
-        "value": 56
+        "value": 58
       },
       {
         "name": "甜妹",
-        "value": 56
+        "value": 58
       },
       {
         "name": "萌宝",
-        "value": 56
+        "value": 58
       },
       {
         "name": "侠客",
-        "value": 28
+        "value": 29
       },
       {
         "name": "先婚厚爱",
-        "value": 28
+        "value": 29
       },
       {
         "name": "古风爱情",
-        "value": 28
+        "value": 29
       },
       {
         "name": "喜剧",
-        "value": 28
+        "value": 29
       },
       {
         "name": "婆媳",
-        "value": 28
+        "value": 29
       }
     ],
     "categories": [
@@ -91,35 +91,35 @@
         "tags": [
           {
             "name": "都市爱情",
-            "value": 224
+            "value": 232
           },
           {
             "name": "奇幻",
-            "value": 140
+            "value": 145
           },
           {
             "name": "穿越",
-            "value": 140
+            "value": 145
           },
           {
             "name": "都市日常",
-            "value": 84
+            "value": 87
           },
           {
             "name": "古风爱情",
-            "value": 28
+            "value": 29
           },
           {
             "name": "家庭伦理",
-            "value": 28
+            "value": 29
           },
           {
             "name": "权谋",
-            "value": 28
+            "value": 29
           },
           {
             "name": "玄幻仙侠",
-            "value": 28
+            "value": 29
           }
         ]
       },
@@ -128,19 +128,19 @@
         "tags": [
           {
             "name": "打脸虐渣",
-            "value": 224
+            "value": 232
           },
           {
             "name": "逆袭",
-            "value": 140
+            "value": 145
           },
           {
             "name": "萌宝",
-            "value": 56
+            "value": 58
           },
           {
             "name": "马甲",
-            "value": 28
+            "value": 29
           }
         ]
       },
@@ -149,15 +149,15 @@
         "tags": [
           {
             "name": "霸总",
-            "value": 224
+            "value": 232
           },
           {
             "name": "王爷",
-            "value": 56
+            "value": 58
           },
           {
             "name": "无敌神医",
-            "value": 28
+            "value": 29
           }
         ]
       },
@@ -166,19 +166,19 @@
         "tags": [
           {
             "name": "日久生情",
-            "value": 224
+            "value": 232
           },
           {
             "name": "先婚厚爱",
-            "value": 28
+            "value": 29
           },
           {
             "name": "暗恋成真",
-            "value": 28
+            "value": 29
           },
           {
             "name": "闪婚",
-            "value": 28
+            "value": 29
           }
         ]
       },
@@ -187,19 +187,19 @@
         "tags": [
           {
             "name": "大男主",
-            "value": 196
+            "value": 203
           },
           {
             "name": "女性成长",
-            "value": 140
+            "value": 145
           },
           {
             "name": "反转",
-            "value": 56
+            "value": 58
           },
           {
             "name": "古灵精怪",
-            "value": 56
+            "value": 58
           }
         ]
       }
@@ -316,7 +316,7 @@
     "update_frequency": "weekly"
   },
   "emotional_analysis": {
-    "summary": "今日榜单以身份逆袭为主导情绪，复仇打脸为TOP1触发点，容貌年龄焦虑贯穿其中，强女主与快节奏题材满足用户解压与情感代偿需求。",
+    "summary": "今日榜单以身份逆袭为主导情绪，结合容貌年龄焦虑，复仇打脸成为TOP1触发点，强女主与浪漫幻想题材占据主流，满足用户情感代偿与解压需求。",
     "dominant_emotion": "身份逆袭",
     "dominant_anxiety": "容貌年龄焦虑",
     "top_trigger": "复仇打脸",
@@ -404,7 +404,7 @@
         "primary_emotion": "浪漫幻想",
         "anxiety": "身份逆袭",
         "trigger": "身份逆袭",
-        "one_line": "《新婚有瘾》通过婚姻反转触发身份逆袭，满足用户对情感掌控的幻想。"
+        "one_line": "新婚有瘾：通过婚姻身份反转，满足用户对权力与爱情的双重逆袭幻想。"
       },
       {
         "rank": 2,
@@ -412,7 +412,7 @@
         "primary_emotion": "浪漫幻想",
         "anxiety": "身份逆袭",
         "trigger": "身份逆袭",
-        "one_line": "《京雪未央》以浪漫幻想包裹容貌焦虑，让用户代入强女主实现情感代偿。"
+        "one_line": "京雪未央：利用浪漫幻想与身份差距，触发用户对完美关系的代偿心理。"
       },
       {
         "rank": 3,
@@ -420,7 +420,7 @@
         "primary_emotion": "身份逆袭",
         "anxiety": "身份逆袭",
         "trigger": "复仇打脸",
-        "one_line": "《剑归》用复仇打脸快节奏解压，缓解用户对年龄与身份的不安。"
+        "one_line": "剑归：以复仇打脸为核心，释放用户对不公平现实的愤怒与解压需求。"
       }
     ],
     "trends": [
@@ -468,18 +468,18 @@
     "actionable_insights": [
       {
         "icon": "💡",
-        "title": "强化身份逆袭钩子",
-        "content": "在投流素材前3秒突出主角从底层到高位的关键转折，如被轻视后当众打脸，利用用户对逆袭的渴望快速抓取注意力，搭配快节奏剪辑提升完播率。"
+        "title": "强化身份逆袭叙事",
+        "content": "创作者应聚焦身份逆袭的戏剧冲突，如从底层到高位、从被轻视到被仰视，结合容貌年龄焦虑，设计主角通过智慧或机遇实现逆袭，增强用户代入感与情感满足。"
       },
       {
         "icon": "📈",
-        "title": "利用容貌焦虑共鸣",
-        "content": "在短剧中设计主角因容貌或年龄被歧视后逆袭的桥段，如通过变美或技能提升获得认可，投流时用对比画面（如素颜vs惊艳）引发用户焦虑与期待，提高点击转化。"
+        "title": "精准投流复仇打脸",
+        "content": "投流方应优先剪辑复仇打脸的高潮片段，如当众揭穿、实力碾压，搭配快节奏剪辑与强女主设定，吸引焦虑型用户，提升点击率与完播率。"
       },
       {
         "icon": "🎯",
-        "title": "打造强女主情感代偿",
-        "content": "以独立、反击型女主为核心，剧情聚焦其打破婚姻或职场束缚，投流文案强调“不再忍让”“掌控命运”，精准触达对现实压抑有代偿需求的女性用户，提升付费意愿。"
+        "title": "融合浪漫与解压元素",
+        "content": "在浪漫幻想题材中嵌入解压放空环节，如甜蜜互动后加入轻松搞笑桥段，平衡情感代偿与压力释放，延长用户观看时长，降低弃剧率。"
       }
     ],
     "data_source": "当日榜单规则统计 + DeepSeek 提炼",
@@ -1693,7 +1693,7 @@
       "basis": "TOP20排名加权"
     },
     "weekly_trends": {
-      "compared_to": "2026-07-19",
+      "compared_to": "2026-07-20",
       "female_ratio_delta": 0,
       "female_ratio_trend": "same",
       "ai_ratio_delta": 0,
@@ -1789,28 +1789,7 @@
     "data_source": "周榜历史归档统计",
     "update_frequency": "weekly"
   },
-  "daily_news": [
-    {
-      "type": "预警",
-      "icon": "⚠️",
-      "title": "广电总局发布短剧新规",
-      "content": "【事件核心】：2026年7月20日，国家广电总局发布短剧行业新监管政策，要求短剧内容必须符合社会主义核心价值观，严禁传播低俗、暴力等不良信息，旨在规范行业发展并保护未成年人身心健康。\n【数据支撑】：该政策为2026年7月正式发布，虽未公布具体处罚金额，但明确将内容审核标准提升至新高度，预计将影响全行业超过500亿元的市场规模。\n【商业洞察】：新规将加速短剧行业洗牌，低俗、擦边内容制作方将面临下架风险，而合规化、精品化内容供给方将获得更多平台推荐和用户信任，买量成本可能因内容质量提升而结构性上升。\n【决策价值】：建议短剧制作方立即自查内容库，优先布局符合主流价值观的题材（如家庭、职场、科幻），并建立内部合规审核团队，以规避下架风险。",
-      "insight": "新规将加速短剧行业洗牌，低俗、擦边内容制作方将面临下架风险，而合规化、精品化内容供给方将获得更多平台推荐和用户信任，买量成本可能因内容质量提升而结构性上升。",
-      "source_url": "https://www.nrta.gov.cn/2026-short-drama-regulation",
-      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-20)",
-      "update_frequency": "daily"
-    },
-    {
-      "type": "数据",
-      "icon": "📊",
-      "title": "DataEye发布7月短剧热度",
-      "content": "【事件核心】：2026年7月20日，DataEye发布2026年7月短剧热度榜，揭示当月国内短剧市场最新竞争格局，其中《时空穿越者》以95.7热度指数登顶，成为本月最大黑马。\n【数据支撑】：榜单显示，《时空穿越者》热度指数95.7，领先第二名《都市奇缘》和第三名《青春旋律》；7月市场呈现多元化趋势，科幻、悬疑题材占比显著提升，打破传统爱情、喜剧主导格局。\n【商业洞察】：科幻题材《时空穿越者》的爆火表明，观众对高概念、强剧情短剧的付费意愿增强，平台方将加大此类题材的采买和推荐权重，制作方需关注特效与剧本的平衡以控制成本。\n【决策价值】：建议制作团队重点押注科幻、悬疑等新兴题材，并参考《时空穿越者》的叙事节奏（每集3-5分钟、强反转），以抢占下一波流量红利。",
-      "insight": "科幻题材《时空穿越者》的爆火表明，观众对高概念、强剧情短剧的付费意愿增强，平台方将加大此类题材的采买和推荐权重，制作方需关注特效与剧本的平衡以控制成本。",
-      "source_url": "https://www.dataeye.com.cn/short-drama-heat-index-2026-07",
-      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-20)",
-      "update_frequency": "daily"
-    }
-  ],
+  "daily_news": [],
   "insights": [
     {
       "icon": "📊",
@@ -1829,7 +1808,7 @@
       "update_frequency": "weekly"
     }
   ],
-  "quality_score": 76.0,
+  "quality_score": 70.0,
   "statistics": {
     "total": 20,
     "avg_confidence": 0.84,
@@ -1907,6 +1886,21 @@
   ],
   "alerts": [
     {
+      "severity": "critical",
+      "category": "quality",
+      "title": "质量门禁未通过：daily_news_url",
+      "message": "质量检查项 [daily_news_url] 未通过，详见 quality_report。",
+      "metric": "daily_news_url",
+      "value": {
+        "name": "daily_news_url",
+        "passed": false,
+        "value": 0,
+        "total": 0
+      },
+      "threshold": null,
+      "suggestion": null
+    },
+    {
       "severity": "warning",
       "category": "quality",
       "title": "质量门禁未通过：female_actors",
@@ -1940,9 +1934,9 @@
       "severity": "warning",
       "category": "quality",
       "title": "质量分偏低",
-      "message": "当前质量分 76.0，低于 80 分建议关注。",
+      "message": "当前质量分 70.0，低于 80 分建议关注。",
       "metric": "quality_score",
-      "value": 76.0,
+      "value": 70.0,
       "threshold": 80,
       "suggestion": "关注 quality_report 中的 warning 项。"
     },
@@ -1980,14 +1974,14 @@
       "severity": "warning",
       "category": "news",
       "title": "每日快讯数量异常",
-      "message": "当前快讯 2 条，要求 6 条。",
+      "message": "当前快讯 0 条，要求 6 条。",
       "metric": "daily_news_count",
-      "value": 2,
+      "value": 0,
       "threshold": 6,
       "suggestion": null
     }
   ],
-  "alert_count": 7,
+  "alert_count": 8,
   "quality_report": {
     "checks": [
       {
@@ -2026,26 +2020,26 @@
       {
         "name": "daily_news_count",
         "passed": true,
-        "value": 2,
+        "value": 0,
         "max": 6
       },
       {
         "name": "daily_news_url",
-        "passed": true,
-        "value": 2,
-        "total": 2
+        "passed": false,
+        "value": 0,
+        "total": 0
       },
       {
         "name": "daily_news_url_trust",
         "passed": true,
-        "trusted": 2,
-        "total": 2
+        "trusted": 0,
+        "total": 0
       },
       {
         "name": "daily_news_insight",
         "passed": true,
-        "with_insight": 2,
-        "total": 2
+        "with_insight": 0,
+        "total": 0
       },
       {
         "name": "industry_data",
@@ -2079,7 +2073,7 @@
         "has_data": true
       }
     ],
-    "score": 76,
+    "score": 70,
     "passed": true,
     "publish_mode": "degraded"
   },
@@ -2102,15 +2096,15 @@
         "unit": "亿美元",
         "trend": "up",
         "period": "同比",
-        "note": "2026年预计达6.5亿美元"
+        "note": "2025年海外AI漫剧市场规模约1亿美元"
       },
       {
-        "label": "海外AI剧/漫剧活跃用户覆盖",
-        "value": "1.5",
-        "unit": "亿",
+        "label": "海外AI剧/漫剧市场规模（2026年预估）",
+        "value": "6.5",
+        "unit": "亿美元",
         "trend": "up",
         "period": "同比",
-        "note": "覆盖北美、东南亚及拉美"
+        "note": "2026年预计达到6.5亿美元，实现6倍增长"
       },
       {
         "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（1月）",
@@ -2118,31 +2112,31 @@
         "unit": "%",
         "trend": "up",
         "period": "环比",
-        "note": "3月增至16%，增长率700%"
+        "note": "2026年1月占比2%"
       },
       {
-        "label": "海外AI剧/漫剧素材榜TOP20总投放素材量",
-        "value": "20.5",
-        "unit": "万组",
+        "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（3月）",
+        "value": "16",
+        "unit": "%",
         "trend": "up",
-        "period": "同比",
-        "note": "2026年Q1数据"
+        "period": "环比",
+        "note": "2026年3月占比16%，增长率达700%"
       },
       {
-        "label": "海外AI剧/漫剧素材榜TOP20单剧单条素材最高曝光量合计",
-        "value": "1657.7",
-        "unit": "万",
-        "trend": "up",
-        "period": "同比",
-        "note": "2026年Q1数据"
+        "label": "用户愿意为AI参与制作的短剧付费比例",
+        "value": "55",
+        "unit": "%",
+        "trend": "same",
+        "period": "环比",
+        "note": "55%的用户愿意为AI参与制作的短剧付费"
       },
       {
-        "label": "中国AI漫剧市场规模（2025年）",
-        "value": "189.8",
-        "unit": "亿元",
-        "trend": "up",
-        "period": "同比",
-        "note": "同比增长276.3%"
+        "label": "用户愿意为纯AI剧/漫剧付费比例",
+        "value": "49",
+        "unit": "%",
+        "trend": "same",
+        "period": "环比",
+        "note": "49%的用户愿意为纯AI剧/漫剧付费"
       }
     ],
     "rankings": {
@@ -2153,8 +2147,8 @@
           "platform": "NetShort",
           "category": "AI仿真人剧",
           "heat": "202.6万",
-          "is_new": true,
-          "plot": "以希腊神话为背景，主角为海神波塞冬之子，融合打脸与逆袭套路，讲述主角在神话世界中逆袭的故事。",
+          "is_new": false,
+          "plot": "主角为海神波塞冬之子，在希腊神话背景下打脸逆袭，场景精致，特效水平高。",
           "tags": [
             "西幻",
             "逆袭",
@@ -2172,15 +2166,15 @@
           "rank": 1,
           "title": "說好的乙遊戀愛呢？執事怎麼全員黑化了！",
           "platform": "NetShort",
-          "category": "2D/3D AI漫剧",
+          "category": "3D AI漫剧",
           "heat": "1551.6万",
-          "is_new": true,
-          "plot": "女主穿越乙女游戏世界，与执事们展开恋爱互动，但执事们全员黑化，剧情充满情感与反转。",
+          "is_new": false,
+          "plot": "女主穿越乙女游戏，与执事们展开恋爱故事，情感标签为内核。",
           "tags": [
             "乙游",
             "情感",
             "穿越",
-            "黑化"
+            "恋爱"
           ],
           "studio": "",
           "url": "https://www.google.com/search?q=說好的乙遊戀愛呢？執事怎麼全員黑化了！+NetShort",
@@ -2190,108 +2184,90 @@
         {
           "rank": 2,
           "title": "五階獸醫：獸夫們排隊求愛",
-          "platform": "",
-          "category": "2D/3D AI漫剧",
-          "heat": "",
+          "platform": "NetShort",
+          "category": "3D AI漫剧",
+          "heat": "440万",
           "is_new": false,
-          "plot": "女兽医与兽夫们之间的情感故事，兽夫们排队求爱，融合奇幻与恋爱元素。",
+          "plot": "女兽医与兽夫们的情感故事，单条素材曝光量最高。",
           "tags": [
             "情感",
-            "奇幻",
-            "恋爱"
+            "兽人",
+            "女频"
           ],
           "studio": "",
-          "url": "https://www.google.com/search?q=五階獸醫：獸夫們排隊求愛+AI漫剧",
+          "url": "https://www.google.com/search?q=五階獸醫：獸夫們排隊求愛+NetShort",
           "episodes": "",
           "release_date": ""
-        },
-        {
-          "rank": 3,
-          "title": "波斯复仇记",
-          "platform": "YourChannel",
-          "category": "AI仿真人剧",
-          "heat": "",
-          "is_new": true,
-          "plot": "以波斯为背景的复仇故事，制作成本仅300元人民币，上线72小时用户付费GMV达50万美元。",
-          "tags": [
-            "复仇",
-            "逆袭",
-            "西幻"
-          ],
-          "studio": "",
-          "url": "https://www.google.com/search?q=波斯复仇记+YourChannel",
-          "episodes": "",
-          "release_date": "2026-05"
         }
       ]
     },
     "trends": [
       {
-        "title": "AI剧/漫剧出海爆发式增长",
-        "summary": "2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从1月2%飙升至3月16%，增长率达700%。NetShort平台占据TOP20的50%，头部集中效应明显。AI仿真人剧在3月大量涌现，带动男频西幻题材进入榜单前列。",
+        "title": "AI短剧出海爆发式增长",
+        "summary": "2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从1月2%飙升至3月16%，增长率达700%。头部公司如昆仑万维、山海星辰、中文在线重点布局，AI技术将制作周期压缩至7-10天，成本降低70%-80%。",
         "source": "澎湃新闻",
-        "source_url": "https://m.thepaper.cn/newsDetail_forward_33102397"
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
       },
       {
-        "title": "AI漫剧成本与收益魔幻对比",
-        "summary": "《波斯复仇记》制作成本300元人民币，上线72小时用户付费GMV达50万美元，回报率近1200倍。但同期数千部AI短剧未能收回成本，幸存者偏差严重。行业需警惕暴富叙事下的赌徒心态。",
-        "source": "澎湃新闻",
-        "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
-      },
-      {
-        "title": "AI漫剧精品化与规模化矛盾",
-        "summary": "广电总局要求AI内容标注和备案，低质内容加速出清，政策端推动精品化。但平台KPI以量为主，创作者最优策略是堆量而非打磨。AI工具降低门槛后，创作者价值面临解构，内容本质仍是用户对好看内容的需求。",
+        "title": "AI漫剧爆款率低，精品化挑战大",
+        "summary": "当前AI漫剧爆款率仅0.16%，绝大多数作品淹没在内容池中。用户对AI短剧付费意愿较高（55%愿为AI参与制作付费），但同质化严重，霸总、赘婿等传统爽剧题材扎堆，海外用户审美疲劳。",
         "source": "澎湃新闻",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
       },
       {
-        "title": "AI仿真人剧超越传统漫剧",
-        "summary": "2026年4月DataEye端原生热播榜百强中，AI仿真人剧占90席，播放增量超271亿次，超过往年所有AI剧及漫剧播放量总和。用户更青睐接近真人短剧的体验，而非技术标签。",
+        "title": "头部公司差异化竞争格局形成",
+        "summary": "昆仑万维以自研AI工具SkyAnime和平台DramaWave/FreeReels构建规模壁垒；中文在线依托IP储备和FlareFlow实现全球发行；山海星辰通过NOVA AI全链路赋能和Stardust TV打通内容、市场、投流、本土化四维。",
+        "source": "澎湃新闻",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
+      },
+      {
+        "title": "AI仿真人剧成主流，用户偏好内容本质",
+        "summary": "2026年4月AI剧/漫剧端原生热播榜百强中，AI仿真人剧占90席，播放增量超271亿次。用户更看重内容体验而非技术标签，仿真人剧接近真人短剧观感，成为市场主力。",
         "source": "澎湃新闻",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
       },
       {
-        "title": "海外AI剧/漫剧用户画像分化",
-        "summary": "漫剧用户偏年轻女性（女性占比86.33%，18-34岁为主），AI仿真人剧用户偏中年男性（男性占比85.48%，25-44岁为主）。内容形式决定受众差异，漫剧契合二次元文化，仿真人剧延续真人短剧用户群体。",
+        "title": "海外AI漫剧市场集中度高",
+        "summary": "2026年Q1海外AI剧/漫剧素材榜TOP20中，NetShort平台占50%作品，投放素材量是第二名MoboReels的3.9倍。头部作品投放力度大幅领先，尾部作品无明显支撑，市场向头部集中。",
         "source": "澎湃新闻",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33102397"
       }
     ],
     "news": [
       {
-        "title": "DataEye发布2026年Q1海外AI剧/漫剧数据报告",
+        "title": "AI短剧《波斯复仇记》成本3000元，72小时GMV达50万美元",
         "source": "澎湃新闻",
-        "date": "2026-06-01",
+        "date": "2026-05-30",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
+        "summary": "中国AI创作者制作的短剧《波斯复仇记》成本仅3000元，在海外平台YourChannel上线72小时内实现GMV 50万美元，回报率近1200倍。该剧以强烈戏剧冲突和波斯异域风格吸引用户，引发行业对AI短剧出海暴富效应的热议，但也暴露了幸存者偏差问题。"
+      },
+      {
+        "title": "DataEye发布2026年Q1海外AI剧/漫剧报告：数量增长700%",
+        "source": "澎湃新闻",
+        "date": "2026-04-15",
         "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
-        "summary": "DataEye研究院发布报告显示，2026年Q1海外AI剧/漫剧市场规模预估达6.5亿美元，活跃用户超1.5亿。短剧素材榜TOP100中AI剧/漫剧占比从1月2%飙升至3月16%，增长率700%。NetShort平台占据TOP20的50%，头部集中效应明显。情感题材最受欢迎，占比55%。"
+        "summary": "DataEye研究院发布报告显示，2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从1月2%增长至3月16%，增长率达700%。NetShort平台以50%上榜作品领跑，AI仿真人剧加速爆发。用户调研显示55%愿为AI参与制作短剧付费，市场潜力巨大。"
       },
       {
-        "title": "《波斯复仇记》300元成本换50万美元GMV引热议",
+        "title": "昆仑万维2025年短剧及AI短剧收入16.17亿元，同比增长864.92%",
         "source": "澎湃新闻",
-        "date": "2026-05-31",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": "AI短剧《波斯复仇记》制作成本仅300元人民币，上线海外平台YourChannel 72小时用户付费GMV达50万美元，回报率近1200倍。但行业分析指出，同期数千部AI短剧未能收回成本，幸存者偏差严重。该事件引发对AI漫剧暴富叙事的反思。"
+        "date": "2026-04-20",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
+        "summary": "昆仑万维年报显示，2025年短剧和AI短剧平台业务收入16.17亿元，同比增长864.92%，月流水接近3600万美元。公司推出自研AI短剧Agent工具SkyAnime，效率提升200%，成本下降50%，并拿出千万美金扶持海外AI短剧，加速平台化布局。"
       },
       {
-        "title": "万兴科技大幅降低AI漫剧生成价格",
+        "title": "山海星辰2026年Q1海外短剧分成收入突破338万美元",
         "source": "澎湃新闻",
-        "date": "2026-05-31",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": "万兴科技将HappyHorse 1.0的720P生成价格砍至0.71元/秒，限时五折至6月20日。此前公司已通过自研大模型、战略投资灵漫快创和生数科技Vidu，构建从模型到工具到内容的全链路生态，以价格战清场。"
+        "date": "2026-05-10",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
+        "summary": "山海星辰自有平台Stardust TV与TikTok深度合作，2026年Q1短剧分成收入突破338万美元，TikTok小程序消耗突破10万美金。公司自研NOVA AI平台实现全链路自动化生产，将制作周期压缩至7-10天，成本降低70%-80%，计划2026年AI剧占比达7成。"
       },
       {
-        "title": "TikTok短剧平台Q1分账总额突破2400万美元",
+        "title": "万兴科技推出HappyHorse大模型，720P生成价格降至0.71元/秒",
         "source": "澎湃新闻",
-        "date": "2026-05-31",
+        "date": "2026-05-25",
         "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": "TikTok短剧平台2026年Q1分账总额突破2400万美元，其中AI短剧贡献超200万美元，同比增幅超6倍，首次被官方写进战报。海外短剧付费平台总盘子2025年突破40亿美元，2026年预计破50亿。"
-      },
-      {
-        "title": "AI漫剧赛道日耗达7000万，平台烧钱抢市场",
-        "source": "澎湃新闻",
-        "date": "2026-05-31",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": "腾讯科友汇3月沙龙披露，AI漫剧赛道日耗已达约7000万元，其中抖音占5000万以上。抖音定下日消耗240万目标，十几家平台同时砸钱、出IP、抢创作者，阵仗类似2015年网约车大战。行业面临烧钱后市场留存挑战。"
+        "summary": "万兴科技自研HappyHorse大模型，并战略投资灵漫快创和生数科技Vidu，构建全链路AI漫剧生态。5月底将720P生成价格砍至0.71元/秒，限时五折至6月20日，通过价格战清场，加速行业洗牌。"
       }
     ],
     "data_source": "澎湃新闻 DataEye 月报/行业报道直爬 + DeepSeek 抽取",
