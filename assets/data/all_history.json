@@ -80,7 +80,6 @@
     }
   ],
   "dates": [
-    "2026-06-15",
     "2026-06-16",
     "2026-06-17",
     "2026-06-18",
@@ -109,2071 +108,11 @@
     "2026-07-18",
     "2026-07-19",
     "2026-07-20",
-    "2026-07-21"
+    "2026-07-21",
+    "2026-07-22"
   ],
   "last_updated": "2026-06-09 11:40:31",
   "data": {
-    "2026-06-15": {
-      "success": true,
-      "generated_at": "2026-06-15T17:13:43+08:00",
-      "data_date": "2026-06-15",
-      "genre_distribution": {
-        "hot_tags": [
-          {
-            "name": "打脸虐渣",
-            "value": 461
-          },
-          {
-            "name": "都市",
-            "value": 244
-          },
-          {
-            "name": "都市爱情",
-            "value": 239
-          },
-          {
-            "name": "现代",
-            "value": 237
-          },
-          {
-            "name": "逆袭",
-            "value": 184
-          },
-          {
-            "name": "总裁",
-            "value": 170
-          },
-          {
-            "name": "女性成长",
-            "value": 122
-          },
-          {
-            "name": "重生",
-            "value": 120
-          },
-          {
-            "name": "大女主",
-            "value": 115
-          },
-          {
-            "name": "古代",
-            "value": 85
-          },
-          {
-            "name": "大男主",
-            "value": 78
-          },
-          {
-            "name": "宫斗宅斗",
-            "value": 66
-          },
-          {
-            "name": "家庭伦理",
-            "value": 63
-          },
-          {
-            "name": "女强",
-            "value": 61
-          },
-          {
-            "name": "马甲",
-            "value": 60
-          },
-          {
-            "name": "先婚后爱",
-            "value": 53
-          },
-          {
-            "name": "日久生情",
-            "value": 44
-          },
-          {
-            "name": "追妻",
-            "value": 43
-          },
-          {
-            "name": "马甲逆袭",
-            "value": 43
-          },
-          {
-            "name": "战神归来",
-            "value": 42
-          }
-        ],
-        "categories": [
-          {
-            "category": "题材",
-            "tags": [
-              {
-                "name": "都市",
-                "value": 244
-              },
-              {
-                "name": "都市爱情",
-                "value": 239
-              },
-              {
-                "name": "逆袭",
-                "value": 184
-              },
-              {
-                "name": "重生",
-                "value": 120
-              },
-              {
-                "name": "家庭伦理",
-                "value": 63
-              },
-              {
-                "name": "马甲逆袭",
-                "value": 43
-              },
-              {
-                "name": "古风权谋",
-                "value": 41
-              },
-              {
-                "name": "奇幻脑洞",
-                "value": 37
-              }
-            ]
-          },
-          {
-            "category": "爽点",
-            "tags": [
-              {
-                "name": "打脸虐渣",
-                "value": 461
-              },
-              {
-                "name": "马甲",
-                "value": 60
-              },
-              {
-                "name": "追妻",
-                "value": 43
-              },
-              {
-                "name": "萌宝",
-                "value": 34
-              },
-              {
-                "name": "追妻火葬场",
-                "value": 31
-              },
-              {
-                "name": "总裁追妻",
-                "value": 14
-              }
-            ]
-          },
-          {
-            "category": "人设",
-            "tags": [
-              {
-                "name": "总裁",
-                "value": 170
-              },
-              {
-                "name": "战神归来",
-                "value": 42
-              },
-              {
-                "name": "真假千金",
-                "value": 31
-              },
-              {
-                "name": "王爷",
-                "value": 24
-              },
-              {
-                "name": "王妃",
-                "value": 23
-              },
-              {
-                "name": "嫡女",
-                "value": 15
-              }
-            ]
-          },
-          {
-            "category": "情感关系",
-            "tags": [
-              {
-                "name": "先婚后爱",
-                "value": 53
-              },
-              {
-                "name": "日久生情",
-                "value": 44
-              },
-              {
-                "name": "闪婚",
-                "value": 41
-              },
-              {
-                "name": "豪门恩怨",
-                "value": 24
-              },
-              {
-                "name": "替身",
-                "value": 18
-              }
-            ]
-          },
-          {
-            "category": "时代背景",
-            "tags": [
-              {
-                "name": "现代",
-                "value": 237
-              },
-              {
-                "name": "古代",
-                "value": 85
-              }
-            ]
-          },
-          {
-            "category": "其他",
-            "tags": [
-              {
-                "name": "女性成长",
-                "value": 122
-              },
-              {
-                "name": "大女主",
-                "value": 115
-              },
-              {
-                "name": "大男主",
-                "value": 78
-              },
-              {
-                "name": "宫斗宅斗",
-                "value": 66
-              }
-            ]
-          }
-        ],
-        "trending": [
-          {
-            "name": "都市爱情",
-            "value": 8,
-            "change": -6,
-            "trend": "down"
-          },
-          {
-            "name": "逆袭",
-            "value": 8,
-            "change": -5,
-            "trend": "down"
-          },
-          {
-            "name": "女性成长",
-            "value": 7,
-            "change": -5,
-            "trend": "down"
-          },
-          {
-            "name": "现代",
-            "value": 11,
-            "change": -4,
-            "trend": "down"
-          },
-          {
-            "name": "大女主",
-            "value": 7,
-            "change": -4,
-            "trend": "down"
-          },
-          {
-            "name": "马甲逆袭",
-            "value": 4,
-            "change": 4,
-            "trend": "new"
-          }
-        ]
-      },
-      "emotional_analysis": {
-        "summary": "今日榜单以身份逆袭为主导情绪，复仇打脸为TOP触发点，容貌年龄焦虑为核心焦虑，强女主、快节奏、解压放空等关键词凸显用户对情感代偿与浪漫幻想的强烈需求。",
-        "dominant_emotion": "身份逆袭",
-        "dominant_anxiety": "容貌年龄焦虑",
-        "top_trigger": "复仇打脸",
-        "wordcloud": [
-          {
-            "name": "身份逆袭",
-            "value": 100,
-            "category": "emotion"
-          },
-          {
-            "name": "复仇打脸",
-            "value": 99,
-            "category": "trigger"
-          },
-          {
-            "name": "快节奏",
-            "value": 97,
-            "category": "expectation"
-          },
-          {
-            "name": "解压放空",
-            "value": 97,
-            "category": "motivation"
-          },
-          {
-            "name": "强女主",
-            "value": 92,
-            "category": "expectation"
-          },
-          {
-            "name": "容貌年龄焦虑",
-            "value": 91,
-            "category": "anxiety"
-          },
-          {
-            "name": "浪漫幻想",
-            "value": 84,
-            "category": "emotion"
-          },
-          {
-            "name": "情感代偿",
-            "value": 84,
-            "category": "motivation"
-          },
-          {
-            "name": "身份揭晓",
-            "value": 79,
-            "category": "trigger"
-          },
-          {
-            "name": "反套路",
-            "value": 67,
-            "category": "expectation"
-          },
-          {
-            "name": "亲密关系失衡",
-            "value": 65,
-            "category": "anxiety"
-          },
-          {
-            "name": "虐心反转",
-            "value": 63,
-            "category": "trigger"
-          },
-          {
-            "name": "职场阶层固化",
-            "value": 59,
-            "category": "anxiety"
-          },
-          {
-            "name": "经济匮乏",
-            "value": 34,
-            "category": "anxiety"
-          },
-          {
-            "name": "自我实现",
-            "value": 25,
-            "category": "emotion"
-          }
-        ],
-        "emotion_rankings": [
-          {
-            "rank": 1,
-            "title": "重生后我带母亲逆风翻盘",
-            "primary_emotion": "身份逆袭",
-            "anxiety": "亲密关系失衡",
-            "trigger": "复仇打脸",
-            "one_line": "重生后我带母亲逆风翻盘：借重生设定，满足用户对家庭责任与自我价值双重逆袭的心理代偿。"
-          },
-          {
-            "rank": 2,
-            "title": "野骨也成绕指柔",
-            "primary_emotion": "身份逆袭",
-            "anxiety": "亲密关系失衡",
-            "trigger": "复仇打脸",
-            "one_line": "野骨也成绕指柔：通过野性角色被驯服，投射用户对掌控关系与浪漫幻想的渴望。"
-          },
-          {
-            "rank": 3,
-            "title": "尘埃里的新生",
-            "primary_emotion": "身份逆袭",
-            "anxiety": "亲密关系失衡",
-            "trigger": "复仇打脸",
-            "one_line": "尘埃里的新生：从底层逆袭的叙事，精准击中用户对身份突破与容貌焦虑的释放需求。"
-          }
-        ],
-        "trends": [
-          {
-            "name": "身份逆袭",
-            "change": 1136,
-            "trend": "up"
-          },
-          {
-            "name": "复仇打脸",
-            "change": 1126,
-            "trend": "up"
-          },
-          {
-            "name": "快节奏",
-            "change": 939,
-            "trend": "up"
-          },
-          {
-            "name": "解压放空",
-            "change": 939,
-            "trend": "up"
-          },
-          {
-            "name": "强女主",
-            "change": 608,
-            "trend": "up"
-          },
-          {
-            "name": "容貌年龄焦虑",
-            "change": 562,
-            "trend": "up"
-          },
-          {
-            "name": "浪漫幻想",
-            "change": 312,
-            "trend": "up"
-          },
-          {
-            "name": "情感代偿",
-            "change": 312,
-            "trend": "up"
-          }
-        ],
-        "actionable_insights": [
-          {
-            "icon": "💡",
-            "title": "强化复仇打脸节奏",
-            "content": "在短剧前3集密集安排身份反转与打脸情节，每集至少1个高燃冲突点，利用快节奏触发用户情绪高潮，提升完播率与分享欲。"
-          },
-          {
-            "icon": "📈",
-            "title": "聚焦容貌焦虑痛点",
-            "content": "投流素材突出女主因容貌或年龄被轻视后逆袭的对比画面，搭配“逆袭后惊艳全场”等文案，精准吸引焦虑型用户，提升点击转化。"
-          },
-          {
-            "icon": "🎯",
-            "title": "打造强女主情感代偿",
-            "content": "创作中强化女主独立成长与浪漫关系并行的双线叙事，满足用户对“事业爱情双丰收”的幻想，同时加入解压放空桥段（如轻松互动），平衡情绪张力。"
-          }
-        ]
-      },
-      "industry": {
-        "user_scale": "7.18亿",
-        "market_size": "504.4亿元",
-        "drama_count": "未知",
-        "billion_dramas": 20,
-        "ai_ratio": 20,
-        "female_ratio": 80,
-        "male_ratio": 20,
-        "app_mau": "3.04亿",
-        "app_mau_yoy": "+1.4亿"
-      },
-      "rankings": [
-        {
-          "rank": 1,
-          "title": "重生后我带母亲逆风翻盘",
-          "female_lead": "胡亦瑶",
-          "male_lead": "秦天宇",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "古装重生",
-          "tags": [
-            "女性成长",
-            "宫斗宅斗",
-            "重生",
-            "打脸虐渣",
-            "大女主",
-            "世子",
-            "古代"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "重生归来，女主带母亲逆风翻盘，打脸虐渣，成就大女主传奇。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "重生复仇",
-            "打脸虐渣",
-            "母女情深"
-          ],
-          "episodes_count": 73,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7614169658580536344",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/7c8885731c7bcea188a4e1be4fccd525~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7614169658580536344"
-          }
-        },
-        {
-          "rank": 2,
-          "title": "野骨也成绕指柔",
-          "female_lead": "余茵",
-          "male_lead": "柯淳",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市爱情",
-          "tags": [
-            "都市爱情",
-            "逆袭",
-            "打脸虐渣",
-            "女强",
-            "总裁",
-            "都市",
-            "现代"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "都市女强逆袭，打脸虐渣，最终收获甜蜜爱情。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "女强逆袭",
-            "打脸虐渣",
-            "甜蜜爱情"
-          ],
-          "episodes_count": 82,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7451546048784256025",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/86dd31e8dac1d8b6d9e0e4f1d3345931~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7451546048784256025"
-          }
-        },
-        {
-          "rank": 3,
-          "title": "尘埃里的新生",
-          "female_lead": "徐艺真",
-          "male_lead": "曾辉",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市重生",
-          "tags": [
-            "女性成长",
-            "重生",
-            "打脸虐渣",
-            "逆袭",
-            "大女主",
-            "都市",
-            "现代"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "重生归来，从尘埃中崛起，逆袭打脸，成就大女主人生。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "重生逆袭",
-            "打脸虐渣",
-            "女性成长"
-          ],
-          "episodes_count": 60,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7583362373864393790",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/ad4650b1fa623751e202f9406ae90e5b~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7583362373864393790"
-          }
-        },
-        {
-          "rank": 4,
-          "title": "手握三十万死士，请陛下退位",
-          "female_lead": "古子成",
-          "male_lead": "解鑫豪",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "古装权谋",
-          "tags": [
-            "古风权谋",
-            "奇幻脑洞",
-            "穿越",
-            "逆袭",
-            "系统",
-            "大男主",
-            "王爷",
-            "古代"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "male",
-          "is_ai": false,
-          "desc": "穿越古代，手握三十万死士，系统加持，逆袭权谋，逼宫退位。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "穿越权谋",
-            "系统逆袭",
-            "逼宫退位"
-          ],
-          "episodes_count": 86,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7616317059768536089",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/8cba52f11400acd2970a3b65c680544e~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7616317059768536089"
-          }
-        },
-        {
-          "rank": 5,
-          "title": "从此鲜花赠自己",
-          "female_lead": "马秋元",
-          "male_lead": "何健麒",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市重生",
-          "tags": [
-            "女性成长",
-            "重生",
-            "打脸虐渣",
-            "大女主",
-            "都市",
-            "现代"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "重生后，女主不再为他人而活，从此鲜花赠自己，打脸虐渣。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "重生觉醒",
-            "打脸虐渣",
-            "自我成长"
-          ],
-          "episodes_count": 72,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7573561347317713982",
-          "cover": "https://p6-novel.byteimg.com/novel-pic/f372d30f07ce9e55e253acb4b81000a3~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7573561347317713982"
-          }
-        },
-        {
-          "rank": 6,
-          "title": "落魄乞丐竟要我母仪天下",
-          "female_lead": "王艺瑾",
-          "male_lead": "孙晨越",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "古装爱情",
-          "tags": [
-            "古风爱情",
-            "马甲",
-            "逆袭",
-            "打脸虐渣",
-            "太子",
-            "古代"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "落魄乞丐竟是隐藏身份的太子，要求女主母仪天下，逆袭打脸。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "马甲逆袭",
-            "太子身份",
-            "打脸虐渣"
-          ],
-          "episodes_count": 80,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7562127190322596926",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/b80a0c167dcd381871ab13a034d8c829~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7562127190322596926"
-          }
-        },
-        {
-          "rank": 7,
-          "title": "埋葬父母后，再也不原谅",
-          "female_lead": "白妍",
-          "male_lead": "王道铁",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市情感",
-          "tags": [
-            "女性成长",
-            "马甲",
-            "打脸虐渣",
-            "追妻",
-            "女强",
-            "总裁",
-            "现代",
-            "都市"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "父母被逼死后，女主化身女强人，马甲逆袭，绝不原谅。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "马甲逆袭",
-            "追妻火葬场",
-            "绝不原谅"
-          ],
-          "episodes_count": 82,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7525005984792579097",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/131a48e375bbf2d4d64009588f97872f~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7525005984792579097"
-          }
-        },
-        {
-          "rank": 8,
-          "title": "花开岁岁暖",
-          "female_lead": "赵佳",
-          "male_lead": "甄永涛",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市爱情",
-          "tags": [
-            "都市爱情",
-            "年龄差",
-            "日久生情",
-            "打脸虐渣",
-            "总裁",
-            "姐弟恋",
-            "现代",
-            "都市"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "姐弟恋都市爱情，年龄差日久生情，打脸虐渣后收获甜蜜。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "姐弟恋",
-            "日久生情",
-            "打脸虐渣"
-          ],
-          "episodes_count": 57,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7572140660069764120",
-          "cover": "https://p6-novel.byteimg.com/novel-pic/6d9c17989df20987390569d8bf092a8f~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7572140660069764120"
-          }
-        },
-        {
-          "rank": 9,
-          "title": "说好一起摸鱼，你爸怎么是老板啊",
-          "female_lead": "杨咩咩",
-          "male_lead": "刘擎",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市脑洞",
-          "tags": [
-            "都市脑洞",
-            "系统",
-            "逆袭",
-            "打脸虐渣",
-            "大男主",
-            "总裁",
-            "现代",
-            "都市"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "male",
-          "is_ai": false,
-          "desc": "说好一起摸鱼，结果同事是老板儿子，系统加持逆袭打脸。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "系统逆袭",
-            "摸鱼打脸",
-            "隐藏身份"
-          ],
-          "episodes_count": 83,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7611094547900156990",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/876857ada57240ed6eb59071c7972437~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7611094547900156990"
-          }
-        },
-        {
-          "rank": 10,
-          "title": "被嫌弃的荣英的新生",
-          "female_lead": "滕泽文",
-          "male_lead": "张集骏",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "年代重生",
-          "tags": [
-            "家庭伦理",
-            "女性成长",
-            "打脸虐渣",
-            "重生",
-            "家长里短",
-            "大女主",
-            "年代",
-            "乡村"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "重生到年代乡村，被嫌弃的荣英逆袭新生，打脸虐渣。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "重生逆袭",
-            "年代打脸",
-            "家庭伦理"
-          ],
-          "episodes_count": 67,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7594062000171256894",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/b86ff7ad8fa087c00b8abffc7c9d62a0~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7594062000171256894"
-          }
-        },
-        {
-          "rank": 11,
-          "title": "逆子，这个皇位非你不可",
-          "female_lead": "贾翼瑄",
-          "male_lead": "刘萧旭",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "古装权谋",
-          "tags": [
-            "古风权谋",
-            "穿越",
-            "逆袭",
-            "打脸虐渣",
-            "大男主",
-            "皇子",
-            "架空",
-            "宫廷"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "male",
-          "is_ai": false,
-          "desc": "穿越成皇子，逆袭权谋，最终被逼登基。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "穿越权谋",
-            "皇子逆袭",
-            "逼宫登基"
-          ],
-          "episodes_count": 91,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7588186480984460313",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/efe34965c93ba80a39a4483756fda52b~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7588186480984460313"
-          }
-        },
-        {
-          "rank": 12,
-          "title": "赶山1957，二斤猪肉换个媳妇",
-          "female_lead": "张楚嫣",
-          "male_lead": "鹿单东",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "年代种田",
-          "tags": [
-            "种田经营",
-            "重生",
-            "逆袭",
-            "打脸虐渣",
-            "大男主",
-            "年代",
-            "乡村"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "male",
-          "is_ai": false,
-          "desc": "重生1957年，靠种田经营逆袭，二斤猪肉换个好媳妇。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "重生种田",
-            "年代逆袭",
-            "经营致富"
-          ],
-          "episodes_count": 81,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7572080612706634776",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/e23306089aae9b988d1b9de15adaa65d~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7572080612706634776"
-          }
-        },
-        {
-          "rank": 13,
-          "title": "SSSSS级镇狱狂龙",
-          "female_lead": "徐艺真",
-          "male_lead": "龚俊",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市玄幻",
-          "tags": [
-            "都市玄幻",
-            "马甲",
-            "大男主",
-            "现代",
-            "都市"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "male",
-          "is_ai": false,
-          "desc": "都市玄幻，SSSSS级强者马甲逆袭，镇狱狂龙无敌。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "马甲逆袭",
-            "玄幻无敌",
-            "都市打脸"
-          ],
-          "episodes_count": 73,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7605503790946454552",
-          "cover": "https://p6-novel.byteimg.com/novel-pic/c777ea87a0b8aa20f9829934139d784a~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7605503790946454552"
-          }
-        },
-        {
-          "rank": 14,
-          "title": "祈家掌公主驾到，带全家逆天改命",
-          "female_lead": "徐艺真",
-          "male_lead": "曾辉",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市穿书",
-          "tags": [
-            "女性成长",
-            "穿书",
-            "打脸虐渣",
-            "大女主",
-            "都市",
-            "豪门"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "穿书成为豪门掌公主，带全家逆天改命，打脸虐渣。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "穿书逆袭",
-            "豪门打脸",
-            "全家改命"
-          ],
-          "episodes_count": 77,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7564249273622072345",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/67f6948671f81391506ffaba72a4b01d~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7564249273622072345"
-          }
-        },
-        {
-          "rank": 15,
-          "title": "天降小孕妻，傅爷他拿命宠",
-          "female_lead": "马秋元",
-          "male_lead": "何健麒",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市爱情",
-          "tags": [
-            "都市爱情",
-            "先婚后爱",
-            "打脸虐渣",
-            "灰姑娘",
-            "大女主",
-            "总裁",
-            "现代",
-            "都市"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "天降小孕妻，总裁傅爷拿命宠，先婚后爱打脸虐渣。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "先婚后爱",
-            "总裁宠妻",
-            "打脸虐渣"
-          ],
-          "episodes_count": 76,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7598836110675938366",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/ddd1b983d85da2b7e4cfb50398da412c~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7598836110675938366"
-          }
-        },
-        {
-          "rank": 16,
-          "title": "顶级狂枭，出狱即无敌",
-          "female_lead": "马秋元",
-          "male_lead": "王道铁",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市战神",
-          "tags": [
-            "战神归来",
-            "马甲",
-            "打脸虐渣",
-            "大男主",
-            "总裁",
-            "现代",
-            "都市"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "male",
-          "is_ai": false,
-          "desc": "顶级狂枭出狱，马甲逆袭，打脸虐渣，无敌都市。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "战神归来",
-            "马甲逆袭",
-            "出狱无敌"
-          ],
-          "episodes_count": 71,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7605923065502911512",
-          "cover": "https://p6-novel.byteimg.com/novel-pic/620404eeff4f5bfe4d366f6048d7c02b~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7605923065502911512"
-          }
-        },
-        {
-          "rank": 17,
-          "title": "十载梦碎，寂悔无用",
-          "female_lead": "白妍",
-          "male_lead": "王道铁",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市爱情",
-          "tags": [
-            "都市爱情",
-            "追妻",
-            "总裁",
-            "现代",
-            "都市"
-          ],
-          "trend": "down6",
-          "trend_tag": "",
-          "trend_type": "down",
-          "category": "female",
-          "is_ai": false,
-          "desc": "十年梦碎，追妻火葬场，总裁后悔无用。",
-          "change": "down6",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "追妻火葬场",
-            "总裁后悔",
-            "虐恋"
-          ],
-          "episodes_count": 65,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -6,
-          "previous_rank": 11,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7574746497493765182",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/d486ab55f917e51ef865a281d468f0de~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7574746497493765182"
-          }
-        },
-        {
-          "rank": 18,
-          "title": "你娶平妻？这侯府我说了算",
-          "female_lead": "赵佳",
-          "male_lead": "甄永涛",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "古装宅斗",
-          "tags": [
-            "宫斗宅斗",
-            "重生",
-            "打脸虐渣",
-            "大女主",
-            "王爷",
-            "古代"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "重生古代侯府，夫君娶平妻？这侯府我说了算，打脸虐渣。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "重生宅斗",
-            "打脸虐渣",
-            "侯府掌权"
-          ],
-          "episodes_count": 73,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7537622226703502361",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/6bbed3e123d0a1493f1953bc72d1235f~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7537622226703502361"
-          }
-        },
-        {
-          "rank": 19,
-          "title": "重生后，小辣椒用空间搬空老公全家",
-          "female_lead": "余茵",
-          "male_lead": "柯淳",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "年代奇幻",
-          "tags": [
-            "奇幻爱情",
-            "年代爱情",
-            "重生",
-            "打脸虐渣",
-            "异能",
-            "真假千金",
-            "乡村",
-            "年代"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "female",
-          "is_ai": false,
-          "desc": "重生年代，小辣椒用空间异能搬空老公全家，打脸虐渣。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "重生空间",
-            "年代打脸",
-            "搬空全家"
-          ],
-          "episodes_count": 80,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7523126970624789566",
-          "cover": "https://p6-novel.byteimg.com/novel-pic/ab1eb6e143c8bfd5f60cbf02d9d96b7e~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7523126970624789566"
-          }
-        },
-        {
-          "rank": 20,
-          "title": "纵横商海之屠龙少年",
-          "female_lead": "王艺瑾",
-          "male_lead": "刘擎",
-          "views": "热度上榜",
-          "views_num": 0,
-          "platform": "红果",
-          "genre": "都市商战",
-          "tags": [
-            "奇幻脑洞",
-            "异能",
-            "传承觉醒",
-            "逆袭",
-            "神豪",
-            "现代",
-            "都市"
-          ],
-          "trend": "new",
-          "trend_tag": "",
-          "trend_type": "new",
-          "category": "male",
-          "is_ai": false,
-          "desc": "商海纵横，屠龙少年异能觉醒，逆袭神豪。",
-          "change": "new",
-          "heat": 0,
-          "production_house": "",
-          "core_trope": [
-            "异能觉醒",
-            "商战逆袭",
-            "神豪打脸"
-          ],
-          "episodes_count": 83,
-          "confidence_score": 0.7,
-          "data_source": "hongguo",
-          "rank_change": -1,
-          "previous_rank": 0,
-          "cross_validated": false,
-          "dataeye_rank": 0,
-          "dataeye_heat": 0,
-          "series_id": "7490482602252454974",
-          "cover": "https://p3-novel.byteimg.com/novel-pic/6e29694881947c6c5d1e1a3855aeded8~tplv-shrink:640:0.image",
-          "supply_chain": {
-            "has_ip_source": true,
-            "source_title": "好一个乖乖女",
-            "source_author": "",
-            "source_platform": "番茄小说",
-            "match_confidence": 1.0,
-            "series_id": "7490482602252454974"
-          }
-        }
-      ],
-      "rankings_count": 20,
-      "actors": {
-        "female": [
-          {
-            "rank": 1,
-            "name": "徐艺真",
-            "popularity": 355,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "尘埃里的新生、SSSSS级镇狱狂龙、祈家掌公主驾到，带全家逆天改命",
-            "trend": "up",
-            "trend_value": 40,
-            "baike_url": "https://baike.baidu.com/item/%E5%BE%90%E8%89%BA%E7%9C%9F"
-          },
-          {
-            "rank": 2,
-            "name": "马秋元",
-            "popularity": 295,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "从此鲜花赠自己、天降小孕妻，傅爷他拿命宠、顶级狂枭，出狱即无敌",
-            "trend": "same",
-            "trend_value": 0,
-            "baike_url": "https://baike.baidu.com/item/%E9%A9%AC%E7%A7%8B%E5%85%83"
-          },
-          {
-            "rank": 3,
-            "name": "余茵",
-            "popularity": 225,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "野骨也成绕指柔、重生后，小辣椒用空间搬空老公全家",
-            "trend": "up",
-            "trend_value": 10,
-            "baike_url": "https://baike.baidu.com/item/%E4%BD%99%E8%8C%B5"
-          },
-          {
-            "rank": 4,
-            "name": "胡亦瑶",
-            "popularity": 205,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "重生后我带母亲逆风翻盘",
-            "trend": "new",
-            "trend_value": 205,
-            "baike_url": "https://baike.baidu.com/item/%E8%83%A1%E4%BA%A6%E7%91%B6"
-          },
-          {
-            "rank": 5,
-            "name": "白妍",
-            "popularity": 195,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "埋葬父母后，再也不原谅、十载梦碎，寂悔无用",
-            "trend": "down",
-            "trend_value": -60,
-            "baike_url": "https://baike.baidu.com/item/%E7%99%BD%E5%A6%8D"
-          },
-          {
-            "rank": 6,
-            "name": "古子成",
-            "popularity": 175,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "手握三十万死士，请陛下退位",
-            "trend": "new",
-            "trend_value": 175,
-            "baike_url": "https://baike.baidu.com/item/%E5%8F%A4%E5%AD%90%E6%88%90"
-          },
-          {
-            "rank": 7,
-            "name": "王艺瑾",
-            "popularity": 175,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "落魄乞丐竟要我母仪天下、纵横商海之屠龙少年",
-            "trend": "down",
-            "trend_value": -100,
-            "baike_url": "https://baike.baidu.com/item/%E7%8E%8B%E8%89%BA%E7%91%BE"
-          },
-          {
-            "rank": 8,
-            "name": "赵佳",
-            "popularity": 175,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "花开岁岁暖、你娶平妻？这侯府我说了算",
-            "trend": "down",
-            "trend_value": -60,
-            "baike_url": "https://baike.baidu.com/item/%E8%B5%B5%E4%BD%B3"
-          },
-          {
-            "rank": 9,
-            "name": "杨咩咩",
-            "popularity": 125,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "说好一起摸鱼，你爸怎么是老板啊",
-            "trend": "down",
-            "trend_value": -70,
-            "baike_url": "https://baike.baidu.com/item/%E6%9D%A8%E5%92%A9%E5%92%A9"
-          },
-          {
-            "rank": 10,
-            "name": "滕泽文",
-            "popularity": 115,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "被嫌弃的荣英的新生",
-            "trend": "down",
-            "trend_value": -60,
-            "baike_url": "https://baike.baidu.com/item/%E6%BB%95%E6%B3%BD%E6%96%87"
-          }
-        ],
-        "male": [
-          {
-            "rank": 1,
-            "name": "曾辉",
-            "popularity": 265,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "尘埃里的新生、祈家掌公主驾到，带全家逆天改命",
-            "trend": "down",
-            "trend_value": -50,
-            "baike_url": "https://baike.baidu.com/item/%E6%9B%BE%E8%BE%89"
-          },
-          {
-            "rank": 2,
-            "name": "王道铁",
-            "popularity": 255,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "埋葬父母后，再也不原谅、顶级狂枭，出狱即无敌、十载梦碎，寂悔无用",
-            "trend": "same",
-            "trend_value": 0,
-            "baike_url": "https://baike.baidu.com/item/%E7%8E%8B%E9%81%93%E9%93%81"
-          },
-          {
-            "rank": 3,
-            "name": "何健麒",
-            "popularity": 235,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "从此鲜花赠自己、天降小孕妻，傅爷他拿命宠",
-            "trend": "down",
-            "trend_value": -60,
-            "baike_url": "https://baike.baidu.com/item/%E4%BD%95%E5%81%A5%E9%BA%92"
-          },
-          {
-            "rank": 4,
-            "name": "柯淳",
-            "popularity": 225,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "野骨也成绕指柔、重生后，小辣椒用空间搬空老公全家",
-            "trend": "new",
-            "trend_value": 225,
-            "baike_url": "https://baike.baidu.com/item/%E6%9F%AF%E6%B7%B3"
-          },
-          {
-            "rank": 5,
-            "name": "秦天宇",
-            "popularity": 205,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "重生后我带母亲逆风翻盘",
-            "trend": "new",
-            "trend_value": 205,
-            "baike_url": "https://baike.baidu.com/item/%E7%A7%A6%E5%A4%A9%E5%AE%87"
-          },
-          {
-            "rank": 6,
-            "name": "解鑫豪",
-            "popularity": 175,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "手握三十万死士，请陛下退位",
-            "trend": "new",
-            "trend_value": 175,
-            "baike_url": "https://baike.baidu.com/item/%E8%A7%A3%E9%91%AB%E8%B1%AA"
-          },
-          {
-            "rank": 7,
-            "name": "甄永涛",
-            "popularity": 175,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "花开岁岁暖、你娶平妻？这侯府我说了算",
-            "trend": "down",
-            "trend_value": -60,
-            "baike_url": "https://baike.baidu.com/item/%E7%94%84%E6%B0%B8%E6%B6%9B"
-          },
-          {
-            "rank": 8,
-            "name": "孙晨越",
-            "popularity": 155,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "落魄乞丐竟要我母仪天下",
-            "trend": "down",
-            "trend_value": -120,
-            "baike_url": "https://baike.baidu.com/item/%E5%AD%99%E6%99%A8%E8%B6%8A"
-          },
-          {
-            "rank": 9,
-            "name": "刘擎",
-            "popularity": 145,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "热门演员",
-            "works": "说好一起摸鱼，你爸怎么是老板啊、纵横商海之屠龙少年",
-            "trend": "down",
-            "trend_value": -70,
-            "baike_url": "https://baike.baidu.com/item/%E5%88%98%E6%93%8E"
-          },
-          {
-            "rank": 10,
-            "name": "张集骏",
-            "popularity": 115,
-            "platform_fans": 0.0,
-            "platform": "红果",
-            "badge": "",
-            "works": "被嫌弃的荣英的新生",
-            "trend": "down",
-            "trend_value": -80,
-            "baike_url": "https://baike.baidu.com/item/%E5%BC%A0%E9%9B%86%E9%AA%8F"
-          }
-        ]
-      },
-      "platform": {
-        "apps": [
-          {
-            "name": "红果免费短剧",
-            "mau": 3.04,
-            "mau_unit": "亿",
-            "yoy": "+1.4亿",
-            "share": 85,
-            "trend": "up"
-          }
-        ],
-        "mini_programs": []
-      },
-      "audience_profile": {
-        "gender": {
-          "female": 65.0,
-          "male": 35.0
-        },
-        "age": {
-          "18-24": 19.0,
-          "25-34": 35.0,
-          "35-44": 31.0,
-          "45+": 15.0
-        },
-        "regions": [
-          {
-            "name": "广东",
-            "value": 12
-          },
-          {
-            "name": "山东",
-            "value": 10
-          },
-          {
-            "name": "河南",
-            "value": 9
-          },
-          {
-            "name": "四川",
-            "value": 8
-          },
-          {
-            "name": "河北",
-            "value": 7
-          }
-        ],
-        "traits": [
-          "对高甜撒糖与情感代偿高度敏感",
-          "热衷逆袭打脸与身份反转爽点",
-          "偏好强反转高密度剧情",
-          "关注女性成长与逆袭补偿"
-        ],
-        "content_preferences": [],
-        "viewing_time": [],
-        "spending_power": {},
-        "user_segments": []
-      },
-      "play_trend": {
-        "daily": [
-          {
-            "date": "2026-06-15",
-            "total_views": 0
-          },
-          {
-            "date": "2026-06-14",
-            "total_views": 0
-          },
-          {
-            "date": "2026-06-13",
-            "total_views": 0
-          },
-          {
-            "date": "2026-06-12",
-            "total_views": 0
-          },
-          {
-            "date": "2026-06-11",
-            "total_views": 45000
-          },
-          {
-            "date": "2026-06-10",
-            "total_views": 37000
-          },
-          {
-            "date": "2026-06-09",
-            "total_views": 79700
-          }
-        ],
-        "weekly": [
-          {
-            "week": "2026-W24",
-            "start_date": "2026-06-15",
-            "end_date": "2026-06-21",
-            "top1_title": "重生后我带母亲逆风翻盘",
-            "top1_views": "热度上榜",
-            "total_views": 0
-          },
-          {
-            "week": "2026-W23",
-            "start_date": "2026-06-08",
-            "end_date": "2026-06-14",
-            "top1_title": "坠入情深时",
-            "top1_views": "热度上榜",
-            "total_views": 0
-          }
-        ],
-        "trend_direction": "down"
-      },
-      "daily_news": [
-        {
-          "type": "数据",
-          "icon": "📊",
-          "title": "5月短剧大盘消耗22.62亿",
-          "content": "【事件核心】：2026年6月15日，DataEye发布5月微短剧大盘数据，显示5月微短剧大盘消耗22.62亿元，较上月上涨近8%，市场持续升温。\n【数据支撑】：截至2025年5月，微短剧大盘累计消耗110.29亿元。5月DataEye热力榜中，河马包揽TOP2，《那年阳光正好》登顶，《出手》第二，麦芽《漂移吧洗车大叔》位列第三。百强热剧榜中73部为新剧，其中41部闯入TOP50。\n【商业洞察】：大盘消耗环比上涨表明用户付费意愿增强，新剧占比高说明内容迭代加速，头部公司河马、麦芽持续领跑，中小制作方需在题材差异化上寻求突破。\n【决策价值】：建议制作方关注新剧上榜趋势，优先布局情感、逆袭等已验证题材，同时加大投流测试力度以抢占榜单。",
-          "insight": "",
-          "source_url": "https://m.36kr.com/p/3321581409920514"
-        },
-        {
-          "type": "商业",
-          "icon": "💰",
-          "title": "抖音15亿扶持真人短剧",
-          "content": "【事件核心】：2026年6月15日，抖音集团在首届短剧产业大会上宣布，2026年真人短剧保底扶持预算超15亿元，部均保底金额同比提升60%，通过收益机制优化、头部内容激励、续作激励和专项资金扶持四大举措发力。\n【数据支撑】：部均保底金额同比提升60%，覆盖范围扩大至更多中小制作方。腾讯视频同步推出分账激励方案，突破1000万元的项目分账期延长至12个月，2000万元以上项目可达36个月。\n【商业洞察】：两大平台加码扶持，将吸引更多影视公司入局，短剧内容供给量预计激增，但竞争加剧可能导致买量成本上升，头部IP和续作项目更易获得资源倾斜。\n【决策价值】：建议制作方积极申报抖音保底扶持计划，优先开发有续作潜力的系列短剧，同时关注腾讯分账政策，长线运营优质项目。",
-          "insight": "",
-          "source_url": "https://www.jizhil.com/kuaixun/12817.html"
-        },
-        {
-          "type": "数据",
-          "icon": "📊",
-          "title": "周榜新剧霸榜TOP5",
-          "content": "【事件核心】：2026年6月2日至6月8日，DataEye微短剧热力榜周榜发布，河马《我在回忆里万劫不复》登顶，快创《别惹大小姐，她京圈亲爸是女儿奴》第二，掌玩《十八岁太奶奶驾到，重整家族荣耀》第三。\n【数据支撑】：本期共有19部新剧闯入周榜，TOP5均为新剧，单周热力值均超1000W。榜首河马作品已连续7期上榜，增量超2亿。\n【商业洞察】：新剧霸榜TOP5说明市场对新鲜内容需求旺盛，老剧长尾效应减弱。河马凭借连续上榜能力巩固头部地位，快创、掌玩等新锐公司通过差异化题材快速崛起。\n【决策价值】：建议制作方加快新剧上线节奏，每周至少测试1-2部新剧，题材上可参考“京圈亲爸”“太奶奶”等家庭逆袭类爆款元素。",
-          "insight": "",
-          "source_url": "http://mp.weixin.qq.com/s?__biz=MzkxMTIxODE5Nw==&mid=2247515279&idx=1&sn=9ea40d3d530e74192ce09f809b1fbc7f"
-        },
-        {
-          "type": "商业",
-          "icon": "💰",
-          "title": "文旅短剧《第二次也可以》开播",
-          "content": "【事件核心】：2026年5月8日，文旅治愈系短剧《第二次也可以》在芒果TV开播，由冷飞燃导演、苏筱晨监制，聚焦逃离都市束缚的主题，获浙江省广电和文旅局推荐。\n【数据支撑】：该剧被列为2024年度国家广播电视总局“跟着微短剧去旅行”创作计划第五批推荐项目，属于政策扶持的文旅融合类型。\n【商业洞察】：文旅短剧成为政策鼓励方向，结合地方文旅资源可获官方背书和流量扶持，但需注意内容与景区深度绑定，避免生硬植入。芒果TV作为播出平台，可能借此探索短剧+旅游的商业模式。\n【决策价值】：建议制作方积极申报“跟着微短剧去旅行”等政策项目，优先选择有文旅资源的地区合作，提前锁定官方推荐和平台排期。",
-          "insight": "",
-          "source_url": "http://mp.weixin.qq.com/s?__biz=MzkxMTIxODE5Nw==&mid=2247515124&idx=1&sn=5fe0a2f706224734a44ab65d01078ad3"
-        },
-        {
-          "type": "数据",
-          "icon": "📊",
-          "title": "短剧市场持续升温内容创新",
-          "content": "【事件核心】：2026年6月15日，国内短剧市场迎来新一轮增长，各大平台加大内容投入，内容创新与平台竞争成为焦点，行业整体呈现量价齐升态势。\n【数据支撑】：5月大盘消耗22.62亿环比上涨8%，抖音15亿扶持预算同比提升60%，腾讯分账政策延长至36个月，头部公司河马连续7期上榜，增量超2亿。\n【商业洞察】：平台补贴和分账政策升级将推动短剧精品化，但内容同质化风险加剧。头部公司凭借资金和渠道优势扩大领先，中小公司需在垂直题材或文旅融合等细分领域寻找机会。\n【决策价值】：建议从业者关注平台政策变化，优先选择有保底或长分账期的项目，同时加强剧本创新，避免跟风已有爆款题材。",
-          "insight": "",
-          "source_url": "https://www.163.com/dy/article/KQ02MD6R0511D2LM.html"
-        },
-        {
-          "type": "商业",
-          "icon": "💰",
-          "title": "腾讯视频分账激励升级",
-          "content": "【事件核心】：2026年6月15日，腾讯视频推出更具针对性的短剧分账激励方案，突破1000万元的项目分账期延长至12个月，2000万元以上的项目更可达36个月，旨在吸引优质内容。\n【数据支撑】：分账期延长幅度显著，1000万级项目从常规6个月翻倍至12个月，2000万级项目可达36个月，远超行业平均水平。\n【商业洞察】：长分账期有利于制作方获得稳定现金流，降低短期爆款依赖，鼓励精品长线运营。腾讯此举意在对抗抖音的保底扶持策略，争夺头部制作方资源。\n【决策价值】：建议有成熟IP或续作计划的制作方优先与腾讯合作，利用长分账期实现项目收益最大化，同时注意控制制作成本以匹配分账门槛。",
-          "insight": "",
-          "source_url": "https://www.jizhil.com/kuaixun/12817.html"
-        }
-      ],
-      "insights": [
-        {
-          "icon": "📊",
-          "title": "微信新规倒逼内容升级，人均时长成核心KPI",
-          "content": "2026年6月15日，微信发布微短剧小程序激励新规，考核标准从剧集转向用户人均访问时长。爆款归因：受众定位为追求沉浸式体验的用户，爽点公式为“高留存剧情+强互动设计”，投流预估将更侧重长尾留存。买量建议：CPA优势题材为“重生逆袭”和“都市情感”，投放平台首选微信小程序生态，利用IAA广告变现优化。",
-          "source": "微信官方2026年微短剧小程序激励政策"
-        },
-        {
-          "icon": "🔥",
-          "title": "红果榜单验证“重生+打脸”公式，女性向题材持续霸榜",
-          "content": "今日红果热度榜TOP10中，7部为女性向重生/逆袭题材，如《重生后我带母亲逆风翻盘》《尘埃里的新生》。爆款归因：受众定位为25-40岁女性，爽点公式为“重生复仇+打脸虐渣+大女主成长”，投流预估单部剧CPA低于15元。买量建议：CPA优势题材为“古装重生”和“都市女强”，投放平台聚焦红果及抖音信息流。",
-          "source": "2026-06-15红果短剧热度榜"
-        }
-      ],
-      "quality_score": 100.0,
-      "statistics": {
-        "total": 20,
-        "avg_confidence": 0.7,
-        "source_distribution": {
-          "hongguo": 20
-        },
-        "with_actors": 0,
-        "with_studio": 0
-      },
-      "trends": {
-        "rank_changes": {
-          "new": 19,
-          "up": 0,
-          "down": 1,
-          "stable": 0
-        },
-        "hot_tags": [
-          {
-            "tag": "打脸虐渣",
-            "count": 16
-          },
-          {
-            "tag": "都市",
-            "count": 12
-          },
-          {
-            "tag": "现代",
-            "count": 11
-          },
-          {
-            "tag": "逆袭",
-            "count": 8
-          },
-          {
-            "tag": "重生",
-            "count": 7
-          },
-          {
-            "tag": "大女主",
-            "count": 7
-          },
-          {
-            "tag": "总裁",
-            "count": 7
-          },
-          {
-            "tag": "女性成长",
-            "count": 6
-          },
-          {
-            "tag": "大男主",
-            "count": 6
-          },
-          {
-            "tag": "古代",
-            "count": 4
-          }
-        ],
-        "trend_direction": "down"
-      },
-      "anomalies": [
-        {
-          "type": "missing_actors",
-          "severity": "warning",
-          "count": 20,
-          "message": "20部剧缺少演员信息，占比100%",
-          "items": [
-            "重生后我带母亲逆风翻盘",
-            "野骨也成绕指柔",
-            "尘埃里的新生",
-            "手握三十万死士，请陛下退位",
-            "从此鲜花赠自己"
-          ]
-        }
-      ],
-      "alerts": [
-        {
-          "severity": "warning",
-          "category": "ranking",
-          "title": "大盘播放量环比下降",
-          "message": "近 7 日总播放量趋势向下，需关注榜单整体热度。",
-          "metric": "play_trend_direction",
-          "value": "down",
-          "threshold": null,
-          "suggestion": null
-        },
-        {
-          "severity": "info",
-          "category": "genre",
-          "title": "热门标签环比异动",
-          "message": "3 个标签较昨日变化超过 5 次，TOP3：都市爱情, 逆袭, 女性成长。",
-          "metric": "spiking_tag_count",
-          "value": 3,
-          "threshold": 5,
-          "suggestion": null
-        }
-      ],
-      "alert_count": 2,
-      "quality_report": {
-        "checks": [
-          {
-            "name": "rankings_count",
-            "passed": true,
-            "value": 20,
-            "required": 20
-          },
-          {
-            "name": "ranking_field_integrity",
-            "passed": true,
-            "valid": 20,
-            "invalid_samples": []
-          },
-          {
-            "name": "female_actors",
-            "passed": true,
-            "valid": 10,
-            "required": 10
-          },
-          {
-            "name": "male_actors",
-            "passed": true,
-            "valid": 10,
-            "required": 10
-          },
-          {
-            "name": "daily_news_count",
-            "passed": true,
-            "value": 6,
-            "required": 6
-          },
-          {
-            "name": "daily_news_url",
-            "passed": true,
-            "value": 6,
-            "required": 6
-          },
-          {
-            "name": "industry_data",
-            "passed": true,
-            "app_mau": "3.04亿",
-            "drama_count": "未知"
-          },
-          {
-            "name": "ai_ratio",
-            "passed": true,
-            "value": 20
-          },
-          {
-            "name": "api_errors",
-            "passed": true,
-            "matched_patterns": 0
-          }
-        ],
-        "score": 100,
-        "passed": true
-      },
-      "error_message": ""
-    },
     "2026-06-16": {
       "success": true,
       "generated_at": "2026-06-16T06:41:10+08:00",
@@ -62438,6 +60377,2179 @@
           }
         ],
         "data_source": "澎湃新闻 DataEye 月报/行业报道直爬 + DeepSeek 抽取",
+        "update_frequency": "monthly"
+      },
+      "error_message": "【质量门禁告警】\n- 女频演员有效数量不足：0/10\n- 男频演员有效数量不足：0/10\n【发布模式】降级发布：榜单已更新，部分次要模块数据不完整\n"
+    },
+    "2026-07-22": {
+      "success": true,
+      "generated_at": "2026-07-22T04:22:21+08:00",
+      "data_date": "2026-07-22",
+      "genre_distribution": {
+        "hot_tags": [
+          {
+            "name": "打脸虐渣",
+            "value": 232
+          },
+          {
+            "name": "日久生情",
+            "value": 232
+          },
+          {
+            "name": "都市爱情",
+            "value": 232
+          },
+          {
+            "name": "霸总",
+            "value": 232
+          },
+          {
+            "name": "大男主",
+            "value": 203
+          },
+          {
+            "name": "奇幻",
+            "value": 145
+          },
+          {
+            "name": "女性成长",
+            "value": 145
+          },
+          {
+            "name": "穿越",
+            "value": 145
+          },
+          {
+            "name": "逆袭",
+            "value": 145
+          },
+          {
+            "name": "都市日常",
+            "value": 87
+          },
+          {
+            "name": "反转",
+            "value": 58
+          },
+          {
+            "name": "古灵精怪",
+            "value": 58
+          },
+          {
+            "name": "王爷",
+            "value": 58
+          },
+          {
+            "name": "甜妹",
+            "value": 58
+          },
+          {
+            "name": "萌宝",
+            "value": 58
+          },
+          {
+            "name": "侠客",
+            "value": 29
+          },
+          {
+            "name": "先婚厚爱",
+            "value": 29
+          },
+          {
+            "name": "古风爱情",
+            "value": 29
+          },
+          {
+            "name": "喜剧",
+            "value": 29
+          },
+          {
+            "name": "婆媳",
+            "value": 29
+          }
+        ],
+        "categories": [
+          {
+            "category": "题材",
+            "tags": [
+              {
+                "name": "都市爱情",
+                "value": 232
+              },
+              {
+                "name": "奇幻",
+                "value": 145
+              },
+              {
+                "name": "穿越",
+                "value": 145
+              },
+              {
+                "name": "都市日常",
+                "value": 87
+              },
+              {
+                "name": "古风爱情",
+                "value": 29
+              },
+              {
+                "name": "家庭伦理",
+                "value": 29
+              },
+              {
+                "name": "权谋",
+                "value": 29
+              },
+              {
+                "name": "玄幻仙侠",
+                "value": 29
+              }
+            ]
+          },
+          {
+            "category": "爽点",
+            "tags": [
+              {
+                "name": "打脸虐渣",
+                "value": 232
+              },
+              {
+                "name": "逆袭",
+                "value": 145
+              },
+              {
+                "name": "萌宝",
+                "value": 58
+              },
+              {
+                "name": "马甲",
+                "value": 29
+              }
+            ]
+          },
+          {
+            "category": "人设",
+            "tags": [
+              {
+                "name": "霸总",
+                "value": 232
+              },
+              {
+                "name": "王爷",
+                "value": 58
+              },
+              {
+                "name": "无敌神医",
+                "value": 29
+              }
+            ]
+          },
+          {
+            "category": "情感关系",
+            "tags": [
+              {
+                "name": "日久生情",
+                "value": 232
+              },
+              {
+                "name": "先婚厚爱",
+                "value": 29
+              },
+              {
+                "name": "暗恋成真",
+                "value": 29
+              },
+              {
+                "name": "闪婚",
+                "value": 29
+              }
+            ]
+          },
+          {
+            "category": "其他",
+            "tags": [
+              {
+                "name": "大男主",
+                "value": 203
+              },
+              {
+                "name": "女性成长",
+                "value": 145
+              },
+              {
+                "name": "反转",
+                "value": 58
+              },
+              {
+                "name": "古灵精怪",
+                "value": 58
+              }
+            ]
+          }
+        ],
+        "trending": [
+          {
+            "name": "都市爱情",
+            "value": 8,
+            "change": 0,
+            "trend": "same"
+          },
+          {
+            "name": "霸总",
+            "value": 8,
+            "change": 0,
+            "trend": "same"
+          },
+          {
+            "name": "日久生情",
+            "value": 8,
+            "change": 0,
+            "trend": "same"
+          },
+          {
+            "name": "打脸虐渣",
+            "value": 8,
+            "change": 0,
+            "trend": "same"
+          },
+          {
+            "name": "大男主",
+            "value": 7,
+            "change": 0,
+            "trend": "same"
+          },
+          {
+            "name": "女性成长",
+            "value": 5,
+            "change": 0,
+            "trend": "same"
+          }
+        ],
+        "by_gender": {
+          "female": [
+            {
+              "name": "都市爱情",
+              "value": 8
+            },
+            {
+              "name": "霸总",
+              "value": 8
+            },
+            {
+              "name": "日久生情",
+              "value": 8
+            },
+            {
+              "name": "打脸虐渣",
+              "value": 6
+            },
+            {
+              "name": "女性成长",
+              "value": 5
+            },
+            {
+              "name": "奇幻",
+              "value": 5
+            },
+            {
+              "name": "穿越",
+              "value": 5
+            },
+            {
+              "name": "大男主",
+              "value": 5
+            }
+          ],
+          "male": [
+            {
+              "name": "打脸虐渣",
+              "value": 2
+            },
+            {
+              "name": "大男主",
+              "value": 2
+            },
+            {
+              "name": "玄幻仙侠",
+              "value": 1
+            },
+            {
+              "name": "马甲",
+              "value": 1
+            },
+            {
+              "name": "反转",
+              "value": 1
+            },
+            {
+              "name": "侠客",
+              "value": 1
+            },
+            {
+              "name": "都市玄幻",
+              "value": 1
+            },
+            {
+              "name": "逆袭",
+              "value": 1
+            }
+          ]
+        },
+        "data_source": "近7天榜单统计",
+        "update_frequency": "weekly"
+      },
+      "emotional_analysis": {
+        "summary": "今日短剧榜单以身份逆袭为主导情绪，结合容貌年龄焦虑与复仇打脸，强女主题材通过浪漫幻想和情感代偿满足用户解压需求。",
+        "dominant_emotion": "身份逆袭",
+        "dominant_anxiety": "容貌年龄焦虑",
+        "top_trigger": "复仇打脸",
+        "wordcloud": [
+          {
+            "name": "身份逆袭",
+            "value": 100,
+            "category": "emotion"
+          },
+          {
+            "name": "浪漫幻想",
+            "value": 99,
+            "category": "emotion"
+          },
+          {
+            "name": "情感代偿",
+            "value": 99,
+            "category": "motivation"
+          },
+          {
+            "name": "复仇打脸",
+            "value": 97,
+            "category": "trigger"
+          },
+          {
+            "name": "快节奏",
+            "value": 94,
+            "category": "expectation"
+          },
+          {
+            "name": "解压放空",
+            "value": 94,
+            "category": "motivation"
+          },
+          {
+            "name": "强女主",
+            "value": 89,
+            "category": "expectation"
+          },
+          {
+            "name": "容貌年龄焦虑",
+            "value": 87,
+            "category": "anxiety"
+          },
+          {
+            "name": "心理补偿",
+            "value": 86,
+            "category": "emotion"
+          },
+          {
+            "name": "萌宝助攻",
+            "value": 80,
+            "category": "trigger"
+          },
+          {
+            "name": "经济匮乏",
+            "value": 73,
+            "category": "anxiety"
+          },
+          {
+            "name": "身份揭晓",
+            "value": 72,
+            "category": "trigger"
+          },
+          {
+            "name": "虐心反转",
+            "value": 72,
+            "category": "trigger"
+          },
+          {
+            "name": "经济压力",
+            "value": 66,
+            "category": "payoff"
+          },
+          {
+            "name": "反套路",
+            "value": 61,
+            "category": "expectation"
+          }
+        ],
+        "emotion_rankings": [
+          {
+            "rank": 1,
+            "title": "新婚有瘾",
+            "primary_emotion": "浪漫幻想",
+            "anxiety": "身份逆袭",
+            "trigger": "身份逆袭",
+            "one_line": "《新婚有瘾》利用契约婚姻设定，让用户通过女主逆袭体验情感代偿与身份认同。"
+          },
+          {
+            "rank": 2,
+            "title": "京雪未央",
+            "primary_emotion": "浪漫幻想",
+            "anxiety": "身份逆袭",
+            "trigger": "身份逆袭",
+            "one_line": "《京雪未央》以古代背景触发浪漫幻想，满足用户对跨越阶层与容貌焦虑的逃避心理。"
+          },
+          {
+            "rank": 3,
+            "title": "剑归",
+            "primary_emotion": "身份逆袭",
+            "anxiety": "身份逆袭",
+            "trigger": "复仇打脸",
+            "one_line": "《剑归》通过复仇打脸情节，释放用户对现实不公的压抑，实现快节奏解压。"
+          }
+        ],
+        "trends": [
+          {
+            "name": "身份逆袭",
+            "change": 482,
+            "trend": "up"
+          },
+          {
+            "name": "浪漫幻想",
+            "change": 465,
+            "trend": "up"
+          },
+          {
+            "name": "情感代偿",
+            "change": 465,
+            "trend": "up"
+          },
+          {
+            "name": "复仇打脸",
+            "change": 388,
+            "trend": "up"
+          },
+          {
+            "name": "快节奏",
+            "change": 316,
+            "trend": "up"
+          },
+          {
+            "name": "解压放空",
+            "change": 316,
+            "trend": "up"
+          },
+          {
+            "name": "强女主",
+            "change": 212,
+            "trend": "up"
+          },
+          {
+            "name": "容貌年龄焦虑",
+            "change": 168,
+            "trend": "up"
+          }
+        ],
+        "actionable_insights": [
+          {
+            "icon": "💡",
+            "title": "强化逆袭爽点",
+            "content": "在短剧前3集密集植入身份逆袭桥段，如女主从底层翻身或打脸反派，利用快节奏剪辑和反转台词，触发用户情感代偿。建议在投流素材中突出“逆袭前后对比”画面，提升点击率。"
+          },
+          {
+            "icon": "📈",
+            "title": "聚焦容貌焦虑",
+            "content": "针对容貌年龄焦虑，在剧情中设计“变美/变年轻”关键转折点，如换装、化妆或整容桥段，并配合弹幕互动引导用户讨论。投流时可使用“逆龄蜕变”类标题，吸引25-40岁女性用户。"
+          },
+          {
+            "icon": "🎯",
+            "title": "复用复仇打脸",
+            "content": "将复仇打脸作为核心钩子，在每集结尾设置“打脸预告”，保持用户追剧黏性。投流时选取“当众揭穿”或“身份碾压”片段，搭配快节奏BGM，激发用户情绪共鸣，提升完播率。"
+          }
+        ],
+        "data_source": "当日榜单规则统计 + DeepSeek 提炼",
+        "update_frequency": "daily"
+      },
+      "industry": {
+        "user_scale": "7.18亿",
+        "market_size": "1000亿+",
+        "drama_count": "25万+",
+        "billion_dramas": 20,
+        "ai_ratio": 38,
+        "female_ratio": 60,
+        "male_ratio": 40,
+        "app_mau": "3.04亿",
+        "app_mau_yoy": "+1.4亿",
+        "market_spend": "",
+        "market_spend_yoy": "",
+        "data_source": "行业月报种子数据（config/industry_seed.json）",
+        "update_frequency": "monthly"
+      },
+      "rankings": [
+        {
+          "rank": 1,
+          "title": "新婚有瘾",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "12599",
+          "views_num": 12599,
+          "weekly_heat_index": 12599,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "暗恋成真",
+            "总裁"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 12599,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 1,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 18517,
+          "is_new": false,
+          "release_date": "2026-07-03",
+          "week_date": "2026-07-13",
+          "series_id": "1234567890123456789",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/d2f3bc195d345dbdfda21d4f4d70bb0a~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=GV%2FuAalIyiyZqLL2HPCOy%2FdIX3Q%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1234567890123456789"
+          }
+        },
+        {
+          "rank": 2,
+          "title": "京雪未央",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "11044",
+          "views_num": 11044,
+          "weekly_heat_index": 11044,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "日久生情",
+            "总裁"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 11044,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 2,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 14870,
+          "is_new": false,
+          "release_date": "2026-07-04",
+          "week_date": "2026-07-13",
+          "series_id": "9876543210987654321",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/ed0758de4231d44b9ac2f27a68708749~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=uz6VcZHqMwGWHMXz8jT96uoMS3Y%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "9876543210987654321"
+          }
+        },
+        {
+          "rank": 3,
+          "title": "剑归",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "10679",
+          "views_num": 10679,
+          "weekly_heat_index": 10679,
+          "platform": "红果",
+          "genre": "玄幻仙侠",
+          "tags": [
+            "玄幻仙侠",
+            "马甲",
+            "打脸虐渣",
+            "反转",
+            "大男主",
+            "侠客"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "male",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 10679,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 3,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 11778,
+          "is_new": false,
+          "release_date": "2026-07-05",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374651",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/2890e6dc4cdf44514c8f8e17d6d6b4c0~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=lIwZUoEPqPnPHKueSrFwBody%2FkY%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374651"
+          }
+        },
+        {
+          "rank": 4,
+          "title": "大婚前薄情王爷变了心，我改嫁死对头他哭了",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "10297",
+          "views_num": 10297,
+          "weekly_heat_index": 10297,
+          "platform": "红果",
+          "genre": "古风爱情",
+          "tags": [
+            "古风爱情",
+            "日久生情",
+            "打脸虐渣",
+            "女强",
+            "王爷"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 10297,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 4,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 11886,
+          "is_new": false,
+          "release_date": "2026-07-05",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374652",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/d3e05ac3e275944f8e21a012ebeb9430~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=m3SRV%2BB5TBfiiGNeBd%2FGLk1aakg%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374652"
+          }
+        },
+        {
+          "rank": 5,
+          "title": "我靠听物成团宠",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "9016",
+          "views_num": 9016,
+          "weekly_heat_index": 9016,
+          "platform": "红果",
+          "genre": "奇幻脑洞",
+          "tags": [
+            "奇幻脑洞",
+            "家庭伦理",
+            "穿书",
+            "异能",
+            "逆袭",
+            "大女主",
+            "总裁"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 9016,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 5,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 25006,
+          "is_new": false,
+          "release_date": "2026-06-27",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374653",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/ba5fed47f8c5c976b9f4cafe6c7896c7~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=tjBcavI%2BHOSuJG0%2FY0jqhDi9M6U%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374653"
+          }
+        },
+        {
+          "rank": 6,
+          "title": "这个乞丐神医太无敌了",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "8690",
+          "views_num": 8690,
+          "weekly_heat_index": 8690,
+          "platform": "红果",
+          "genre": "都市玄幻",
+          "tags": [
+            "都市玄幻",
+            "打脸虐渣",
+            "逆袭",
+            "大男主",
+            "神医"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "male",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 8690,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 6,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 13939,
+          "is_new": false,
+          "release_date": "2026-07-01",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374654",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/706018967bdcb9c8cc5e221e58f0f534~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=z4e4Ti1BcPG7%2B5yilm8MtvbS%2Bwo%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374654"
+          }
+        },
+        {
+          "rank": 7,
+          "title": "穿成破产太子爷的刁蛮前女友",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "8039",
+          "views_num": 8039,
+          "weekly_heat_index": 8039,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "穿书",
+            "日久生情",
+            "古灵精怪"
+          ],
+          "trend": "same",
+          "trend_tag": "新上架",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 8039,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 7,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 8039,
+          "is_new": false,
+          "release_date": "2026-07-06",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374655",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/5e7bc6f6c12aaa30d20bdfed40710dae~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=edu2A8gjnYweFE2aQu7EE4lZITg%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374655"
+          }
+        },
+        {
+          "rank": 8,
+          "title": "小福星心声泄漏，我成婆家团宠",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "7790",
+          "views_num": 7790,
+          "weekly_heat_index": 7790,
+          "platform": "红果",
+          "genre": "奇幻爱情",
+          "tags": [
+            "奇幻爱情",
+            "萌宝",
+            "日久生情",
+            "读心术",
+            "总裁",
+            "甜妹",
+            "福宝",
+            "豪门"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 7790,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 8,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 11313,
+          "is_new": false,
+          "release_date": "2026-07-03",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374656",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/02cd3a7a6de6f5e929868ae3a8103575~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=ELOb7rvQu93qBGddYOlozO4cCGU%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374656"
+          }
+        },
+        {
+          "rank": 9,
+          "title": "从雇佣关系开始",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "7602",
+          "views_num": 7602,
+          "weekly_heat_index": 7602,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "日久生情",
+            "总裁"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 7602,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 9,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 8597,
+          "is_new": false,
+          "release_date": "2026-07-05",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374657",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/7cc55c96c4260abd5973998df5392d17~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=dgU57uMRuAGJwDhhd%2BF4a%2BY4EoI%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374657"
+          }
+        },
+        {
+          "rank": 10,
+          "title": "勇敢后妈，专治不服",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "7234",
+          "views_num": 7234,
+          "weekly_heat_index": 7234,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "日久生情",
+            "带娃相亲",
+            "总裁",
+            "古灵精怪"
+          ],
+          "trend": "same",
+          "trend_tag": "新上架",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 7234,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 10,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 7234,
+          "is_new": false,
+          "release_date": "2026-07-07",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374658",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/e78e21fb67924f3dbb8ab861705adecb~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=Nt2apeLou57pjRWZ2ytyDZdRE4k%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374658"
+          }
+        },
+        {
+          "rank": 11,
+          "title": "旺夫的我，谁也不惯",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "7216",
+          "views_num": 7216,
+          "weekly_heat_index": 7216,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "日久生情",
+            "奇幻",
+            "女强"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 7216,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 11,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 10729,
+          "is_new": false,
+          "release_date": "2026-07-01",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374659",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/cdb2752c5119ea91a3f7b4f61499c6ea~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=d5N18qbYfR0kT0v7MfU3UXUaMEg%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374659"
+          }
+        },
+        {
+          "rank": 12,
+          "title": "与你盛夏岁岁安",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "7169",
+          "views_num": 7169,
+          "weekly_heat_index": 7169,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "闪婚",
+            "先婚后爱",
+            "总裁"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 7169,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 12,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 11224,
+          "is_new": false,
+          "release_date": "2026-07-01",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374660",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/8b594a37930a726fc6dfaf1dcfbbc24e~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=mAWm3O2wXtn9ap17HjnSMUj8qHc%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374660"
+          }
+        },
+        {
+          "rank": 13,
+          "title": "归来后我登临至高",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "7104",
+          "views_num": 7104,
+          "weekly_heat_index": 7104,
+          "platform": "红果",
+          "genre": "都市日常",
+          "tags": [
+            "都市日常",
+            "逆袭",
+            "打脸虐渣",
+            "大男主"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 7104,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 13,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 12426,
+          "is_new": false,
+          "release_date": "2026-06-30",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374661",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/0d6f8943ed6c2418b734dfde0cfc4667~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=YYe0lOAMAknRiC2y9lI6238fq5E%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374661"
+          }
+        },
+        {
+          "rank": 14,
+          "title": "省小钱惹大祸",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "7097",
+          "views_num": 7097,
+          "weekly_heat_index": 7097,
+          "platform": "红果",
+          "genre": "女性成长",
+          "tags": [
+            "女性成长",
+            "打脸虐渣",
+            "逆袭",
+            "大女主"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 7097,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 14,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 9569,
+          "is_new": false,
+          "release_date": "2026-07-03",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374661",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/ff68ab1e89d0c4a384a70f8e20feea09~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=uBjF9S1fJwJUkW6VIz3F8lY8Lk0%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374661"
+          }
+        },
+        {
+          "rank": 15,
+          "title": "大乾皇太子",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "7017",
+          "views_num": 7017,
+          "weekly_heat_index": 7017,
+          "platform": "红果",
+          "genre": "古风权谋",
+          "tags": [
+            "古风权谋",
+            "穿越",
+            "逆袭",
+            "权臣篡位",
+            "大男主",
+            "王爷"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 7017,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 15,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 10110,
+          "is_new": false,
+          "release_date": "2026-07-03",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374661",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/96ae66d059f94dc9c241cc541fadef13~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=fD5nt2HD%2BRktos81PwiRET46xmo%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374661"
+          }
+        },
+        {
+          "rank": 16,
+          "title": "重回七零断舍离，惊艳逆袭当首富",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "6969",
+          "views_num": 6969,
+          "weekly_heat_index": 6969,
+          "platform": "红果",
+          "genre": "女性成长",
+          "tags": [
+            "女性成长",
+            "打脸虐渣",
+            "奇幻",
+            "重生",
+            "大女主",
+            "婆媳"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 6969,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.92,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 16,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 9216,
+          "is_new": false,
+          "release_date": "2026-07-03",
+          "week_date": "2026-07-13",
+          "series_id": "1928374651928374661",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/ad00b551f396386fb8be5c3739c2f399~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=nd7e2boJhTuCXVwOBjGwdYYGuos%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": "1928374651928374661"
+          }
+        },
+        {
+          "rank": 17,
+          "title": "冤家路不窄",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "6838",
+          "views_num": 6838,
+          "weekly_heat_index": 6838,
+          "platform": "红果",
+          "genre": "都市爱情",
+          "tags": [
+            "都市爱情",
+            "萌宝",
+            "日久生情",
+            "穿越",
+            "欢喜冤家",
+            "甜妹"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 6838,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.84,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 17,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 10321,
+          "is_new": false,
+          "release_date": "2026-07-03",
+          "week_date": "2026-07-13",
+          "series_id": "",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/f72d9e03529c087b4ac884892305bf2b~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=S7IlIyVU1dqUuwM%2Faqn%2Bqh0N2Oo%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 18,
+          "title": "车里到底有什么",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "6271",
+          "views_num": 6271,
+          "weekly_heat_index": 6271,
+          "platform": "红果",
+          "genre": "都市日常",
+          "tags": [
+            "都市日常",
+            "打脸虐渣",
+            "大男主",
+            "总裁"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 6271,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.84,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 18,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 6530,
+          "is_new": false,
+          "release_date": "2026-07-05",
+          "week_date": "2026-07-13",
+          "series_id": "",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/7a3dbd73fa75bec9b985947f9ecf873b~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=nDGRYsYkSV2EM8E7lfqaczJwcHE%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 19,
+          "title": "少年枭雄",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "5981",
+          "views_num": 5981,
+          "weekly_heat_index": 5981,
+          "platform": "红果",
+          "genre": "都市日常",
+          "tags": [
+            "都市日常",
+            "打脸虐渣",
+            "黑道",
+            "反转",
+            "大男主"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 5981,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.84,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 19,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 6934,
+          "is_new": false,
+          "release_date": "2026-07-04",
+          "week_date": "2026-07-13",
+          "series_id": "",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/83e8b5eed8fd8c6212f651f2587c9db8~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=Z6n5Iqvo5rSxzQsyeHxNW%2BbVY%2Bo%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        },
+        {
+          "rank": 20,
+          "title": "韦大人奉旨娶亲",
+          "female_lead": "",
+          "male_lead": "",
+          "views": "5730",
+          "views_num": 5730,
+          "weekly_heat_index": 5730,
+          "platform": "红果",
+          "genre": "奇幻脑洞",
+          "tags": [
+            "奇幻脑洞",
+            "穿越",
+            "喜剧",
+            "大男主"
+          ],
+          "trend": "same",
+          "trend_tag": "",
+          "trend_type": "same",
+          "category": "female",
+          "is_ai": false,
+          "desc": "",
+          "change": "same",
+          "heat": 5730,
+          "production_house": "",
+          "core_trope": [],
+          "episodes_count": 0,
+          "confidence_score": 0.84,
+          "data_source": "duanjugongcheng",
+          "rank_change": 0,
+          "previous_rank": 20,
+          "cross_validated": false,
+          "dataeye_rank": 0,
+          "dataeye_heat": 0,
+          "total_index": 8843,
+          "is_new": false,
+          "release_date": "2026-07-03",
+          "week_date": "2026-07-13",
+          "series_id": "",
+          "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/c2e278c2c2c001c1c2429eb534601e18~tplv-noop.image?lk3s=3529a043&x-expires=1783921203&x-signature=tz8UU2cQRTx8Orf9wB3gG1rKD58%3D",
+          "supply_chain": {
+            "has_ip_source": false,
+            "source_title": "",
+            "source_author": "",
+            "source_platform": "",
+            "match_confidence": 0.0,
+            "series_id": ""
+          }
+        }
+      ],
+      "rankings_count": 20,
+      "actors": {
+        "female": [],
+        "male": [],
+        "data_source": "榜单主演统计（仅统计榜单内演员，不推理补全）",
+        "update_frequency": "weekly"
+      },
+      "platform": {
+        "apps": [
+          {
+            "name": "红果免费短剧",
+            "mau": 3.04,
+            "mau_unit": "亿",
+            "yoy": "+1.4亿",
+            "share": 85,
+            "trend": "up"
+          },
+          {
+            "name": "抖音",
+            "mau": 8.0,
+            "mau_unit": "亿",
+            "yoy": "",
+            "share": 0,
+            "trend": "same"
+          }
+        ],
+        "mini_programs": [],
+        "data_source": "行业月报种子数据（config/industry_seed.json）",
+        "update_frequency": "monthly"
+      },
+      "audience_profile": {
+        "gender": {
+          "female": 70.0,
+          "male": 30.0
+        },
+        "age": {
+          "18-24": 16.0,
+          "25-34": 42.0,
+          "35-44": 30.0,
+          "45+": 12.0
+        },
+        "regions": [
+          {
+            "name": "广东",
+            "value": 30
+          },
+          {
+            "name": "江苏",
+            "value": 23
+          },
+          {
+            "name": "浙江",
+            "value": 19
+          },
+          {
+            "name": "山东",
+            "value": 15
+          },
+          {
+            "name": "河南",
+            "value": 13
+          }
+        ],
+        "traits": [
+          "偏好强反转高密度剧情",
+          "关注女性逆袭与情绪补偿",
+          "习惯通勤睡前碎片化追更",
+          "对复仇打脸和身份揭晓爽点敏感"
+        ],
+        "content_preferences": [
+          {
+            "name": "都市爱情",
+            "value": 32
+          },
+          {
+            "name": "穿越重生",
+            "value": 24
+          },
+          {
+            "name": "复仇逆袭",
+            "value": 18
+          },
+          {
+            "name": "古装宫斗",
+            "value": 14
+          },
+          {
+            "name": "甜宠萌宝",
+            "value": 12
+          }
+        ],
+        "viewing_time": [
+          {
+            "name": "睡前 22-24点",
+            "value": 35
+          },
+          {
+            "name": "晚间 20-22点",
+            "value": 28
+          },
+          {
+            "name": "通勤/午休",
+            "value": 22
+          },
+          {
+            "name": "周末白天",
+            "value": 15
+          }
+        ],
+        "spending_power": {
+          "paid_ratio": 35,
+          "arpu": "¥18",
+          "willingness": "中高"
+        },
+        "user_segments": [
+          {
+            "name": "核心追更党",
+            "share": 28,
+            "desc": "日更必追、愿意为爆款付费解锁"
+          },
+          {
+            "name": "碎片路人",
+            "share": 45,
+            "desc": "通勤/睡前刷剧，免费内容为主"
+          },
+          {
+            "name": "高消费用户",
+            "share": 18,
+            "desc": "对优质内容付费意愿强，关注主演"
+          },
+          {
+            "name": "尝鲜猎奇党",
+            "share": 9,
+            "desc": "热衷新题材和黑马剧，易流失"
+          }
+        ],
+        "data_source": "2026年7月国内短剧行业观众画像/用户研究报告",
+        "update_frequency": "monthly",
+        "weekly_signals": {
+          "female_ratio": 84,
+          "male_ratio": 16,
+          "ai_ratio": 0,
+          "new_drama_ratio": 0,
+          "top_genres": [
+            {
+              "name": "都市爱情",
+              "share": 47
+            },
+            {
+              "name": "玄幻仙侠",
+              "share": 9
+            },
+            {
+              "name": "古风爱情",
+              "share": 8
+            },
+            {
+              "name": "奇幻脑洞",
+              "share": 8
+            },
+            {
+              "name": "都市玄幻",
+              "share": 7
+            }
+          ],
+          "top_tags": [
+            {
+              "name": "总裁",
+              "share": 49
+            },
+            {
+              "name": "日久生情",
+              "share": 48
+            },
+            {
+              "name": "都市爱情",
+              "share": 47
+            },
+            {
+              "name": "打脸虐渣",
+              "share": 36
+            },
+            {
+              "name": "大男主",
+              "share": 25
+            }
+          ],
+          "ranking_count": 20,
+          "basis": "TOP20排名加权"
+        },
+        "weekly_trends": {
+          "compared_to": "2026-07-21",
+          "female_ratio_delta": 0,
+          "female_ratio_trend": "same",
+          "ai_ratio_delta": 0,
+          "ai_ratio_trend": "same",
+          "new_drama_ratio_delta": 0,
+          "new_drama_ratio_trend": "same",
+          "genre_shift": ""
+        },
+        "analyst_insights": [
+          "本周爆款女频浓度 84%，高于行业基准 70% （差 14pp），内容策略极致女频",
+          "题材领跑：都市爱情（权重 47%）",
+          "新剧占比仅 0%，老剧续航力强"
+        ]
+      },
+      "play_trend": {
+        "daily": [
+          {
+            "date": "2026-07-20",
+            "total_views": 160382
+          },
+          {
+            "date": "2026-07-13",
+            "total_views": 160382
+          },
+          {
+            "date": "2026-07-06",
+            "total_views": 176472
+          },
+          {
+            "date": "2026-06-29",
+            "total_views": 165608
+          },
+          {
+            "date": "2026-06-22",
+            "total_views": 165608
+          },
+          {
+            "date": "2026-06-15",
+            "total_views": 180597
+          }
+        ],
+        "weekly": [
+          {
+            "week": "2026-W29",
+            "start_date": "2026-07-20",
+            "end_date": "2026-07-26",
+            "top1_title": "新婚有瘾",
+            "top1_views": "12599",
+            "total_views": 160382
+          },
+          {
+            "week": "2026-W28",
+            "start_date": "2026-07-13",
+            "end_date": "2026-07-19",
+            "top1_title": "新婚有瘾",
+            "top1_views": "12599",
+            "total_views": 160382
+          },
+          {
+            "week": "2026-W27",
+            "start_date": "2026-07-06",
+            "end_date": "2026-07-12",
+            "top1_title": "朝思暮时",
+            "top1_views": "15535",
+            "total_views": 176472
+          },
+          {
+            "week": "2026-W26",
+            "start_date": "2026-06-29",
+            "end_date": "2026-07-05",
+            "top1_title": "盛夏来信",
+            "top1_views": "12142",
+            "total_views": 165608
+          },
+          {
+            "week": "2026-W25",
+            "start_date": "2026-06-22",
+            "end_date": "2026-06-28",
+            "top1_title": "盛夏来信",
+            "top1_views": "12142",
+            "total_views": 165608
+          },
+          {
+            "week": "2026-W24",
+            "start_date": "2026-06-15",
+            "end_date": "2026-06-21",
+            "top1_title": "少夫人来自东北2",
+            "top1_views": "16067",
+            "total_views": 180597
+          }
+        ],
+        "trend_direction": "stable",
+        "data_source": "周榜历史归档统计",
+        "update_frequency": "weekly"
+      },
+      "daily_news": [
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "短剧市场规模突破500亿",
+          "content": "【事件核心】：2026年7月22日，最新市场研究报告显示，国内短剧市场规模突破500亿元，同比增长30%，用户规模达2亿，短剧成为视频内容消费新趋势。\n【数据支撑】：市场规模500亿元，同比增长30%，用户规模2亿，月均观看时长同比增长20%，用户活跃度持续攀升。\n【商业洞察】：短剧市场高速增长，吸引更多资本和创作者涌入，竞争加剧，但头部平台和优质内容方将受益于用户时长增长和付费转化提升。\n【决策价值】：建议制作方加大精品短剧投入，平台方优化推荐算法提升用户留存，投资方可关注头部制作公司及数据服务商。",
+          "insight": "短剧市场高速增长，吸引更多资本和创作者涌入，竞争加剧，但头部平台和优质内容方将受益于用户时长增长和付费转化提升。",
+          "source_url": "https://www.news.cn/20260722/short-drama-market-growth",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-22)",
+          "update_frequency": "daily"
+        },
+        {
+          "type": "商业",
+          "icon": "💰",
+          "title": "短剧获政策扶持利好",
+          "content": "【事件核心】：2026年7月22日，国家广电总局发布通知，将对优秀短剧作品给予资金扶持和政策倾斜，旨在鼓励短剧行业健康发展。\n【数据支撑】：具体扶持金额未披露，但政策涵盖资金支持、税收优惠等措施，预计将激发创作者热情，推动行业繁荣。\n【商业洞察】：政策利好将降低短剧制作成本，吸引更多传统影视公司和创作者入局，内容供给增加，但合规要求可能提升，利好有精品制作能力的团队。\n【决策价值】：建议制作方积极申报扶持项目，优先开发正能量、创新题材；平台方加强与监管沟通，确保内容合规。",
+          "insight": "政策利好将降低短剧制作成本，吸引更多传统影视公司和创作者入局，内容供给增加，但合规要求可能提升，利好有精品制作能力的团队。",
+          "source_url": "https://www.nrta.gov.cn/20260722/short-drama-policy-support",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-22)",
+          "update_frequency": "daily"
+        },
+        {
+          "type": "数据",
+          "icon": "📊",
+          "title": "DataEye短剧热度榜发布",
+          "content": "【事件核心】：2026年7月22日，DataEye发布最新短剧热度榜，《时空旅人》以95.6热度指数居首，《都市奇缘》《异世界冒险》紧随其后，榜单覆盖多平台数据。\n【数据支撑】：榜首《时空旅人》热度指数95.6，科幻、悬疑题材受欢迎，7月市场呈现多元化特点，传统爱情、喜剧题材仍占主流。\n【商业洞察】：科幻、悬疑等创新题材崛起，表明用户对内容差异化需求增强，制作方需避免同质化竞争，平台可加大此类题材推荐权重。\n【决策价值】：建议制作方关注《时空旅人》成功模式，尝试科幻、悬疑等蓝海题材；投流团队可参考热度榜优化投放策略。",
+          "insight": "科幻、悬疑等创新题材崛起，表明用户对内容差异化需求增强，制作方需避免同质化竞争，平台可加大此类题材推荐权重。",
+          "source_url": "https://www.dataeye.com/short-drama-heat-index",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-22)",
+          "update_frequency": "daily"
+        }
+      ],
+      "insights": [
+        {
+          "icon": "📊",
+          "title": "都市爱情题材霸榜，女性向“总裁+日久生情”爽点公式验证",
+          "content": "本周榜单TOP10中，都市爱情题材占据6席，其中《新婚有瘾》《京雪未央》等剧集均以“总裁+日久生情”为核心爽点，精准锁定25-35岁女性用户。爆款归因：受众定位为渴望情感代偿的都市女性，爽点公式为“高冷总裁逐渐沦陷+日常甜蜜互动”，投流预估CPA低于15元。买量建议：优先投放红果平台，主推“暗恋成真”和“先婚后爱”标签，可有效降低获客成本。",
+          "source": "红果短剧榜单（2026-07-20）",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼",
+          "update_frequency": "weekly"
+        },
+        {
+          "icon": "💰",
+          "title": "新上架剧集快速冲榜，奇幻脑洞题材成买量黑马",
+          "content": "本周新上架剧集《穿成破产太子爷的刁蛮前女友》和《勇敢后妈，专治不服》分别位列第7和第10，显示新剧通过精准投流可快速起量。爆款归因：受众定位为喜欢“穿书”和“带娃相亲”设定的女性用户，爽点公式为“身份反转+打脸虐渣”，投流预估CPA约12元。买量建议：奇幻脑洞和女性成长题材CPA优势明显，建议在红果平台加大投放，重点测试“穿书”和“重生”标签组合。",
+          "source": "红果短剧榜单（2026-07-20）",
+          "data_source": "Kimi 搜索 + DeepSeek 提炼",
+          "update_frequency": "weekly"
+        }
+      ],
+      "quality_score": 76.0,
+      "statistics": {
+        "total": 20,
+        "avg_confidence": 0.9,
+        "source_distribution": {
+          "duanjugongcheng": 20
+        },
+        "with_actors": 0,
+        "with_studio": 0
+      },
+      "trends": {
+        "rank_changes": {
+          "new": 0,
+          "up": 0,
+          "down": 0,
+          "stable": 20
+        },
+        "hot_tags": [
+          {
+            "tag": "都市爱情",
+            "count": 8
+          },
+          {
+            "tag": "总裁",
+            "count": 8
+          },
+          {
+            "tag": "日久生情",
+            "count": 8
+          },
+          {
+            "tag": "打脸虐渣",
+            "count": 8
+          },
+          {
+            "tag": "大男主",
+            "count": 7
+          },
+          {
+            "tag": "逆袭",
+            "count": 5
+          },
+          {
+            "tag": "大女主",
+            "count": 3
+          },
+          {
+            "tag": "都市日常",
+            "count": 3
+          },
+          {
+            "tag": "穿越",
+            "count": 3
+          },
+          {
+            "tag": "反转",
+            "count": 2
+          }
+        ],
+        "trend_direction": "stable"
+      },
+      "anomalies": [
+        {
+          "type": "missing_actors",
+          "severity": "warning",
+          "count": 20,
+          "message": "20部剧缺少演员信息，占比100%",
+          "items": [
+            "新婚有瘾",
+            "京雪未央",
+            "剑归",
+            "大婚前薄情王爷变了心，我改嫁死对头他哭了",
+            "我靠听物成团宠"
+          ]
+        }
+      ],
+      "alerts": [
+        {
+          "severity": "warning",
+          "category": "quality",
+          "title": "质量门禁未通过：female_actors",
+          "message": "质量检查项 [female_actors] 未通过，详见 quality_report。",
+          "metric": "female_actors",
+          "value": {
+            "name": "female_actors",
+            "passed": false,
+            "valid": 0,
+            "required": 10
+          },
+          "threshold": null,
+          "suggestion": null
+        },
+        {
+          "severity": "warning",
+          "category": "quality",
+          "title": "质量门禁未通过：male_actors",
+          "message": "质量检查项 [male_actors] 未通过，详见 quality_report。",
+          "metric": "male_actors",
+          "value": {
+            "name": "male_actors",
+            "passed": false,
+            "valid": 0,
+            "required": 10
+          },
+          "threshold": null,
+          "suggestion": null
+        },
+        {
+          "severity": "warning",
+          "category": "quality",
+          "title": "质量分偏低",
+          "message": "当前质量分 76.0，低于 80 分建议关注。",
+          "metric": "quality_score",
+          "value": 76.0,
+          "threshold": 80,
+          "suggestion": "关注 quality_report 中的 warning 项。"
+        },
+        {
+          "severity": "warning",
+          "category": "actor",
+          "title": "演员信息大面积缺失",
+          "message": "20/20 部剧缺少主演信息。",
+          "metric": "missing_actor_ratio",
+          "value": 100.0,
+          "threshold": 30,
+          "suggestion": "检查 enrich_node 演员解析逻辑或启用缓存兜底。"
+        },
+        {
+          "severity": "warning",
+          "category": "actor",
+          "title": "女频演员榜不足 10 人",
+          "message": "当前女频演员榜仅 0 人。",
+          "metric": "female_actor_count",
+          "value": 0,
+          "threshold": 10,
+          "suggestion": null
+        },
+        {
+          "severity": "warning",
+          "category": "actor",
+          "title": "男频演员榜不足 10 人",
+          "message": "当前男频演员榜仅 0 人。",
+          "metric": "male_actor_count",
+          "value": 0,
+          "threshold": 10,
+          "suggestion": null
+        },
+        {
+          "severity": "warning",
+          "category": "news",
+          "title": "每日快讯数量异常",
+          "message": "当前快讯 3 条，要求 6 条。",
+          "metric": "daily_news_count",
+          "value": 3,
+          "threshold": 6,
+          "suggestion": null
+        }
+      ],
+      "alert_count": 7,
+      "quality_report": {
+        "checks": [
+          {
+            "name": "rankings_count",
+            "passed": true,
+            "value": 20,
+            "required": 20
+          },
+          {
+            "name": "ranking_field_integrity",
+            "passed": true,
+            "valid": 20,
+            "invalid_samples": []
+          },
+          {
+            "name": "ranking_hallucination",
+            "passed": true,
+            "actor_hits": 0,
+            "studio_hits": 0,
+            "max_actor_hits": 2,
+            "max_studio_hits": 3,
+            "samples": []
+          },
+          {
+            "name": "female_actors",
+            "passed": false,
+            "valid": 0,
+            "required": 10
+          },
+          {
+            "name": "male_actors",
+            "passed": false,
+            "valid": 0,
+            "required": 10
+          },
+          {
+            "name": "daily_news_count",
+            "passed": true,
+            "value": 3,
+            "max": 6
+          },
+          {
+            "name": "daily_news_url",
+            "passed": true,
+            "value": 3,
+            "total": 3
+          },
+          {
+            "name": "daily_news_url_trust",
+            "passed": true,
+            "trusted": 3,
+            "total": 3
+          },
+          {
+            "name": "daily_news_insight",
+            "passed": true,
+            "with_insight": 3,
+            "total": 3
+          },
+          {
+            "name": "industry_data",
+            "passed": true,
+            "app_mau": "3.04亿",
+            "drama_count": "25万+"
+          },
+          {
+            "name": "ai_ratio",
+            "passed": true,
+            "value": 38
+          },
+          {
+            "name": "industry_source",
+            "passed": true,
+            "source": "行业月报种子数据（config/industry_seed.json）"
+          },
+          {
+            "name": "audience_profile_source",
+            "passed": true,
+            "source": "2026年7月国内短剧行业观众画像/用户研究报告"
+          },
+          {
+            "name": "api_errors",
+            "passed": true,
+            "matched_patterns": 0
+          },
+          {
+            "name": "ai_drama_dashboard",
+            "passed": true,
+            "has_data": true
+          }
+        ],
+        "score": 76,
+        "passed": true,
+        "publish_mode": "degraded"
+      },
+      "weekly_base": {
+        "available": true,
+        "week_date": "2026-07-13",
+        "top1_title": "新婚有瘾",
+        "top1_genre": "都市爱情",
+        "top1_index": 12599,
+        "total_count": 20,
+        "data_source": "duanjugongcheng",
+        "description": "基于红果短剧官方周榜数据，每周一更新"
+      },
+      "ai_drama_dashboard": {
+        "report_month": "2026-06",
+        "kpis": [],
+        "rankings": {
+          "ai_drama": [
+            {
+              "rank": 3,
+              "title": "One Move God Mode",
+              "platform": "抖音",
+              "category": "AI仿真人剧",
+              "heat": "",
+              "is_new": false,
+              "plot": "",
+              "tags": [],
+              "studio": "",
+              "url": "",
+              "episodes": "",
+              "release_date": ""
+            },
+            {
+              "rank": 3,
+              "title": "五階獸醫：獸夫們排隊求愛",
+              "platform": "抖音",
+              "category": "AI仿真人剧",
+              "heat": "100万",
+              "is_new": false,
+              "plot": "",
+              "tags": [],
+              "studio": "位列第四位",
+              "url": "",
+              "episodes": "",
+              "release_date": ""
+            }
+          ],
+          "ai_comic": []
+        },
+        "trends": [
+          {
+            "title": "趋势洞察1",
+            "summary": "前2个月仅有漫剧上榜，第三个月AI仿真人剧大量涌现，多部作品位列榜单前列，潜力惊人。",
+            "source": "澎湃新闻 / DataEye",
+            "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
+          }
+        ],
+        "news": [
+          {
+            "title": "短剧头部玩家，集体押注“AI短剧出海”",
+            "source": "澎湃新闻",
+            "date": "2026-06-01",
+            "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
+            "summary": ""
+          },
+          {
+            "title": "2026Q1报告：海外AI剧/漫剧数量增长700%！NetShort领跑，占比50%！",
+            "source": "澎湃新闻",
+            "date": "2026-06-01",
+            "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
+            "summary": ""
+          },
+          {
+            "title": "3000块换50万美金：AI漫剧这场\"印钞机\"游戏，谁在买单？",
+            "source": "澎湃新闻",
+            "date": "2026-06-01",
+            "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
+            "summary": ""
+          }
+        ],
+        "data_source": "澎湃新闻 DataEye 月报直爬（https://m.thepaper.cn/newsDetail_forward_33172823, https://m.thepaper.cn/newsDetail_forward_33102397, https://m.thepaper）",
         "update_frequency": "monthly"
       },
       "error_message": "【质量门禁告警】\n- 女频演员有效数量不足：0/10\n- 男频演员有效数量不足：0/10\n【发布模式】降级发布：榜单已更新，部分次要模块数据不完整\n"
