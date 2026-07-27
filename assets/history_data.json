@@ -1,6 +1,10 @@
 {
   "daily_play_trend": [
     {
+      "date": "2026-07-27",
+      "total_views": 156518
+    },
+    {
       "date": "2026-07-20",
       "total_views": 160382
     },
@@ -26,6 +30,14 @@
     }
   ],
   "weekly_rankings": [
+    {
+      "week": "2026-W30",
+      "start_date": "2026-07-27",
+      "end_date": "2026-08-02",
+      "top1_title": "勇敢后妈，专治不服",
+      "top1_views": "12096",
+      "total_views": 156518
+    },
     {
       "week": "2026-W29",
       "start_date": "2026-07-20",
@@ -75,5 +87,5 @@
       "total_views": 180597
     }
   ],
-  "last_updated": "2026-07-24 04:20:13"
+  "last_updated": "2026-07-27 04:41:30"
 }
