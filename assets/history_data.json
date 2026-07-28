@@ -2,7 +2,7 @@
   "daily_play_trend": [
     {
       "date": "2026-07-27",
-      "total_views": 156518
+      "total_views": 190542
     },
     {
       "date": "2026-07-20",
@@ -34,9 +34,9 @@
       "week": "2026-W30",
       "start_date": "2026-07-27",
       "end_date": "2026-08-02",
-      "top1_title": "勇敢后妈，专治不服",
-      "top1_views": "12096",
-      "total_views": 156518
+      "top1_title": "虎妈驾到，全家反骨仔乖乖立正",
+      "top1_views": "16227",
+      "total_views": 190542
     },
     {
       "week": "2026-W29",
@@ -87,5 +87,5 @@
       "total_views": 180597
     }
   ],
-  "last_updated": "2026-07-27 04:41:30"
+  "last_updated": "2026-07-28 04:15:21"
 }

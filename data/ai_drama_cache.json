@@ -25,7 +25,7 @@
         "unit": "%",
         "trend": "up",
         "period": "环比",
-        "note": "1月份占比2%"
+        "note": "2026年1月占比2%"
       },
       {
         "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（3月）",
@@ -33,7 +33,7 @@
         "unit": "%",
         "trend": "up",
         "period": "环比",
-        "note": "3月份占比16%，增长率达700%"
+        "note": "2026年3月占比16%，增长率达700%"
       },
       {
         "label": "用户愿意为AI参与制作的短剧付费比例",
@@ -56,38 +56,20 @@
       "ai_drama": [
         {
           "rank": 1,
-          "title": "波斯复仇记",
-          "platform": "YourChannel",
-          "category": "AI仿真人剧",
-          "heat": "50万美元GMV（72小时）",
-          "is_new": true,
-          "plot": "一位中国AI创作者制作的短剧，以波斯异域风格为背景，包含强烈戏剧冲突和高密度反转。",
-          "tags": [
-            "复仇",
-            "异域",
-            "逆袭"
-          ],
-          "studio": "个人创作者",
-          "url": "https://www.google.com/search?q=波斯复仇记+AI短剧+YourChannel",
-          "episodes": "",
-          "release_date": "2026-05"
-        },
-        {
-          "rank": 2,
           "title": "One Move God Mode",
           "platform": "NetShort",
           "category": "AI仿真人剧",
-          "heat": "202.6万热值",
+          "heat": "202.6万",
           "is_new": true,
-          "plot": "以希腊神话为背景，主角设定为海神波塞冬之子，通过打脸+逆袭套路展开故事。",
+          "plot": "主角作为海神波塞冬之子，在希腊神话背景下打脸逆袭，场景精致，特效水平高。",
           "tags": [
-            "希腊神话",
+            "西幻",
             "逆袭",
             "打脸",
-            "西幻"
+            "希腊神话"
           ],
           "studio": "",
-          "url": "https://www.google.com/search?q=One+Move+God+Mode+AI短剧+NetShort",
+          "url": "https://www.bing.com/search?q=One+Move+God+Mode+NetShort",
           "episodes": "",
           "release_date": "2026-03"
         }
@@ -97,18 +79,18 @@
           "rank": 1,
           "title": "說好的乙遊戀愛呢？執事怎麼全員黑化了！",
           "platform": "NetShort",
-          "category": "2D AI漫剧",
-          "heat": "1551.6万热值",
-          "is_new": false,
-          "plot": "女主穿越乙女游戏世界，与执事们展开恋爱故事，但执事们全员黑化。",
+          "category": "2D/3D AI漫剧",
+          "heat": "1551.6万",
+          "is_new": true,
+          "plot": "女主穿越乙女游戏世界，与执事们展开恋爱故事，情感标签为核心。",
           "tags": [
             "乙游",
-            "恋爱",
-            "黑化",
-            "穿越"
+            "情感",
+            "穿越",
+            "恋爱"
           ],
           "studio": "",
-          "url": "https://www.google.com/search?q=說好的乙遊戀愛呢？執事怎麼全員黑化了！+NetShort",
+          "url": "https://www.bing.com/search?q=說好的乙遊戀愛呢？執事怎麼全員黑化了！+NetShort",
           "episodes": "",
           "release_date": "2026-02"
         },
@@ -116,36 +98,54 @@
           "rank": 2,
           "title": "五階獸醫：獸夫們排隊求愛",
           "platform": "NetShort",
-          "category": "2D AI漫剧",
-          "heat": "440万次（单素材最高曝光量）",
-          "is_new": false,
-          "plot": "女兽医与兽夫们之间的情感故事，兽夫们排队求爱。",
+          "category": "2D/3D AI漫剧",
+          "heat": "440万",
+          "is_new": true,
+          "plot": "女兽医与兽夫们的情感故事，单条素材曝光量达440万次。",
           "tags": [
             "情感",
             "兽人",
             "恋爱"
           ],
           "studio": "",
-          "url": "https://www.google.com/search?q=五階獸醫：獸夫們排隊求愛+NetShort",
+          "url": "https://www.bing.com/search?q=五階獸醫：獸夫們排隊求愛+NetShort",
           "episodes": "",
-          "release_date": ""
+          "release_date": "2026-01"
         },
         {
           "rank": 3,
+          "title": "波斯复仇记",
+          "platform": "YourChannel",
+          "category": "AI仿真人剧",
+          "heat": "50万美元",
+          "is_new": true,
+          "plot": "波斯异域风格复仇故事，成本仅3000元，上线72小时GMV达50万美元。",
+          "tags": [
+            "复仇",
+            "异域",
+            "逆袭"
+          ],
+          "studio": "",
+          "url": "https://www.bing.com/search?q=波斯复仇记+YourChannel",
+          "episodes": "",
+          "release_date": "2026-05"
+        },
+        {
+          "rank": 4,
           "title": "掠夺词条！我转职为亡灵天灾",
           "platform": "DramaWave",
           "category": "3D AI漫剧",
-          "heat": "累计播放已破百万次",
+          "heat": "100万次",
           "is_new": true,
-          "plot": "主角通过掠夺词条转职为亡灵天灾，展开奇幻冒险。",
+          "plot": "主角通过掠夺词条转职为亡灵天灾，累计播放已破百万次。",
           "tags": [
-            "奇幻",
+            "玄幻",
             "亡灵",
             "系统",
             "逆袭"
           ],
           "studio": "昆仑万维",
-          "url": "https://www.google.com/search?q=掠夺词条！我转职为亡灵天灾+DramaWave",
+          "url": "https://www.bing.com/search?q=掠夺词条！我转职为亡灵天灾+DramaWave",
           "episodes": "",
           "release_date": "2026-02"
         }
@@ -153,76 +153,82 @@
     },
     "trends": [
       {
-        "title": "AI短剧出海爆发式增长",
-        "summary": "2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从1月的2%飙升至3月的16%，增长率达700%。头部公司如昆仑万维、山海星辰、中文在线等集体押注AI短剧出海，AI技术将制作周期从25-40天压缩至7-10天，成本降低70%-80%。",
+        "title": "AI出海短剧爆发式增长",
+        "summary": "2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从1月2%飙升至3月16%，增长率达700%。头部公司如昆仑万维、山海星辰、中文在线集体押注AI短剧出海，AI技术将制作周期从25-40天压缩至7-10天，成本降低70%-80%。",
         "source": "澎湃新闻",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
       },
       {
         "title": "AI漫剧爆款率低，同质化严重",
-        "summary": "当前AI漫剧爆款率仅为0.16%，绝大多数作品淹没在海量内容池中。题材高度集中于霸总、赘婿、重生逆袭等传统爽剧，套路雷同，海外用户审美疲劳。行业面临精品化与规模化的矛盾，头部公司需通过深度本土化提升用户粘性。",
+        "summary": "当前AI漫剧爆款率仅为0.16%，绝大多数作品淹没在内容池中。题材高度集中于霸总、赘婿、重生逆袭等传统爽剧，套路雷同，海外用户审美疲劳。山海星辰提出数据驱动+本土共创+情绪通感策略，以深度本土化提升用户粘性。",
+        "source": "澎湃新闻",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
+      },
+      {
+        "title": "AI仿真人剧加速爆发",
+        "summary": "2026年4月AI剧/漫剧端原生热播榜百强中，AI仿真人剧占90席，播放增量超271亿次，超过往年所有AI剧及漫剧播放量总和。用户更青睐接近真人短剧观感的仿真人剧，而非传统漫剧形式。",
         "source": "澎湃新闻",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
       },
       {
-        "title": "AI仿真人剧成主流，用户偏好内容本质",
-        "summary": "2026年4月AI剧/漫剧端原生热播榜百强中，AI仿真人剧占90席，播放增量超271亿次。用户更看重内容体验而非技术标签，AI仿真人剧因接近真人短剧观感而更受欢迎。技术迭代如Seedance 2.0大幅提升画质和一致性。",
+        "title": "头部平台构建差异化壁垒",
+        "summary": "昆仑万维以自研SkyAnime工具和千万美金扶持打造平台化优势；中文在线依托IP储备和FlareFlow全球发行体系实现复利；山海星辰通过NOVA AI全链路赋能和Stardust TV打通内容、市场、投流与本土化。市场正向头部集中，未来TOP5公司或占9成以上份额。",
         "source": "澎湃新闻",
-        "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
       },
       {
-        "title": "头部公司差异化竞争，市场向集中化演进",
-        "summary": "昆仑万维以自研工具SkyAnime和千万美金扶持构建平台壁垒；中文在线依托IP储备和全球发行体系实现复利；山海星辰通过NOVA AI全链路赋能和深度本土化策略抢占市场。预计未来TOP5短剧公司可能占据90%以上市场份额。",
+        "title": "AI漫剧出海面临文化适配挑战",
+        "summary": "欧美用户对中式爽文叙事接受度有限，AI漫剧出海需解决文化折扣问题。山海星辰采用内核保留、外壳置换的本土化重构策略，引入欧美本土编剧共创，优化人设台词与叙事表达，以降低文化折扣。",
         "source": "澎湃新闻",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
       }
     ],
     "news": [
       {
-        "title": "AI短剧《波斯复仇记》成本3000元，72小时GMV达50万美元",
+        "title": "AI短剧《波斯复仇记》成本3000元换50万美元GMV",
         "source": "澎湃新闻",
-        "date": "2026-05-31",
+        "date": "2026-05-30",
         "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": "中国AI创作者制作的短剧《波斯复仇记》在海外平台YourChannel上线，制作成本仅3000元人民币，72小时内用户付费总额达50万美元，回报率接近1200倍。该剧以波斯异域风格和高密度反转吸引用户，引发行业对AI短剧出海潜力的广泛讨论。"
+        "summary": "中国AI创作者制作的短剧《波斯复仇记》成本仅3000元，在海外平台YourChannel上线72小时内实现用户付费总额50万美元，回报率接近1200倍。该剧以强烈戏剧冲突、高密度反转和波斯异域风格吸引海外用户，引发行业对AI短剧出海暴富幻想的讨论。"
       },
       {
-        "title": "DataEye发布2026年Q1海外AI剧/漫剧报告：数量增长700%",
+        "title": "DataEye发布2026年Q1海外AI剧/漫剧数据报告",
         "source": "澎湃新闻",
         "date": "2026-04-15",
         "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
-        "summary": "DataEye研究院发布的报告显示，2026年Q1海外短剧素材榜TOP100中AI剧/漫剧占比从1月的2%增长至3月的16%，增长率达700%。NetShort平台以50%的上榜作品占比领跑，AI仿真人剧加速爆发，用户接受度持续提升。"
+        "summary": "报告显示海外AI剧/漫剧市场规模2026年预计达6.5亿美元，Q1素材榜TOP100中AI剧/漫剧占比从1月2%增长至3月16%，增长率700%。NetShort平台以50%上榜作品领跑，AI仿真人剧加速爆发，用户对AI剧付费接受度较高。"
       },
       {
-        "title": "昆仑万维DramaWave月流水近3600万美元，AI短剧占比快速提升",
-        "source": "澎湃新闻",
-        "date": "2026-05-20",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
-        "summary": "昆仑万维2025年年报显示，短剧和AI短剧平台业务全年收入16.17亿元，同比增长864.92%。旗下DramaWave和FreeReels双平台月活用户稳居海外第一，2025年末月流水接近3600万美元。2026年Q1新上线剧集中AI短剧占比快速提升，平台全面迈向专业化AI短剧平台。"
-      },
-      {
-        "title": "山海星辰NOVA AI实现全链路自动化，AI剧将占7成产能",
-        "source": "澎湃新闻",
-        "date": "2026-05-25",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
-        "summary": "山海星辰自研一站式AI内容创作平台NOVA AI实现从剧本到成片的全链路自动化生产。2026年Q1，其海外短剧平台Stardust TV与TikTok合作分成收入突破338万美元。公司计划2026年AI剧占比达到7成左右，成为出海短剧的绝对主力产能。"
-      },
-      {
-        "title": "万兴科技推出HappyHorse大模型，AI漫剧价格降至0.71元/秒",
-        "source": "澎湃新闻",
-        "date": "2026-05-28",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": "万兴科技年初通过自研HappyHorse大模型、战略投资灵漫快创和生数科技Vidu，构建全链路AI漫剧生态。5月底将720P生成价格砍至0.71元/秒，限时五折至6月20日。此举旨在通过价格战清场，加速行业洗牌。"
-      },
-      {
-        "title": "TikTok短剧平台Q1分账总额突破2400万美元，AI短剧贡献超200万美元",
+        "title": "昆仑万维DramaWave月流水近3600万美元，AI短剧占比提升",
         "source": "澎湃新闻",
         "date": "2026-04-20",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
+        "summary": "昆仑万维2025年年报显示短剧和AI短剧平台业务全年收入16.17亿元，同比增长864.92%。DramaWave和FreeReels双平台月活用户稳居海外第一，2025年12月月流水近3600万美元。2026年Q1新上线剧集中AI短剧占比快速提升，平台全面迈向专业化AI短剧平台。"
+      },
+      {
+        "title": "山海星辰NOVA AI实现全链路自动化生产，AI剧将占7成",
+        "source": "澎湃新闻",
+        "date": "2026-05-10",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
+        "summary": "山海星辰自研一站式AI内容创作平台NOVA AI实现从剧本到成片全链路自动化生产，将单部AI短剧制作周期从25-40天压缩至7-10天，成本降低70%-80%。2026年Q1 Stardust TV与TikTok合作分成收入突破338万美元，公司计划AI剧占比提升至7成。"
+      },
+      {
+        "title": "万兴科技HappyHorse大模型降价，AI漫剧价格战开启",
+        "source": "澎湃新闻",
+        "date": "2026-05-25",
         "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": "TikTok短剧平台2026年Q1分账总额突破2400万美元，其中AI短剧贡献超200万美元，同比增幅超6倍，首次被官方写进战报。AI短剧在海外市场的商业化潜力得到验证，吸引更多平台和资本入局。"
+        "summary": "万兴科技将HappyHorse 1.0的720P生成价格砍至0.71元/秒，限时五折至6月20日。公司此前已自研HappyHorse大模型，千万级战略投资灵漫快创，数千万级投资生数科技Vidu，从上游模型到创作工具到内容制作方全链路布局，以价格战清场。"
+      },
+      {
+        "title": "TikTok短剧平台Q1分账总额突破2400万美元，AI短剧贡献超200万",
+        "source": "澎湃新闻",
+        "date": "2026-04-25",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
+        "summary": "TikTok短剧平台2026年Q1分账总额突破2400万美元，其中AI短剧贡献超200万美元，同比增幅超6倍，首次被官方写进战报。中文在线FlareFlow平台截至5月底注册用户超过3700万，上线5000多部作品，其中10%是AI短剧。"
       }
     ],
     "data_source": "澎湃新闻 DataEye 月报/行业报道直爬 + DeepSeek 抽取",
     "update_frequency": "monthly"
   },
-  "updated_at": "2026-07-27T04:39:55.657276"
+  "updated_at": "2026-07-28T04:14:17.364557"
 }
