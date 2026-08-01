@@ -1,74 +1,152 @@
 {
-  "data_month": "2026-07",
+  "data_month": "2026-08",
   "dashboard": {
     "report_month": "2026-06",
-    "kpis": [],
+    "kpis": [
+      {
+        "label": "海外AI剧/漫剧市场规模（2025年）",
+        "value": "1",
+        "unit": "亿美元",
+        "trend": "up",
+        "period": "同比",
+        "note": "2025年海外AI漫剧市场规模约1亿美元"
+      },
+      {
+        "label": "海外AI剧/漫剧市场规模（2026年预计）",
+        "value": "6.5",
+        "unit": "亿美元",
+        "trend": "up",
+        "period": "同比",
+        "note": "2026年预计达到6.5亿美元，实现6倍增长"
+      },
+      {
+        "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（1月）",
+        "value": "2",
+        "unit": "%",
+        "trend": "up",
+        "period": "环比",
+        "note": "2026年1月占比2%"
+      },
+      {
+        "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（3月）",
+        "value": "16",
+        "unit": "%",
+        "trend": "up",
+        "period": "环比",
+        "note": "2026年3月占比16%，增长率达700%"
+      },
+      {
+        "label": "用户愿意为AI参与制作的短剧付费比例",
+        "value": "55",
+        "unit": "%",
+        "trend": "same",
+        "period": "环比",
+        "note": "55%的用户愿意为AI参与制作的短剧付费，23%付费意愿更强"
+      },
+      {
+        "label": "用户愿意为纯AI剧/漫剧付费比例",
+        "value": "49",
+        "unit": "%",
+        "trend": "same",
+        "period": "环比",
+        "note": "49%的用户愿意为纯AI剧/漫剧付费，30%付费意愿更强"
+      }
+    ],
     "rankings": {
       "ai_drama": [
         {
-          "rank": 3,
+          "rank": 1,
           "title": "One Move God Mode",
-          "platform": "抖音",
+          "platform": "NetShort",
           "category": "AI仿真人剧",
-          "heat": "",
-          "is_new": false,
-          "plot": "",
-          "tags": [],
+          "heat": "202.6万",
+          "is_new": true,
+          "plot": "以希腊神话为背景，主角为海神波塞冬之子，通过打脸逆袭套路展开故事，场景精致，特效出色。",
+          "tags": [
+            "西幻",
+            "希腊神话",
+            "打脸",
+            "逆袭"
+          ],
           "studio": "",
-          "url": "",
+          "url": "https://www.google.com/search?q=One+Move+God+Mode+NetShort",
           "episodes": "",
-          "release_date": ""
-        },
-        {
-          "rank": 3,
-          "title": "五階獸醫：獸夫們排隊求愛",
-          "platform": "抖音",
-          "category": "AI仿真人剧",
-          "heat": "100万",
-          "is_new": false,
-          "plot": "",
-          "tags": [],
-          "studio": "位列第四位",
-          "url": "",
-          "episodes": "",
-          "release_date": ""
+          "release_date": "2026-03"
         }
       ],
-      "ai_comic": []
+      "ai_comic": [
+        {
+          "rank": 1,
+          "title": "說好的乙遊戀愛呢？執事怎麼全員黑化了！",
+          "platform": "NetShort",
+          "category": "2D AI漫剧",
+          "heat": "1551.6万",
+          "is_new": false,
+          "plot": "女主穿越乙女游戏，与黑化执事们展开恋爱故事，情感内核，多次位居素材榜前列。",
+          "tags": [
+            "乙游",
+            "穿越",
+            "恋爱",
+            "黑化"
+          ],
+          "studio": "",
+          "url": "https://www.google.com/search?q=說好的乙遊戀愛呢執事怎麼全員黑化了",
+          "episodes": "",
+          "release_date": "2026-02"
+        }
+      ]
     },
     "trends": [
       {
-        "title": "趋势洞察1",
-        "summary": "前2个月仅有漫剧上榜，第三个月AI仿真人剧大量涌现，多部作品位列榜单前列，潜力惊人。",
-        "source": "澎湃新闻 / DataEye",
+        "title": "AI短剧出海加速",
+        "summary": "2026年Q1海外AI剧/漫剧占比从1月2%增至3月16%，增长率700%，头部公司如昆仑万维、山海星辰等加大投入，AI技术降低制作成本，推动出海短剧从野蛮生长进入正规军对决阶段。",
+        "source": "DataEye研究院",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33102397"
+      },
+      {
+        "title": "AI漫剧爆款率低",
+        "summary": "尽管AI漫剧产能暴增，但爆款率仅为0.16%，大量作品同质化严重，海外市场尚未出现现象级爆款，行业面临审美疲劳和内容精品化挑战。",
+        "source": "DataEye研究院",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
+      },
+      {
+        "title": "AI仿真人剧崛起",
+        "summary": "2026年4月AI剧/漫剧端原生热播榜百强中，AI仿真人剧占90席，播放增量超271亿次，用户更倾向于接近真人短剧的观感，AI仿真人剧成为新增长点。",
+        "source": "DataEye研究院",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
+      },
+      {
+        "title": "头部集中与洗牌",
+        "summary": "市场向头部集中，TOP5短剧公司可能占据9成以上份额，腰部公司需走小而美垂直深耕路线，行业从百团大战收编为三国鼎立，洗牌加速。",
+        "source": "DataEye研究院",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
       }
     ],
     "news": [
       {
-        "title": "短剧头部玩家，集体押注“AI短剧出海”",
-        "source": "澎湃新闻",
-        "date": "2026-06-01",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
-        "summary": ""
-      },
-      {
-        "title": "2026Q1报告：海外AI剧/漫剧数量增长700%！NetShort领跑，占比50%！",
-        "source": "澎湃新闻",
-        "date": "2026-06-01",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
-        "summary": ""
-      },
-      {
-        "title": "3000块换50万美金：AI漫剧这场\"印钞机\"游戏，谁在买单？",
+        "title": "AI短剧《波斯复仇记》爆火，3000元成本换50万美元GMV",
         "source": "澎湃新闻",
         "date": "2026-06-01",
         "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": ""
+        "summary": "中国AI创作者制作的《波斯复仇记》成本仅3000元，上线72小时GMV达50万美元，回报率近1200倍。该剧的成功引发行业关注，但专家提醒幸存者偏差，多数AI短剧难以盈利，行业需警惕泡沫。"
+      },
+      {
+        "title": "DataEye发布2026年Q1海外AI剧/漫剧数据报告",
+        "source": "澎湃新闻",
+        "date": "2026-04-15",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
+        "summary": "报告显示海外AI剧/漫剧市场规模2026年预计达6.5亿美元，素材榜占比增长700%，NetShort领跑，用户付费意愿高，情感题材最受欢迎，AI仿真人剧加速爆发。"
+      },
+      {
+        "title": "短剧头部玩家集体押注AI短剧出海",
+        "source": "澎湃新闻",
+        "date": "2026-06-10",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
+        "summary": "昆仑万维、山海星辰、中文在线等头部公司重点发力海外AI短剧，通过自研AI工具降低制作成本，提升本土化能力，行业进入正规军对决阶段，AI剧将成出海主力产能。"
       }
     ],
-    "data_source": "澎湃新闻 DataEye 月报直爬（https://m.thepaper.cn/newsDetail_forward_33172823, https://m.thepaper.cn/newsDetail_forward_33102397, https://m.thepaper）",
+    "data_source": "澎湃新闻 DataEye 月报/行业报道直爬 + DeepSeek 抽取",
     "update_frequency": "monthly"
   },
-  "updated_at": "2026-07-31T04:25:45.277362"
+  "updated_at": "2026-08-01T04:23:37.184591"
 }

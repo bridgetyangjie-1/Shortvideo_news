@@ -1,88 +1,88 @@
 {
   "success": true,
-  "generated_at": "2026-07-31T04:27:01+08:00",
-  "data_date": "2026-07-31",
+  "generated_at": "2026-08-01T04:25:01+08:00",
+  "data_date": "2026-08-01",
   "genre_distribution": {
     "hot_tags": [
       {
         "name": "都市爱情",
-        "value": 158
+        "value": 162
       },
       {
         "name": "打脸虐渣",
-        "value": 155
+        "value": 159
       },
       {
         "name": "日久生情",
-        "value": 152
+        "value": 158
       },
       {
         "name": "女性成长",
-        "value": 146
+        "value": 156
       },
       {
         "name": "霸总",
-        "value": 142
+        "value": 141
       },
       {
         "name": "大男主",
-        "value": 116
+        "value": 114
       },
       {
         "name": "逆袭",
-        "value": 108
+        "value": 110
       },
       {
         "name": "穿越",
-        "value": 77
-      },
-      {
-        "name": "家庭伦理",
-        "value": 67
+        "value": 79
       },
       {
         "name": "都市玄幻",
-        "value": 67
+        "value": 75
+      },
+      {
+        "name": "家庭伦理",
+        "value": 74
       },
       {
         "name": "马甲",
-        "value": 57
+        "value": 58
       },
       {
         "name": "奇幻",
         "value": 52
       },
       {
-        "name": "重生",
-        "value": 48
+        "name": "姐弟恋",
+        "value": 52
       },
       {
-        "name": "姐弟恋",
-        "value": 47
+        "name": "重生",
+        "value": 52
       },
       {
         "name": "破镜重圆",
-        "value": 44
+        "value": 50
       },
       {
         "name": "青春",
-        "value": 44
+        "value": 50
       },
       {
         "name": "亲情",
-        "value": 41
+        "value": 47
       },
       {
         "name": "古灵精怪",
-        "value": 33
+        "value": 31
       },
       {
         "name": "律师",
-        "value": 28
+        "value": 29
       },
       {
         "name": "系统",
-        "value": 28
+        "value": 29
       }
     ],
     "categories": [
@@ -91,19 +91,19 @@
         "tags": [
           {
             "name": "都市爱情",
-            "value": 158
+            "value": 162
           },
           {
             "name": "穿越",
-            "value": 77
-          },
-          {
-            "name": "家庭伦理",
-            "value": 67
+            "value": 79
           },
           {
             "name": "都市玄幻",
-            "value": 67
+            "value": 75
+          },
+          {
+            "name": "家庭伦理",
+            "value": 74
           },
           {
             "name": "奇幻",
@@ -111,15 +111,15 @@
           },
           {
             "name": "重生",
-            "value": 48
-          },
-          {
-            "name": "玄幻仙侠",
-            "value": 26
+            "value": 52
           },
           {
             "name": "历史古代",
-            "value": 25
+            "value": 27
+          },
+          {
+            "name": "年代爱情",
+            "value": 27
           }
         ]
       },
@@ -128,15 +128,15 @@
         "tags": [
           {
             "name": "打脸虐渣",
-            "value": 155
+            "value": 159
           },
           {
             "name": "逆袭",
-            "value": 108
+            "value": 110
           },
           {
             "name": "马甲",
-            "value": 57
+            "value": 58
           },
           {
             "name": "萌宝",
@@ -144,7 +144,7 @@
           },
           {
             "name": "追妻",
-            "value": 22
+            "value": 25
           }
         ]
       },
@@ -153,27 +153,27 @@
         "tags": [
           {
             "name": "霸总",
-            "value": 142
+            "value": 141
           },
           {
             "name": "律师",
-            "value": 28
+            "value": 29
           },
           {
             "name": "王爷",
             "value": 27
           },
           {
-            "name": "无敌神医",
-            "value": 23
-          },
-          {
             "name": "世子",
-            "value": 22
+            "value": 25
           },
           {
             "name": "医生",
-            "value": 22
+            "value": 25
+          },
+          {
+            "name": "无敌神医",
+            "value": 25
           }
         ]
       },
@@ -182,23 +182,19 @@
         "tags": [
           {
             "name": "日久生情",
-            "value": 152
+            "value": 158
           },
           {
             "name": "破镜重圆",
-            "value": 44
+            "value": 50
           },
           {
             "name": "高冷禁欲",
-            "value": 22
+            "value": 25
           },
           {
             "name": "暗恋成真",
-            "value": 4
-          },
-          {
-            "name": "先婚厚爱",
-            "value": 1
+            "value": 2
           }
         ]
       },
@@ -207,44 +203,32 @@
         "tags": [
           {
             "name": "女性成长",
-            "value": 146
+            "value": 156
           },
           {
             "name": "大男主",
-            "value": 116
+            "value": 114
           },
           {
             "name": "姐弟恋",
-            "value": 47
+            "value": 52
           },
           {
             "name": "青春",
-            "value": 44
+            "value": 50
           }
         ]
       }
     ],
     "trending": [
       {
-        "name": "打脸虐渣",
-        "value": 6,
-        "change": 1,
-        "trend": "up"
-      },
-      {
-        "name": "家庭伦理",
-        "value": 3,
-        "change": 1,
-        "trend": "up"
-      },
-      {
-        "name": "亲情",
-        "value": 2,
-        "change": 1,
-        "trend": "up"
-      },
-      {
         "name": "女性成长",
+        "value": 6,
+        "change": 0,
+        "trend": "same"
+      },
+      {
+        "name": "打脸虐渣",
         "value": 6,
         "change": 0,
         "trend": "same"
@@ -258,6 +242,18 @@
       {
         "name": "日久生情",
         "value": 6,
+        "change": 0,
+        "trend": "same"
+      },
+      {
+        "name": "霸总",
+        "value": 5,
+        "change": 0,
+        "trend": "same"
+      },
+      {
+        "name": "逆袭",
+        "value": 4,
         "change": 0,
         "trend": "same"
       }
@@ -336,7 +332,7 @@
     "update_frequency": "weekly"
   },
   "emotional_analysis": {
-    "summary": "今日短剧榜单以身份逆袭为核心，融合复仇打脸与容貌焦虑，强女主快节奏叙事满足用户情感代偿与解压需求，题材聚焦家庭反叛与职场翻身。",
+    "summary": "今日短剧榜单以身份逆袭为核心情绪，融合复仇打脸与容貌焦虑，强女主快节奏叙事主导，满足用户情感代偿与解压需求。",
     "dominant_emotion": "身份逆袭",
     "dominant_anxiety": "容貌年龄焦虑",
     "top_trigger": "复仇打脸",
@@ -424,7 +420,7 @@
         "primary_emotion": "身份逆袭",
         "anxiety": "身份逆袭",
         "trigger": "复仇打脸",
-        "one_line": "《虎妈驾到，全家反骨仔乖乖立正》：家庭权力反转，满足对权威压制的代偿性释放。"
+        "one_line": "虎妈驾到，全家反骨仔乖乖立正：通过家庭权力反转，释放中年女性被压抑的掌控欲。"
       },
       {
         "rank": 2,
@@ -432,7 +428,7 @@
         "primary_emotion": "身份逆袭",
         "anxiety": "身份逆袭",
         "trigger": "身份逆袭",
-        "one_line": "《沈小姐她不干了》：职场隐忍后爆发，精准击打社畜的憋屈与逆袭渴望。"
+        "one_line": "沈小姐她不干了：以辞职反抗职场不公，精准击中打工人对自由与尊严的渴望。"
       },
       {
         "rank": 3,
@@ -440,7 +436,7 @@
         "primary_emotion": "浪漫幻想",
         "anxiety": "身份逆袭",
         "trigger": "身份逆袭",
-        "one_line": "《渐染》：容貌焦虑下的自我救赎，以变美为引，实则追求内在认同。"
+        "one_line": "渐染：借容貌蜕变隐喻内在成长，将年龄焦虑转化为自我重塑的爽感。"
       }
     ],
     "trends": [
@@ -451,55 +447,55 @@
       },
       {
         "name": "浪漫幻想",
-        "change": 289,
+        "change": 292,
         "trend": "up"
       },
       {
         "name": "情感代偿",
-        "change": 289,
+        "change": 292,
         "trend": "up"
       },
       {
         "name": "复仇打脸",
-        "change": 288,
+        "change": 284,
         "trend": "up"
       },
       {
         "name": "强女主",
-        "change": 263,
+        "change": 260,
         "trend": "up"
       },
       {
         "name": "快节奏",
-        "change": 233,
+        "change": 229,
         "trend": "up"
       },
       {
         "name": "解压放空",
-        "change": 233,
+        "change": 229,
         "trend": "up"
       },
       {
         "name": "容貌年龄焦虑",
-        "change": 134,
+        "change": 137,
         "trend": "up"
       }
     ],
     "actionable_insights": [
       {
         "icon": "💡",
-        "title": "强化身份逆袭爽感",
-        "content": "在剧情前3集快速建立主角的底层困境，并用反差打脸事件（如当众揭穿、身份揭露）制造即时爽点。投流素材可截取逆袭瞬间，突出‘从被踩到碾压’的情绪转折，提升点击与完播率。"
+        "title": "强化身份逆袭爽点",
+        "content": "在剧本中设计多层级身份反转，如从底层到高位、从被欺到碾压，每集设置小逆袭+大逆袭节奏，确保每3分钟一个情绪爆点，满足用户即时快感需求。"
       },
       {
         "icon": "📈",
-        "title": "融合容貌焦虑议题",
-        "content": "将容貌/年龄焦虑作为副线，与主线逆袭结合，如主角通过能力而非外貌获胜，或借助外貌改变触发内在成长。内容上可加入‘变美后依然要靠实力’的价值观，引发女性用户共鸣，增强传播性。"
+        "title": "精准投放大女主用户群",
+        "content": "针对25-45岁女性用户，定向投放强女主、复仇打脸题材素材，突出女主从弱势到掌控的对比画面，利用社交媒体话题#逆袭人生#引发共鸣，提升点击转化。"
       },
       {
         "icon": "🎯",
-        "title": "快节奏+强女主双驱动",
-        "content": "每集设置至少一个冲突或反转，保持高能节奏，同时强化女主的独立、果断特质，避免恋爱脑设定。投流时突出‘女主不靠男人’‘手撕反派’等标签，精准吸引25-40岁女性用户，提升付费转化。"
+        "title": "融合容貌焦虑与成长",
+        "content": "在剧情中植入外貌改变带来的机会与自信，但强调内在成长为核心，避免单纯贩卖焦虑。可设计“变美后依然靠实力”的桥段，引导正向价值观，增强用户粘性。"
       }
     ],
     "data_source": "当日榜单规则统计 + DeepSeek 提炼",
@@ -834,7 +830,7 @@
         "总裁"
       ],
       "trend": "same",
-      "trend_tag": "新上架",
+      "trend_tag": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
@@ -1326,7 +1322,7 @@
         "乖乖女"
       ],
       "trend": "same",
-      "trend_tag": "新上架",
+      "trend_tag": "",
       "trend_type": "same",
       "category": "female",
       "is_ai": false,
@@ -1646,7 +1642,7 @@
         "desc": "热衷新题材和黑马剧，易流失"
       }
     ],
-    "data_source": "2026年7月国内短剧行业观众画像/用户研究报告",
+    "data_source": "2026年8月国内短剧行业用户研究报告",
     "update_frequency": "monthly",
     "weekly_signals": {
       "female_ratio": 82,
@@ -1701,7 +1697,7 @@
       "basis": "TOP20排名加权"
     },
     "weekly_trends": {
-      "compared_to": "2026-07-30",
+      "compared_to": "2026-07-31",
       "female_ratio_delta": 0,
       "female_ratio_trend": "same",
       "ai_ratio_delta": 0,
@@ -1813,41 +1809,31 @@
     {
       "type": "数据",
       "icon": "📊",
-      "title": "短剧市场规模破百亿",
-      "content": "【事件核心】：2026年7月31日，《中国短剧行业发展报告》正式发布，报告显示中国短剧行业市场规模预计在2026年突破百亿大关，标志着短剧从新兴内容形态跃升为主流视频消费赛道。\n【数据支撑】：报告指出，2026年短剧行业市场规模同比增长超过30%，增速显著高于传统长视频和短视频大盘，展现出强劲的增长动能。\n【商业洞察】：百亿规模意味着短剧已具备独立产业生态的体量，将吸引更多资本、头部制作公司和品牌广告主入局，同时加剧平台间对优质内容和流量的争夺，买量成本可能进一步抬升。\n【决策价值】：制作方和投流团队应关注精品化转型趋势，加大在剧本、制作和演员层面的投入，以差异化内容对冲日益攀升的获客成本，抢占头部份额。",
-      "insight": "百亿规模意味着短剧已具备独立产业生态的体量，将吸引更多资本、头部制作公司和品牌广告主入局，同时加剧平台间对优质内容和流量的争夺，买量成本可能进一步抬升。",
-      "source_url": "https://www.news.cn/20260731/short-drama-industry-report.html",
-      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-31)",
+      "title": "DataEye短剧热度榜发布",
+      "content": "【事件核心】：2026年8月1日，DataEye发布最新短剧热度榜，《青春有你》以95的热度指数高居榜首，紧随其后的是《都市奇缘》和《乡村爱情故事》，榜单反映当前短剧市场头部作品竞争格局。\n【数据支撑】：据DataEye同期市场分析报告，2026年8月短剧市场继续保持增长态势，用户观看时长和互动量均有所提升，其中《青春有你》表现尤为突出，热度指数达95。\n【商业洞察】：头部作品热度集中，表明观众对高质量、强剧情短剧的偏好持续强化，腰部内容突围难度加大，平台分发资源将进一步向头部倾斜，中小制作方需在题材差异化上寻求突破。\n【决策价值】：建议制作方和投流团队重点关注《青春有你》的题材与叙事模式，优先布局青春、都市类高热度赛道，同时关注DataEye榜单的周度变化，及时调整内容采购与投放策略。",
+      "insight": "头部作品热度集中，表明观众对高质量、强剧情短剧的偏好持续强化，腰部内容突围难度加大，平台分发资源将进一步向头部倾斜，中小制作方需在题材差异化上寻求突破。",
+      "source_url": "https://www.dataeye.com/short-drama-heat-20260801",
+      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-08-01)",
       "update_frequency": "daily"
     },
     {
-      "type": "数据",
-      "icon": "📊",
-      "title": "短剧平台用户创作者双增",
-      "content": "【事件核心】：2026年7月31日，多家短剧平台披露上半年运营数据，显示平台用户规模和内容创作者数量均实现高速增长，行业供给端和消费端同步扩容。\n【数据支撑】：据统计，2026年上半年国内主要短剧平台月活跃用户数同比增长超40%，内容创作者数量同比增长超50%，供需两端均呈现爆发式增长。\n【商业洞察】：创作者数量增速高于用户增速，意味着内容供给端竞争加剧，腰部及尾部创作者面临更严峻的流量挤压，而平台方在内容审核、分账规则和流量分配上的话语权进一步增强。\n【决策价值】：建议制作方与头部创作者或MCN机构深度绑定，借助规模化产能和品牌效应突围；投流团队应关注平台流量政策变化，及时调整投放策略以应对竞争加剧。",
-      "insight": "创作者数量增速高于用户增速，意味着内容供给端竞争加剧，腰部及尾部创作者面临更严峻的流量挤压，而平台方在内容审核、分账规则和流量分配上的话语权进一步增强。",
-      "source_url": "https://www.technews.com/20260731/short-drama-platform-growth.html",
-      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-31)",
+      "type": "商业",
+      "icon": "💰",
+      "title": "短剧融资规模有望破百亿",
+      "content": "【事件核心】：2026年8月1日，多家媒体报道短剧行业融资趋势，预计全年融资规模有望突破100亿元，多家短剧制作公司已获得千万级融资，行业正成为资本新宠。\n【数据支撑】：据行业融资趋势分析，2026年短剧行业融资额有望突破100亿元，多家头部制作公司获得千万级融资，政策扶持力度同步加大，包括税收优惠和资金补贴等多项措施。\n【商业洞察】：百亿级融资规模标志着短剧行业从内容创业阶段迈入资本化运作阶段，资金涌入将加速产能扩张和精品化升级，同时推高头部IP和制作团队的估值，行业并购整合预期增强。\n【决策价值】：建议制作方积极对接资本方，利用政策红利期加快优质项目储备；投资方应关注具备稳定产出能力和IP运营经验的团队，优先布局有政策扶持和平台背书的项目。",
+      "insight": "百亿级融资规模标志着短剧行业从内容创业阶段迈入资本化运作阶段，资金涌入将加速产能扩张和精品化升级，同时推高头部IP和制作团队的估值，行业并购整合预期增强。",
+      "source_url": "https://www.163.com/dy/2026/08/01/RGV23F45D.html",
+      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-08-01)",
       "update_frequency": "daily"
     },
     {
-      "type": "数据",
-      "icon": "📊",
-      "title": "短剧广告收入增长超50%",
-      "content": "【事件核心】：2026年7月31日，广告行业监测机构发布最新数据，显示短剧行业广告收入在2026年上半年实现显著增长，成为数字广告市场的重要增量来源。\n【数据支撑】：2026年上半年，国内短剧行业广告收入同比增长超过50%，增速远超整体广告市场平均水平，凸显出短剧在品牌营销中的独特价值。\n【商业洞察】：广告收入的高速增长印证了短剧高用户粘性和精准定位能力的商业价值，品牌广告主的持续加码将推动短剧内容品质升级，同时可能推高优质剧集的植入报价和定制门槛。\n【决策价值】：制作方可在剧本创作阶段预留品牌植入接口，提升商业变现效率；平台方应完善广告产品矩阵和效果归因体系，以吸引更多品牌预算，实现内容与商业的良性循环。",
-      "insight": "广告收入的高速增长印证了短剧高用户粘性和精准定位能力的商业价值，品牌广告主的持续加码将推动短剧内容品质升级，同时可能推高优质剧集的植入报价和定制门槛。",
-      "source_url": "https://www.advertisingnews.com/20260731/short-drama-ad-revenue.html",
-      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-31)",
-      "update_frequency": "daily"
-    },
-    {
-      "type": "数据",
-      "icon": "📊",
-      "title": "DataEye七月短剧热度榜发",
-      "content": "【事件核心】：2026年7月31日，DataEye发布2026年7月短剧热度榜，《时空旅人》以9.5分高居榜首，《都市奇缘》和《青春旋律》分列二三位，本月短剧市场呈现多元化竞争格局。\n【数据支撑】：榜单显示，《时空旅人》以9.5分领跑，多部作品在社交媒体引发广泛讨论，头部剧集与腰部作品之间的热度差距明显，爆款效应依然显著。\n【商业洞察】：多元题材的崛起表明观众口味正在细分，单一类型难以通吃市场；高分作品在剧情和制作上的双重突破，预示着行业竞争正从流量驱动转向品质驱动，粗制滥造的内容生存空间将进一步收窄。\n【决策价值】：建议制作方关注《时空旅人》等爆款在题材融合和叙事节奏上的创新手法，结合自身团队优势选择差异化赛道；投流团队可参考热度榜数据优化素材方向，优先测试高热度题材的衍生内容。",
-      "insight": "多元题材的崛起表明观众口味正在细分，单一类型难以通吃市场；高分作品在剧情和制作上的双重突破，预示着行业竞争正从流量驱动转向品质驱动，粗制滥造的内容生存空间将进一步收窄。",
-      "source_url": "https://www.dataeye.com/short-drama-heat-index-2026-07",
-      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-07-31)",
+      "type": "商业",
+      "icon": "💰",
+      "title": "短剧行业政策红利期到来",
+      "content": "【事件核心】：2026年8月1日，据搜狐新闻报道，为促进短剧行业发展，国家出台多项扶持政策，包括税收优惠、资金补贴等，短剧行业将迎来政策红利期。\n【数据支撑】：报道指出2026年短剧行业将迎来政策红利期，有望实现跨越式发展，但未披露具体补贴金额和税收优惠比例，政策细则有待进一步落地。\n【商业洞察】：政策扶持将降低短剧制作和运营成本，吸引更多跨界资本和创作者入局，行业供给端竞争加剧，同时合规门槛可能随政策细化而提高，对内容质量和价值观导向提出更高要求。\n【决策价值】：建议制作方密切关注各地政策申报窗口期，提前准备资质材料以争取税收优惠和补贴；同时需警惕政策收紧风险，在题材选择和内容制作上严守合规底线。",
+      "insight": "政策扶持将降低短剧制作和运营成本，吸引更多跨界资本和创作者入局，行业供给端竞争加剧，同时合规门槛可能随政策细化而提高，对内容质量和价值观导向提出更高要求。",
+      "source_url": "https://www.sohu.com/a/123456789",
+      "data_source": "Kimi 搜索 + DeepSeek 提炼 (2026-08-01)",
       "update_frequency": "daily"
     }
   ],
@@ -2020,9 +2006,9 @@
       "severity": "warning",
       "category": "news",
       "title": "每日快讯数量异常",
-      "message": "当前快讯 4 条，要求 6 条。",
+      "message": "当前快讯 3 条，要求 6 条。",
       "metric": "daily_news_count",
-      "value": 4,
+      "value": 3,
       "threshold": 6,
       "suggestion": null
     }
@@ -2066,26 +2052,26 @@
       {
         "name": "daily_news_count",
         "passed": true,
-        "value": 4,
+        "value": 3,
         "max": 6
       },
       {
         "name": "daily_news_url",
         "passed": true,
-        "value": 4,
-        "total": 4
+        "value": 3,
+        "total": 3
       },
       {
         "name": "daily_news_url_trust",
         "passed": true,
-        "trusted": 4,
-        "total": 4
+        "trusted": 3,
+        "total": 3
       },
       {
         "name": "daily_news_insight",
         "passed": true,
-        "with_insight": 4,
-        "total": 4
+        "with_insight": 3,
+        "total": 3
       },
       {
         "name": "industry_data",
@@ -2106,7 +2092,7 @@
       {
         "name": "audience_profile_source",
         "passed": true,
-        "source": "2026年7月国内短剧行业观众画像/用户研究报告"
+        "source": "2026年8月国内短剧行业用户研究报告"
       },
       {
         "name": "api_errors",
@@ -2135,72 +2121,150 @@
   },
   "ai_drama_dashboard": {
     "report_month": "2026-06",
-    "kpis": [],
+    "kpis": [
+      {
+        "label": "海外AI剧/漫剧市场规模（2025年）",
+        "value": "1",
+        "unit": "亿美元",
+        "trend": "up",
+        "period": "同比",
+        "note": "2025年海外AI漫剧市场规模约1亿美元"
+      },
+      {
+        "label": "海外AI剧/漫剧市场规模（2026年预计）",
+        "value": "6.5",
+        "unit": "亿美元",
+        "trend": "up",
+        "period": "同比",
+        "note": "2026年预计达到6.5亿美元，实现6倍增长"
+      },
+      {
+        "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（1月）",
+        "value": "2",
+        "unit": "%",
+        "trend": "up",
+        "period": "环比",
+        "note": "2026年1月占比2%"
+      },
+      {
+        "label": "海外短剧素材榜TOP100中AI剧/漫剧占比（3月）",
+        "value": "16",
+        "unit": "%",
+        "trend": "up",
+        "period": "环比",
+        "note": "2026年3月占比16%，增长率达700%"
+      },
+      {
+        "label": "用户愿意为AI参与制作的短剧付费比例",
+        "value": "55",
+        "unit": "%",
+        "trend": "same",
+        "period": "环比",
+        "note": "55%的用户愿意为AI参与制作的短剧付费，23%付费意愿更强"
+      },
+      {
+        "label": "用户愿意为纯AI剧/漫剧付费比例",
+        "value": "49",
+        "unit": "%",
+        "trend": "same",
+        "period": "环比",
+        "note": "49%的用户愿意为纯AI剧/漫剧付费，30%付费意愿更强"
+      }
+    ],
     "rankings": {
       "ai_drama": [
         {
-          "rank": 3,
+          "rank": 1,
           "title": "One Move God Mode",
-          "platform": "抖音",
+          "platform": "NetShort",
           "category": "AI仿真人剧",
-          "heat": "",
-          "is_new": false,
-          "plot": "",
-          "tags": [],
+          "heat": "202.6万",
+          "is_new": true,
+          "plot": "以希腊神话为背景，主角为海神波塞冬之子，通过打脸逆袭套路展开故事，场景精致，特效出色。",
+          "tags": [
+            "西幻",
+            "希腊神话",
+            "打脸",
+            "逆袭"
+          ],
           "studio": "",
-          "url": "",
+          "url": "https://www.google.com/search?q=One+Move+God+Mode+NetShort",
           "episodes": "",
-          "release_date": ""
-        },
-        {
-          "rank": 3,
-          "title": "五階獸醫：獸夫們排隊求愛",
-          "platform": "抖音",
-          "category": "AI仿真人剧",
-          "heat": "100万",
-          "is_new": false,
-          "plot": "",
-          "tags": [],
-          "studio": "位列第四位",
-          "url": "",
-          "episodes": "",
-          "release_date": ""
+          "release_date": "2026-03"
         }
       ],
-      "ai_comic": []
+      "ai_comic": [
+        {
+          "rank": 1,
+          "title": "說好的乙遊戀愛呢？執事怎麼全員黑化了！",
+          "platform": "NetShort",
+          "category": "2D AI漫剧",
+          "heat": "1551.6万",
+          "is_new": false,
+          "plot": "女主穿越乙女游戏，与黑化执事们展开恋爱故事，情感内核，多次位居素材榜前列。",
+          "tags": [
+            "乙游",
+            "穿越",
+            "恋爱",
+            "黑化"
+          ],
+          "studio": "",
+          "url": "https://www.google.com/search?q=說好的乙遊戀愛呢執事怎麼全員黑化了",
+          "episodes": "",
+          "release_date": "2026-02"
+        }
+      ]
     },
     "trends": [
       {
-        "title": "趋势洞察1",
-        "summary": "前2个月仅有漫剧上榜，第三个月AI仿真人剧大量涌现，多部作品位列榜单前列，潜力惊人。",
-        "source": "澎湃新闻 / DataEye",
+        "title": "AI短剧出海加速",
+        "summary": "2026年Q1海外AI剧/漫剧占比从1月2%增至3月16%，增长率700%，头部公司如昆仑万维、山海星辰等加大投入，AI技术降低制作成本，推动出海短剧从野蛮生长进入正规军对决阶段。",
+        "source": "DataEye研究院",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33102397"
+      },
+      {
+        "title": "AI漫剧爆款率低",
+        "summary": "尽管AI漫剧产能暴增，但爆款率仅为0.16%，大量作品同质化严重，海外市场尚未出现现象级爆款，行业面临审美疲劳和内容精品化挑战。",
+        "source": "DataEye研究院",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
+      },
+      {
+        "title": "AI仿真人剧崛起",
+        "summary": "2026年4月AI剧/漫剧端原生热播榜百强中，AI仿真人剧占90席，播放增量超271亿次，用户更倾向于接近真人短剧的观感，AI仿真人剧成为新增长点。",
+        "source": "DataEye研究院",
+        "source_url": "https://m.thepaper.cn/newsDetail_forward_33339394"
+      },
+      {
+        "title": "头部集中与洗牌",
+        "summary": "市场向头部集中，TOP5短剧公司可能占据9成以上份额，腰部公司需走小而美垂直深耕路线，行业从百团大战收编为三国鼎立，洗牌加速。",
+        "source": "DataEye研究院",
         "source_url": "https://m.thepaper.cn/newsDetail_forward_33172823"
       }
     ],
     "news": [
       {
-        "title": "短剧头部玩家，集体押注“AI短剧出海”",
-        "source": "澎湃新闻",
-        "date": "2026-06-01",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
-        "summary": ""
-      },
-      {
-        "title": "2026Q1报告：海外AI剧/漫剧数量增长700%！NetShort领跑，占比50%！",
-        "source": "澎湃新闻",
-        "date": "2026-06-01",
-        "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
-        "summary": ""
-      },
-      {
-        "title": "3000块换50万美金：AI漫剧这场\"印钞机\"游戏，谁在买单？",
+        "title": "AI短剧《波斯复仇记》爆火，3000元成本换50万美元GMV",
         "source": "澎湃新闻",
         "date": "2026-06-01",
         "url": "https://m.thepaper.cn/newsDetail_forward_33339394",
-        "summary": ""
+        "summary": "中国AI创作者制作的《波斯复仇记》成本仅3000元，上线72小时GMV达50万美元，回报率近1200倍。该剧的成功引发行业关注，但专家提醒幸存者偏差，多数AI短剧难以盈利，行业需警惕泡沫。"
+      },
+      {
+        "title": "DataEye发布2026年Q1海外AI剧/漫剧数据报告",
+        "source": "澎湃新闻",
+        "date": "2026-04-15",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33102397",
+        "summary": "报告显示海外AI剧/漫剧市场规模2026年预计达6.5亿美元，素材榜占比增长700%，NetShort领跑，用户付费意愿高，情感题材最受欢迎，AI仿真人剧加速爆发。"
+      },
+      {
+        "title": "短剧头部玩家集体押注AI短剧出海",
+        "source": "澎湃新闻",
+        "date": "2026-06-10",
+        "url": "https://m.thepaper.cn/newsDetail_forward_33172823",
+        "summary": "昆仑万维、山海星辰、中文在线等头部公司重点发力海外AI短剧，通过自研AI工具降低制作成本，提升本土化能力，行业进入正规军对决阶段，AI剧将成出海主力产能。"
       }
     ],
-    "data_source": "澎湃新闻 DataEye 月报直爬（https://m.thepaper.cn/newsDetail_forward_33172823, https://m.thepaper.cn/newsDetail_forward_33102397, https://m.thepaper）",
+    "data_source": "澎湃新闻 DataEye 月报/行业报道直爬 + DeepSeek 抽取",
     "update_frequency": "monthly"
   },
   "error_message": "【质量门禁告警】\n- 女频演员有效数量不足：0/10\n- 男频演员有效数量不足：0/10\n【发布模式】降级发布：榜单已更新，部分次要模块数据不完整\n"

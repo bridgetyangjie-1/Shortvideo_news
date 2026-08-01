@@ -1,5 +1,5 @@
 {
-  "data_month": "2026-07",
+  "data_month": "2026-08",
   "industry": {
     "user_scale": "7.18亿",
     "market_size": "1000亿+",
@@ -10,6 +10,8 @@
     "male_ratio": 40,
     "app_mau": "3.04亿",
     "app_mau_yoy": "+1.4亿",
+    "market_spend": "",
+    "market_spend_yoy": "",
     "data_source": "行业月报种子数据（config/industry_seed.json）",
     "update_frequency": "monthly"
   },
@@ -36,5 +38,5 @@
     "data_source": "行业月报种子数据（config/industry_seed.json）",
     "update_frequency": "monthly"
   },
-  "updated_at": "2026-07-06T14:04:39.480795"
+  "updated_at": "2026-08-01T04:24:49.301039"
 }
