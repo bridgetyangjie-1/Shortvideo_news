@@ -1,0 +1,228 @@
+{
+  "success": true,
+  "generated_at": "2026-08-03T04:34:53+08:00",
+  "week_date": "2026-08-03",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "枭雄崛起，从打工仔到江湖大佬",
+      "genre": "都市日常",
+      "weekly_index": 13014,
+      "total_index": 17621,
+      "release_date": "2026-07-22",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 2,
+      "title": "我靠奶奶的金项链青云直上了",
+      "genre": "女性成长",
+      "weekly_index": 12221,
+      "total_index": 16491,
+      "release_date": "2026-07-22",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 3,
+      "title": "风水之王",
+      "genre": "都市玄幻",
+      "weekly_index": 11924,
+      "total_index": 23892,
+      "release_date": "2026-07-18",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 4,
+      "title": "虎妈驾到，全家反骨仔乖乖立正",
+      "genre": "女性成长",
+      "weekly_index": 11126,
+      "total_index": 32256,
+      "release_date": "2026-07-15",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 5,
+      "title": "母凭子贵后被皇家宠上天第二季",
+      "genre": "古风爱情",
+      "weekly_index": 11100,
+      "total_index": 14914,
+      "release_date": "2026-07-24",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 6,
+      "title": "沈小姐她不干了",
+      "genre": "女性成长",
+      "weekly_index": 10770,
+      "total_index": 30001,
+      "release_date": "2026-07-15",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 7,
+      "title": "渐染",
+      "genre": "都市爱情",
+      "weekly_index": 9782,
+      "total_index": 26918,
+      "release_date": "2026-07-18",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 8,
+      "title": "陆太太是来离婚的之慵便枕玉凉",
+      "genre": "年代爱情",
+      "weekly_index": 9298,
+      "total_index": 11287,
+      "release_date": "2026-07-25",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 9,
+      "title": "野路子·第一季",
+      "genre": "动作",
+      "weekly_index": 9118,
+      "total_index": 11891,
+      "release_date": "2026-07-24",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 10,
+      "title": "钢铁小棉袄，为父斩风霜",
+      "genre": "家庭伦理",
+      "weekly_index": 8572,
+      "total_index": 22111,
+      "release_date": "2026-07-16",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 11,
+      "title": "婚前夫君变了心，我扶纨绔踏青云",
+      "genre": "古风爱情",
+      "weekly_index": 7621,
+      "total_index": 7621,
+      "release_date": "2026-07-27",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 12,
+      "title": "她见枯荣",
+      "genre": "玄幻仙侠",
+      "weekly_index": 7556,
+      "total_index": 17940,
+      "release_date": "2026-07-19",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 13,
+      "title": "婚途未晚",
+      "genre": "都市爱情",
+      "weekly_index": 7497,
+      "total_index": 16965,
+      "release_date": "2026-07-20",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 14,
+      "title": "八零福妻旺夫日常",
+      "genre": "年代爱情",
+      "weekly_index": 6809,
+      "total_index": 14715,
+      "release_date": "2026-07-18",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 15,
+      "title": "三生：渡厄",
+      "genre": "都市玄幻",
+      "weekly_index": 6543,
+      "total_index": 14536,
+      "release_date": "2026-07-19",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 16,
+      "title": "心有葵花向日倾",
+      "genre": "都市爱情",
+      "weekly_index": 6446,
+      "total_index": 13994,
+      "release_date": "2026-07-21",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 17,
+      "title": "姐妹换嫁，全京城嗑我们两对",
+      "genre": "古风爱情",
+      "weekly_index": 6327,
+      "total_index": 6327,
+      "release_date": "2026-07-29",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 18,
+      "title": "室友偷刷我会员卡后",
+      "genre": "女性成长",
+      "weekly_index": 6282,
+      "total_index": 7150,
+      "release_date": "2026-07-26",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 19,
+      "title": "他们都能听见，我还怎么下班",
+      "genre": "奇幻脑洞",
+      "weekly_index": 6241,
+      "total_index": 15670,
+      "release_date": "2026-07-17",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    },
+    {
+      "rank": 20,
+      "title": "她，不做贺太太了",
+      "genre": "女性成长",
+      "weekly_index": 6001,
+      "total_index": 7391,
+      "release_date": "2026-07-23",
+      "is_new": false,
+      "data_source": "duanjugongcheng",
+      "week_date": "2026-08-03"
+    }
+  ],
+  "rankings_count": 20
+}

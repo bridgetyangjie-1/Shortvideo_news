@@ -1,6 +1,11 @@
 {
   "weeks": [
     {
+      "data_date": "2026-08-03",
+      "week_label": "2026.08.03 - 08.09",
+      "file": "weekly/2026-08-03.json"
+    },
+    {
       "data_date": "2026-07-27",
       "week_label": "2026.07.27 - 08.02",
       "file": "weekly/2026-07-27.json"
