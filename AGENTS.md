@@ -392,8 +392,8 @@ python src/utils/config_validator.py
 
 - **工作流文件**：`.github/workflows/daily_update.yml`
 - **触发条件**：
-  - 定时：`cron: '0 1 * * *'`（UTC 1:00 = 北京时间 9:00）
-  - 手动：`workflow_dispatch`
+  - 定时：`cron: '0 1 * * *'`（UTC 1:00 = 北京时间 9:00）**当前已停用**，工作流中对应 `schedule` 已注释。
+  - 手动：`workflow_dispatch`（如需临时手动更新，可进入仓库 Actions 页面手动触发）。
 - **权限**：`contents: write`（用于自动提交生成的数据文件）
 
 执行步骤：
@@ -520,6 +520,7 @@ export PYTHONPATH="$PWD/src"
 
 | 日期 | 改动 |
 |------|------|
+| 2026-08-05 | **停用每日自动更新**：`.github/workflows/daily_update.yml` 中注释 `schedule` 定时触发，保留 `workflow_dispatch` 手动触发；站点不再每日自动更新，现有数据仍通过 GitHub Pages 托管 |
 | 2026-07-09 | **v1.14.6 演员数据源链路重构（P0/P1）**：短剧工程周榜解析 `slug` 并调 wind-vane detail API 回填封面/标签；`hongguo_series_search` 剧名搜索 `series_id`（catalog 精确匹配 + Kimi 搜 novelquickapp 链接）；`search_node` 关闭 `enrich_intro` 并拉取 503 条 catalog；`filter_actors_by_search_context` 无信源演员留空；拦截「红果」等平台名误入演员字段 |
 | 2026-07-08 | **v1.14.5 演员热力榜纠偏与红果演员数据源修复**：`metadata_fetcher` 改用 `/detail?series_id=` 解析演职员表；`actor_resolver` enrich 内红果 catalog 剧名匹配回填 `series_id`，Kimi 改为短剧垂类 query；`enrich`/`actor_ranking` prompt 禁止一线明星与泛化假名，移除演员榜 DeepSeek 凑数；`data_quality` 新增 `MAINSTREAM_ACTOR_BLOCKLIST`；详见 `docs/CR-2026-07-08.md` §7 |
 | 2026-07-08 | **v1.14.4 P1 分析可用性提升**：`utils/title_matcher.py` 增强红果剧名四级模糊匹配回填 `series_id`/封面/集数；`tag_normalizer` 扩展同义词，`genre_distribution_node` 爽点优先分类并输出 `by_gender` 男女频标签；`IndustryData` 新增 `market_spend` 大盘消耗 KPI；`enrich_node` 动态 `confidence_score`；前端展示质量分/置信度角标/男女频标签/月大盘消耗 |
